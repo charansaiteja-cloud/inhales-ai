@@ -1,0 +1,59 @@
+pubspec.lock
+# Flutter & Dart
+*.iml
+*.ipr
+*.iws
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+
+# Builds
+build/
+android/app/outputs/
+android/app/intermediates/
+android/app/.cxx/
+ios/Flutter/Flutter.framework
+windows/runner/Release/
+macos/Build/
+linux/build/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Generated
+*.g.dart
+*.rs
+*.pyc
+
+# Secrets & Keys
+*.keystore
+*.jks
+*.p12
+*.pem
+*.crt
+*.key
+android/key.properties
+local.properties
+
+# Model binaries
+**/models/*.gguf
+**/model_catalog/*.json
+**/knowledge/*.gguf
+
+# Local data
+*.db
+*.sqlite
+*.sqlite3
+
+# Credentials
+*.credentials
+.env
+*.token

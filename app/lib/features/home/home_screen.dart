@@ -1,0 +1,431 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../core/theme/inhale_colors.dart';
+import '../../core/theme/inhale_typography.dart';
+import '../../core/theme/inhale_tokens.dart';
+import '../../core/responsive/responsive.dart';
+import '../../widgets/glass_card.dart';
+import '../../widgets/glass_search_bar.dart';
+import '../../widgets/glass_status_badge.dart';
+import '../../widgets/glass_bottom_navigation_bar.dart';
+import '../../widgets/glass_sidebar.dart';
+import '../settings/settings_provider.dart';
+
+class HomeScreen extends ConsumerStatefulWidget {
+  const HomeScreen({super.key});
+
+  @override
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  int _selectedIndex = 0;
+  final _searchController = TextEditingController();
+
+  final _navDestinations = const [
+    BottomNavDestination(label: 'Home', icon: Icons.home_rounded),
+    BottomNavDestination(label: 'Chat', icon: Icons.chat_rounded),
+    BottomNavDestination(label: 'Learn', icon: Icons.school_rounded),
+    BottomNavDestination(label: 'Notes', icon: Icons.note_rounded),
+    BottomNavDestination(label: 'Settings', icon: Icons.settings_rounded),
+  ];
+
+  final _dashboardTiles = const [
+    DashboardTile(
+      label: 'AI Chat',
+      description: 'Ask anything',
+      icon: Icons.smart_toy_rounded,
+      route: '/chat',
+      gradient: GradientInfo(InhaleColors.primaryBlue, InhaleColors.deepBlue),
+    ),
+    DashboardTile(
+      label: 'School',
+      description: 'Classes 1-10',
+      icon: Icons.school_rounded,
+      route: '/school',
+      gradient: GradientInfo(Color(0xFF2ECC71), Color(0xFF27AE60)),
+    ),
+    DashboardTile(
+      label: 'College',
+      description: 'Higher education',
+      icon: Icons.work_rounded,
+      route: '/college',
+      gradient: GradientInfo(Color(0xFFE67E22), Color(0xFFD35400)),
+    ),
+    DashboardTile(
+      label: 'Writing',
+      description: 'Assisted writing',
+      icon: Icons.edit_note_rounded,
+      route: '/writing',
+      gradient: GradientInfo(Color(0xFF9B59B6), Color(0xFF8E44AD)),
+    ),
+    DashboardTile(
+      label: 'Coding',
+      description: 'Code assistant',
+      icon: Icons.code_rounded,
+      route: '/coding',
+      gradient: GradientInfo(Color(0xFF3498DB), Color(0xFF2980B9)),
+    ),
+    DashboardTile(
+      label: 'Mathematics',
+      description: 'Calculations',
+      icon: Icons.calculate_rounded,
+      route: '/math',
+      gradient: GradientInfo(Color(0xFF1ABC9C), Color(0xFF16A085)),
+    ),
+    DashboardTile(
+      label: 'Quiz Studio',
+      description: 'Test yourself',
+      icon: Icons.quiz_rounded,
+      route: '/quizzes',
+      gradient: GradientInfo(Color(0xFFE74C3C), Color(0xFFC0392B)),
+    ),
+    DashboardTile(
+      label: 'Notes',
+      description: 'Study workspace',
+      icon: Icons.note_alt_rounded,
+      route: '/notes',
+      gradient: GradientInfo(Color(0xFFF39C12), Color(0xFFE67E22)),
+    ),
+    DashboardTile(
+      label: 'Translation',
+      description: 'Multi-language',
+      icon: Icons.translate_rounded,
+      route: '/translation',
+      gradient: GradientInfo(Color(0xFF8E44AD), Color(0xFF9B59B6)),
+    ),
+    DashboardTile(
+      label: 'Documents',
+      description: 'PDF & files',
+      icon: Icons.description_rounded,
+      route: '/documents',
+      gradient: GradientInfo(Color(0xFF2C3E50), Color(0xFF34495E)),
+    ),
+    DashboardTile(
+      label: 'Voice',
+      description: 'Speech assistant',
+      icon: Icons.mic_rounded,
+      route: '/voice',
+      gradient: GradientInfo(Color(0xFFE91E63), Color(0xFFC2185B)),
+    ),
+    DashboardTile(
+      label: 'Image Learn',
+      description: 'Vision AI',
+      icon: Icons.image_rounded,
+      route: '/vision',
+      gradient: GradientInfo(Color(0xFF00BCD4), Color(0xFF0097A7)),
+    ),
+  ];
+
+  void _onNavItemTap(int index) {
+    setState(() => _selectedIndex = index);
+    switch (index) {
+      case 0:
+        GoRouter.of(context).go('/home');
+      case 1:
+        GoRouter.of(context).go('/chat');
+      case 2:
+        GoRouter.of(context).go('/school');
+      case 3:
+        GoRouter.of(context).go('/notes');
+      case 4:
+        GoRouter.of(context).go('/settings');
+    }
+  }
+
+  void _onTileTap(String route) {
+    GoRouter.of(context).push(route);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final settings = ref.watch(settingsProvider);
+    final reducedBlur = settings.maybeWhen(
+      data: (s) => s.reducedBlur,
+      orElse: () => false,
+    );
+
+    final layout = Responsive.isDesktop(context)
+        ? _buildDesktop(context, reducedBlur)
+        : _buildMobile(context, reducedBlur);
+
+    return Scaffold(
+      body: SafeArea(child: layout),
+      bottomNavigationBar: Responsive.isDesktop(context)
+          ? null
+          : GlassBottomNavigationBar(
+              currentIndex: _selectedIndex,
+              onTap: _onNavItemTap,
+              items: _navDestinations,
+            ),
+    );
+  }
+
+  Widget _buildDesktop(BuildContext context, bool reducedBlur) {
+    return Row(
+      children: [
+        SizedBox(
+          width: 260,
+          child: GlassSidebar(
+            items: [
+              BottomNavDestination(label: 'Dashboard', icon: Icons.dashboard_rounded),
+              BottomNavDestination(label: 'Chat', icon: Icons.chat_rounded),
+              BottomNavDestination(label: 'School', icon: Icons.school_rounded),
+              BottomNavDestination(label: 'Notes', icon: Icons.note_rounded),
+              BottomNavDestination(label: 'Settings', icon: Icons.settings_rounded),
+            ],
+            currentIndex: _selectedIndex,
+            onItemTap: (index, label) => _onNavItemTap(index),
+          ),
+        ),
+        const VerticalDivider(width: 1),
+        Expanded(child: _buildContent(context, reducedBlur)),
+      ],
+    );
+  }
+
+  Widget _buildMobile(BuildContext context, bool reducedBlur) {
+    return _buildContent(context, reducedBlur);
+  }
+
+  Widget _buildContent(BuildContext context, bool reducedBlur) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: InhaleColors.gradientBackground,
+      ),
+      child: CustomScrollView(
+        slivers: [
+          // Header
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.only(
+                top: Responsive.isMobile(context) ? InhaleSpacing.md : InhaleSpacing.xl,
+                bottom: InhaleSpacing.md,
+                left: InhaleSpacing.lg,
+                right: InhaleSpacing.lg,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        width: 48,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          gradient: InhaleColors.gradientPrimary,
+                          borderRadius: BorderRadius.circular(InhaleRadius.sm),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'I',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 28,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: InhaleSpacing.sm),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'InhaleSkill AI',
+                              style: InhaleTypography.displaySmall,
+                            ),
+                            Text(
+                              'Learn Anything. Build Skills. Anywhere.',
+                              style: InhaleTypography.bodyMedium.copyWith(
+                                color: InhaleColors.secondaryText,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const GlassStatusBadge(
+                        label: 'Offline Ready',
+                        backgroundColor: Color(0x262ECC71),
+                        textColor: Color(0xFF2ECC71),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          // Search bar
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: InhaleSpacing.lg),
+              child: GlassSearchBar(
+                hintText: 'Ask anything...',
+                onSubmitted: (_) {
+                  if (_searchController.text.isNotEmpty) {
+                    GoRouter.of(context).push('/chat');
+                  }
+                },
+              ),
+            ),
+          ),
+
+          // Dashboard tiles
+          SliverPadding(
+            padding: EdgeInsets.all(InhaleSpacing.lg),
+            sliver: SliverGrid(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: Responsive.crossAxisCount(
+                  context,
+                  mobile: 2,
+                  tablet: 3,
+                  desktop: 4,
+                ),
+                crossAxisSpacing: InhaleSpacing.md,
+                mainAxisSpacing: InhaleSpacing.md,
+                childAspectRatio: 1.0,
+              ),
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  final tile = _dashboardTiles[index];
+                  return GlassCard(
+                    onTap: () => _onTileTap(tile.route),
+                    padding: EdgeInsets.all(InhaleSpacing.md),
+                    elevated: true,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 56,
+                          height: 56,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [tile.gradient.start, tile.gradient.end],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            borderRadius: BorderRadius.circular(InhaleRadius.sm),
+                          ),
+                          child: Icon(
+                            tile.icon,
+                            color: Colors.white,
+                            size: 28,
+                          ),
+                        ),
+                        const SizedBox(height: InhaleSpacing.sm),
+                        Text(
+                          tile.label,
+                          style: InhaleTypography.titleMedium,
+                        ),
+                        Text(
+                          tile.description,
+                          style: InhaleTypography.bodySmall,
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                childCount: _dashboardTiles.length,
+              ),
+            ),
+          ),
+
+          // Status bar
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.all(InhaleSpacing.lg),
+              child: GlassCard(
+                padding: EdgeInsets.all(InhaleSpacing.md),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    _StatusItem(
+                      icon: Icons.memory_rounded,
+                      label: 'RAM',
+                      value: '4GB+',
+                    ),
+                    _StatusItem(
+                      icon: Icons.storage_rounded,
+                      label: 'Storage',
+                      value: 'Free',
+                    ),
+                    _StatusItem(
+                      icon: Icons.model_training_rounded,
+                      label: 'Model',
+                      value: 'None',
+                    ),
+                    _StatusItem(
+                      icon: Icons.wifi_off_rounded,
+                      label: 'Mode',
+                      value: 'Offline',
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class GradientInfo {
+  final Color start;
+  final Color end;
+  const GradientInfo(this.start, this.end);
+}
+
+class DashboardTile {
+  final String label;
+  final String description;
+  final IconData icon;
+  final String route;
+  final GradientInfo gradient;
+  const DashboardTile({
+    required this.label,
+    required this.description,
+    required this.icon,
+    required this.route,
+    required this.gradient,
+  });
+}
+
+class _StatusItem extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final String value;
+  const _StatusItem({
+    required this.icon,
+    required this.label,
+    required this.value,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Icon(icon, color: InhaleColors.primaryBlue, size: 24),
+        const SizedBox(height: 4),
+        Text(
+          label,
+          style: InhaleTypography.labelSmall,
+        ),
+        Text(
+          value,
+          style: InhaleTypography.titleSmall,
+        ),
+      ],
+    );
+  }
+}
+
+class BottomNavDestination {
+  final String label;
+  final IconsData icon;
+  const BottomNavDestination({required this.label, required this.icon});
+}

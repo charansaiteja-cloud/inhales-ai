@@ -1,0 +1,79 @@
+name: inhaleskill_ai
+description: >
+  InhaleSkill AI — Universal Offline AI Learning and Productivity Assistant.
+  Premium Blue and White Liquid Glass UI. 100% local AI inference.
+  Learn Anything. Build Skills. Anywhere.
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.7.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State management
+  flutter_riverpod: ^2.5.1
+  riverpod: ^2.5.1
+
+  # Navigation
+  go_router: ^14.2.0
+
+  # Database
+  drift: ^2.22.0
+  sqlite3: ^2.7.4
+
+  # Document processing & generation
+  pdf: ^3.10.4
+  printing: ^5.11.0
+
+  # File handling
+  path_provider: ^2.1.5
+  file_picker: ^8.1.3
+  share_plus: ^10.0.2
+
+  # Markdown rendering
+  markdown: ^7.2.2
+  flutter_markdown: ^0.7.3+2
+
+  # TTS / STT
+  flutter_tts: ^4.0.1
+
+  # Utilities
+  path: ^1.9.0
+  http: ^1.2.1
+  connectivity_plus: ^6.0.3
+  device_info_plus: ^10.1.0
+  shared_preferences: ^2.3.2
+  flutter_secure_storage: ^9.0.0
+  crypto: ^3.0.0
+  collection: ^1.17.12
+  equatable: ^2.0.5
+  json_annotation: ^4.9.0
+  url_launcher: ^6.3.0
+  open_file: ^3.4.0
+  image: ^4.0.17
+  cached_network_image: ^3.4.1
+  shimmer: ^3.0.0
+  vibration: ^1.9.0
+  google_fonts: ^6.2.1
+  flutter_svg: ^2.0.7
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  build_runner: ^2.4.11
+  drift_dev: ^2.22.0
+  json_serializable: ^6.8.0
+  mockito: ^5.4.4
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/fonts/
+    - assets/branding/

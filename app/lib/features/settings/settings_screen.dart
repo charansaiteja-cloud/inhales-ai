@@ -25,7 +25,11 @@ class SettingsScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildSettingsBody(BuildContext context, WidgetRef ref, AppSettings settings) {
+  Widget _buildSettingsBody(
+    BuildContext context,
+    WidgetRef ref,
+    AppSettings settings,
+  ) {
     final notifier = ref.read(settingsProvider.notifier);
     final isDark = settings.themeMode == ThemeMode.dark;
     return ListView(
@@ -40,7 +44,8 @@ class SettingsScreen extends ConsumerWidget {
           subtitle: isDark ? 'Dark' : 'Light',
           trailing: Switch(
             value: isDark,
-            onChanged: (v) => notifier.setTheme(v ? ThemeMode.dark : ThemeMode.light),
+            onChanged:
+                (v) => notifier.setTheme(v ? ThemeMode.dark : ThemeMode.light),
             activeColor: InhaleColors.primaryBlue,
           ),
         ),
@@ -69,19 +74,22 @@ class SettingsScreen extends ConsumerWidget {
         const SizedBox(height: InhaleSpacing.lg),
         Text('AI & Models', style: InhaleTypography.headlineSmall),
         const SizedBox(height: InhaleSpacing.sm),
-        _settingsTile(context,
+        _settingsTile(
+          context,
           icon: Icons.download_rounded,
           title: 'Manage Models',
           subtitle: 'Download and configure AI models',
           onTap: () {},
         ),
-        _settingsTile(context,
+        _settingsTile(
+          context,
           icon: Icons.tune_rounded,
           title: 'Context Length',
           subtitle: '${settings.contextLength} tokens',
           onTap: null,
         ),
-        _settingsTile(context,
+        _settingsTile(
+          context,
           icon: Icons.memory_rounded,
           title: 'CPU Threads',
           subtitle: '${settings.cpuThreads} threads',
@@ -90,7 +98,8 @@ class SettingsScreen extends ConsumerWidget {
         const SizedBox(height: InhaleSpacing.lg),
         Text('Data & Privacy', style: InhaleTypography.headlineSmall),
         const SizedBox(height: InhaleSpacing.sm),
-        _settingsTile(context,
+        _settingsTile(
+          context,
           icon: Icons.cloud_off_rounded,
           title: 'Offline Mode',
           subtitle: settings.offlineMode ? 'Active' : 'Inactive',
@@ -100,7 +109,8 @@ class SettingsScreen extends ConsumerWidget {
             activeColor: InhaleColors.primaryBlue,
           ),
         ),
-        _settingsTile(context,
+        _settingsTile(
+          context,
           icon: Icons.delete_sweep_rounded,
           title: 'Clear Data',
           subtitle: 'Remove all local data and models',
@@ -109,13 +119,15 @@ class SettingsScreen extends ConsumerWidget {
         const SizedBox(height: InhaleSpacing.lg),
         Text('About', style: InhaleTypography.headlineSmall),
         const SizedBox(height: InhaleSpacing.sm),
-        _settingsTile(context,
+        _settingsTile(
+          context,
           icon: Icons.info_outline_rounded,
           title: 'Version',
           subtitle: '1.0.0-alpha',
           onTap: null,
         ),
-        _settingsTile(context,
+        _settingsTile(
+          context,
           icon: Icons.code_rounded,
           title: 'Built With',
           subtitle: 'Flutter + llama.cpp (offline AI)',
@@ -125,7 +137,8 @@ class SettingsScreen extends ConsumerWidget {
     );
   }
 
-  Widget _settingsTile(BuildContext context, {
+  Widget _settingsTile(
+    BuildContext context, {
     required IconData icon,
     required String title,
     required String subtitle,
@@ -142,7 +155,10 @@ class SettingsScreen extends ConsumerWidget {
             Container(
               width: 40,
               height: 40,
-              decoration: BoxDecoration(color: InhaleColors.lightGlassBlue.withAlpha(100), borderRadius: BorderRadius.circular(InhaleRadius.md)),
+              decoration: BoxDecoration(
+                color: InhaleColors.lightGlassBlue.withAlpha(100),
+                borderRadius: BorderRadius.circular(InhaleRadius.md),
+              ),
               child: Icon(icon, color: InhaleColors.primaryBlue, size: 20),
             ),
             const SizedBox(width: 12),
@@ -151,12 +167,22 @@ class SettingsScreen extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(title, style: InhaleTypography.titleSmall),
-                  Text(subtitle, style: InhaleTypography.bodySmall.copyWith(color: InhaleColors.secondaryText)),
+                  Text(
+                    subtitle,
+                    style: InhaleTypography.bodySmall.copyWith(
+                      color: InhaleColors.secondaryText,
+                    ),
+                  ),
                 ],
               ),
             ),
-            if (trailing != null) trailing
-            else if (onTap != null) Icon(Icons.chevron_right_rounded, color: InhaleColors.secondaryText),
+            if (trailing != null)
+              trailing
+            else if (onTap != null)
+              Icon(
+                Icons.chevron_right_rounded,
+                color: InhaleColors.secondaryText,
+              ),
           ],
         ),
       ),

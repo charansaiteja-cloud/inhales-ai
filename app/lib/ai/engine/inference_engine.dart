@@ -6,7 +6,11 @@ abstract class InferenceEngine {
   void unloadModel();
   bool get isLoaded;
   int get memoryMb;
-  Stream<String> generate(String prompt, {int maxTokens = 512, double temperature = 0.7});
+  Stream<String> generate(
+    String prompt, {
+    int maxTokens = 512,
+    double temperature = 0.7,
+  });
   void cancel();
 }
 

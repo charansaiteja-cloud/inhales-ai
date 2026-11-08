@@ -27,14 +27,26 @@ class ModelManagerScreen extends ConsumerWidget {
                 padding: EdgeInsets.all(InhaleSpacing.md),
                 child: Row(
                   children: [
-                    Icon(Icons.storage_rounded, color: InhaleColors.primaryBlue, size: 24),
+                    Icon(
+                      Icons.storage_rounded,
+                      color: InhaleColors.primaryBlue,
+                      size: 24,
+                    ),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Installed Models', style: InhaleTypography.titleSmall),
-                          Text('${modelState.installedModels.length} installed', style: InhaleTypography.bodySmall.copyWith(color: InhaleColors.secondaryText)),
+                          Text(
+                            'Installed Models',
+                            style: InhaleTypography.titleSmall,
+                          ),
+                          Text(
+                            '${modelState.installedModels.length} installed',
+                            style: InhaleTypography.bodySmall.copyWith(
+                              color: InhaleColors.secondaryText,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -48,7 +60,9 @@ class ModelManagerScreen extends ConsumerWidget {
                 itemCount: catalog.length,
                 itemBuilder: (context, index) {
                   final model = catalog[index];
-                  final installed = modelState.installedModels.any((m) => m.id == model.id);
+                  final installed = modelState.installedModels.any(
+                    (m) => m.id == model.id,
+                  );
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 8),
                     child: GlassCard(
@@ -61,23 +75,52 @@ class ModelManagerScreen extends ConsumerWidget {
                               children: [
                                 Row(
                                   children: [
-                                    Text(model.name, style: InhaleTypography.titleSmall),
+                                    Text(
+                                      model.name,
+                                      style: InhaleTypography.titleSmall,
+                                    ),
                                     const SizedBox(width: 8),
                                     Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                                      decoration: BoxDecoration(color: InhaleColors.primaryBlue.withAlpha(40), borderRadius: BorderRadius.circular(InhaleRadius.sm)),
-                                      child: Text(model.ramTier, style: TextStyle(fontSize: 10, color: InhaleColors.primaryBlue, fontWeight: FontWeight.w600)),
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 8,
+                                        vertical: 2,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: InhaleColors.primaryBlue
+                                            .withAlpha(40),
+                                        borderRadius: BorderRadius.circular(
+                                          InhaleRadius.sm,
+                                        ),
+                                      ),
+                                      child: Text(
+                                        model.ramTier,
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          color: InhaleColors.primaryBlue,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 ),
                                 const SizedBox(height: 4),
-                                Text('${model.sizeLabel}  ·  ${model.provider}', style: InhaleTypography.bodySmall.copyWith(color: InhaleColors.secondaryText)),
+                                Text(
+                                  '${model.sizeLabel}  ·  ${model.provider}',
+                                  style: InhaleTypography.bodySmall.copyWith(
+                                    color: InhaleColors.secondaryText,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
                           GlassButton(
                             label: installed ? 'Installed' : 'Download',
-                            onTap: installed ? null : () => ref.read(modelManagerProvider.notifier).installModel(model),
+                            onTap:
+                                installed
+                                    ? null
+                                    : () => ref
+                                        .read(modelManagerProvider.notifier)
+                                        .installModel(model),
                             disabled: installed,
                           ),
                         ],

@@ -31,7 +31,8 @@ class GlassButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final content = child ??
+    final content =
+        child ??
         Text(
           label ?? '',
           style: TextStyle(
@@ -44,28 +45,42 @@ class GlassButton extends StatelessWidget {
     return MouseRegion(
       cursor: enabled ? SystemMouseCursors.click : SystemMouseCursors.basic,
       child: TapRegion(
-        onTap: enabled ? onTap : null,
+        onTapInside: (_) => onTap,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 180),
           curve: Curves.easeInOut,
           width: width,
           height: height ?? (iconOnly ? 48 : 52),
           decoration: BoxDecoration(
-            color: enabled
-                ? (outlined ? InhaleColors.glassSurface : InhaleColors.pureWhite.withValues(alpha: 0.9))
-                : InhaleColors.glassSurface,
-            gradient: enabled && !outlined ? InhaleColors.gradientPrimary : null,
-            borderRadius: const BorderRadius.all(Radius.circular(InhaleRadius.pill)),
+            color:
+                enabled
+                    ? (outlined
+                        ? InhaleColors.glassSurface
+                        : InhaleColors.pureWhite.withValues(alpha: 0.9))
+                    : InhaleColors.glassSurface,
+            gradient:
+                enabled && !outlined ? InhaleColors.gradientPrimary : null,
+            borderRadius: const BorderRadius.all(
+              Radius.circular(InhaleRadius.pill),
+            ),
             border: Border.all(
-              color: outlined ? InhaleColors.primaryBlue : InhaleColors.glassBorderSubtle,
+              color:
+                  outlined
+                      ? InhaleColors.primaryBlue
+                      : InhaleColors.glassBorderSubtle,
               width: outlined ? 1.5 : 0.5,
             ),
-            boxShadow: enabled
-                ? (outlined ? InhaleShadows.softBlue : InhaleShadows.floating)
-                : null,
+            boxShadow:
+                enabled
+                    ? (outlined
+                        ? InhaleShadows.softBlue
+                        : InhaleShadows.floating)
+                    : null,
           ),
           child: ClipRRect(
-            borderRadius: const BorderRadius.all(Radius.circular(InhaleRadius.pill)),
+            borderRadius: const BorderRadius.all(
+              Radius.circular(InhaleRadius.pill),
+            ),
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
               child: Center(child: content),

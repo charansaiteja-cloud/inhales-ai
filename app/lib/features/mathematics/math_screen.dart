@@ -24,19 +24,32 @@ class MathScreen extends ConsumerWidget {
           children: [
             Text('Enter Expression', style: InhaleTypography.headlineMedium),
             const SizedBox(height: InhaleSpacing.sm),
-            GlassTextField(hintText: 'e.g. 2 + 3 * 4 or (10 - 5) / 2', onChanged: (v) => notifier.setInput(v), onSubmitted: (_) => notifier.compute(), textInputAction: TextInputAction.go),
+            GlassTextField(
+              hintText: 'e.g. 2 + 3 * 4 or (10 - 5) / 2',
+              onChanged: (v) => notifier.setInput(v),
+            ),
             const SizedBox(height: InhaleSpacing.md),
-            GlassButton(width: double.infinity, label: 'Calculate', onTap: () => notifier.compute()),
+            GlassButton(
+              width: double.infinity,
+              label: 'Calculate',
+              onTap: () => notifier.compute(),
+            ),
             if (state.output.isNotEmpty) ...[
               const SizedBox(height: InhaleSpacing.lg),
               Text('Result', style: InhaleTypography.titleMedium),
               const SizedBox(height: InhaleSpacing.sm),
               GlassCard(
                 padding: EdgeInsets.all(InhaleSpacing.md),
-                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text(state.output, style: InhaleTypography.displaySmall),
-                  if (state.steps.isNotEmpty) ...[const SizedBox(height: InhaleSpacing.sm), Text(state.steps, style: InhaleTypography.bodySmall)],
-                ]),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(state.output, style: InhaleTypography.displaySmall),
+                    if (state.steps.isNotEmpty) ...[
+                      const SizedBox(height: InhaleSpacing.sm),
+                      Text(state.steps, style: InhaleTypography.bodySmall),
+                    ],
+                  ],
+                ),
               ),
             ],
           ],

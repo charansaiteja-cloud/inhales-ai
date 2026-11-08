@@ -18,14 +18,19 @@ class QuizScreen extends ConsumerWidget {
       appBar: GlassAppBar(title: 'Quizzes'),
       body: Container(
         decoration: BoxDecoration(gradient: InhaleColors.gradientBackground),
-        child: state.isInProgress
-            ? _buildActiveQuiz(context, ref, state)
-            : _buildQuizLibrary(context, ref, state),
+        child:
+            state.isInProgress
+                ? _buildActiveQuiz(context, ref, state)
+                : _buildQuizLibrary(context, ref, state),
       ),
     );
   }
 
-  Widget _buildQuizLibrary(BuildContext context, WidgetRef ref, QuizState state) {
+  Widget _buildQuizLibrary(
+    BuildContext context,
+    WidgetRef ref,
+    QuizState state,
+  ) {
     final categories = [
       {'name': 'Mathematics', 'icon': Icons.calculate_rounded},
       {'name': 'Science', 'icon': Icons.science_rounded},
@@ -41,14 +46,20 @@ class QuizScreen extends ConsumerWidget {
             slivers: [
               SliverPadding(
                 padding: EdgeInsets.all(InhaleSpacing.md),
-                sliver: SliverToBoxAdapter(child: Text('Create Custom Quiz', style: InhaleTypography.headlineMedium)),
+                sliver: SliverToBoxAdapter(
+                  child: Text(
+                    'Create Custom Quiz',
+                    style: InhaleTypography.headlineMedium,
+                  ),
+                ),
               ),
               SliverPadding(
                 padding: EdgeInsets.symmetric(horizontal: InhaleSpacing.md),
                 sliver: SliverToBoxAdapter(
                   child: GlassTextField(
                     hintText: 'Enter a topic for an AI-generated quiz...',
-                    onChanged: (v) => ref.read(quizProvider.notifier).setTopic(v),
+                    onChanged:
+                        (v) => ref.read(quizProvider.notifier).setTopic(v),
                   ),
                 ),
               ),
@@ -57,30 +68,56 @@ class QuizScreen extends ConsumerWidget {
                 sliver: SliverToBoxAdapter(
                   child: GlassButton(
                     width: double.infinity,
-                    label: state.isGenerating ? 'Generating...' : 'Generate Quiz',
-                    onTap: state.isGenerating ? null : () => ref.read(quizProvider.notifier).generateQuiz(),
+                    label:
+                        state.isGenerating ? 'Generating...' : 'Generate Quiz',
+                    onTap:
+                        state.isGenerating
+                            ? null
+                            : () =>
+                                ref.read(quizProvider.notifier).generateQuiz(),
                   ),
                 ),
               ),
               SliverPadding(
                 padding: EdgeInsets.all(InhaleSpacing.md),
-                sliver: SliverToBoxAdapter(child: Text('Quick Topics', style: InhaleTypography.headlineMedium)),
+                sliver: SliverToBoxAdapter(
+                  child: Text(
+                    'Quick Topics',
+                    style: InhaleTypography.headlineMedium,
+                  ),
+                ),
               ),
               SliverPadding(
                 padding: EdgeInsets.symmetric(horizontal: InhaleSpacing.md),
                 sliver: SliverGrid(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisExtent: 90, crossAxisSpacing: 12, mainAxisSpacing: 12),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisExtent: 90,
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 12,
+                  ),
                   delegate: SliverChildBuilderDelegate((context, index) {
                     final cat = categories[index];
                     return GlassCard(
-                      onTap: () => ref.read(quizProvider.notifier).generateQuiz(topic: cat['name']!),
+                      onTap:
+                          () => ref
+                              .read(quizProvider.notifier)
+                              .generateQuiz(topic: cat['name'].toString()),
                       padding: EdgeInsets.all(InhaleSpacing.md),
                       child: Column(
-                        MainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(cat['icon'], color: InhaleColors.primaryBlue, size: 28),
+                          Icon(
+                            cat['icon'] as IconData,
+                            color: InhaleColors.primaryBlue,
+                            size: 28,
+                          ),
                           const SizedBox(height: 4),
-                          Text(cat['name']!, style: InhaleTypography.titleSmall, textAlign: TextAlign.center),
+                          Text(
+                            cat['name'] as String,
+                            style: InhaleTypography.titleSmall,
+                            textAlign: TextAlign.center,
+                          ),
                         ],
                       ),
                     );
@@ -94,7 +131,11 @@ class QuizScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildActiveQuiz(BuildContext context, WidgetRef ref, QuizState state) {
+  Widget _buildActiveQuiz(
+    BuildContext context,
+    WidgetRef ref,
+    QuizState state,
+  ) {
     final question = state.questions[state.currentIndex];
     return Column(
       children: [
@@ -103,7 +144,10 @@ class QuizScreen extends ConsumerWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('Question ${state.currentIndex + 1} / ${state.questions.length}', style: InhaleTypography.titleSmall),
+              Text(
+                'Question ${state.currentIndex + 1} / ${state.questions.length}',
+                style: InhaleTypography.titleSmall,
+              ),
             ],
           ),
         ),
@@ -115,29 +159,56 @@ class QuizScreen extends ConsumerWidget {
                 sliver: SliverToBoxAdapter(
                   child: GlassCard(
                     padding: EdgeInsets.all(InhaleSpacing.md),
-                    child: Text(question.question, style: InhaleTypography.titleMedium),
+                    child: Text(
+                      question.question,
+                      style: InhaleTypography.titleMedium,
+                    ),
                   ),
                 ),
               ),
               SliverPadding(
                 padding: EdgeInsets.symmetric(horizontal: InhaleSpacing.md),
                 sliver: SliverGrid(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisExtent: 80, crossAxisSpacing: 12, mainAxisSpacing: 12),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisExtent: 80,
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 12,
+                  ),
                   delegate: SliverChildBuilderDelegate((context, index) {
                     final label = String.fromCharCode(65 + index);
                     return GlassCard(
-                      onTap: () => ref.read(quizProvider.notifier).submitAnswer(state.currentIndex, label),
+                      onTap:
+                          () => ref
+                              .read(quizProvider.notifier)
+                              .submitAnswer(state.currentIndex, label),
                       padding: EdgeInsets.all(InhaleSpacing.md),
                       child: Row(
                         children: [
                           Container(
                             width: 28,
                             height: 28,
-                            decoration: BoxDecoration(color: InhaleColors.primaryBlue.withAlpha(40), shape: BoxShape.circle),
-                            child: Center(child: Text(label, style: const TextStyle(color: InhaleColors.primaryBlue, fontWeight: FontWeight.bold))),
+                            decoration: BoxDecoration(
+                              color: InhaleColors.primaryBlue.withAlpha(40),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Center(
+                              child: Text(
+                                label,
+                                style: const TextStyle(
+                                  color: InhaleColors.primaryBlue,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
                           ),
                           const SizedBox(width: 12),
-                          Expanded(child: Text('Option $label', style: InhaleTypography.bodyMedium)),
+                          Expanded(
+                            child: Text(
+                              'Option $label',
+                              style: InhaleTypography.bodyMedium,
+                            ),
+                          ),
                         ],
                       ),
                     );

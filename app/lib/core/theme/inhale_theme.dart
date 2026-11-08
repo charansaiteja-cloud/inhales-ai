@@ -27,12 +27,12 @@ class InhaleTheme {
     cardTheme: CardThemeData(
       color: InhaleColors.glassSurface,
       elevation: 0,
-      shape: const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(InhaleRadius.md)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(InhaleRadius.md),
       ),
     ),
     scrollbarTheme: ScrollbarThemeData(
-      thumbColor: MaterialStateColor.resolveWith(
+      thumbColor: WidgetStateColor.resolveWith(
         (_) => InhaleColors.primaryBlue.withValues(alpha: 0.4),
       ),
     ),
@@ -60,23 +60,23 @@ class InhaleTheme {
     pageTransitionsTheme: PageTransitionsTheme(
       builders: {
         TargetPlatform.android: ZoomPageTransitionsBuilder(),
-        TargetPlatform.ios: ZoomPageTransitionsBuilder(),
+        TargetPlatform.iOS: ZoomPageTransitionsBuilder(),
         TargetPlatform.linux: ZoomPageTransitionsBuilder(),
         TargetPlatform.macOS: ZoomPageTransitionsBuilder(),
         TargetPlatform.windows: ZoomPageTransitionsBuilder(),
       },
     ),
-    snackbarTheme: SnackbarThemeData(
-      behavior: SnackbarBehavior.floating,
-      shape: const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(InhaleRadius.md)),
+    snackBarTheme: SnackBarThemeData(
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(InhaleRadius.md),
       ),
       backgroundColor: InhaleColors.navyText,
       contentTextStyle: const TextStyle(color: Colors.white),
     ),
     dialogTheme: DialogThemeData(
-      shape: const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(InhaleRadius.lg)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(InhaleRadius.lg),
       ),
     ),
   );
@@ -103,8 +103,8 @@ class InhaleTheme {
       bodyLarge: InhaleTypography.darkBodyLarge,
       bodySmall: InhaleTypography.darkBodySmall,
     ),
-    snackbarTheme: SnackbarThemeData(
-      behavior: SnackbarBehavior.floating,
+    snackBarTheme: SnackBarThemeData(
+      behavior: SnackBarBehavior.floating,
       backgroundColor: InhaleColors.darkSurface,
       contentTextStyle: const TextStyle(color: InhaleColors.darkNavyText),
     ),
@@ -129,14 +129,12 @@ class InhaleThemeData {
   Color get surface =>
       isDark ? InhaleColors.darkGlassSurface : InhaleColors.glassSurface;
 
-  Color get text =>
-      isDark ? InhaleColors.darkNavyText : InhaleColors.navyText;
+  Color get text => isDark ? InhaleColors.darkNavyText : InhaleColors.navyText;
 
   Color get secondaryText =>
       isDark ? InhaleColors.darkSecondaryText : InhaleColors.secondaryText;
 
-  Color get primary =>
-      isDark ? InhaleColors.skyBlue : InhaleColors.primaryBlue;
+  Color get primary => isDark ? InhaleColors.skyBlue : InhaleColors.primaryBlue;
 
   double get blur => isDark ? InhaleBlur.medium : InhaleBlur.light;
 }

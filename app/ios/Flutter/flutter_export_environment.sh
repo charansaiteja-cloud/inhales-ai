@@ -1,8 +1,8 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
 export "FLUTTER_ROOT=/home/charan/flutter"
-export "FLUTTER_APPLICATION_PATH=/home/charan/inhaleskill-ai/app"
-export "FLUTTER_FRAMEWORK_SWIFT_PACKAGE_PATH=/home/charan/inhaleskill-ai/app/ios/Flutter/ephemeral/Packages/.packages/FlutterFramework"
+export "FLUTTER_APPLICATION_PATH=/home/charan/inhales-ai/app"
+export "FLUTTER_FRAMEWORK_SWIFT_PACKAGE_PATH=/home/charan/inhales-ai/app/ios/Flutter/ephemeral/Packages/.packages/FlutterFramework"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_TARGET=lib/main.dart"
 export "FLUTTER_BUILD_DIR=build"

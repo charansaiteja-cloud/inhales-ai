@@ -60,10 +60,12 @@ class MathNotifier extends StateNotifier<MathState> {
     String steps;
 
     try {
-      // Try deterministic calculation for simple expressions
       final numeric = _tryEvaluate(input);
       if (numeric != null) {
-        result = numeric.toStringAsFixed(6).replaceAll(RegExp(r'0+$'), '').replaceAll(RegExp(r'\.$'), '');
+        result = numeric
+            .toStringAsFixed(6)
+            .replaceAll(RegExp(r'0+$'), '')
+            .replaceAll(RegExp(r'\.$'), '');
         steps = 'Expression: ${input}\nResult: $result';
       } else {
         result = 'Use AI model for complex math.';
@@ -74,7 +76,11 @@ class MathNotifier extends StateNotifier<MathState> {
       steps = 'Expression: $input\nThe expression may need AI analysis.';
     }
 
-    final mathResult = MathResult(expression: input, result: result, steps: steps);
+    final mathResult = MathResult(
+      expression: input,
+      result: result,
+      steps: steps,
+    );
 
     state = MathState(
       input: state.input,
@@ -87,10 +93,11 @@ class MathNotifier extends StateNotifier<MathState> {
 
   double? _tryEvaluate(String expr) {
     try {
-      // Simple arithmetic evaluation
-      final clean = expr.replaceAll(' ', '').replaceAll('x', '*').replaceAll('X', '*');
+      final clean = expr
+          .replaceAll(' ', '')
+          .replaceAll('x', '*')
+          .replaceAll('X', '*');
       if (RegExp(r'^[\d\+\-\*\/\.\(\)\%\s]+$').hasMatch(clean)) {
-        // Use a simple parser for safe evaluation
         final tokens = _tokenize(clean);
         return _parseExpression(tokens);
       }
@@ -107,7 +114,9 @@ class MathNotifier extends StateNotifier<MathState> {
         i++;
       } else if (expr[i].codeUnitAt(0) >= 48 && expr[i].codeUnitAt(0) <= 57) {
         var num = '';
-        while (i < expr.length && (expr[i].codeUnitAt(0) >= 48 && expr[i].codeUnitAt(0) <= 57 || expr[i] == '.')) {
+        while (i < expr.length &&
+            ((expr[i].codeUnitAt(0) >= 48 && expr[i].codeUnitAt(0) <= 57) ||
+                expr[i] == '.')) {
           num += expr[i];
           i++;
         }
@@ -121,27 +130,12 @@ class MathNotifier extends StateNotifier<MathState> {
 
   double _parseExpression(List<String> tokens) {
     int pos = 0;
-    double parseExpr() {
-      double result = parseTerm();
-      while (pos < tokens.length && (tokens[pos] == '+' || tokens[pos] == '-')) {
-        final op = tokens[pos++];
-        final right = parseTerm();
-        result = op == '+' ? result + right : result - right;
-      }
-      return result;
-    }
-    double parseTerm() {
-      double result = parseFactor();
-      while (pos < tokens.length && (tokens[pos] == '*' || tokens[pos] == '/' || tokens[pos] == '%')) {
-        final op = tokens[pos++];
-        final right = parseFactor();
-        if (op == '*') result *= right;
-        else if (op == '/') result /= right;
-        else result = right % (result.abs());
-      }
-      return result;
-    }
-    double parseFactor() {
+
+    double Function() parseExpr = () => 0.0;
+    double Function() parseTerm = () => 0.0;
+    double Function() parseFactor = () => 0.0;
+
+    parseFactor = () {
       if (pos < tokens.length && tokens[pos] == '(') {
         pos++;
         final result = parseExpr();
@@ -151,8 +145,36 @@ class MathNotifier extends StateNotifier<MathState> {
       if (pos < tokens.length) {
         return double.parse(tokens[pos++]);
       }
-      return 0;
-    }
+      return 0.0;
+    };
+
+    parseTerm = () {
+      double result = parseFactor();
+      while (pos < tokens.length &&
+          (tokens[pos] == '*' || tokens[pos] == '/' || tokens[pos] == '%')) {
+        final op = tokens[pos++];
+        final right = parseFactor();
+        if (op == '*')
+          result *= right;
+        else if (op == '/')
+          result /= right;
+        else
+          result = right % (result.abs());
+      }
+      return result;
+    };
+
+    parseExpr = () {
+      double result = parseTerm();
+      while (pos < tokens.length &&
+          (tokens[pos] == '+' || tokens[pos] == '-')) {
+        final op = tokens[pos++];
+        final right = parseTerm();
+        result = op == '+' ? result + right : result - right;
+      }
+      return result;
+    };
+
     return parseExpr();
   }
 }

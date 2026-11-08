@@ -29,7 +29,11 @@ class FfiInferenceEngine implements InferenceEngine {
   }
 
   @override
-  Future<bool> loadModel(String path, {int threads = 4, int gpuLayers = 0}) async {
+  Future<bool> loadModel(
+    String path, {
+    int threads = 4,
+    int gpuLayers = 0,
+  }) async {
     if (_ffi == null) return false;
     final pathPtr = path.toNativeUtf8();
     final threadsPtr = threads.toString().toNativeUtf8();
@@ -56,7 +60,11 @@ class FfiInferenceEngine implements InferenceEngine {
   int get memoryMb => _ffi?.inhale_get_memory_mb() ?? 0;
 
   @override
-  Stream<String> generate(String prompt, {int maxTokens = 512, double temperature = 0.7}) async* {
+  Stream<String> generate(
+    String prompt, {
+    int maxTokens = 512,
+    double temperature = 0.7,
+  }) async* {
     if (_ffi == null) {
       yield _simulateResponse(prompt);
       return;
@@ -91,4 +99,6 @@ class FfiInferenceEngine implements InferenceEngine {
   }
 }
 
-final ffiInferenceEngineProvider = Provider<FfiInferenceEngine>((ref) => FfiInferenceEngine());
+final ffiInferenceEngineProvider = Provider<FfiInferenceEngine>(
+  (ref) => FfiInferenceEngine(),
+);

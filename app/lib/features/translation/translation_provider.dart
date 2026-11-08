@@ -34,9 +34,10 @@ class TranslationHistory {
   });
 }
 
-final translationProvider = StateNotifierProvider<TranslationNotifier, TranslationState>(
-  (ref) => TranslationNotifier(),
-);
+final translationProvider =
+    StateNotifierProvider<TranslationNotifier, TranslationState>(
+      (ref) => TranslationNotifier(),
+    );
 
 class TranslationNotifier extends StateNotifier<TranslationState> {
   TranslationNotifier() : super(const TranslationState());
@@ -55,9 +56,10 @@ class TranslationNotifier extends StateNotifier<TranslationState> {
     // Real implementation uses local translation model.
     await Future.delayed(const Duration(milliseconds: 800));
 
-    final result = state.translatedText.isEmpty 
-        ? 'Translation requires a language model. Install one from Model Manager.'
-        : state.translatedText;
+    final result =
+        state.translatedText.isEmpty
+            ? 'Translation requires a language model. Install one from Model Manager.'
+            : state.translatedText;
 
     final historyEntry = TranslationHistory(
       source: text,

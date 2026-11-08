@@ -25,7 +25,7 @@ class GlassChatBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TapRegion(
+    return InkWell(
       onTap: onTap,
       onLongPress: onLongPress,
       child: Align(
@@ -37,13 +37,20 @@ class GlassChatBubble extends StatelessWidget {
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
                 decoration: BoxDecoration(
-                  color: isUser
-                      ? InhaleColors.primaryBlue.withValues(alpha: 0.85)
-                      : InhaleColors.glassSurface,
+                  color:
+                      isUser
+                          ? InhaleColors.primaryBlue.withValues(alpha: 0.85)
+                          : InhaleColors.glassSurface,
                   border: Border.all(
-                    color: isUser ? Colors.transparent : InhaleColors.glassBorderSubtle,
+                    color:
+                        isUser
+                            ? Colors.transparent
+                            : InhaleColors.glassBorderSubtle,
                     width: 0.5,
                   ),
                 ),
@@ -54,7 +61,10 @@ class GlassChatBubble extends StatelessWidget {
                     Text(
                       message,
                       style: TextStyle(
-                        color: isUser ? InhaleColors.pureWhite : InhaleColors.navyText,
+                        color:
+                            isUser
+                                ? InhaleColors.pureWhite
+                                : InhaleColors.navyText,
                         fontSize: 15,
                         height: 1.4,
                       ),
@@ -65,7 +75,12 @@ class GlassChatBubble extends StatelessWidget {
                         timestamp!,
                         style: TextStyle(
                           fontSize: 10,
-                          color: isUser ? InhaleColors.pureWhite.withValues(alpha: 0.7) : InhaleColors.secondaryText,
+                          color:
+                              isUser
+                                  ? InhaleColors.pureWhite.withValues(
+                                    alpha: 0.7,
+                                  )
+                                  : InhaleColors.secondaryText,
                         ),
                       ),
                     ],

@@ -21,7 +21,7 @@ class PathUtils {
   }
 
   static Future<String> get appCache async {
-    final dir = await getCacheDirectory();
+    final dir = await getApplicationCacheDirectory();
     return dir.path;
   }
 

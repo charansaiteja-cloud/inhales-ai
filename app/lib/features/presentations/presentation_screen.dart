@@ -19,9 +19,10 @@ class PresentationScreen extends ConsumerWidget {
       appBar: GlassAppBar(title: 'Presentations'),
       body: Container(
         decoration: BoxDecoration(gradient: InhaleColors.gradientBackground),
-        child: state.presentations.isEmpty
-            ? _buildEmptyState(context, notifier)
-            : _buildPresentationsList(context, ref, state, notifier),
+        child:
+            state.presentations.isEmpty
+                ? _buildEmptyState(context, notifier)
+                : _buildPresentationsList(context, ref, state, notifier),
       ),
     );
   }
@@ -31,22 +32,43 @@ class PresentationScreen extends ConsumerWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.presentation_outlined, size: 64, color: InhaleColors.secondaryText),
+          Icon(
+            Icons.slideshow_rounded,
+            size: 64,
+            color: InhaleColors.secondaryText,
+          ),
           const SizedBox(height: InhaleSpacing.md),
           Text('No Presentations Yet', style: InhaleTypography.titleMedium),
           const SizedBox(height: InhaleSpacing.sm),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: InhaleSpacing.xl),
-            child: Text('Create a presentation from a topic or generate one with AI', style: InhaleTypography.bodyMedium.copyWith(color: InhaleColors.secondaryText), textAlign: TextAlign.center),
+            child: Text(
+              'Create a presentation from a topic or generate one with AI',
+              style: InhaleTypography.bodyMedium.copyWith(
+                color: InhaleColors.secondaryText,
+              ),
+              textAlign: TextAlign.center,
+            ),
           ),
           const SizedBox(height: InhaleSpacing.lg),
-          SizedBox(width: 240, child: GlassButton(label: 'Create from Topic', onTap: () => notifier.showTopicInput())),
+          SizedBox(
+            width: 240,
+            child: GlassButton(
+              label: 'Create from Topic',
+              onTap: () => notifier.showTopicInput(),
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildPresentationsList(BuildContext context, WidgetRef ref, dynamic state, dynamic notifier) {
+  Widget _buildPresentationsList(
+    BuildContext context,
+    WidgetRef ref,
+    dynamic state,
+    dynamic notifier,
+  ) {
     return Column(
       children: [
         Expanded(
@@ -65,20 +87,37 @@ class PresentationScreen extends ConsumerWidget {
                       Container(
                         width: 48,
                         height: 48,
-                        decoration: BoxDecoration(color: InhaleColors.lightGlassBlue.withAlpha(200), borderRadius: BorderRadius.circular(InhaleRadius.md)),
-                        child: Icon(Icons.presentation_rounded, color: InhaleColors.primaryBlue),
+                        decoration: BoxDecoration(
+                          color: InhaleColors.lightGlassBlue.withAlpha(200),
+                          borderRadius: BorderRadius.circular(InhaleRadius.md),
+                        ),
+                        child: Icon(
+                          Icons.present_to_all_rounded,
+                          color: InhaleColors.primaryBlue,
+                        ),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(pres['title'] ?? 'Untitled', style: InhaleTypography.titleSmall),
-                            Text('${pres['slides'] ?? 0} slides', style: InhaleTypography.bodySmall.copyWith(color: InhaleColors.secondaryText)),
+                            Text(
+                              pres['title'] ?? 'Untitled',
+                              style: InhaleTypography.titleSmall,
+                            ),
+                            Text(
+                              '${pres['slides'] ?? 0} slides',
+                              style: InhaleTypography.bodySmall.copyWith(
+                                color: InhaleColors.secondaryText,
+                              ),
+                            ),
                           ],
                         ),
                       ),
-                      Icon(Icons.chevron_right_rounded, color: InhaleColors.secondaryText),
+                      Icon(
+                        Icons.chevron_right_rounded,
+                        color: InhaleColors.secondaryText,
+                      ),
                     ],
                   ),
                 ),
@@ -88,7 +127,11 @@ class PresentationScreen extends ConsumerWidget {
         ),
         Padding(
           padding: EdgeInsets.all(InhaleSpacing.md),
-          child: GlassButton(width: double.infinity, label: 'New Presentation', onTap: () => notifier.showTopicInput()),
+          child: GlassButton(
+            width: double.infinity,
+            label: 'New Presentation',
+            onTap: () => notifier.showTopicInput(),
+          ),
         ),
         const SizedBox(height: InhaleSpacing.md),
       ],

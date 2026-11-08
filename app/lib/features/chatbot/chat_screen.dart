@@ -56,7 +56,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                       isUser: msg.isUser,
                       timestamp: msg.timestamp.toString(),
                       isStreaming: msg.isStreaming,
-                      isLast: index == chatState.activeSession!.messages.length - 1,
+                      isLast:
+                          index == chatState.activeSession!.messages.length - 1,
                     );
                   },
                 ),
@@ -66,9 +67,16 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.smart_toy_rounded, size: 64, color: InhaleColors.primaryBlue),
+                    Icon(
+                      Icons.smart_toy_rounded,
+                      size: 64,
+                      color: InhaleColors.primaryBlue,
+                    ),
                     const SizedBox(height: InhaleSpacing.md),
-                    Text('Start a Conversation', style: InhaleTypography.headlineMedium),
+                    Text(
+                      'Start a Conversation',
+                      style: InhaleTypography.headlineMedium,
+                    ),
                     const SizedBox(height: InhaleSpacing.md),
                     GlassButton(
                       label: 'New Conversation',
@@ -91,11 +99,20 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                   ),
                   const SizedBox(width: InhaleSpacing.sm),
                   GlassIconButton(
-                    onTap: chatState.isGenerating 
-                        ? () => ref.read(chatProvider.notifier).stopGeneration()
-                        : _sendMessage,
-                    icon: Icon(chatState.isGenerating ? Icons.stop_rounded : Icons.send_rounded, 
-                        color: chatState.isGenerating ? InhaleColors.error : InhaleColors.primaryBlue),
+                    onTap:
+                        chatState.isGenerating
+                            ? () =>
+                                ref.read(chatProvider.notifier).stopGeneration()
+                            : _sendMessage,
+                    icon: Icon(
+                      chatState.isGenerating
+                          ? Icons.stop_rounded
+                          : Icons.send_rounded,
+                      color:
+                          chatState.isGenerating
+                              ? InhaleColors.error
+                              : InhaleColors.primaryBlue,
+                    ),
                   ),
                 ],
               ),

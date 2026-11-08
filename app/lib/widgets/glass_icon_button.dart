@@ -20,7 +20,7 @@ class GlassIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TapRegion(
-      onTap: onTap,
+      onTapInside: (_) => onTap,
       child: Container(
         width: size,
         height: size,
@@ -29,10 +29,7 @@ class GlassIconButton extends StatelessWidget {
           shape: BoxShape.circle,
           border: Border.all(color: InhaleColors.glassBorderSubtle, width: 0.5),
         ),
-        child: IconButton(
-          icon: icon,
-          onPressed: onTap,
-        ),
+        child: IconButton(icon: icon, onPressed: onTap),
       ),
     );
   }

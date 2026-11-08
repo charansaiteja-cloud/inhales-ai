@@ -45,32 +45,40 @@ class DownloadProgress {
   final double progress;
   final bool isComplete;
 
-  const DownloadProgress({required this.modelId, this.progress = 0.0, this.isComplete = false});
+  const DownloadProgress({
+    required this.modelId,
+    this.progress = 0.0,
+    this.isComplete = false,
+  });
 }
 
 final modelManagerProvider =
     StateNotifierProvider<ModelManagerNotifier, ModelManagerState>(
-  (ref) => ModelManagerNotifier(),
-);
+      (ref) => ModelManagerNotifier(),
+    );
 
 class ModelManagerNotifier extends StateNotifier<ModelManagerState> {
   ModelManagerNotifier()
-      : super(const ModelManagerState(
-            hardware: HardwareProfile(
-              totalRamMb: 4096,
-              availableRamMb: 2048,
-              storageFreeMb: 10000,
-              cpuArchitecture: 'x86_64',
-              cpuCores: 4,
-              gpuAvailable: false,
-              gpuName: 'none',
-              os: 'linux',
-              osVersion: 1,
-            ),
-            installedModels: []));
+    : super(
+        const ModelManagerState(
+          hardware: HardwareProfile(
+            totalRamMb: 4096,
+            availableRamMb: 2048,
+            storageFreeMb: 10000,
+            cpuArchitecture: 'x86_64',
+            cpuCores: 4,
+            gpuAvailable: false,
+            gpuName: 'none',
+            os: 'linux',
+            osVersion: 1,
+          ),
+          installedModels: [],
+        ),
+      );
 
   void installModel(ModelCatalogEntry model) {
-    final updated = List<ModelCatalogEntry>.from(state.installedModels)..add(model);
+    final updated = List<ModelCatalogEntry>.from(state.installedModels)
+      ..add(model);
     state = state.copyWith(installedModels: updated);
   }
 

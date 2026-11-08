@@ -33,24 +33,41 @@ class _GlassSearchBarState extends State<GlassSearchBar> {
   @override
   Widget build(BuildContext context) {
     return TapRegion(
-      onTap: widget.onTap,
+      onTapInside: (_) => widget.onTap,
       child: ClipRRect(
-        borderRadius: const BorderRadius.all(Radius.circular(InhaleRadius.pill)),
+        borderRadius: const BorderRadius.all(
+          Radius.circular(InhaleRadius.pill),
+        ),
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
           child: Container(
             decoration: BoxDecoration(
               color: InhaleColors.glassSurface,
-              borderRadius: const BorderRadius.all(Radius.circular(InhaleRadius.pill)),
-              border: Border.all(color: InhaleColors.glassBorderSubtle, width: 0.5),
+              borderRadius: const BorderRadius.all(
+                Radius.circular(InhaleRadius.pill),
+              ),
+              border: Border.all(
+                color: InhaleColors.glassBorderSubtle,
+                width: 0.5,
+              ),
             ),
             child: TextField(
               controller: _controller,
               enabled: widget.enabled,
               onTap: widget.onTap,
               onChanged: widget.onChanged,
-              style: const TextStyle(color: InhaleColors.navyText, fontSize: 15),
-              decoration: const BoxDecoration(),
+              style: const TextStyle(
+                color: InhaleColors.navyText,
+                fontSize: 15,
+              ),
+              decoration: InputDecoration(
+                hintText: widget.hintText,
+                border: InputBorder.none,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
+              ),
               cursorColor: InhaleColors.primaryBlue,
             ),
           ),

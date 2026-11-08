@@ -4,7 +4,7 @@ import '../core/theme/inhale_colors.dart';
 import '../core/theme/inhale_tokens.dart';
 
 class GlassSidebar extends StatelessWidget {
-  final List<BottomNavDestination> items;
+  final List<SidebarItem> items;
   final int currentIndex;
   final Function(int, String) onItemTap;
   final VoidCallback? onTap;
@@ -26,7 +26,9 @@ class GlassSidebar extends StatelessWidget {
           width: 260,
           decoration: const BoxDecoration(
             color: Color(0x99FFFFFF),
-            border: Border(right: BorderSide(color: Color(0x4DFFFFFF), width: 0.5)),
+            border: Border(
+              right: BorderSide(color: Color(0x4DFFFFFF), width: 0.5),
+            ),
           ),
           child: SafeArea(
             child: ListView(
@@ -34,7 +36,11 @@ class GlassSidebar extends StatelessWidget {
               children: [
                 const Text(
                   'InhaleSkill AI',
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700, color: InhaleColors.primaryBlue),
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
+                    color: InhaleColors.primaryBlue,
+                  ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 24),
@@ -42,23 +48,47 @@ class GlassSidebar extends StatelessWidget {
                   final item = items[index];
                   final isActive = index == currentIndex;
                   return TapRegion(
-                    onTap: () => onItemTap(index, item.label),
+                    onTapInside: (_) => onItemTap(index, item.label),
                     child: Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 2,
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
                       decoration: BoxDecoration(
-                        color: isActive ? InhaleColors.primaryBlue.withValues(alpha: 0.12) : Colors.transparent,
-                        borderRadius: const BorderRadius.all(Radius.circular(InhaleRadius.md)),
+                        color:
+                            isActive
+                                ? InhaleColors.primaryBlue.withValues(
+                                  alpha: 0.12,
+                                )
+                                : Colors.transparent,
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(InhaleRadius.md),
+                        ),
                       ),
                       child: Row(
                         children: [
-                          Icon(item.icon, color: isActive ? InhaleColors.primaryBlue : InhaleColors.secondaryText, size: 22),
+                          Icon(
+                            item.icon,
+                            color:
+                                isActive
+                                    ? InhaleColors.primaryBlue
+                                    : InhaleColors.secondaryText,
+                            size: 22,
+                          ),
                           const SizedBox(width: 14),
                           Text(
                             item.label,
                             style: TextStyle(
-                              color: isActive ? InhaleColors.primaryBlue : InhaleColors.navyText,
-                              fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
+                              color:
+                                  isActive
+                                      ? InhaleColors.primaryBlue
+                                      : InhaleColors.navyText,
+                              fontWeight:
+                                  isActive ? FontWeight.w600 : FontWeight.w400,
                               fontSize: 15,
                             ),
                           ),
@@ -76,10 +106,14 @@ class GlassSidebar extends StatelessWidget {
   }
 }
 
-class GlassSidebarItem {
+class SidebarItem {
   final String label;
-  final IconsData icon;
+  final IconData icon;
   final String route;
 
-  const GlassSidebarItem({required this.label, required this.icon, required this.route});
+  const SidebarItem({
+    required this.label,
+    required this.icon,
+    required this.route,
+  });
 }

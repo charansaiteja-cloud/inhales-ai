@@ -36,12 +36,11 @@ class GlassCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final radius = borderRadius ?? const BorderRadius.all(
-      Radius.circular(InhaleRadius.md),
-    );
-
-    final effectiveShadows = shadows ??
-        (elevated ? InhaleShadows.glass : InhaleShadows.softBlue);
+    final radius =
+        borderRadius ??
+        const BorderRadius.all(Radius.circular(InhaleRadius.md));
+    final effectiveShadows =
+        shadows ?? (elevated ? InhaleShadows.glass : InhaleShadows.softBlue);
 
     return Container(
       width: width,
@@ -50,10 +49,7 @@ class GlassCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: backgroundColor ?? InhaleColors.glassSurface,
         borderRadius: radius,
-        border: Border.all(
-          color: InhaleColors.glassBorderSubtle,
-          width: 0.5,
-        ),
+        border: Border.all(color: InhaleColors.glassBorderSubtle, width: 0.5),
         boxShadow: effectiveShadows,
       ),
       child: ClipRRect(
@@ -62,60 +58,21 @@ class GlassCard extends StatelessWidget {
           filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
           child: Material(
             color: Colors.transparent,
-            child: onTap != null || onLongPress != null
-                ? GlassInkTap(
-                    onTap: onTap,
-                    onLongPress: onLongPress,
-                    child: padding != null
-                        ? Padding(padding: padding!, child: child)
-                        : child,
-                  )
-                : padding != null
-                    ? Padding(padding: padding!, child: child)
-                    : child,
+            child:
+                onTap != null || onLongPress != null
+                    ? InkWell(
+                      onTap: onTap,
+                      onLongPress: onLongPress,
+                      child: Padding(
+                        padding: padding ?? EdgeInsets.zero,
+                        child: child ?? const SizedBox(),
+                      ),
+                    )
+                    : Padding(
+                      padding: padding ?? EdgeInsets.zero,
+                      child: child ?? const SizedBox(),
+                    ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-/// Internal ink-well wrapper preserving glass styling on press.
-class GlassInkTap extends StatefulWidget {
-  final Widget child;
-  final VoidCallback? onTap;
-  final VoidCallback? onLongPress;
-
-  const GlassInkTap({
-    super.key,
-    required this.child,
-    this.onTap,
-    this.onLongPress,
-  });
-
-  @override
-  State<GlassInkTap> createState() => _GlassInkTapState();
-}
-
-class _GlassInkTapState extends State<GlassInkTap> {
-  bool _pressed = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return MouseRegion(
-      onEnter: (_) => setState(() => _pressed = true),
-      onExit: (_) => setState(() => _pressed = false),
-      child: TapRegion(
-        onTap: widget.onTap,
-        onLongPress: widget.onLongPress,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 150),
-          decoration: BoxDecoration(
-            color: _pressed
-                ? InhaleColors.glassSurfaceHeavy
-                : InhaleColors.glassSurface,
-          ),
-          child: widget.child,
         ),
       ),
     );

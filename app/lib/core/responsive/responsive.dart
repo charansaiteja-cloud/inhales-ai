@@ -13,8 +13,12 @@ class Responsive {
   static bool isDesktop(BuildContext context) =>
       MediaQuery.of(context).size.width >= 1100;
 
-  static int crossAxisCount(BuildContext context,
-      {int mobile = 2, int tablet = 3, int desktop = 4}) {
+  static int crossAxisCount(
+    BuildContext context, {
+    int mobile = 2,
+    int tablet = 3,
+    int desktop = 4,
+  }) {
     if (isDesktop(context)) return desktop;
     if (isTablet(context)) return tablet;
     return mobile;

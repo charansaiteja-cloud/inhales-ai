@@ -94,7 +94,10 @@ class ChatNotifier extends StateNotifier<ChatState> {
     );
 
     state = ChatState(
-      sessions: state.sessions.map((s) => s.id == session.id ? updatedSession : s).toList(),
+      sessions:
+          state.sessions
+              .map((s) => s.id == session.id ? updatedSession : s)
+              .toList(),
       activeSession: updatedSession,
       isGenerating: true,
     );
@@ -123,7 +126,8 @@ class ChatNotifier extends StateNotifier<ChatState> {
     );
 
     state = ChatState(
-      sessions: state.sessions.map((s) => s.id == session.id ? updated : s).toList(),
+      sessions:
+          state.sessions.map((s) => s.id == session.id ? updated : s).toList(),
       activeSession: updated,
       isGenerating: true,
     );
@@ -132,7 +136,9 @@ class ChatNotifier extends StateNotifier<ChatState> {
     await Future.delayed(const Duration(milliseconds: 500));
     final response = ChatMessage(
       id: _nextId++,
-      content: _generatePlaceholderResponse(session.messages.lastWhere((m) => m.isUser).content),
+      content: _generatePlaceholderResponse(
+        session.messages.lastWhere((m) => m.isUser).content,
+      ),
       isUser: false,
       timestamp: DateTime.now(),
     );
@@ -149,7 +155,10 @@ class ChatNotifier extends StateNotifier<ChatState> {
     );
 
     state = ChatState(
-      sessions: state.sessions.map((s) => s.id == session.id ? finalSession : s).toList(),
+      sessions:
+          state.sessions
+              .map((s) => s.id == session.id ? finalSession : s)
+              .toList(),
       activeSession: finalSession,
       isGenerating: false,
     );
@@ -170,28 +179,40 @@ class ChatNotifier extends StateNotifier<ChatState> {
     final filtered = state.sessions.where((s) => s.id != sessionId).toList();
     state = ChatState(
       sessions: filtered,
-      activeSession: state.activeSession?.id == sessionId 
-          ? (filtered.isEmpty ? null : filtered.first)
-          : state.activeSession,
+      activeSession:
+          state.activeSession?.id == sessionId
+              ? (filtered.isEmpty ? null : filtered.first)
+              : state.activeSession,
     );
   }
 
   Future<void> renameSession(int sessionId, String newTitle) async {
-    final updated = state.sessions.map((s) =>
-      s.id == sessionId ? ChatSession(
-        id: s.id, title: newTitle, messages: s.messages, mode: s.mode, lastMessageTime: s.lastMessageTime,
-      ) : s
-    ).toList();
-    
-    final active = state.activeSession?.id == sessionId
-        ? ChatSession(
-            id: state.activeSession!.id,
-            title: newTitle,
-            messages: state.activeSession!.messages,
-            mode: state.activeSession!.mode,
-            lastMessageTime: state.activeSession!.lastMessageTime,
-          )
-        : state.activeSession;
+    final updated =
+        state.sessions
+            .map(
+              (s) =>
+                  s.id == sessionId
+                      ? ChatSession(
+                        id: s.id,
+                        title: newTitle,
+                        messages: s.messages,
+                        mode: s.mode,
+                        lastMessageTime: s.lastMessageTime,
+                      )
+                      : s,
+            )
+            .toList();
+
+    final active =
+        state.activeSession?.id == sessionId
+            ? ChatSession(
+              id: state.activeSession!.id,
+              title: newTitle,
+              messages: state.activeSession!.messages,
+              mode: state.activeSession!.mode,
+              lastMessageTime: state.activeSession!.lastMessageTime,
+            )
+            : state.activeSession;
 
     state = ChatState(sessions: updated, activeSession: active);
   }
@@ -204,9 +225,9 @@ extension on ChatState {
     bool? isGenerating,
     String? generationError,
   }) => ChatState(
-        sessions: sessions ?? this.sessions,
-        activeSession: activeSession ?? this.activeSession,
-        isGenerating: isGenerating ?? this.isGenerating,
-        generationError: generationError ?? this.generationError,
-      );
+    sessions: sessions ?? this.sessions,
+    activeSession: activeSession ?? this.activeSession,
+    isGenerating: isGenerating ?? this.isGenerating,
+    generationError: generationError ?? this.generationError,
+  );
 }

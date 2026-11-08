@@ -4,12 +4,16 @@ class PresentationState {
   final List<Map<String, dynamic>> presentations;
   final Map<String, dynamic>? currentPresentation;
 
-  const PresentationState({this.presentations = const [], this.currentPresentation});
+  const PresentationState({
+    this.presentations = const [],
+    this.currentPresentation,
+  });
 }
 
-final presentationProvider = StateNotifierProvider<PresentationNotifier, PresentationState>(
-  (ref) => PresentationNotifier(),
-);
+final presentationProvider =
+    StateNotifierProvider<PresentationNotifier, PresentationState>(
+      (ref) => PresentationNotifier(),
+    );
 
 class PresentationNotifier extends StateNotifier<PresentationState> {
   PresentationNotifier() : super(const PresentationState());

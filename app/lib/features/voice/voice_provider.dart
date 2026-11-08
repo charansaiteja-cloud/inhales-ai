@@ -19,11 +19,11 @@ class VoiceState {
     bool? isSpeaking,
     String? textToSpeak,
   }) => VoiceState(
-        isRecording: isRecording ?? this.isRecording,
-        transcribedText: transcribedText ?? this.transcribedText,
-        isSpeaking: isSpeaking ?? this.isSpeaking,
-        textToSpeak: textToSpeak ?? this.textToSpeak,
-      );
+    isRecording: isRecording ?? this.isRecording,
+    transcribedText: transcribedText ?? this.transcribedText,
+    isSpeaking: isSpeaking ?? this.isSpeaking,
+    textToSpeak: textToSpeak ?? this.textToSpeak,
+  );
 }
 
 final voiceProvider = StateNotifierProvider<VoiceNotifier, VoiceState>(
@@ -36,7 +36,9 @@ class VoiceNotifier extends StateNotifier<VoiceState> {
   void toggleRecording() {
     state = state.copyWith(isRecording: !state.isRecording);
     if (!state.isRecording) {
-      state = state.copyWith(transcribedText: 'Transcribed text will appear here');
+      state = state.copyWith(
+        transcribedText: 'Transcribed text will appear here',
+      );
     }
   }
 

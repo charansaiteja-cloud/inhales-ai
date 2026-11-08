@@ -53,7 +53,7 @@ class QuizNotifier extends StateNotifier<QuizState> {
     final quizTopic = topic.isNotEmpty ? topic : state.topic;
     state = state.copyWith(isGenerating: true);
     await Future.delayed(const Duration(milliseconds: 500));
-    
+
     final questions = <QuizQuestion>[
       for (int i = 0; i < 5; i++)
         QuizQuestion(
@@ -76,7 +76,7 @@ class QuizNotifier extends StateNotifier<QuizState> {
   void submitAnswer(int questionIndex, String answer) {
     final question = state.questions[questionIndex];
     final isCorrect = answer == question.correctAnswer;
-    
+
     state = QuizState(
       isInProgress: state.isInProgress,
       questions: state.questions,
@@ -104,11 +104,11 @@ extension on QuizState {
     int? correctCount,
     String? topic,
   }) => QuizState(
-        isGenerating: isGenerating ?? this.isGenerating,
-        isInProgress: isInProgress ?? this.isInProgress,
-        questions: questions ?? this.questions,
-        currentIndex: currentIndex ?? this.currentIndex,
-        correctCount: correctCount ?? this.correctCount,
-        topic: topic ?? this.topic,
-      );
+    isGenerating: isGenerating ?? this.isGenerating,
+    isInProgress: isInProgress ?? this.isInProgress,
+    questions: questions ?? this.questions,
+    currentIndex: currentIndex ?? this.currentIndex,
+    correctCount: correctCount ?? this.correctCount,
+    topic: topic ?? this.topic,
+  );
 }

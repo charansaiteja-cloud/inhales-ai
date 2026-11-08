@@ -23,7 +23,9 @@ class HardwareProfile {
   bool get isHighEnd => totalRamMb > 8192;
 }
 
-final hardwareServiceProvider = Provider<HardwareService>((ref) => HardwareService());
+final hardwareServiceProvider = Provider<HardwareService>(
+  (ref) => HardwareService(),
+);
 
 class HardwareService {
   Future<HardwareProfile> getProfile() async {

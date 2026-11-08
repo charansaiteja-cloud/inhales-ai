@@ -25,7 +25,9 @@ class GlassAppBar extends StatelessWidget implements PreferredSizeWidget {
         child: Container(
           decoration: const BoxDecoration(
             color: Color(0x99FFFFFF),
-            border: Border(bottom: BorderSide(color: Color(0x4DFFFFFF), width: 0.5)),
+            border: Border(
+              bottom: BorderSide(color: Color(0x4DFFFFFF), width: 0.5),
+            ),
           ),
           child: SafeArea(
             bottom: false,
@@ -35,7 +37,10 @@ class GlassAppBar extends StatelessWidget implements PreferredSizeWidget {
                 children: [
                   if (showBack)
                     IconButton(
-                      icon: const Icon(Icons.arrow_back_rounded, color: InhaleColors.primaryBlue),
+                      icon: const Icon(
+                        Icons.arrow_back_rounded,
+                        color: InhaleColors.primaryBlue,
+                      ),
                       onPressed: onBack ?? () => Navigator.of(context).pop(),
                     )
                   else

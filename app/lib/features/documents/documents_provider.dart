@@ -7,9 +7,10 @@ class DocumentsState {
   const DocumentsState({this.documents = const [], this.searchQuery = ''});
 }
 
-final documentsProvider = StateNotifierProvider<DocumentsNotifier, DocumentsState>(
-  (ref) => DocumentsNotifier(),
-);
+final documentsProvider =
+    StateNotifierProvider<DocumentsNotifier, DocumentsState>(
+      (ref) => DocumentsNotifier(),
+    );
 
 class DocumentsNotifier extends StateNotifier<DocumentsState> {
   int _nextId = 1;
@@ -18,7 +19,10 @@ class DocumentsNotifier extends StateNotifier<DocumentsState> {
 
   void addDocument() {
     final doc = {'id': _nextId++, 'name': 'New Document', 'type': 'PDF'};
-    state = DocumentsState(documents: [doc, ...state.documents], searchQuery: state.searchQuery);
+    state = DocumentsState(
+      documents: [doc, ...state.documents],
+      searchQuery: state.searchQuery,
+    );
   }
 
   void openDocument(int index) {}

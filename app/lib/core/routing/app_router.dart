@@ -24,24 +24,96 @@ final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: '/home',
     routes: [
-      GoRoute(path: '/home', name: 'home', builder: (_, __) => const HomeScreen()),
-      GoRoute(path: '/chat', name: 'chat', builder: (_, __) => const ChatScreen()),
-      GoRoute(path: '/chat/:id', name: 'chat-detail', builder: (_, __) => const ChatScreen()),
-      GoRoute(path: '/school', name: 'school', builder: (_, __) => const SchoolScreen()),
-      GoRoute(path: '/college', name: 'college', builder: (_, __) => const CollegeScreen()),
-      GoRoute(path: '/general', name: 'general', builder: (_, __) => const GeneralScreen()),
-      GoRoute(path: '/writing', name: 'writing', builder: (_, __) => const WritingScreen()),
-      GoRoute(path: '/coding', name: 'coding', builder: (_, __) => const CodingScreen()),
-      GoRoute(path: '/math', name: 'math', builder: (_, __) => const MathScreen()),
-      GoRoute(path: '/translation', name: 'translation', builder: (_, __) => const TranslationScreen()),
-      GoRoute(path: '/vision', name: 'vision', builder: (_, __) => const VisionScreen()),
-      GoRoute(path: '/documents', name: 'documents', builder: (_, __) => const DocumentsScreen()),
-      GoRoute(path: '/quizzes', name: 'quizzes', builder: (_, __) => const QuizScreen()),
-      GoRoute(path: '/notes', name: 'notes', builder: (_, __) => const NotesScreen()),
-      GoRoute(path: '/voice', name: 'voice', builder: (_, __) => const VoiceScreen()),
-      GoRoute(path: '/presentations', name: 'presentations', builder: (_, __) => const PresentationScreen()),
-      GoRoute(path: '/models', name: 'models', builder: (_, __) => const ModelManagerScreen()),
-      GoRoute(path: '/settings', name: 'settings', builder: (_, __) => const SettingsScreen()),
+      GoRoute(
+        path: '/home',
+        name: 'home',
+        builder: (_, __) => const HomeScreen(),
+      ),
+      GoRoute(
+        path: '/chat',
+        name: 'chat',
+        builder: (_, __) => const ChatScreen(),
+      ),
+      GoRoute(
+        path: '/chat/:id',
+        name: 'chat-detail',
+        builder: (_, __) => const ChatScreen(),
+      ),
+      GoRoute(
+        path: '/school',
+        name: 'school',
+        builder: (_, __) => const SchoolScreen(),
+      ),
+      GoRoute(
+        path: '/college',
+        name: 'college',
+        builder: (_, __) => const CollegeScreen(),
+      ),
+      GoRoute(
+        path: '/general',
+        name: 'general',
+        builder: (_, __) => const GeneralScreen(),
+      ),
+      GoRoute(
+        path: '/writing',
+        name: 'writing',
+        builder: (_, __) => const WritingScreen(),
+      ),
+      GoRoute(
+        path: '/coding',
+        name: 'coding',
+        builder: (_, __) => const CodingScreen(),
+      ),
+      GoRoute(
+        path: '/math',
+        name: 'math',
+        builder: (_, __) => const MathScreen(),
+      ),
+      GoRoute(
+        path: '/translation',
+        name: 'translation',
+        builder: (_, __) => const TranslationScreen(),
+      ),
+      GoRoute(
+        path: '/vision',
+        name: 'vision',
+        builder: (_, __) => const VisionScreen(),
+      ),
+      GoRoute(
+        path: '/documents',
+        name: 'documents',
+        builder: (_, __) => const DocumentsScreen(),
+      ),
+      GoRoute(
+        path: '/quizzes',
+        name: 'quizzes',
+        builder: (_, __) => const QuizScreen(),
+      ),
+      GoRoute(
+        path: '/notes',
+        name: 'notes',
+        builder: (_, __) => const NotesScreen(),
+      ),
+      GoRoute(
+        path: '/voice',
+        name: 'voice',
+        builder: (_, __) => const VoiceScreen(),
+      ),
+      GoRoute(
+        path: '/presentations',
+        name: 'presentations',
+        builder: (_, __) => const PresentationScreen(),
+      ),
+      GoRoute(
+        path: '/models',
+        name: 'models',
+        builder: (_, __) => const ModelManagerScreen(),
+      ),
+      GoRoute(
+        path: '/settings',
+        name: 'settings',
+        builder: (_, __) => const SettingsScreen(),
+      ),
     ],
   );
 });

@@ -19,49 +19,118 @@ class TranslationScreen extends ConsumerWidget {
     final languages = {'en': 'English', 'hi': 'Hindi', 'te': 'Telugu'};
     return Scaffold(
       appBar: GlassAppBar(title: 'Translation'),
-      body: Column(children: [
-        Padding(
-          padding: EdgeInsets.all(InhaleSpacing.md),
-          child: Row(children: [
-            Expanded(child: GlassCard(
-              padding: EdgeInsets.symmetric(vertical: InhaleSpacing.sm),
-              child: DropdownButton<String>(
-                value: state.sourceLang, isExpanded: true, underline: const SizedBox(),
-                items: languages.entries.map((e) => DropdownMenuItem(value: e.key, child: Text(e.value, style: InhaleTypography.titleMedium))).toList(),
-                onChanged: (v) { if (v != null) notifier.setLanguages(v, state.targetLang); },
-              ),
-            )),
-            Padding(padding: EdgeInsets.symmetric(horizontal: InhaleSpacing.sm), child: GlassIconButton(onTap: () => notifier.swapLanguages(), icon: Icon(Icons.swap_horiz_rounded, color: InhaleColors.primaryBlue))),
-            Expanded(child: GlassCard(
-              padding: EdgeInsets.symmetric(vertical: InhaleSpacing.sm),
-              child: DropdownButton<String>(
-                value: state.targetLang, isExpanded: true, underline: const SizedBox(),
-                items: languages.entries.map((e) => DropdownMenuItem(value: e.key, child: Text(e.value, style: InhaleTypography.titleMedium))).toList(),
-                onChanged: (v) { if (v != null) notifier.setLanguages(state.sourceLang, v); },
-              ),
-            )),
-          ]),
-        ),
-        Expanded(child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: InhaleSpacing.md),
-          child: GlassCard(
+      body: Column(
+        children: [
+          Padding(
             padding: EdgeInsets.all(InhaleSpacing.md),
-            child: GlassTextField(maxLines: null, hintText: 'Enter text to translate...', onChanged: (v) {}),
+            child: Row(
+              children: [
+                Expanded(
+                  child: GlassCard(
+                    padding: EdgeInsets.symmetric(vertical: InhaleSpacing.sm),
+                    child: DropdownButton<String>(
+                      value: state.sourceLang,
+                      isExpanded: true,
+                      underline: const SizedBox(),
+                      items:
+                          languages.entries
+                              .map(
+                                (e) => DropdownMenuItem(
+                                  value: e.key,
+                                  child: Text(
+                                    e.value,
+                                    style: InhaleTypography.titleMedium,
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                      onChanged: (v) {
+                        if (v != null)
+                          notifier.setLanguages(v, state.targetLang);
+                      },
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: InhaleSpacing.sm),
+                  child: GlassIconButton(
+                    onTap: () => notifier.swapLanguages(),
+                    icon: Icon(
+                      Icons.swap_horiz_rounded,
+                      color: InhaleColors.primaryBlue,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: GlassCard(
+                    padding: EdgeInsets.symmetric(vertical: InhaleSpacing.sm),
+                    child: DropdownButton<String>(
+                      value: state.targetLang,
+                      isExpanded: true,
+                      underline: const SizedBox(),
+                      items:
+                          languages.entries
+                              .map(
+                                (e) => DropdownMenuItem(
+                                  value: e.key,
+                                  child: Text(
+                                    e.value,
+                                    style: InhaleTypography.titleMedium,
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                      onChanged: (v) {
+                        if (v != null)
+                          notifier.setLanguages(state.sourceLang, v);
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-        )),
-        Padding(
-          padding: EdgeInsets.all(InhaleSpacing.md),
-          child: GlassButton(width: double.infinity, label: 'Translate', onTap: () => notifier.translate('sample')),
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: InhaleSpacing.md),
-          child: GlassCard(
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: InhaleSpacing.md),
+              child: GlassCard(
+                padding: EdgeInsets.all(InhaleSpacing.md),
+                child: GlassTextField(
+                  maxLines: null,
+                  hintText: 'Enter text to translate...',
+                  onChanged: (v) {},
+                ),
+              ),
+            ),
+          ),
+          Padding(
             padding: EdgeInsets.all(InhaleSpacing.md),
-            child: Text(state.translatedText.isNotEmpty ? state.translatedText : 'Translation will appear here.', style: state.translatedText.isNotEmpty ? InhaleTypography.bodyLarge : InhaleTypography.bodyMedium.copyWith(color: InhaleColors.secondaryText)),
+            child: GlassButton(
+              width: double.infinity,
+              label: 'Translate',
+              onTap: () => notifier.translate('sample'),
+            ),
           ),
-        ),
-        const SizedBox(height: InhaleSpacing.md),
-      ]),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: InhaleSpacing.md),
+            child: GlassCard(
+              padding: EdgeInsets.all(InhaleSpacing.md),
+              child: Text(
+                state.translatedText.isNotEmpty
+                    ? state.translatedText
+                    : 'Translation will appear here.',
+                style:
+                    state.translatedText.isNotEmpty
+                        ? InhaleTypography.bodyLarge
+                        : InhaleTypography.bodyMedium.copyWith(
+                          color: InhaleColors.secondaryText,
+                        ),
+              ),
+            ),
+          ),
+          const SizedBox(height: InhaleSpacing.md),
+        ],
+      ),
     );
   }
 }

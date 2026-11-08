@@ -33,56 +33,92 @@ class NotesScreen extends ConsumerWidget {
             if (state.isSearching)
               Padding(
                 padding: EdgeInsets.all(InhaleSpacing.md),
-                child: GlassTextField(hintText: 'Search notes...', onChanged: (v) => notifier.search(v)),
+                child: GlassTextField(
+                  hintText: 'Search notes...',
+                  onChanged: (v) => notifier.search(v),
+                ),
               ),
             Expanded(
-              child: state.notes.isEmpty
-                  ? Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.note_outlined, size: 64, color: InhaleColors.secondaryText),
-                          const SizedBox(height: InhaleSpacing.md),
-                          Text('No Notes Yet', style: InhaleTypography.titleMedium),
-                          const SizedBox(height: InhaleSpacing.sm),
-                          Text('Create a note to get started', style: InhaleTypography.bodyMedium.copyWith(color: InhaleColors.secondaryText)),
-                        ],
-                      ),
-                    )
-                  : ListView.builder(
-                      padding: EdgeInsets.all(InhaleSpacing.md),
-                      itemCount: state.notes.length,
-                      itemBuilder: (context, index) {
-                        final note = state.notes[index];
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 8),
-                          child: GlassCard(
-                            onTap: () => notifier.openNote(index),
-                            padding: EdgeInsets.all(InhaleSpacing.md),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Expanded(child: Text(note['title'] ?? 'Untitled', style: InhaleTypography.titleSmall)),
-                                    GlassIconButton(
-                                      onTap: () => notifier.deleteNote(index),
-                                      icon: Icon(Icons.delete_outline_rounded, color: InhaleColors.error, size: 18),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 4),
-                                Text(note['content'] ?? '', style: InhaleTypography.bodySmall.copyWith(color: InhaleColors.secondaryText), maxLines: 3, overflow: TextOverflow.ellipsis),
-                              ],
+              child:
+                  state.notes.isEmpty
+                      ? Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.note_outlined,
+                              size: 64,
+                              color: InhaleColors.secondaryText,
                             ),
-                          ),
-                        );
-                      },
-                    ),
+                            const SizedBox(height: InhaleSpacing.md),
+                            Text(
+                              'No Notes Yet',
+                              style: InhaleTypography.titleMedium,
+                            ),
+                            const SizedBox(height: InhaleSpacing.sm),
+                            Text(
+                              'Create a note to get started',
+                              style: InhaleTypography.bodyMedium.copyWith(
+                                color: InhaleColors.secondaryText,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                      : ListView.builder(
+                        padding: EdgeInsets.all(InhaleSpacing.md),
+                        itemCount: state.notes.length,
+                        itemBuilder: (context, index) {
+                          final note = state.notes[index];
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 8),
+                            child: GlassCard(
+                              onTap: () => notifier.openNote(index),
+                              padding: EdgeInsets.all(InhaleSpacing.md),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          note['title'] ?? 'Untitled',
+                                          style: InhaleTypography.titleSmall,
+                                        ),
+                                      ),
+                                      GlassIconButton(
+                                        onTap: () => notifier.deleteNote(index),
+                                        icon: Icon(
+                                          Icons.delete_outline_rounded,
+                                          color: InhaleColors.error,
+                                          size: 18,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    note['content'] ?? '',
+                                    style: InhaleTypography.bodySmall.copyWith(
+                                      color: InhaleColors.secondaryText,
+                                    ),
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
             ),
             Padding(
               padding: EdgeInsets.all(InhaleSpacing.md),
-              child: GlassButton(width: double.infinity, label: 'New Note', onTap: () => notifier.addNote()),
+              child: GlassButton(
+                width: double.infinity,
+                label: 'New Note',
+                onTap: () => notifier.addNote(),
+              ),
             ),
             const SizedBox(height: InhaleSpacing.md),
           ],

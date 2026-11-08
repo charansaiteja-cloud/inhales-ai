@@ -1,6 +1,17 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-enum WritingMode { essay, letter, email, report, story, poem, speech, resume, article, social }
+enum WritingMode {
+  essay,
+  letter,
+  email,
+  report,
+  story,
+  poem,
+  speech,
+  resume,
+  article,
+  social,
+}
 
 class WritingState {
   final WritingMode mode;

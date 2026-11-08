@@ -24,6 +24,7 @@ dependencies:
   # Database
   drift: ^2.22.0
   sqlite3: ^2.7.4
+  sqlite3_flutter_libs: ^0.5.0
 
   # Document processing & generation
   pdf: ^3.10.4

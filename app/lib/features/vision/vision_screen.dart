@@ -38,20 +38,40 @@ class VisionScreen extends ConsumerWidget {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.add_photo_alternate_rounded, size: 48, color: InhaleColors.secondaryText),
+                        Icon(
+                          Icons.add_photo_alternate_rounded,
+                          size: 48,
+                          color: InhaleColors.secondaryText,
+                        ),
                         const SizedBox(height: InhaleSpacing.sm),
-                        Text('Tap to upload or paste an image', style: InhaleTypography.bodyMedium.copyWith(color: InhaleColors.secondaryText)),
+                        Text(
+                          'Tap to upload or paste an image',
+                          style: InhaleTypography.bodyMedium.copyWith(
+                            color: InhaleColors.secondaryText,
+                          ),
+                        ),
                       ],
                     ),
                   ),
                 ),
               ),
               const SizedBox(height: InhaleSpacing.lg),
-              Text('Describe What You Need', style: InhaleTypography.titleMedium),
+              Text(
+                'Describe What You Need',
+                style: InhaleTypography.titleMedium,
+              ),
               const SizedBox(height: InhaleSpacing.sm),
-              GlassTextField(hintText: 'e.g. What is in this image? Solve this problem...', onChanged: (v) => notifier.setPrompt(v)),
+              GlassTextField(
+                hintText: 'e.g. What is in this image? Solve this problem...',
+                onChanged: (v) => notifier.setPrompt(v),
+              ),
               const SizedBox(height: InhaleSpacing.lg),
-              GlassButton(width: double.infinity, label: state.isProcessing ? 'Analyzing...' : 'Analyze Image', onTap: state.isProcessing ? null : () => notifier.analyzeImage()),
+              GlassButton(
+                width: double.infinity,
+                label: state.isProcessing ? 'Analyzing...' : 'Analyze Image',
+                onTap:
+                    state.isProcessing ? null : () => notifier.analyzeImage(),
+              ),
               if (state.result != null && state.result!.isNotEmpty) ...[
                 const SizedBox(height: InhaleSpacing.lg),
                 Text('Analysis Result', style: InhaleTypography.titleMedium),

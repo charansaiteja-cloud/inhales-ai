@@ -32,16 +32,16 @@ class Note {
     bool? isPinned,
     DateTime? updatedAt,
   }) => Note(
-        id: id,
-        title: title ?? this.title,
-        content: content ?? this.content,
-        folder: folder ?? this.folder,
-        subject: subject ?? this.subject,
-        classLevel: classLevel ?? this.classLevel,
-        isPinned: isPinned ?? this.isPinned,
-        createdAt: createdAt,
-        updatedAt: updatedAt ?? DateTime.now(),
-      );
+    id: id,
+    title: title ?? this.title,
+    content: content ?? this.content,
+    folder: folder ?? this.folder,
+    subject: subject ?? this.subject,
+    classLevel: classLevel ?? this.classLevel,
+    isPinned: isPinned ?? this.isPinned,
+    createdAt: createdAt,
+    updatedAt: updatedAt ?? DateTime.now(),
+  );
 }
 
 class NotesState {
@@ -50,7 +50,12 @@ class NotesState {
   final bool isSearching;
   final Map<String, dynamic>? currentNote;
 
-  const NotesState({this.notes = const [], this.searchQuery = '', this.isSearching = false, this.currentNote});
+  const NotesState({
+    this.notes = const [],
+    this.searchQuery = '',
+    this.isSearching = false,
+    this.currentNote,
+  });
 }
 
 final notesProvider = StateNotifierProvider<NotesNotifier, NotesState>(
@@ -63,8 +68,17 @@ class NotesNotifier extends StateNotifier<NotesState> {
   NotesNotifier() : super(const NotesState());
 
   void addNote() {
-    final note = {'id': _nextId++, 'title': 'New Note', 'content': '', 'createdAt': DateTime.now()};
-    state = NotesState(notes: [note, ...state.notes], searchQuery: state.searchQuery, isSearching: state.isSearching);
+    final note = {
+      'id': _nextId++,
+      'title': 'New Note',
+      'content': '',
+      'createdAt': DateTime.now(),
+    };
+    state = NotesState(
+      notes: [note, ...state.notes],
+      searchQuery: state.searchQuery,
+      isSearching: state.isSearching,
+    );
   }
 
   void openNote(int index) {
@@ -76,14 +90,26 @@ class NotesNotifier extends StateNotifier<NotesState> {
     if (index >= 0 && index < newNotes.length) {
       newNotes.removeAt(index);
     }
-    state = NotesState(notes: newNotes, searchQuery: state.searchQuery, isSearching: state.isSearching);
+    state = NotesState(
+      notes: newNotes,
+      searchQuery: state.searchQuery,
+      isSearching: state.isSearching,
+    );
   }
 
   void toggleSearch() {
-    state = NotesState(notes: state.notes, searchQuery: '', isSearching: !state.isSearching);
+    state = NotesState(
+      notes: state.notes,
+      searchQuery: '',
+      isSearching: !state.isSearching,
+    );
   }
 
   void search(String query) {
-    state = NotesState(notes: state.notes, searchQuery: query, isSearching: state.isSearching);
+    state = NotesState(
+      notes: state.notes,
+      searchQuery: query,
+      isSearching: state.isSearching,
+    );
   }
 }

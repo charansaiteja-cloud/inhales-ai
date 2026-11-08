@@ -1,16 +1,11 @@
 import 'package:drift/drift.dart';
+import 'package:drift/native.dart';
 import 'package:sqlite3/sqlite3.dart';
-import 'package:sqlite3_flutter/sqlite3_flutter.dart';
 
-import 'tables/conversations.dart';
-import 'tables/messages.dart';
-import 'tables/notes.dart';
-import 'tables/other_tables.dart';
+import 'tables/all_tables.dart';
 
 part 'database.g.dart';
 
-/// Local SQLite database for InhaleSkill AI.
-/// All data persists on-device. No cloud sync.
 @DriftDatabase(
   tables: [
     Conversations,
@@ -24,15 +19,15 @@ part 'database.g.dart';
     Documents,
   ],
 )
-class AppDatabase extends_$AppDatabase {
+class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   static QueryExecutor _openConnection() {
-    return LazyDatabase(() async {
-      sqlite3Flutter.install();
-      final db = sqlite3.open('inhaleskill_ai.db');
-      return DatabaseConnection.fromDb(db);
-    });
+    final db = sqlite3.open('inhaleskill_ai.db');
+    return NativeDatabase.opened(
+      db,
+      setup: (db) => db.execute('PRAGMA foreign_keys = ON'),
+    );
   }
 
   @override
@@ -40,30 +35,15 @@ class AppDatabase extends_$AppDatabase {
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
-        onUpgrade: (migrator, from, to) async {
-          if (from < 2) {
-            await migrator.createTable(bookmarks);
-            await migrator.createTable(quizHistory);
-            await migrator.createTable(learningActivity);
-            await migrator.createTable(appModels);
-            await migrator.createTable(preferences);
-            await migrator.createTable(documents);
-          }
-          if (from < 3) {
-            await migrator.createIndex(Index(
-              'idx_messages_conversation',
-              messages,
-              [messages.conversationId],
-            ));
-            await migrator.createIndex(Index(
-              'idx_notes_subject',
-              notes,
-              [notes.subject],
-            ));
-          }
-        },
-        beforeOpen: (db) async {
-          await db.execute('PRAGMA foreign_keys = ON');
-        },
-      );
+    onUpgrade: (migrator, from, to) async {
+      if (from < 2) {
+        await migrator.createTable(bookmarks);
+        await migrator.createTable(quizHistory);
+        await migrator.createTable(learningActivity);
+        await migrator.createTable(appModels);
+        await migrator.createTable(preferences);
+        await migrator.createTable(documents);
+      }
+    },
+  );
 }

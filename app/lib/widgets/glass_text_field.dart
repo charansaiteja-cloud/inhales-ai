@@ -38,7 +38,8 @@ class GlassTextField extends StatefulWidget {
 }
 
 class _GlassTextFieldState extends State<GlassTextField> {
-  late final _controller = widget.controller ?? TextEditingController(text: widget.initialValue);
+  late final _controller =
+      widget.controller ?? TextEditingController(text: widget.initialValue);
 
   @override
   void dispose() {
@@ -51,7 +52,7 @@ class _GlassTextFieldState extends State<GlassTextField> {
   @override
   Widget build(BuildContext context) {
     return TapRegion(
-      onTap: widget.onTap,
+      onTapInside: (_) => widget.onTap?.call(),
       child: ClipRRect(
         borderRadius: const BorderRadius.all(Radius.circular(InhaleRadius.md)),
         child: BackdropFilter(
@@ -60,9 +61,14 @@ class _GlassTextFieldState extends State<GlassTextField> {
             width: widget.width,
             decoration: BoxDecoration(
               color: InhaleColors.glassSurface,
-              borderRadius: const BorderRadius.all(Radius.circular(InhaleRadius.md)),
+              borderRadius: const BorderRadius.all(
+                Radius.circular(InhaleRadius.md),
+              ),
               border: Border.all(
-                color: widget.error != null ? InhaleColors.error : InhaleColors.glassBorderSubtle,
+                color:
+                    widget.error != null
+                        ? InhaleColors.error
+                        : InhaleColors.glassBorderSubtle,
                 width: 0.5,
               ),
             ),
@@ -74,9 +80,19 @@ class _GlassTextFieldState extends State<GlassTextField> {
               obscureText: widget.obscureText,
               maxLines: widget.maxLines,
               minLines: widget.minLines,
-              style: const TextStyle(color: InhaleColors.navyText, fontSize: 15),
+              style: const TextStyle(
+                color: InhaleColors.navyText,
+                fontSize: 15,
+              ),
               cursorColor: InhaleColors.primaryBlue,
-              decoration: const BoxDecoration(),
+              decoration: InputDecoration(
+                hintText: widget.hintText,
+                border: InputBorder.none,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
+              ),
               onSubmitted: widget.onSubmitted,
             ),
           ),

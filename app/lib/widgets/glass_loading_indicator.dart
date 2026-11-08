@@ -48,7 +48,9 @@ class _GlassLoadingIndicatorState extends State<GlassLoadingIndicator>
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(
-            color: (widget.color ?? InhaleColors.primaryBlue).withValues(alpha: 0.2),
+            color: (widget.color ?? InhaleColors.primaryBlue).withValues(
+              alpha: 0.2,
+            ),
             width: widget.strokeWidth,
           ),
         ),

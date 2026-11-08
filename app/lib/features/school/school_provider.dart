@@ -45,15 +45,18 @@ final schoolProvider = StateNotifierProvider<SchoolNotifier, SchoolState>(
 );
 
 class SchoolNotifier extends StateNotifier<SchoolState> {
-  SchoolNotifier() : super(const SchoolState(
-    subjects: [
-      SchoolSubject(name: 'Mathematics', icon: '📐'),
-      SchoolSubject(name: 'Science', icon: '🔬'),
-      SchoolSubject(name: 'English', icon: '📖'),
-      SchoolSubject(name: 'Social Studies', icon: '🌍'),
-      SchoolSubject(name: 'General Knowledge', icon: '🧠'),
-    ],
-  ));
+  SchoolNotifier()
+    : super(
+        const SchoolState(
+          subjects: [
+            SchoolSubject(name: 'Mathematics', icon: '📐'),
+            SchoolSubject(name: 'Science', icon: '🔬'),
+            SchoolSubject(name: 'English', icon: '📖'),
+            SchoolSubject(name: 'Social Studies', icon: '🌍'),
+            SchoolSubject(name: 'General Knowledge', icon: '🧠'),
+          ],
+        ),
+      );
 
   Future<void> selectClass(int cls) async {
     state = SchoolState(

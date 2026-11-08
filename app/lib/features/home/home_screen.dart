@@ -147,19 +147,27 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       orElse: () => false,
     );
 
-    final layout = Responsive.isDesktop(context)
-        ? _buildDesktop(context, reducedBlur)
-        : _buildMobile(context, reducedBlur);
+    final layout =
+        Responsive.isDesktop(context)
+            ? _buildDesktop(context, reducedBlur)
+            : _buildMobile(context, reducedBlur);
 
     return Scaffold(
       body: SafeArea(child: layout),
-      bottomNavigationBar: Responsive.isDesktop(context)
-          ? null
-          : GlassBottomNavigationBar(
-              currentIndex: _selectedIndex,
-              onTap: _onNavItemTap,
-              items: _navDestinations,
-            ),
+      bottomNavigationBar:
+          Responsive.isDesktop(context)
+              ? null
+              : GlassBottomNavigationBar(
+                currentIndex: _selectedIndex,
+                onTap: _onNavItemTap,
+                items:
+                    _navDestinations
+                        .map(
+                          (d) =>
+                              GlassBottomNavItem(label: d.label, icon: d.icon),
+                        )
+                        .toList(),
+              ),
     );
   }
 
@@ -170,11 +178,31 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           width: 260,
           child: GlassSidebar(
             items: [
-              BottomNavDestination(label: 'Dashboard', icon: Icons.dashboard_rounded),
-              BottomNavDestination(label: 'Chat', icon: Icons.chat_rounded),
-              BottomNavDestination(label: 'School', icon: Icons.school_rounded),
-              BottomNavDestination(label: 'Notes', icon: Icons.note_rounded),
-              BottomNavDestination(label: 'Settings', icon: Icons.settings_rounded),
+              SidebarItem(
+                label: 'Dashboard',
+                icon: Icons.dashboard_rounded,
+                route: '/home',
+              ),
+              SidebarItem(
+                label: 'Chat',
+                icon: Icons.chat_rounded,
+                route: '/chat',
+              ),
+              SidebarItem(
+                label: 'School',
+                icon: Icons.school_rounded,
+                route: '/school',
+              ),
+              SidebarItem(
+                label: 'Notes',
+                icon: Icons.note_rounded,
+                route: '/notes',
+              ),
+              SidebarItem(
+                label: 'Settings',
+                icon: Icons.settings_rounded,
+                route: '/settings',
+              ),
             ],
             currentIndex: _selectedIndex,
             onItemTap: (index, label) => _onNavItemTap(index),
@@ -192,16 +220,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   Widget _buildContent(BuildContext context, bool reducedBlur) {
     return Container(
-      decoration: BoxDecoration(
-        gradient: InhaleColors.gradientBackground,
-      ),
+      decoration: BoxDecoration(gradient: InhaleColors.gradientBackground),
       child: CustomScrollView(
         slivers: [
           // Header
           SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.only(
-                top: Responsive.isMobile(context) ? InhaleSpacing.md : InhaleSpacing.xl,
+                top:
+                    Responsive.isMobile(context)
+                        ? InhaleSpacing.md
+                        : InhaleSpacing.xl,
                 bottom: InhaleSpacing.md,
                 left: InhaleSpacing.lg,
                 right: InhaleSpacing.lg,
@@ -265,7 +294,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               padding: EdgeInsets.symmetric(horizontal: InhaleSpacing.lg),
               child: GlassSearchBar(
                 hintText: 'Ask anything...',
-                onSubmitted: (_) {
+                onChanged: (_) {
                   if (_searchController.text.isNotEmpty) {
                     GoRouter.of(context).push('/chat');
                   }
@@ -289,48 +318,35 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 mainAxisSpacing: InhaleSpacing.md,
                 childAspectRatio: 1.0,
               ),
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  final tile = _dashboardTiles[index];
-                  return GlassCard(
-                    onTap: () => _onTileTap(tile.route),
-                    padding: EdgeInsets.all(InhaleSpacing.md),
-                    elevated: true,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 56,
-                          height: 56,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [tile.gradient.start, tile.gradient.end],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            borderRadius: BorderRadius.circular(InhaleRadius.sm),
+              delegate: SliverChildBuilderDelegate((context, index) {
+                final tile = _dashboardTiles[index];
+                return GlassCard(
+                  onTap: () => _onTileTap(tile.route),
+                  padding: EdgeInsets.all(InhaleSpacing.md),
+                  elevated: true,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 56,
+                        height: 56,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [tile.gradient.start, tile.gradient.end],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
                           ),
-                          child: Icon(
-                            tile.icon,
-                            color: Colors.white,
-                            size: 28,
-                          ),
+                          borderRadius: BorderRadius.circular(InhaleRadius.sm),
                         ),
-                        const SizedBox(height: InhaleSpacing.sm),
-                        Text(
-                          tile.label,
-                          style: InhaleTypography.titleMedium,
-                        ),
-                        Text(
-                          tile.description,
-                          style: InhaleTypography.bodySmall,
-                        ),
-                      ],
-                    ),
-                  );
-                },
-                childCount: _dashboardTiles.length,
-              ),
+                        child: Icon(tile.icon, color: Colors.white, size: 28),
+                      ),
+                      const SizedBox(height: InhaleSpacing.sm),
+                      Text(tile.label, style: InhaleTypography.titleMedium),
+                      Text(tile.description, style: InhaleTypography.bodySmall),
+                    ],
+                  ),
+                );
+              }, childCount: _dashboardTiles.length),
             ),
           ),
 
@@ -411,14 +427,8 @@ class _StatusItem extends StatelessWidget {
       children: [
         Icon(icon, color: InhaleColors.primaryBlue, size: 24),
         const SizedBox(height: 4),
-        Text(
-          label,
-          style: InhaleTypography.labelSmall,
-        ),
-        Text(
-          value,
-          style: InhaleTypography.titleSmall,
-        ),
+        Text(label, style: InhaleTypography.labelSmall),
+        Text(value, style: InhaleTypography.titleSmall),
       ],
     );
   }
@@ -426,6 +436,6 @@ class _StatusItem extends StatelessWidget {
 
 class BottomNavDestination {
   final String label;
-  final IconsData icon;
+  final IconData icon;
   const BottomNavDestination({required this.label, required this.icon});
 }

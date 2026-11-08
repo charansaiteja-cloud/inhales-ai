@@ -23,7 +23,11 @@ class GlassStatusBadge extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: TextStyle(color: textColor, fontSize: 11, fontWeight: FontWeight.w600),
+        style: TextStyle(
+          color: textColor,
+          fontSize: 11,
+          fontWeight: FontWeight.w600,
+        ),
       ),
     );
   }
@@ -31,12 +35,6 @@ class GlassStatusBadge extends StatelessWidget {
 
 class BottomNavDestination {
   final String label;
-  final IconsData icon;
+  final IconData icon;
   const BottomNavDestination({required this.label, required this.icon});
-}
-
-class SidebarItem {
-  final String label;
-  final IconsData icon;
-  const SidebarItem({required this.label, required this.icon});
 }

@@ -28,7 +28,9 @@ class GlassBottomNavigationBar extends StatelessWidget {
         child: Container(
           decoration: const BoxDecoration(
             color: Color(0x99FFFFFF),
-            border: Border(top: BorderSide(color: Color(0x4DFFFFFF), width: 0.5)),
+            border: Border(
+              top: BorderSide(color: Color(0x4DFFFFFF), width: 0.5),
+            ),
           ),
           child: SafeArea(
             child: Padding(
@@ -39,13 +41,16 @@ class GlassBottomNavigationBar extends StatelessWidget {
                   final isActive = index == currentIndex;
                   return Expanded(
                     child: TapRegion(
-                      onTap: () => onTap(index),
+                      onTapInside: (_) => onTap(index),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(
                             isActive ? item.activeIcon ?? item.icon : item.icon,
-                            color: isActive ? InhaleColors.primaryBlue : InhaleColors.secondaryText,
+                            color:
+                                isActive
+                                    ? InhaleColors.primaryBlue
+                                    : InhaleColors.secondaryText,
                             size: 24,
                           ),
                           const SizedBox(height: 2),
@@ -53,8 +58,12 @@ class GlassBottomNavigationBar extends StatelessWidget {
                             item.label,
                             style: TextStyle(
                               fontSize: 11,
-                              color: isActive ? InhaleColors.primaryBlue : InhaleColors.secondaryText,
-                              fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
+                              color:
+                                  isActive
+                                      ? InhaleColors.primaryBlue
+                                      : InhaleColors.secondaryText,
+                              fontWeight:
+                                  isActive ? FontWeight.w600 : FontWeight.w400,
                             ),
                           ),
                         ],
@@ -73,8 +82,8 @@ class GlassBottomNavigationBar extends StatelessWidget {
 
 class GlassBottomNavItem {
   final String label;
-  final IconsData icon;
-  final IconsData? activeIcon;
+  final IconData icon;
+  final IconData? activeIcon;
 
   const GlassBottomNavItem({
     required this.label,

@@ -42,51 +42,52 @@ class AppSettings {
     double? speechSpeed,
     bool? speechEnabled,
   }) => AppSettings(
-        themeMode: themeMode ?? this.themeMode,
-        offlineMode: offlineMode ?? this.offlineMode,
-        reducedBlur: reducedBlur ?? this.reducedBlur,
-        reducedAnimation: reducedAnimation ?? this.reducedAnimation,
-        fontSize: fontSize ?? this.fontSize,
-        language: language ?? this.language,
-        contextLength: contextLength ?? this.contextLength,
-        cpuThreads: cpuThreads ?? this.cpuThreads,
-        useGpu: useGpu ?? this.useGpu,
-        speechSpeed: speechSpeed ?? this.speechSpeed,
-        speechEnabled: speechEnabled ?? this.speechEnabled,
-      );
+    themeMode: themeMode ?? this.themeMode,
+    offlineMode: offlineMode ?? this.offlineMode,
+    reducedBlur: reducedBlur ?? this.reducedBlur,
+    reducedAnimation: reducedAnimation ?? this.reducedAnimation,
+    fontSize: fontSize ?? this.fontSize,
+    language: language ?? this.language,
+    contextLength: contextLength ?? this.contextLength,
+    cpuThreads: cpuThreads ?? this.cpuThreads,
+    useGpu: useGpu ?? this.useGpu,
+    speechSpeed: speechSpeed ?? this.speechSpeed,
+    speechEnabled: speechEnabled ?? this.speechEnabled,
+  );
 
   Map<String, dynamic> toJson() => {
-        'themeMode': themeMode.index,
-        'offlineMode': offlineMode,
-        'reducedBlur': reducedBlur,
-        'reducedAnimation': reducedAnimation,
-        'fontSize': fontSize,
-        'language': language,
-        'contextLength': contextLength,
-        'cpuThreads': cpuThreads,
-        'useGpu': useGpu,
-        'speechSpeed': speechSpeed,
-        'speechEnabled': speechEnabled,
-      };
+    'themeMode': themeMode.index,
+    'offlineMode': offlineMode,
+    'reducedBlur': reducedBlur,
+    'reducedAnimation': reducedAnimation,
+    'fontSize': fontSize,
+    'language': language,
+    'contextLength': contextLength,
+    'cpuThreads': cpuThreads,
+    'useGpu': useGpu,
+    'speechSpeed': speechSpeed,
+    'speechEnabled': speechEnabled,
+  };
 
   static AppSettings fromJson(Map<String, dynamic> json) => AppSettings(
-        themeMode: ThemeMode.values[json['themeMode'] ?? 0],
-        offlineMode: json['offlineMode'] ?? true,
-        reducedBlur: json['reducedBlur'] ?? false,
-        reducedAnimation: json['reducedAnimation'] ?? false,
-        fontSize: (json['fontSize'] ?? 1.0).toDouble(),
-        language: json['language'] ?? 'en',
-        contextLength: json['contextLength'] ?? 2048,
-        cpuThreads: json['cpuThreads'] ?? 4,
-        useGpu: json['useGpu'] ?? false,
-        speechSpeed: (json['speechSpeed'] ?? 1.0).toDouble(),
-        speechEnabled: json['speechEnabled'] ?? false,
-      );
+    themeMode: ThemeMode.values[json['themeMode'] ?? 0],
+    offlineMode: json['offlineMode'] ?? true,
+    reducedBlur: json['reducedBlur'] ?? false,
+    reducedAnimation: json['reducedAnimation'] ?? false,
+    fontSize: (json['fontSize'] ?? 1.0).toDouble(),
+    language: json['language'] ?? 'en',
+    contextLength: json['contextLength'] ?? 2048,
+    cpuThreads: json['cpuThreads'] ?? 4,
+    useGpu: json['useGpu'] ?? false,
+    speechSpeed: (json['speechSpeed'] ?? 1.0).toDouble(),
+    speechEnabled: json['speechEnabled'] ?? false,
+  );
 }
 
-final settingsProvider = StateNotifierProvider<SettingsNotifier, AsyncValue<AppSettings>>(
-  (ref) => SettingsNotifier(),
-);
+final settingsProvider =
+    StateNotifierProvider<SettingsNotifier, AsyncValue<AppSettings>>(
+      (ref) => SettingsNotifier(),
+    );
 
 class SettingsNotifier extends StateNotifier<AsyncValue<AppSettings>> {
   SettingsNotifier() : super(const AsyncValue.loading()) {

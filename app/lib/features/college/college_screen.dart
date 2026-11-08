@@ -18,38 +18,69 @@ class CollegeScreen extends ConsumerWidget {
       appBar: GlassAppBar(title: 'College Learning'),
       body: Container(
         decoration: BoxDecoration(gradient: InhaleColors.gradientBackground),
-        child: CustomScrollView(slivers: [
-          SliverPadding(padding: EdgeInsets.all(InhaleSpacing.md), sliver: SliverToBoxAdapter(child: Text('Choose Your Subject', style: InhaleTypography.headlineLarge))),
-          SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: InhaleSpacing.md),
-            sliver: SliverList(
-              delegate: SliverChildBuilderDelegate((context, index) {
-                final subject = state.subjects[index];
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: GlassCard(
-                    onTap: () => ref.read(collegeProvider.notifier).selectSubject(subject),
-                    padding: EdgeInsets.all(InhaleSpacing.md),
-                    child: Row(children: [
-                      Expanded(child: Text(subject, style: InhaleTypography.titleMedium)),
-                      if (state.selectedSubject == subject) Icon(Icons.check_circle_rounded, color: InhaleColors.primaryBlue),
-                    ]),
-                  ),
-                );
-              }, childCount: state.subjects.length),
-            ),
-          ),
-          SliverPadding(
-            padding: EdgeInsets.all(InhaleSpacing.md),
-            sliver: SliverToBoxAdapter(
-              child: GlassButton(
-                width: double.infinity,
-                label: state.selectedSubject != null ? 'Start Learning: ${state.selectedSubject!}' : 'Select a Subject',
-                onTap: state.selectedSubject != null ? () => GoRouter.of(context).push('/chat?mode=college') : null,
+        child: CustomScrollView(
+          slivers: [
+            SliverPadding(
+              padding: EdgeInsets.all(InhaleSpacing.md),
+              sliver: SliverToBoxAdapter(
+                child: Text(
+                  'Choose Your Subject',
+                  style: InhaleTypography.headlineLarge,
+                ),
               ),
             ),
-          ),
-        ]),
+            SliverPadding(
+              padding: EdgeInsets.symmetric(horizontal: InhaleSpacing.md),
+              sliver: SliverList(
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  final subject = state.subjects[index];
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: GlassCard(
+                      onTap:
+                          () => ref
+                              .read(collegeProvider.notifier)
+                              .selectSubject(subject),
+                      padding: EdgeInsets.all(InhaleSpacing.md),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              subject,
+                              style: InhaleTypography.titleMedium,
+                            ),
+                          ),
+                          if (state.selectedSubject == subject)
+                            Icon(
+                              Icons.check_circle_rounded,
+                              color: InhaleColors.primaryBlue,
+                            ),
+                        ],
+                      ),
+                    ),
+                  );
+                }, childCount: state.subjects.length),
+              ),
+            ),
+            SliverPadding(
+              padding: EdgeInsets.all(InhaleSpacing.md),
+              sliver: SliverToBoxAdapter(
+                child: GlassButton(
+                  width: double.infinity,
+                  label:
+                      state.selectedSubject != null
+                          ? 'Start Learning: ${state.selectedSubject!}'
+                          : 'Select a Subject',
+                  onTap:
+                      state.selectedSubject != null
+                          ? () =>
+                              GoRouter.of(context).push('/chat?mode=college')
+                          : null,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

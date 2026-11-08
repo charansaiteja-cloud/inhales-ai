@@ -41,23 +41,44 @@ class AppConstants {
   };
 
   // Chat modes
-  static const List<String> responseModes = ['Short', 'Detailed', 'Step-by-step'];
+  static const List<String> responseModes = [
+    'Short',
+    'Detailed',
+    'Step-by-step',
+  ];
   static const int defaultResponseModeIndex = 1;
 
   // Schools
   static const List<int> schoolClasses = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   static const List<String> schoolSubjects = [
-    'Mathematics', 'Science', 'English', 'Grammar',
-    'Social Studies', 'History', 'Geography',
-    'General Knowledge', 'Regional Languages',
+    'Mathematics',
+    'Science',
+    'English',
+    'Grammar',
+    'Social Studies',
+    'History',
+    'Geography',
+    'General Knowledge',
+    'Regional Languages',
   ];
 
   static const List<String> collegeSubjects = [
-    'Engineering', 'Computer Science', 'Programming',
-    'Mathematics', 'Physics', 'Chemistry', 'Biology',
-    'Commerce', 'Accounting', 'Economics',
-    'Business Management', 'Statistics', 'Humanities',
-    'Arts', 'Literature', 'Law',
+    'Engineering',
+    'Computer Science',
+    'Programming',
+    'Mathematics',
+    'Physics',
+    'Chemistry',
+    'Biology',
+    'Commerce',
+    'Accounting',
+    'Economics',
+    'Business Management',
+    'Statistics',
+    'Humanities',
+    'Arts',
+    'Literature',
+    'Law',
   ];
 }

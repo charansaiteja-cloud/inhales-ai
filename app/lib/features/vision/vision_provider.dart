@@ -47,7 +47,8 @@ class VisionNotifier extends StateNotifier<VisionState> {
     await Future.delayed(const Duration(seconds: 2));
     state = VisionState(
       image: state.image,
-      result: 'Vision analysis requires a vision model. Install Qwen2.5-VL from Model Manager.',
+      result:
+          'Vision analysis requires a vision model. Install Qwen2.5-VL from Model Manager.',
       isProcessing: false,
       modelAvailable: false,
     );

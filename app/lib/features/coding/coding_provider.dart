@@ -45,7 +45,8 @@ class CodingNotifier extends StateNotifier<CodingState> {
 
   Future<void> askAI(String prompt) async {
     // Real implementation: prompt local AI for code generation/explanation.
-    final response = 'AI response requires a language model. Install one from the Model Manager.';
+    final response =
+        'AI response requires a language model. Install one from the Model Manager.';
     state = CodingState(
       code: state.code,
       language: state.language,

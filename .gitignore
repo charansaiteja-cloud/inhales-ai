@@ -1,4 +1,6 @@
-pubspec.lock
+# Keep pubspec.lock committed (only ignore in subdirectories if needed)
+# /pubspec.lock
+
 # Flutter & Dart
 *.iml
 *.ipr

@@ -97,9 +97,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                         isUser: msg.isUser,
                         timestamp: _formatTime(msg.timestamp),
                         isStreaming: msg.isStreaming,
-                        isLast:
-                            index ==
-                            chatState.activeSession!.messages.length - 1,
                       );
                     },
                   ),

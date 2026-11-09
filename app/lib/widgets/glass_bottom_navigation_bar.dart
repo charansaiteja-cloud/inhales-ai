@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
-import '../core/theme/inhale_colors.dart';
 
 class GlassBottomNavigationBar extends StatelessWidget {
   final int currentIndex;
@@ -21,7 +20,7 @@ class GlassBottomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final navItems = _effectiveItems;
-    return ClipRect(
+    return ClipRRect(
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
         child: Container(
@@ -38,34 +37,42 @@ class GlassBottomNavigationBar extends StatelessWidget {
                 children: List.generate(navItems.length, (index) {
                   final item = navItems[index];
                   final isActive = index == currentIndex;
+
                   return Expanded(
-                    child: TapRegion(
-                      onTapInside: (_) => onTap(index),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            isActive ? item.activeIcon ?? item.icon : item.icon,
-                            color:
-                                isActive
-                                    ? InhaleColors.primaryBlue
-                                    : InhaleColors.secondaryText,
-                            size: 24,
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            item.label,
-                            style: TextStyle(
-                              fontSize: 11,
+                    child: Semantics(
+                      button: true,
+                      label: item.label,
+                      onTap: () => onTap(index),
+                      child: TapRegion(
+                        onTapInside: (_) => onTap(index),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              isActive
+                                  ? item.activeIcon ?? item.icon
+                                  : item.icon,
                               color:
-                                  isActive
-                                      ? InhaleColors.primaryBlue
-                                      : InhaleColors.secondaryText,
-                              fontWeight:
-                                  isActive ? FontWeight.w600 : FontWeight.w400,
+                                  isActive ? Colors.blue : Colors.grey.shade500,
+                              size: 24,
                             ),
-                          ),
-                        ],
+                            const SizedBox(height: 2),
+                            Text(
+                              item.label,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color:
+                                    isActive
+                                        ? Colors.blue
+                                        : Colors.grey.shade500,
+                                fontWeight:
+                                    isActive
+                                        ? FontWeight.w600
+                                        : FontWeight.w400,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   );

@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
-import '../core/theme/inhale_colors.dart';
-import '../core/theme/inhale_tokens.dart';
 
-/// Premium Liquid Glass card with frosted blur effect.
-/// Automatically adapts to light/dark theme.
 class GlassCard extends StatelessWidget {
   final Widget? child;
   final VoidCallback? onTap;
@@ -31,7 +27,7 @@ class GlassCard extends StatelessWidget {
     this.height,
     this.padding,
     this.margin,
-    this.blur = InhaleBlur.medium,
+    this.blur = 10.0,
     this.elevated = false,
     this.glow = false,
     this.backgroundColor,
@@ -46,74 +42,91 @@ class GlassCard extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final settings = MediaQuery.of(context).accessibleNavigation;
     final shouldBlur = useBlur ?? !settings;
-    final radius =
-        borderRadius ??
-        const BorderRadius.all(Radius.circular(InhaleRadius.md));
+    final radius = borderRadius ?? BorderRadius.circular(8);
 
     final effectiveShadows = shadows ?? _buildShadows(isDark);
     final effectiveBorder =
-        borderColor ??
-        (isDark
-            ? InhaleColors.glassBorderSubtle
-            : InhaleColors.lightGlassBorderSubtle);
+        borderColor ?? (isDark ? Colors.white24 : Colors.grey.shade300);
     final effectiveBg =
         backgroundColor ??
-        (isDark
-            ? InhaleColors.glassSurfaceMedium
-            : InhaleColors.lightGlassSurface);
+        (isDark ? Colors.grey.shade900 : Colors.white.withValues(alpha: 0.7));
 
-    return Container(
-      width: width,
-      height: height,
-      margin: margin,
-      decoration: BoxDecoration(
-        color: effectiveBg,
-        borderRadius: radius,
-        border: Border.all(color: effectiveBorder, width: 0.5),
-        boxShadow: effectiveShadows,
-      ),
-      child: ClipRRect(
-        borderRadius: radius,
-        child:
-            shouldBlur
-                ? BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
-                  child: _buildContent(context),
-                )
-                : _buildContent(context),
+    final hoverCard = MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: onTap,
+        onLongPress: onLongPress,
+        child: Container(
+          width: width,
+          height: height,
+          margin: margin,
+          decoration: BoxDecoration(
+            color: effectiveBg,
+            borderRadius: radius,
+            border: Border.all(color: effectiveBorder, width: 0.5),
+            boxShadow: effectiveShadows,
+          ),
+          child:
+              shouldBlur
+                  ? ClipRRect(
+                    borderRadius: radius,
+                    child: RepaintBoundary(
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
+                        child: _buildContent(context),
+                      ),
+                    ),
+                  )
+                  : _buildContent(context),
+        ),
       ),
     );
+
+    if (onTap != null || onLongPress != null) {
+      return Semantics(
+        button: true,
+        child: InkWell(
+          onTap: onTap,
+          onLongPress: onLongPress,
+          borderRadius: radius,
+          child: hoverCard,
+        ),
+      );
+    }
+    return hoverCard;
   }
 
-  Widget _buildContent(BuildContext context) {
-    final content = Padding(
-      padding: padding ?? EdgeInsets.zero,
-      child: child ?? const SizedBox(),
-    );
-
-    return Material(
-      color: Colors.transparent,
-      child:
-          onTap != null || onLongPress != null
-              ? InkWell(
-                onTap: onTap,
-                onLongPress: onLongPress,
-                borderRadius:
-                    borderRadius ??
-                    const BorderRadius.all(Radius.circular(InhaleRadius.md)),
-                child: content,
-              )
-              : content,
-    );
-  }
+  Widget _buildContent(BuildContext context) => Padding(
+    padding: padding ?? EdgeInsets.zero,
+    child: child ?? const SizedBox(),
+  );
 
   List<BoxShadow> _buildShadows(bool isDark) {
-    if (glow) {
-      return isDark ? InhaleShadows.glowBlue : InhaleShadows.subtle;
-    }
-    if (elevated) {
-      return isDark ? InhaleShadows.floating : InhaleShadows.glassBlue;
-    }
-    return isDark ? InhaleShadows.glass : InhaleShadows.soft;
+    if (glow)
+      return isDark
+          ? [
+            BoxShadow(
+              color: Colors.blue.withValues(alpha: 0.3),
+              blurRadius: 20,
+              spreadRadius: 5,
+            ),
+          ]
+          : [];
+    if (elevated)
+      return isDark
+          ? [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.2),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ]
+          : [
+            BoxShadow(
+              color: Colors.blue.withValues(alpha: 0.15),
+              blurRadius: 10,
+            ),
+          ];
+    return [];
   }
 }

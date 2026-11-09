@@ -32,46 +32,50 @@ class _GlassSearchBarState extends State<GlassSearchBar> {
 
   @override
   Widget build(BuildContext context) {
-    return TapRegion(
-      onTapInside: (_) => widget.onTap,
-      child: ClipRRect(
-        borderRadius: const BorderRadius.all(
-          Radius.circular(InhaleRadius.pill),
-        ),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-          child: Container(
-            decoration: BoxDecoration(
-              color: InhaleColors.glassSurface,
-              borderRadius: const BorderRadius.all(
-                Radius.circular(InhaleRadius.pill),
-              ),
-              border: Border.all(
-                color: InhaleColors.glassBorderSubtle,
-                width: 0.5,
-              ),
-            ),
-            child: TextField(
-              controller: _controller,
-              enabled: widget.enabled,
-              onTap: widget.onTap,
-              onChanged: widget.onChanged,
-              style: const TextStyle(
-                color: InhaleColors.navyText,
-                fontSize: 15,
-              ),
-              decoration: InputDecoration(
-                hintText: widget.hintText,
-                border: InputBorder.none,
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
+    final hintText = widget.hintText ?? 'Search';
+    final effectiveOnTap = widget.onTap ?? (() {});
+
+    return Semantics(
+      label: hintText,
+      onTap: effectiveOnTap,
+      child: StatefulBuilder(
+        builder: (context, setState) {
+          return GestureDetector(
+            onTap: effectiveOnTap,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(InhaleRadius.pill),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: InhaleColors.glassSurface,
+                    borderRadius: BorderRadius.circular(InhaleRadius.pill),
+                    border: Border.all(
+                      color: InhaleColors.glassBorderSubtle,
+                      width: 0.5,
+                    ),
+                  ),
+                  child: TextField(
+                    controller: _controller,
+                    enabled: widget.enabled,
+                    onTap: () {},
+                    onChanged: widget.onChanged,
+                    style: const TextStyle(color: Colors.black87, fontSize: 15),
+                    decoration: InputDecoration(
+                      hintText: hintText,
+                      border: InputBorder.none,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
+                    ),
+                    cursorColor: InhaleColors.primaryBlue,
+                  ),
                 ),
               ),
-              cursorColor: InhaleColors.primaryBlue,
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }

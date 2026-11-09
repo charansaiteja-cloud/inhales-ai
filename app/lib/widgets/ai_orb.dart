@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import '../core/theme/inhale_colors.dart';
 
-/// Premium AI Orb animation for voice/thinking states.
+/// Premium AI Orb animation with state-specific visuals.
 class AIOrb extends StatefulWidget {
   final double size;
   final bool isActive;
@@ -25,7 +24,6 @@ class AIOrb extends StatefulWidget {
 class _AIOrbState extends State<AIOrb> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
-  late Animation<double> _opacityAnimation;
 
   @override
   void initState() {
@@ -39,12 +37,6 @@ class _AIOrbState extends State<AIOrb> with SingleTickerProviderStateMixin {
       begin: 1.0,
       end: 1.15,
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
-
-    _opacityAnimation = Tween<double>(
-      begin: 0.6,
-      end: 1.0,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
-
     if (widget.isActive ||
         widget.isListening ||
         widget.isProcessing ||
@@ -56,12 +48,14 @@ class _AIOrbState extends State<AIOrb> with SingleTickerProviderStateMixin {
   @override
   void didUpdateWidget(AIOrb oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.isActive ||
+    final isAnimating =
+        widget.isActive ||
         widget.isListening ||
         widget.isProcessing ||
-        widget.isSpeaking) {
-      if (!_controller.isAnimating) _controller.repeat(reverse: true);
-    } else {
+        widget.isSpeaking;
+    if (isAnimating && !_controller.isAnimating) {
+      setState(() {});
+    } else if (!isAnimating && _controller.isAnimating) {
       _controller.stop();
       _controller.reset();
     }
@@ -75,70 +69,99 @@ class _AIOrbState extends State<AIOrb> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: widget.size,
-      height: widget.size,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          AnimatedBuilder(
-            animation: _scaleAnimation,
-            builder: (context, child) {
-              return Transform.scale(
-                scale: _scaleAnimation.value,
-                child: Container(
+    return RepaintBoundary(
+      child: SizedBox(
+        width: widget.size,
+        height: widget.size,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            if (widget.isListening || widget.isActive) ...[
+              AnimatedBuilder(
+                animation: _scaleAnimation,
+                builder: (context, child) {
+                  return Transform.scale(
+                    scale: _scaleAnimation.value,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        gradient: const RadialGradient(
+                          colors: [
+                            Color(0x645B8CFF),
+                            Color(0x339B87FF),
+                            Colors.transparent,
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+              Container(
+                width: widget.size * 0.6,
+                height: widget.size * 0.6,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: RadialGradient(
+                    colors: [
+                      Color(0xC985FFFF),
+                      Color(0x995B8CFF),
+                      Color(0x669B87FF),
+                    ],
+                  ),
+                ),
+              ),
+              if (widget.isListening)
+                Container(
+                  width: widget.size * 0.7,
+                  height: widget.size * 0.7,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    gradient: RadialGradient(
-                      colors: [
-                        InhaleColors.electricBlue.withValues(
-                          alpha: 0.4 * _opacityAnimation.value,
-                        ),
-                        InhaleColors.violet.withValues(alpha: 0.2),
-                        Colors.transparent,
-                      ],
-                      stops: const [0.0, 0.5, 1.0],
+                    border: Border.all(
+                      color: const Color(0x9985FFFF),
+                      width: 2,
                     ),
                   ),
                 ),
-              );
-            },
-          ),
-          Container(
-            width: widget.size * 0.6,
-            height: widget.size * 0.6,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: RadialGradient(
-                colors: [
-                  InhaleColors.softCyan.withValues(alpha: 0.8),
-                  InhaleColors.electricBlue.withValues(alpha: 0.6),
-                  InhaleColors.violet.withValues(alpha: 0.4),
-                ],
-                stops: const [0.0, 0.5, 1.0],
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: InhaleColors.electricBlue.withValues(alpha: 0.4),
-                  blurRadius: 30,
-                  spreadRadius: 8,
+              if (widget.isProcessing)
+                Container(
+                  height: 24,
+                  margin: const EdgeInsets.only(top: 12),
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                  ),
                 ),
-              ],
-            ),
-          ),
-          if (widget.isListening)
-            Container(
-              width: widget.size * 0.7,
-              height: widget.size * 0.7,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: InhaleColors.softCyan.withValues(alpha: 0.6),
-                  width: 2,
+              if (widget.isSpeaking)
+                Container(
+                  height: widget.size * 0.18,
+                  margin: const EdgeInsets.only(top: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(
+                      5,
+                      (i) => RepaintBoundary(
+                        child: AnimatedBuilder(
+                          animation: _scaleAnimation,
+                          builder: (context, child) {
+                            final height = 4 + 6 * _scaleAnimation.value;
+                            return Container(
+                              width: 3,
+                              height: height,
+                              margin: const EdgeInsets.symmetric(
+                                horizontal: 1.5,
+                              ),
+                              color: Colors.white,
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-        ],
+            ],
+          ],
+        ),
       ),
     );
   }

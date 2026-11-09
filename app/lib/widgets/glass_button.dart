@@ -57,52 +57,64 @@ class GlassButton extends StatelessWidget {
 
     return MouseRegion(
       cursor: enabled ? SystemMouseCursors.click : SystemMouseCursors.basic,
-      child: TapRegion(
-        onTapInside: (_) => enabled ? onTap?.call() : null,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.easeInOut,
-          width: width,
-          height: height ?? (iconOnly ? 44 : 48),
-          decoration: BoxDecoration(
-            color:
-                enabled
-                    ? (outlined
-                        ? InhaleColors.glassSurface
+      child: Semantics(
+        button: true,
+        enabled: enabled,
+        label: label ?? 'Button',
+        onTap: enabled ? onTap : null,
+        child: FocusableActionDetector(
+          enabled: enabled,
+          child: InkWell(
+            onTap: enabled ? onTap : null,
+            borderRadius: effectiveRadius,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.easeInOut,
+              width: width,
+              height: height ?? (iconOnly ? 44 : 48),
+              decoration: BoxDecoration(
+                color:
+                    enabled
+                        ? (outlined
+                            ? InhaleColors.glassSurface
+                            : (isDark
+                                ? InhaleColors.electricBlue
+                                : InhaleColors.lightPrimaryBlue))
                         : (isDark
-                            ? InhaleColors.electricBlue
-                            : InhaleColors.lightPrimaryBlue))
-                    : (isDark
-                        ? InhaleColors.glassSurface
-                        : InhaleColors.lightGlassSurface),
-            gradient:
-                enabled && !outlined ? InhaleColors.gradientPrimary : null,
-            borderRadius: effectiveRadius,
-            border: Border.all(
-              color:
-                  outlined
-                      ? (isDark
-                          ? InhaleColors.glassBorder
-                          : InhaleColors.lightGlassBorder)
-                      : (isDark
-                          ? InhaleColors.glassBorderSubtle
-                          : InhaleColors.lightGlassBorderSubtle),
-              width: outlined ? 1.5 : 0.5,
-            ),
-            boxShadow:
-                enabled
-                    ? (glow
-                        ? InhaleShadows.glowBlue
-                        : (outlined
-                            ? InhaleShadows.soft
-                            : InhaleShadows.floating))
-                    : null,
-          ),
-          child: ClipRRect(
-            borderRadius: effectiveRadius,
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
-              child: Center(child: content),
+                            ? InhaleColors.glassSurface
+                            : InhaleColors.lightGlassSurface),
+                gradient:
+                    enabled && !outlined ? InhaleColors.gradientPrimary : null,
+                borderRadius: effectiveRadius,
+                border: Border.all(
+                  color:
+                      outlined
+                          ? (isDark
+                              ? InhaleColors.glassBorder
+                              : InhaleColors.lightGlassBorder)
+                          : (isDark
+                              ? InhaleColors.glassBorderSubtle
+                              : InhaleColors.lightGlassBorderSubtle),
+                  width: outlined ? 1.5 : 0.5,
+                ),
+                boxShadow:
+                    enabled
+                        ? (glow
+                            ? InhaleShadows.glowBlue
+                            : (outlined
+                                ? InhaleShadows.soft
+                                : InhaleShadows.floating))
+                        : null,
+              ),
+              child: ClipRRect(
+                borderRadius: effectiveRadius,
+                child: RepaintBoundary(
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
+                    child: Center(child: content),
+                  ),
+                ),
+              ),
             ),
           ),
         ),

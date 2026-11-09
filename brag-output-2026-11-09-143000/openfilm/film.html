@@ -1,0 +1,198 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1920, height=1080">
+<title>InhaleSkill AI — Launch Video</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #000; overflow: hidden; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+  .track { position: absolute; inset: 0; pointer-events: none; }
+  .track video { width: 100%; height: 100%; object-fit: cover; }
+  .track img { width: 100%; height: 100%; object-fit: cover; }
+  iframe { border: none; width: 100%; height: 100%; background: #000; }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- AUDIO TRACK -->
+<audio id="music" src="assets/music/happy-beats-business-moves-vol-1.mp3" preload="auto"></audio>
+
+<!-- TRACK 1: Hook - Text Reveal -->
+<section class="track" id="t1-hook-text" data-at="0" data-dur="2.5">
+  <iframe src="pages/hook-text.html"></iframe>
+</section>
+
+<!-- TRACK 2: App Icon Pulse -->
+<section class="track" id="t2-icon-pulse" data-at="2.3" data-dur="1.5">
+  <iframe src="pages/icon-pulse.html"></iframe>
+</section>
+
+<!-- TRACK 3: Dashboard Tiles Reveal -->
+<section class="track" id="t3-dashboard" data-at="3.5" data-dur="3">
+  <iframe src="pages/dashboard.html"></iframe>
+</section>
+
+<!-- TRACK 4: "14 features. One app. Zero cloud." Overlay -->
+<section class="track" id="t4-tagline" data-at="5.5" data-dur="2">
+  <iframe src="pages/tagline.html"></iframe>
+</section>
+
+<!-- TRACK 5: Model Manager Screen -->
+<section class="track" id="t5-model-manager" data-at="7.5" data-dur="2.5">
+  <iframe src="pages/model-manager.html"></iframe>
+</section>
+
+<!-- TRACK 6: Chat Streaming Demo -->
+<section class="track" id="t6-chat-stream" data-at="9.5" data-dur="2.5">
+  <iframe src="pages/chat-stream.html"></iframe>
+</section>
+
+<!-- TRACK 7: "llama.cpp FFI • GGUF • Runs on 4 GB RAM" -->
+<section class="track" id="t7-tech-badge" data-at="7.5" data-dur="2">
+  <iframe src="pages/tech-badge.html"></iframe>
+</section>
+
+<!-- TRACK 8: "100% local. No API keys. Ever." -->
+<section class="track" id="t8-local-badge" data-at="9.5" data-dur="2">
+  <iframe src="pages/local-badge.html"></iframe>
+</section>
+
+<!-- TRACK 9: School/College Split Screen -->
+<section class="track" id="t9-school-college" data-at="12" data-dur="2.5">
+  <iframe src="pages/school-college.html"></iframe>
+</section>
+
+<!-- TRACK 10: "Classes 1–10 • Engineering • Humanities • All offline" -->
+<section class="track" id="t10-curriculum-badge" data-at="12.5" data-dur="2">
+  <iframe src="pages/curriculum-badge.html"></iframe>
+</section>
+
+<!-- TRACK 11: UI Montage - GlassCard Ripple -->
+<section class="track" id="t11-ui-1" data-at="14" data-dur="0.7">
+  <iframe src="pages/ui-glasscard.html"></iframe>
+</section>
+
+<!-- TRACK 12: UI Montage - Theme Toggle -->
+<section class="track" id="t12-ui-2" data-at="14.7" data-dur="0.7">
+  <iframe src="pages/ui-theme.html"></iframe>
+</section>
+
+<!-- TRACK 13: UI Montage - Writing Mode Chips -->
+<section class="track" id="t13-ui-3" data-at="15.4" data-dur="0.7">
+  <iframe src="pages/ui-writing.html"></iframe>
+</section>
+
+<!-- TRACK 14: UI Montage - Vision Shimmer -->
+<section class="track" id="t14-ui-4" data-at="16.1" data-dur="0.7">
+  <iframe src="pages/ui-vision.html"></iframe>
+</section>
+
+<!-- TRACK 15: UI Montage - Notes Search -->
+<section class="track" id="t15-ui-5" data-at="16.8" data-dur="0.7">
+  <iframe src="pages/ui-notes.html"></iframe>
+</section>
+
+<!-- TRACK 16: "Blue & White Liquid Glass • 60 fps • Accessible" -->
+<section class="track" id="t16-ui-badge" data-at="14" data-dur="3.5">
+  <iframe src="pages/ui-badge.html"></iframe>
+</section>
+
+<!-- TRACK 17: Final Logo + Tagline -->
+<section class="track" id="t17-outro" data-at="17.5" data-dur="2.5">
+  <iframe src="pages/outro.html"></iframe>
+</section>
+
+<!-- TRACK 18: GitHub URL -->
+<section class="track" id="t18-github" data-at="19" data-dur="1.5">
+  <iframe src="pages/github.html"></iframe>
+</section>
+
+<script>
+  // OpenFilm player controller
+  const film = {
+    duration: 20,
+    tracks: document.querySelectorAll('section.track'),
+    music: document.getElementById('music'),
+    playing: false,
+    currentTime: 0,
+    raf: null
+  };
+
+  film.tracks.forEach(t => {
+    t.style.opacity = '0';
+    t.style.display = 'none';
+  });
+
+  function updateTracks(t) {
+    film.tracks.forEach(tr => {
+      const at = parseFloat(tr.dataset.at) || 0;
+      const dur = parseFloat(tr.dataset.dur) || 0;
+      const end = at + dur;
+      const iframe = tr.querySelector('iframe');
+      if (t >= at && t < end) {
+        tr.style.display = 'block';
+        tr.style.opacity = '1';
+        if (iframe && iframe.contentWindow && iframe.contentWindow.film) {
+          iframe.contentWindow.film.frame((t - at) / dur);
+        }
+      } else {
+        tr.style.opacity = '0';
+        tr.style.display = 'none';
+      }
+    });
+  }
+
+  function tick(ts) {
+    if (!film.playing) return;
+    film.currentTime = (ts - film.startTime) / 1000;
+    if (film.currentTime >= film.duration) {
+      film.currentTime = film.duration;
+      film.playing = false;
+      film.music.pause();
+      film.music.currentTime = 0;
+      updateTracks(film.currentTime);
+      return;
+    }
+    updateTracks(film.currentTime);
+    film.raf = requestAnimationFrame(tick);
+  }
+
+  film.play = () => {
+    if (film.playing) return;
+    film.playing = true;
+    film.startTime = performance.now() - film.currentTime * 1000;
+    film.music.currentTime = film.currentTime;
+    film.music.play().catch(() => {});
+    film.raf = requestAnimationFrame(tick);
+  };
+
+  film.pause = () => {
+    film.playing = false;
+    cancelAnimationFrame(film.raf);
+    film.music.pause();
+  };
+
+  film.seek = (t) => {
+    film.currentTime = Math.max(0, Math.min(film.duration, t));
+    film.music.currentTime = film.currentTime;
+    updateTracks(film.currentTime);
+  };
+
+  window.film = film;
+  document.addEventListener('keydown', e => {
+    if (e.code === 'Space') { e.preventDefault(); film.playing ? film.pause() : film.play(); }
+    if (e.code === 'ArrowLeft') film.seek(film.currentTime - 1);
+    if (e.code === 'ArrowRight') film.seek(film.currentTime + 1);
+    if (e.code === 'KeyR') film.seek(0);
+  });
+
+  // Auto-play on load for preview
+  document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => film.play(), 500);
+  });
+</script>
+</body>
+</html>

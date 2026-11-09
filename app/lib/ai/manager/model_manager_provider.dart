@@ -2,7 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/hardware_profile.dart';
 import '../models/model_catalog_entry.dart';
 
-export 'package:flutter_riverpod/flutter_riverpod.dart' show StateNotifier, StateNotifierProvider;
+export 'package:flutter_riverpod/flutter_riverpod.dart'
+    show StateNotifier, StateNotifierProvider;
 
 /// Model manager state — tracks installed models, active model, and downloads.
 class ModelManagerState {

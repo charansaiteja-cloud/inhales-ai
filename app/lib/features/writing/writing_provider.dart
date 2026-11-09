@@ -34,14 +34,13 @@ class WritingState {
     String? content,
     String? instructions,
     bool? isGenerating,
-  }) =>
-      WritingState(
-        mode: mode ?? this.mode,
-        title: title ?? this.title,
-        content: content ?? this.content,
-        instructions: instructions ?? this.instructions,
-        isGenerating: isGenerating ?? this.isGenerating,
-      );
+  }) => WritingState(
+    mode: mode ?? this.mode,
+    title: title ?? this.title,
+    content: content ?? this.content,
+    instructions: instructions ?? this.instructions,
+    isGenerating: isGenerating ?? this.isGenerating,
+  );
 }
 
 final writingProvider = StateNotifierProvider<WritingNotifier, WritingState>(

@@ -121,7 +121,7 @@ class ModelManagerScreen extends ConsumerWidget {
                                     : () => ref
                                         .read(modelManagerProvider.notifier)
                                         .installModel(model),
-                            disabled: installed,
+                            enabled: !installed,
                           ),
                         ],
                       ),

@@ -56,10 +56,8 @@ class TranslationScreen extends ConsumerWidget {
                   padding: EdgeInsets.symmetric(horizontal: InhaleSpacing.sm),
                   child: GlassIconButton(
                     onTap: () => notifier.swapLanguages(),
-                    icon: Icon(
-                      Icons.swap_horiz_rounded,
-                      color: InhaleColors.primaryBlue,
-                    ),
+                    icon: Icons.swap_horiz_rounded,
+                    color: InhaleColors.primaryBlue,
                   ),
                 ),
                 Expanded(

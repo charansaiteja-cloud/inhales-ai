@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import '../core/theme/inhale_colors.dart';
+import '../core/theme/inhale_tokens.dart';
+import '../core/theme/inhale_typography.dart';
 
 class GlassAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final List<Widget>? actions;
   final bool showBack;
   final VoidCallback? onBack;
+  final Widget? leading;
+  final Widget? trailing;
+  final double elevation;
 
   const GlassAppBar({
     super.key,
@@ -14,48 +19,85 @@ class GlassAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.actions,
     this.showBack = false,
     this.onBack,
+    this.leading,
+    this.trailing,
+    this.elevation = 0,
   });
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return ClipRect(
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+        filter: ImageFilter.blur(
+          sigmaX: InhaleBlur.medium,
+          sigmaY: InhaleBlur.medium,
+        ),
         child: Container(
-          decoration: const BoxDecoration(
-            color: Color(0x99FFFFFF),
+          decoration: BoxDecoration(
+            color:
+                isDark
+                    ? InhaleColors.midnight.withValues(alpha: 0.8)
+                    : InhaleColors.pureWhite.withValues(alpha: 0.8),
             border: Border(
-              bottom: BorderSide(color: Color(0x4DFFFFFF), width: 0.5),
+              bottom: BorderSide(
+                color:
+                    isDark
+                        ? InhaleColors.glassBorderSubtle
+                        : InhaleColors.lightGlassBorderSubtle,
+                width: 0.5,
+              ),
             ),
+            boxShadow:
+                elevation > 0
+                    ? (isDark ? InhaleShadows.soft : InhaleShadows.glassBlue)
+                    : null,
           ),
           child: SafeArea(
             bottom: false,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              padding: const EdgeInsets.symmetric(
+                horizontal: InhaleSpacing.md,
+                vertical: InhaleSpacing.sm,
+              ),
               child: Row(
                 children: [
-                  if (showBack)
-                    IconButton(
-                      icon: const Icon(
-                        Icons.arrow_back_rounded,
-                        color: InhaleColors.primaryBlue,
-                      ),
-                      onPressed: onBack ?? () => Navigator.of(context).pop(),
-                    )
+                  if (showBack || leading != null)
+                    leading ??
+                        IconButton(
+                          icon: Icon(
+                            Icons.arrow_back_rounded,
+                            color:
+                                isDark
+                                    ? InhaleColors.textPrimary
+                                    : InhaleColors.lightNavyText,
+                          ),
+                          onPressed:
+                              onBack ?? () => Navigator.of(context).pop(),
+                        )
                   else
-                    const SizedBox(),
+                    const SizedBox(width: 40),
                   Expanded(
                     child: Text(
                       title,
-                      style: const TextStyle(
-                        fontSize: 18,
+                      style: InhaleTypography.titleLarge.copyWith(
+                        color:
+                            isDark
+                                ? InhaleColors.textPrimary
+                                : InhaleColors.lightNavyText,
                         fontWeight: FontWeight.w600,
-                        color: InhaleColors.navyText,
                       ),
                       textAlign: showBack ? TextAlign.start : TextAlign.center,
                     ),
                   ),
-                  if (actions != null) ...actions!,
+                  trailing ??
+                      (actions != null
+                          ? Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [...actions!],
+                          )
+                          : const SizedBox(width: 40)),
                 ],
               ),
             ),

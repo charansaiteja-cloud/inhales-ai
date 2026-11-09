@@ -22,7 +22,8 @@ class NotesScreen extends ConsumerWidget {
         actions: [
           GlassIconButton(
             onTap: () => notifier.toggleSearch(),
-            icon: Icon(Icons.search_rounded, color: InhaleColors.textPrimary),
+            icon: Icons.search_rounded,
+            color: InhaleColors.textPrimary,
           ),
         ],
       ),
@@ -88,11 +89,9 @@ class NotesScreen extends ConsumerWidget {
                                       ),
                                       GlassIconButton(
                                         onTap: () => notifier.deleteNote(index),
-                                        icon: Icon(
-                                          Icons.delete_outline_rounded,
-                                          color: InhaleColors.error,
-                                          size: 18,
-                                        ),
+                                        icon: Icons.delete_outline_rounded,
+                                        color: InhaleColors.error,
+                                        size: 36,
                                       ),
                                     ],
                                   ),

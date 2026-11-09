@@ -11,6 +11,7 @@ import '../../widgets/glass_search_bar.dart';
 import '../../widgets/glass_status_badge.dart';
 import '../../widgets/glass_bottom_navigation_bar.dart';
 import '../../widgets/glass_sidebar.dart';
+import '../../widgets/ai_orb.dart';
 import '../settings/settings_provider.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -38,14 +39,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       description: 'Ask anything',
       icon: Icons.smart_toy_rounded,
       route: '/chat',
-      gradient: GradientInfo(InhaleColors.primaryBlue, InhaleColors.deepBlue),
+      gradient: GradientInfo(InhaleColors.electricBlue, InhaleColors.violet),
     ),
     DashboardTile(
       label: 'School',
       description: 'Classes 1-10',
       icon: Icons.school_rounded,
       route: '/school',
-      gradient: GradientInfo(Color(0xFF2ECC71), Color(0xFF27AE60)),
+      gradient: GradientInfo(InhaleColors.success, Color(0xFF27AE60)),
     ),
     DashboardTile(
       label: 'College',
@@ -59,14 +60,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       description: 'Assisted writing',
       icon: Icons.edit_note_rounded,
       route: '/writing',
-      gradient: GradientInfo(Color(0xFF9B59B6), Color(0xFF8E44AD)),
+      gradient: GradientInfo(InhaleColors.violet, Color(0xFF8E44AD)),
     ),
     DashboardTile(
       label: 'Coding',
       description: 'Code assistant',
       icon: Icons.code_rounded,
       route: '/coding',
-      gradient: GradientInfo(Color(0xFF3498DB), Color(0xFF2980B9)),
+      gradient: GradientInfo(InhaleColors.electricBlue, Color(0xFF2980B9)),
     ),
     DashboardTile(
       label: 'Mathematics',
@@ -80,7 +81,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       description: 'Test yourself',
       icon: Icons.quiz_rounded,
       route: '/quizzes',
-      gradient: GradientInfo(Color(0xFFE74C3C), Color(0xFFC0392B)),
+      gradient: GradientInfo(InhaleColors.error, Color(0xFFC0392B)),
     ),
     DashboardTile(
       label: 'Notes',
@@ -94,7 +95,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       description: 'Multi-language',
       icon: Icons.translate_rounded,
       route: '/translation',
-      gradient: GradientInfo(Color(0xFF8E44AD), Color(0xFF9B59B6)),
+      gradient: GradientInfo(Color(0xFF8E44AD), InhaleColors.violet),
     ),
     DashboardTile(
       label: 'Documents',
@@ -177,7 +178,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         SizedBox(
           width: 260,
           child: GlassSidebar(
-            items: [
+            items: const [
               SidebarItem(
                 label: 'Dashboard',
                 icon: Icons.dashboard_rounded,
@@ -208,7 +209,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             onItemTap: (index, label) => _onNavItemTap(index),
           ),
         ),
-        const VerticalDivider(width: 1),
         Expanded(child: _buildContent(context, reducedBlur)),
       ],
     );
@@ -219,11 +219,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Widget _buildContent(BuildContext context, bool reducedBlur) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
-      decoration: BoxDecoration(gradient: InhaleColors.gradientBackground),
+      decoration: BoxDecoration(
+        gradient:
+            isDark
+                ? InhaleColors.gradientBackgroundDark
+                : InhaleColors.gradientBackground,
+      ),
       child: CustomScrollView(
         slivers: [
-          // Header
           SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.only(
@@ -246,6 +252,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         decoration: BoxDecoration(
                           gradient: InhaleColors.gradientPrimary,
                           borderRadius: BorderRadius.circular(InhaleRadius.sm),
+                          boxShadow: [
+                            BoxShadow(
+                              color: InhaleColors.electricBlue.withValues(
+                                alpha: 0.3,
+                              ),
+                              blurRadius: 16,
+                              spreadRadius: 2,
+                            ),
+                          ],
                         ),
                         child: const Center(
                           child: Text(
@@ -264,31 +279,40 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'InhaleSkill AI',
-                              style: InhaleTypography.displaySmall,
+                              'Good evening',
+                              style: InhaleTypography.bodyMedium.copyWith(
+                                color:
+                                    isDark
+                                        ? InhaleColors.textSecondary
+                                        : InhaleColors.lightTextSecondary,
+                              ),
                             ),
                             Text(
-                              'Learn Anything. Build Skills. Anywhere.',
-                              style: InhaleTypography.bodyMedium.copyWith(
-                                color: InhaleColors.secondaryText,
+                              'InhaleSkill AI',
+                              style: InhaleTypography.displaySmall.copyWith(
+                                color:
+                                    isDark
+                                        ? InhaleColors.textPrimary
+                                        : InhaleColors.lightNavyText,
                               ),
                             ),
                           ],
                         ),
                       ),
-                      const GlassStatusBadge(
-                        label: 'Offline Ready',
-                        backgroundColor: Color(0x262ECC71),
-                        textColor: Color(0xFF2ECC71),
+                      GlassStatusBadge(
+                        label: 'AI Ready',
+                        backgroundColor: InhaleColors.successSoft,
+                        textColor: InhaleColors.success,
                       ),
                     ],
                   ),
+                  const SizedBox(height: InhaleSpacing.lg),
+                  _buildHeroCard(context, isDark),
                 ],
               ),
             ),
           ),
 
-          // Search bar
           SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: InhaleSpacing.lg),
@@ -303,7 +327,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
           ),
 
-          // Dashboard tiles
           SliverPadding(
             padding: EdgeInsets.all(InhaleSpacing.lg),
             sliver: SliverGrid(
@@ -322,7 +345,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 final tile = _dashboardTiles[index];
                 return GlassCard(
                   onTap: () => _onTileTap(tile.route),
-                  padding: EdgeInsets.all(InhaleSpacing.md),
+                  padding: const EdgeInsets.all(InhaleSpacing.md),
                   elevated: true,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -337,12 +360,35 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             end: Alignment.bottomRight,
                           ),
                           borderRadius: BorderRadius.circular(InhaleRadius.sm),
+                          boxShadow: [
+                            BoxShadow(
+                              color: tile.gradient.start.withValues(alpha: 0.3),
+                              blurRadius: 12,
+                              spreadRadius: 2,
+                            ),
+                          ],
                         ),
                         child: Icon(tile.icon, color: Colors.white, size: 28),
                       ),
                       const SizedBox(height: InhaleSpacing.sm),
-                      Text(tile.label, style: InhaleTypography.titleMedium),
-                      Text(tile.description, style: InhaleTypography.bodySmall),
+                      Text(
+                        tile.label,
+                        style: InhaleTypography.titleMedium.copyWith(
+                          color:
+                              isDark
+                                  ? InhaleColors.textPrimary
+                                  : InhaleColors.lightNavyText,
+                        ),
+                      ),
+                      Text(
+                        tile.description,
+                        style: InhaleTypography.bodySmall.copyWith(
+                          color:
+                              isDark
+                                  ? InhaleColors.textMuted
+                                  : InhaleColors.lightTextSecondary,
+                        ),
+                      ),
                     ],
                   ),
                 );
@@ -350,12 +396,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
           ),
 
-          // Status bar
           SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.all(InhaleSpacing.lg),
               child: GlassCard(
-                padding: EdgeInsets.all(InhaleSpacing.md),
+                padding: const EdgeInsets.all(InhaleSpacing.md),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -363,26 +408,118 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       icon: Icons.memory_rounded,
                       label: 'RAM',
                       value: '4GB+',
+                      isDark: isDark,
                     ),
                     _StatusItem(
                       icon: Icons.storage_rounded,
                       label: 'Storage',
                       value: 'Free',
+                      isDark: isDark,
                     ),
                     _StatusItem(
                       icon: Icons.model_training_rounded,
                       label: 'Model',
                       value: 'None',
+                      isDark: isDark,
                     ),
                     _StatusItem(
                       icon: Icons.wifi_off_rounded,
                       label: 'Mode',
                       value: 'Offline',
+                      isDark: isDark,
                     ),
                   ],
                 ),
               ),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHeroCard(BuildContext context, bool isDark) {
+    return GlassCard(
+      padding: const EdgeInsets.all(InhaleSpacing.lg),
+      elevated: true,
+      glow: true,
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Your Intelligence Hub',
+                  style: InhaleTypography.headlineLarge.copyWith(
+                    color:
+                        isDark
+                            ? InhaleColors.textPrimary
+                            : InhaleColors.lightNavyText,
+                  ),
+                ),
+                const SizedBox(height: InhaleSpacing.xs),
+                Text(
+                  'Your personal AI, ready whenever you are.',
+                  style: InhaleTypography.bodyMedium.copyWith(
+                    color:
+                        isDark
+                            ? InhaleColors.textSecondary
+                            : InhaleColors.lightTextSecondary,
+                  ),
+                ),
+                const SizedBox(height: InhaleSpacing.md),
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: InhaleColors.successSoft,
+                        borderRadius: BorderRadius.circular(InhaleRadius.xs),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 6,
+                            height: 6,
+                            decoration: const BoxDecoration(
+                              color: InhaleColors.success,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            'AI Model Ready',
+                            style: InhaleTypography.labelSmall.copyWith(
+                              color: InhaleColors.success,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: InhaleSpacing.sm),
+                    Text(
+                      'Offline',
+                      style: InhaleTypography.labelSmall.copyWith(
+                        color:
+                            isDark
+                                ? InhaleColors.textMuted
+                                : InhaleColors.lightTextMuted,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: InhaleSpacing.lg),
+          const SizedBox(
+            width: 80,
+            height: 80,
+            child: AIOrb(size: 80, isActive: true),
           ),
         ],
       ),
@@ -415,20 +552,44 @@ class _StatusItem extends StatelessWidget {
   final IconData icon;
   final String label;
   final String value;
+  final bool isDark;
+
   const _StatusItem({
     required this.icon,
     required this.label,
     required this.value,
+    required this.isDark,
   });
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Icon(icon, color: InhaleColors.primaryBlue, size: 24),
+        Icon(
+          icon,
+          color:
+              isDark
+                  ? InhaleColors.electricBlue
+                  : InhaleColors.lightPrimaryBlue,
+          size: 24,
+        ),
         const SizedBox(height: 4),
-        Text(label, style: InhaleTypography.labelSmall),
-        Text(value, style: InhaleTypography.titleSmall),
+        Text(
+          label,
+          style: InhaleTypography.labelSmall.copyWith(
+            color:
+                isDark
+                    ? InhaleColors.textMuted
+                    : InhaleColors.lightTextSecondary,
+          ),
+        ),
+        Text(
+          value,
+          style: InhaleTypography.titleSmall.copyWith(
+            color:
+                isDark ? InhaleColors.textPrimary : InhaleColors.lightNavyText,
+          ),
+        ),
       ],
     );
   }

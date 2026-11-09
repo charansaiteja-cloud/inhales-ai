@@ -3,34 +3,39 @@ import 'dart:ui';
 import '../core/theme/inhale_colors.dart';
 import '../core/theme/inhale_tokens.dart';
 
+/// Liquid Glass text field/input.
 class GlassTextField extends StatefulWidget {
+  final TextEditingController? controller;
   final String? hintText;
-  final ValueChanged<String>? onChanged;
-  final VoidCallback? onTap;
+  final String? labelText;
   final bool obscureText;
+  final TextInputType? keyboardType;
   final int? maxLines;
   final int? minLines;
-  final double? width;
-  final String? initialValue;
-  final String? error;
-  final bool enabled;
-  final TextEditingController? controller;
+  final ValueChanged<String>? onChanged;
   final ValueChanged<String>? onSubmitted;
+  final Widget? prefixIcon;
+  final Widget? suffixIcon;
+  final bool enabled;
+  final bool autofocus;
+  final double? blur;
 
   const GlassTextField({
     super.key,
+    this.controller,
     this.hintText,
-    this.onChanged,
-    this.onTap,
+    this.labelText,
     this.obscureText = false,
+    this.keyboardType,
     this.maxLines = 1,
     this.minLines,
-    this.width,
-    this.initialValue,
-    this.error,
-    this.enabled = true,
-    this.controller,
+    this.onChanged,
     this.onSubmitted,
+    this.prefixIcon,
+    this.suffixIcon,
+    this.enabled = true,
+    this.autofocus = false,
+    this.blur,
   });
 
   @override
@@ -38,62 +43,92 @@ class GlassTextField extends StatefulWidget {
 }
 
 class _GlassTextFieldState extends State<GlassTextField> {
-  late final _controller =
-      widget.controller ?? TextEditingController(text: widget.initialValue);
+  late FocusNode _focusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode = FocusNode();
+  }
 
   @override
   void dispose() {
-    if (widget.controller == null) {
-      _controller.dispose();
-    }
+    _focusNode.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return TapRegion(
-      onTapInside: (_) => widget.onTap?.call(),
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final effectiveBlur = widget.blur ?? InhaleBlur.light;
+
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.easeInOut,
+      decoration: BoxDecoration(
+        color:
+            isDark
+                ? InhaleColors.glassSurfaceLight
+                : InhaleColors.lightGlassSurface,
+        borderRadius: BorderRadius.circular(InhaleRadius.sm),
+        border: Border.all(
+          color:
+              _focusNode.hasFocus
+                  ? (isDark
+                      ? InhaleColors.electricBlue
+                      : InhaleColors.lightPrimaryBlue)
+                  : (isDark
+                      ? InhaleColors.glassBorderSubtle
+                      : InhaleColors.lightGlassBorderSubtle),
+          width: _focusNode.hasFocus ? 1.5 : 0.5,
+        ),
+        boxShadow:
+            _focusNode.hasFocus
+                ? (isDark ? InhaleShadows.glassBlue : InhaleShadows.subtle)
+                : (isDark ? InhaleShadows.subtle : null),
+      ),
       child: ClipRRect(
-        borderRadius: const BorderRadius.all(Radius.circular(InhaleRadius.md)),
+        borderRadius: BorderRadius.circular(InhaleRadius.sm),
         child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-          child: Container(
-            width: widget.width,
-            decoration: BoxDecoration(
-              color: InhaleColors.glassSurface,
-              borderRadius: const BorderRadius.all(
-                Radius.circular(InhaleRadius.md),
-              ),
-              border: Border.all(
-                color:
-                    widget.error != null
-                        ? InhaleColors.error
-                        : InhaleColors.glassBorderSubtle,
-                width: 0.5,
-              ),
+          filter: ImageFilter.blur(
+            sigmaX: effectiveBlur,
+            sigmaY: effectiveBlur,
+          ),
+          child: TextField(
+            controller: widget.controller,
+            focusNode: _focusNode,
+            obscureText: widget.obscureText,
+            keyboardType: widget.keyboardType,
+            maxLines: widget.maxLines,
+            minLines: widget.minLines,
+            onChanged: widget.onChanged,
+            onSubmitted: widget.onSubmitted,
+            enabled: widget.enabled,
+            autofocus: widget.autofocus,
+            style: TextStyle(
+              color:
+                  isDark
+                      ? InhaleColors.textPrimary
+                      : InhaleColors.lightNavyText,
+              fontSize: 15,
             ),
-            child: TextField(
-              controller: _controller,
-              enabled: widget.enabled,
-              onTap: widget.onTap,
-              onChanged: widget.onChanged,
-              obscureText: widget.obscureText,
-              maxLines: widget.maxLines,
-              minLines: widget.minLines,
-              style: const TextStyle(
-                color: InhaleColors.navyText,
-                fontSize: 15,
+            decoration: InputDecoration(
+              hintText: widget.hintText,
+              labelText: widget.labelText,
+              prefixIcon: widget.prefixIcon,
+              suffixIcon: widget.suffixIcon,
+              hintStyle: TextStyle(
+                color:
+                    isDark
+                        ? InhaleColors.textMuted
+                        : InhaleColors.lightTextSecondary,
+                fontSize: 14,
               ),
-              cursorColor: InhaleColors.primaryBlue,
-              decoration: InputDecoration(
-                hintText: widget.hintText,
-                border: InputBorder.none,
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
-                ),
+              border: InputBorder.none,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 14,
               ),
-              onSubmitted: widget.onSubmitted,
             ),
           ),
         ),

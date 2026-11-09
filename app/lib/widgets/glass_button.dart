@@ -3,6 +3,7 @@ import 'dart:ui';
 import '../core/theme/inhale_colors.dart';
 import '../core/theme/inhale_tokens.dart';
 
+/// Premium Liquid Glass button with frosted blur and gradient.
 class GlassButton extends StatelessWidget {
   final VoidCallback? onTap;
   final Widget? child;
@@ -13,7 +14,8 @@ class GlassButton extends StatelessWidget {
   final bool iconOnly;
   final double blur;
   final bool enabled;
-  final bool disabled;
+  final bool glow;
+  final BorderRadius? borderRadius;
 
   const GlassButton({
     super.key,
@@ -24,19 +26,30 @@ class GlassButton extends StatelessWidget {
     this.height,
     this.outlined = false,
     this.iconOnly = false,
-    this.blur = InhaleBlur.reduced,
+    this.blur = InhaleBlur.light,
     this.enabled = true,
-    this.disabled = false,
+    this.glow = false,
+    this.borderRadius,
   });
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final effectiveRadius =
+        borderRadius ??
+        const BorderRadius.all(Radius.circular(InhaleRadius.pill));
+
     final content =
         child ??
         Text(
           label ?? '',
           style: TextStyle(
-            color: outlined ? InhaleColors.primaryBlue : InhaleColors.pureWhite,
+            color:
+                outlined
+                    ? (isDark
+                        ? InhaleColors.electricBlue
+                        : InhaleColors.lightPrimaryBlue)
+                    : (isDark ? InhaleColors.textPrimary : Colors.white),
             fontWeight: FontWeight.w600,
             fontSize: 15,
           ),
@@ -45,42 +58,48 @@ class GlassButton extends StatelessWidget {
     return MouseRegion(
       cursor: enabled ? SystemMouseCursors.click : SystemMouseCursors.basic,
       child: TapRegion(
-        onTapInside: (_) => onTap,
+        onTapInside: (_) => enabled ? onTap?.call() : null,
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 180),
+          duration: const Duration(milliseconds: 200),
           curve: Curves.easeInOut,
           width: width,
-          height: height ?? (iconOnly ? 48 : 52),
+          height: height ?? (iconOnly ? 44 : 48),
           decoration: BoxDecoration(
             color:
                 enabled
                     ? (outlined
                         ? InhaleColors.glassSurface
-                        : InhaleColors.pureWhite.withValues(alpha: 0.9))
-                    : InhaleColors.glassSurface,
+                        : (isDark
+                            ? InhaleColors.electricBlue
+                            : InhaleColors.lightPrimaryBlue))
+                    : (isDark
+                        ? InhaleColors.glassSurface
+                        : InhaleColors.lightGlassSurface),
             gradient:
                 enabled && !outlined ? InhaleColors.gradientPrimary : null,
-            borderRadius: const BorderRadius.all(
-              Radius.circular(InhaleRadius.pill),
-            ),
+            borderRadius: effectiveRadius,
             border: Border.all(
               color:
                   outlined
-                      ? InhaleColors.primaryBlue
-                      : InhaleColors.glassBorderSubtle,
+                      ? (isDark
+                          ? InhaleColors.glassBorder
+                          : InhaleColors.lightGlassBorder)
+                      : (isDark
+                          ? InhaleColors.glassBorderSubtle
+                          : InhaleColors.lightGlassBorderSubtle),
               width: outlined ? 1.5 : 0.5,
             ),
             boxShadow:
                 enabled
-                    ? (outlined
-                        ? InhaleShadows.soft
-                        : InhaleShadows.floating)
+                    ? (glow
+                        ? InhaleShadows.glowBlue
+                        : (outlined
+                            ? InhaleShadows.soft
+                            : InhaleShadows.floating))
                     : null,
           ),
           child: ClipRRect(
-            borderRadius: const BorderRadius.all(
-              Radius.circular(InhaleRadius.pill),
-            ),
+            borderRadius: effectiveRadius,
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
               child: Center(child: content),

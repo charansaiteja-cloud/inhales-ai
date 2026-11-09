@@ -47,16 +47,15 @@ class VoiceScreen extends ConsumerWidget {
                     ),
                     GlassIconButton(
                       onTap: () => notifier.toggleRecording(),
-                      icon: Icon(
-                        state.isRecording
-                            ? Icons.mic_rounded
-                            : Icons.mic_none_rounded,
-                        color:
-                            state.isRecording
-                                ? InhaleColors.error
-                                : InhaleColors.primaryBlue,
-                        size: 32,
-                      ),
+                      icon:
+                          state.isRecording
+                              ? Icons.mic_rounded
+                              : Icons.mic_none_rounded,
+                      color:
+                          state.isRecording
+                              ? InhaleColors.error
+                              : InhaleColors.primaryBlue,
+                      size: 64,
                     ),
                   ],
                 ),

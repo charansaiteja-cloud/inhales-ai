@@ -16,10 +16,7 @@ class _SmoothPageTransitionBuilder extends PageTransitionsBuilder {
     Widget child,
   ) {
     return FadeTransition(
-      opacity: CurvedAnimation(
-        parent: animation,
-        curve: Curves.easeOutCubic,
-      ),
+      opacity: CurvedAnimation(parent: animation, curve: Curves.easeOutCubic),
       child: child,
     );
   }
@@ -51,7 +48,10 @@ class InhaleTheme {
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(InhaleRadius.md),
-        side: const BorderSide(color: InhaleColors.lightGlassBorderSubtle, width: 0.5),
+        side: const BorderSide(
+          color: InhaleColors.lightGlassBorderSubtle,
+          width: 0.5,
+        ),
       ),
     ),
     scrollbarTheme: ScrollbarThemeData(
@@ -111,7 +111,10 @@ class InhaleTheme {
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(InhaleRadius.md),
-        side: const BorderSide(color: InhaleColors.glassBorderSubtle, width: 0.5),
+        side: const BorderSide(
+          color: InhaleColors.glassBorderSubtle,
+          width: 0.5,
+        ),
       ),
     ),
     scrollbarTheme: ScrollbarThemeData(
@@ -172,7 +175,10 @@ class InhaleTheme {
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(InhaleRadius.sm),
-        borderSide: const BorderSide(color: InhaleColors.electricBlue, width: 1.5),
+        borderSide: const BorderSide(
+          color: InhaleColors.electricBlue,
+          width: 1.5,
+        ),
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
     ),
@@ -197,12 +203,14 @@ class InhaleThemeData {
   Color get surface =>
       isDark ? InhaleColors.glassSurfaceMedium : InhaleColors.lightGlassSurface;
 
-  Color get text => isDark ? InhaleColors.textPrimary : InhaleColors.lightNavyText;
+  Color get text =>
+      isDark ? InhaleColors.textPrimary : InhaleColors.lightNavyText;
 
   Color get secondaryText =>
       isDark ? InhaleColors.textSecondary : InhaleColors.lightTextSecondary;
 
-  Color get primary => isDark ? InhaleColors.electricBlue : InhaleColors.lightPrimaryBlue;
+  Color get primary =>
+      isDark ? InhaleColors.electricBlue : InhaleColors.lightPrimaryBlue;
 
   double get blur => isDark ? InhaleBlur.medium : InhaleBlur.light;
 }

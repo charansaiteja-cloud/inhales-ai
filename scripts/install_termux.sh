@@ -2,50 +2,53 @@
 set -euo pipefail
 
 # InhaleSkill AI — Termux installer
-# Repository: https://github.com/charansaiteja-cloud/inhales-ai.git
+# Installs Flutter and builds the Android APK from source.
+# Note: Pre-built APKs from GitHub Actions are recommended.
+
 REPO_URL="https://github.com/charansaiteja-cloud/inhales-ai.git"
 REPO_DIR="$HOME/inhales-ai"
+FLUTTER_DIR="$HOME/flutter"
 
 echo "=== InhaleSkill AI Termux installer ==="
 
-# Validate Termux
-if [ ! -d "$HOME" ] || [ -z "${TERMUX_VERSION:-}" ]; then
+# Validate Termux environment
+if [ -z "${TERMUX_VERSION:-}" ]; then
   echo "This script should be run inside Termux on Android." >&2
   exit 1
 fi
 
-# Check available storage
+# Check available storage (need 1.5 GB+ for Flutter SDK + build)
 AVAILABLE=$(df -m "$HOME" | awk 'NR==2 {print $4}')
 echo "Available storage: ${AVAILABLE} MB"
 
-if [ "$AVAILABLE" -lt 500 ]; then
-  echo "ERROR: Insufficient storage. Need at least 500 MB." >&2
+if [ "$AVAILABLE" -lt 1500 ]; then
+  echo "ERROR: Insufficient storage. Need at least 1500 MB for Flutter SDK + build." >&2
   exit 1
 fi
 
 # Install prerequisites
 echo "Installing prerequisites..."
-pkg install -y git clang cmake ninja libstdc++ libpng-dev libjpeg-dev protobuf-dev android-tools || true
+pkg update -y
+pkg install -y git clang cmake ninja libstdc++ || true
 
 # Install Flutter if not present
-if [ ! -d "$HOME/flutter" ]; then
-  echo "Cloning Flutter SDK..."
-  git clone https://github.com/flutter/flutter.git -b stable "$HOME/flutter"
+if [ ! -d "$FLUTTER_DIR/.git" ]; then
+  echo "Cloning Flutter SDK (~300 MB)..."
+  git clone --depth 1 https://github.com/flutter/flutter.git -b stable "$FLUTTER_DIR"
 fi
-export PATH="$HOME/flutter/bin:$PATH"
 
-echo "Flutter version:"
-flutter --version | head -1
+export PATH="$FLUTTER_DIR/bin:$PATH"
+export PUB_CACHE="$HOME/.pub-cache"
+
+# Accept licenses and cache artifacts
+flutter --version >/dev/null 2>&1 || true
 
 # Clone or update repository
 if [ ! -d "$REPO_DIR" ]; then
   echo "Cloning repository..."
-  git clone "$REPO_URL" "$REPO_DIR"
+  git clone --depth 1 "$REPO_URL" "$REPO_DIR"
 else
-  echo "Updating repository..."
-  cd "$REPO_DIR"
-  git fetch --all
-  git reset --hard origin/main
+  echo "Repository exists at $REPO_DIR"
 fi
 
 # Build
@@ -53,19 +56,22 @@ cd "$REPO_DIR/app"
 echo "Running flutter pub get..."
 flutter pub get
 
-echo "Building Android APK..."
-flutter build apk --debug
+echo "Building Android debug APK..."
+flutter build apk --debug 2>&1 | tail -5
 
-# Sideload if device connected
-DEVICE=$(adb devices 2>/dev/null | awk 'NR>1{print $1}' | grep -v "unauthorized" | head -1 || true)
-if [ -n "$DEVICE" ]; then
-  echo "Sideloading APK to $DEVICE..."
-  adb -s "$DEVICE" install -r build/app/outputs/flutter-apk/app-debug.apk
+APK_PATH="build/app/outputs/flutter-apk/app-debug.apk"
+
+if [ -f "$APK_PATH" ]; then
+  APK_SIZE=$(du -h "$APK_PATH" | cut -f1)
+  echo ""
+  echo "=== Build successful ==="
+  echo "APK: $APK_PATH ($APK_SIZE)"
+  echo ""
+  echo "To install:"
+  echo "  pm install -r $REPO_DIR/$APK_PATH"
 else
-  echo "No Android device connected via ADB."
-  echo "APK location: build/app/outputs/flutter-apk/app-debug.apk"
+  echo ""
+  echo "=== Build failed ==="
+  echo "Check the output above for errors."
+  exit 1
 fi
-
-echo "=== Installation complete ==="
-echo "Run the app from your Android launcher or use:"
-echo "  cd $REPO_DIR/app && flutter run -d <device>"

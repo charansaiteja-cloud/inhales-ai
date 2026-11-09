@@ -1,49 +1,60 @@
 # InhaleSkill AI
 
-**InhaleSkill AI** is a cross-platform, offline AI learning and productivity assistant built with Flutter. It supports Classes 1–10, college learning, AI chat, coding, mathematics, writing, quizzes, notes, translation, image and document understanding, voice assistance, PDF and presentations, with adaptive local AI models and a premium Blue & White Liquid Glass UI.
+**Universal Offline AI Learning and Productivity Assistant**
+
+*Learn Anything. Build Skills. Anywhere.*
+
+![Platforms](https://img.shields.io/badge/platform-Android%20%7C%20Linux%20%7C%20Windows%20%7C%20macOS-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Flutter](https://img.shields.io/badge/Flutter-3.47-blue)
+
+InhaleSkill AI is a cross-platform, privacy-first AI application with **100% offline** local inference, a premium Blue & White Liquid Glass UI, and adaptive hardware support starting from 4 GB RAM devices.
 
 ## Features
 
-- **Offline AI** — 100% local inference via llama.cpp FFI; no cloud, no login, no telemetry
-- **Chat** — streaming AI conversations with local model
-- **School** — Classes 1–10 curriculum modules
-- **College** — higher education learning modules
-- **General** — general-purpose AI assistant
-- **Writing** — assisted writing and editing
-- **Coding** — code assistant and explanation
-- **Mathematics** — calculations and problem solving
-- **Translation** — multi-language translation
-- **Vision** — image and document understanding
-- **Documents** — PDF and file processing
-- **Quizzes** — test yourself with generated quizzes
-- **Notes** — study workspace with local storage
-- **Voice** — text-to-speech assistance
-- **Presentations** — presentation generation
-- **Model Manager** — download and manage local GGUF models
-- **Liquid Glass UI** — premium blue & white glassmorphism design
+| Category | Features |
+|---|---|
+| **Chat** | Streaming AI conversations, multi-session, history |
+| **School** | Classes 1–10, subjects, quizzes, notes |
+| **College** | Engineering, CS, sciences, commerce, humanities |
+| **Writing** | Essays, letters, resumes, creative writing |
+| **Coding** | Code generation, explanation, debugging |
+| **Math** | Calculations, step-by-step solutions |
+| **Translation** | Offline text translation |
+| **Vision** | Image understanding (with vision model) |
+| **Documents** | PDF, TXT, DOCX processing |
+| **Quizzes** | MCQ, true/false, fill-in-blanks, timed |
+| **Notes** | Local storage, folders, search, export |
+| **Voice** | Text-to-speech, speech input |
+| **PDF/PPTX** | Document generation and export |
+| **Model Manager** | Download, install, switch local GGUF models |
 
 ## Tech Stack
 
-- **Framework**: Flutter 3.47 (stable)
-- **State**: Riverpod 2.5
-- **Navigation**: GoRouter 14.2
-- **Database**: Drift 2.22 (SQLite)
-- **AI**: llama.cpp FFI (native C++ engine)
-- **CI**: GitHub Actions
+- **Framework**: Flutter 3.47 / Dart 3.13
+- **State**: Riverpod 2.6
+- **Navigation**: GoRouter
+- **Database**: Drift (SQLite)
+- **AI Engine**: llama.cpp via FFI (native C++)
+- **Models**: GGUF quantized models
+- **CI/CD**: GitHub Actions
 
 ## Supported Platforms
 
-- Android
-- iOS
-- Windows
-- macOS
-- Linux
+| Platform | Status |
+|---|---|
+| Android (API 24+) | ✅ Built & tested (APK + AAB) |
+| Linux (x64) | ✅ Built & tested |
+| Windows | 🖥️ Platform configured (build on Windows host) |
+| macOS | 🍎 Platform configured (build on macOS host) |
 
 ## Hardware Requirements
 
-- 4 GB RAM minimum (6 GB recommended)
-- 64 GB storage
-- Works fully offline
+| Profile | RAM | Storage | Model |
+|---|---|---|---|
+| Minimum | 4 GB | 64 GB | Lightweight Q4 GGUF |
+| Recommended | 6–8 GB | 128 GB | Balanced model |
+| High-end | 12+ GB | 256 GB+ | Full-featured model |
 
 ## Quick Start
 
@@ -51,13 +62,63 @@
 git clone https://github.com/charansaiteja-cloud/inhales-ai.git
 cd inhales-ai/app
 flutter pub get
-flutter run -d windows  # or -d linux, -d macos
+flutter run
 ```
 
-## Termux Installation
+## Building
 
-See `scripts/install_termux.sh` for Termux setup instructions.
+```bash
+# Android release
+cd app && flutter build apk --release
+
+# Android Play Store
+cd app && flutter build appbundle --release
+
+# Linux
+cd app && flutter build linux --release
+
+# Windows (on Windows host)
+cd app && flutter build windows --release
+
+# macOS (on macOS host)
+cd app && flutter build macos --release
+```
+
+## Termux
+
+```bash
+bash scripts/install_termux.sh
+```
+
+See `scripts/install_termux.sh` for details. Note: building in Termux requires significant storage and time. Using the pre-built APK from GitHub Actions is recommended.
+
+## Project Structure
+
+```
+inhales-ai/
+├── app/                      # Flutter application
+│   ├── lib/
+│   │   ├── core/             # Theme, routing, constants
+│   │   ├── ai/               # Inference engine, FFI, model manager
+│   │   ├── features/         # Feature modules (chat, school, etc.)
+│   │   ├── services/         # Storage, hardware detection
+│   │   └── widgets/          # Liquid Glass UI components
+│   └── test/                 # Tests
+├── native/                   # Native C++ inference engine
+│   └── inference/
+├── scripts/                  # Build & install scripts
+├── .github/workflows/        # CI/CD
+└── docs/                     # Documentation
+```
+
+## Privacy
+
+- No cloud AI APIs
+- No mandatory login
+- No telemetry
+- No remote database
+- All data stored locally via SQLite
 
 ## License
 
-MIT — see LICENSE
+MIT — see [LICENSE](LICENSE)

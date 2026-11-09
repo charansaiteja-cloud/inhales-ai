@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+// These variable names match native C function symbols in inhale_engine.cpp
 import 'dart:ffi';
 import 'package:ffi/ffi.dart';
 

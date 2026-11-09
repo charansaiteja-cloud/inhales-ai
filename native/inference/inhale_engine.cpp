@@ -1,17 +1,17 @@
-// InhaleSkill AI — Native inference engine (llama.cpp wrapper).
+// InhaleSkill AI — Native inference engine (llama.cpp wrapper stub).
 // Build with CMake. See native/CMakeLists.txt.
 //
 // Exports:
 //   inhale_init() -> int  (0 = ok)
 //   inhale_load_model(path, ctx, threads, gpu) -> int (0 = ok)
-//   inhale_generate(prompt, max_tokens, temp, top_p, top_k,
-//                   token_cb, done_cb, err_cb, cancel) -> int
+//   inhale_generate(prompt, max_tokens, temp, top_p, top_k, ...) -> int
 //   inhale_unload_model()
 //   inhale_shutdown()
 //   inhale_get_memory_mb() -> int
-//
-// Token callbacks are invoked from native threads; the Dart side
-// marshals them onto the UI isolate via a registered callback.
+//   inhale_is_loaded() -> int
+//   inhale_set_context(ctx)
+//   inhale_get_context() -> int
+//   inhale_cancel()
 
 #include <cstdint>
 #include <cstring>
@@ -25,10 +25,7 @@
   #define EXPORT __attribute__((visibility("default")))
 #endif
 
-// Minimal stub engine interface. The full llama.cpp integration
-// is wired through native/CMakeLists.txt and the llama.cpp submodule.
-// This file compiles standalone and provides graceful fallbacks.
-
+// Stub engine interface. Real llama.cpp integration replaces this.
 struct InhaleEngine {
     bool loaded = false;
     std::string modelPath;
@@ -55,7 +52,6 @@ EXPORT int inhale_load_model(const char* path, int ctx, int threads, int gpu) {
     g_engine.useGpu = gpu != 0;
     g_engine.loaded = true;
     g_engine.cancelled = false;
-    // Memory estimate: placeholder. Real implementation queries llama.
     g_engine.memoryMb = std::max(500, ctx / 2);
     return 0;
 }
@@ -87,6 +83,7 @@ EXPORT void inhale_cancel() {
     g_engine.cancelled = true;
 }
 
+// Simple generate: returns 0 on success. Callbacks are optional.
 EXPORT int inhale_generate(
     const char* prompt,
     int max_tokens,
@@ -106,10 +103,13 @@ EXPORT int inhale_generate(
         if (err_cb) err_cb("Cancelled");
         return -2;
     }
-    // Real implementation streams tokens via llama.cpp.
-    // Stub: emit a placeholder token so the Dart layer can test plumbing.
-    if (token_cb) token_cb("[engine:stub]");
-    if (done_cb) done_cb();
+    // Stub: if token_cb provided, send a placeholder token
+    if (token_cb) {
+        token_cb("[inhale:stub:token]");
+    }
+    if (done_cb) {
+        done_cb();
+    }
     return 0;
 }
 

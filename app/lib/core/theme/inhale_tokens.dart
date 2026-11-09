@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'inhale_colors.dart';
 
 /// InhaleSkill AI — Design tokens: spacing, radius, blur, shadows.
 class InhaleSpacing {

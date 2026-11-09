@@ -46,7 +46,7 @@ class SettingsScreen extends ConsumerWidget {
             value: isDark,
             onChanged:
                 (v) => notifier.setTheme(v ? ThemeMode.dark : ThemeMode.light),
-            activeColor: InhaleColors.primaryBlue,
+            activeThumbColor: InhaleColors.primaryBlue,
           ),
         ),
         _settingsTile(
@@ -57,7 +57,7 @@ class SettingsScreen extends ConsumerWidget {
           trailing: Switch(
             value: settings.reducedAnimation,
             onChanged: (v) => notifier.setReducedAnimation(v),
-            activeColor: InhaleColors.primaryBlue,
+            activeThumbColor: InhaleColors.primaryBlue,
           ),
         ),
         _settingsTile(
@@ -68,7 +68,7 @@ class SettingsScreen extends ConsumerWidget {
           trailing: Switch(
             value: settings.reducedBlur,
             onChanged: (v) => notifier.setReducedBlur(v),
-            activeColor: InhaleColors.primaryBlue,
+            activeThumbColor: InhaleColors.primaryBlue,
           ),
         ),
         const SizedBox(height: InhaleSpacing.lg),
@@ -106,7 +106,7 @@ class SettingsScreen extends ConsumerWidget {
           trailing: Switch(
             value: settings.offlineMode,
             onChanged: (v) => notifier.setOffline(v),
-            activeColor: InhaleColors.primaryBlue,
+            activeThumbColor: InhaleColors.primaryBlue,
           ),
         ),
         _settingsTile(

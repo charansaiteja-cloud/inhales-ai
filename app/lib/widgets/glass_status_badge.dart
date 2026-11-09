@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../core/theme/inhale_colors.dart';
 
 class GlassStatusBadge extends StatelessWidget {
   final String label;

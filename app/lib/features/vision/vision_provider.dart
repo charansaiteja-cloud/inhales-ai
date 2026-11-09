@@ -13,6 +13,18 @@ class VisionState {
     this.isProcessing = false,
     this.modelAvailable = false,
   });
+
+  VisionState copyWith({
+    File? image,
+    String? result,
+    bool? isProcessing,
+    bool? modelAvailable,
+  }) => VisionState(
+    image: image ?? this.image,
+    result: result ?? this.result,
+    isProcessing: isProcessing ?? this.isProcessing,
+    modelAvailable: modelAvailable ?? this.modelAvailable,
+  );
 }
 
 final visionProvider = StateNotifierProvider<VisionNotifier, VisionState>(
@@ -28,29 +40,17 @@ class VisionNotifier extends StateNotifier<VisionState> {
     _prompt = prompt;
   }
 
-  Future<void> setImage(File image) async {
-    state = VisionState(
-      image: image,
-      result: state.result,
-      isProcessing: false,
-      modelAvailable: state.modelAvailable,
-    );
+  void setImage(File image) {
+    state = state.copyWith(image: image);
   }
 
   Future<void> analyzeImage() async {
-    state = VisionState(
-      image: state.image,
-      result: '',
-      isProcessing: true,
-      modelAvailable: state.modelAvailable,
-    );
+    state = state.copyWith(isProcessing: true);
     await Future.delayed(const Duration(seconds: 2));
-    state = VisionState(
-      image: state.image,
-      result:
-          'Vision analysis requires a vision model. Install Qwen2.5-VL from Model Manager.',
+    state = state.copyWith(
       isProcessing: false,
-      modelAvailable: false,
+      result:
+          'Vision analysis requires a vision-capable model. Install Qwen2.5-VL from the Model Manager.',
     );
   }
 

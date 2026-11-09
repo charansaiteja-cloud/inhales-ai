@@ -27,6 +27,21 @@ class WritingState {
     this.instructions = '',
     this.isGenerating = false,
   });
+
+  WritingState copyWith({
+    WritingMode? mode,
+    String? title,
+    String? content,
+    String? instructions,
+    bool? isGenerating,
+  }) =>
+      WritingState(
+        mode: mode ?? this.mode,
+        title: title ?? this.title,
+        content: content ?? this.content,
+        instructions: instructions ?? this.instructions,
+        isGenerating: isGenerating ?? this.isGenerating,
+      );
 }
 
 final writingProvider = StateNotifierProvider<WritingNotifier, WritingState>(
@@ -36,52 +51,26 @@ final writingProvider = StateNotifierProvider<WritingNotifier, WritingState>(
 class WritingNotifier extends StateNotifier<WritingState> {
   WritingNotifier() : super(const WritingState());
 
-  Future<void> setMode(WritingMode mode) async {
-    state = WritingState(
-      mode: mode,
-      title: state.title,
-      content: state.content,
-      instructions: state.instructions,
-      isGenerating: state.isGenerating,
-    );
+  void setMode(WritingMode mode) {
+    state = state.copyWith(mode: mode);
   }
 
-  Future<void> setContent(String content) async {
-    state = WritingState(
-      mode: state.mode,
-      title: state.title,
-      content: content,
-      instructions: state.instructions,
-      isGenerating: state.isGenerating,
-    );
+  void setTitle(String title) {
+    state = state.copyWith(title: title);
   }
 
-  Future<void> setInstructions(String instr) async {
-    state = WritingState(
-      mode: state.mode,
-      title: state.title,
-      content: state.content,
-      instructions: instr,
-      isGenerating: state.isGenerating,
-    );
+  void setContent(String content) {
+    state = state.copyWith(content: content);
+  }
+
+  void setInstructions(String instr) {
+    state = state.copyWith(instructions: instr);
   }
 
   Future<void> generateContent() async {
-    state = WritingState(
-      mode: state.mode,
-      title: state.title,
-      content: state.content,
-      instructions: state.instructions,
-      isGenerating: true,
-    );
+    state = state.copyWith(isGenerating: true);
     // Real implementation: prompt local AI.
     await Future.delayed(const Duration(seconds: 1));
-    state = WritingState(
-      mode: state.mode,
-      title: state.title,
-      content: state.content,
-      instructions: state.instructions,
-      isGenerating: false,
-    );
+    state = state.copyWith(isGenerating: false);
   }
 }

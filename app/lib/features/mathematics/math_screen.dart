@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../core/theme/inhale_colors.dart';
 import '../../core/theme/inhale_tokens.dart';
 import '../../core/theme/inhale_typography.dart';
 import '../../widgets/glass_card.dart';

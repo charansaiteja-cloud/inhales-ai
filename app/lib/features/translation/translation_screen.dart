@@ -110,7 +110,10 @@ class TranslationScreen extends ConsumerWidget {
             child: GlassButton(
               width: double.infinity,
               label: 'Translate',
-              onTap: state.inputText.isNotEmpty ? () => notifier.translate(state.inputText) : null,
+              onTap:
+                  state.inputText.isNotEmpty
+                      ? () => notifier.translate(state.inputText)
+                      : null,
             ),
           ),
           Padding(

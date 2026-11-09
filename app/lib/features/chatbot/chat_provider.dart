@@ -1,6 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../domain/entities/conversation.dart' as domain;
+import '../../../domain/entities/message.dart' as domain_msg;
+import '../../../domain/repositories/conversation_repository.dart';
+import '../../../domain/repositories/message_repository.dart';
+import '../../../di/di.dart';
 
-/// Chat state model.
+/// Chat state model - UI-facing (maintains backward compatibility).
 class ChatMessage {
   final int id;
   final String content;
@@ -15,6 +20,17 @@ class ChatMessage {
     required this.timestamp,
     this.isStreaming = false,
   });
+
+  /// Create from domain Message entity.
+  factory ChatMessage.fromEntity(domain_msg.Message message) {
+    return ChatMessage(
+      id: message.id ?? 0,
+      content: message.content,
+      isUser: message.role == 'user',
+      timestamp: message.createdAt,
+      isStreaming: false,
+    );
+  }
 }
 
 class ChatSession {
@@ -31,6 +47,20 @@ class ChatSession {
     this.mode = 'chat',
     required this.lastMessageTime,
   });
+
+  /// Create from domain Conversation and its Messages.
+  factory ChatSession.fromEntities(
+    domain.Conversation conversation,
+    List<domain_msg.Message> messages,
+  ) {
+    return ChatSession(
+      id: conversation.id ?? 0,
+      title: conversation.title,
+      messages: messages.map(ChatMessage.fromEntity).toList(),
+      mode: conversation.mode ?? 'chat',
+      lastMessageTime: conversation.updatedAt,
+    );
+  }
 }
 
 class ChatState {
@@ -45,24 +75,77 @@ class ChatState {
     this.isGenerating = false,
     this.generationError = '',
   });
+
+  ChatState copyWith({
+    List<ChatSession>? sessions,
+    ChatSession? activeSession,
+    bool? isGenerating,
+    String? generationError,
+  }) => ChatState(
+    sessions: sessions ?? this.sessions,
+    activeSession: activeSession ?? this.activeSession,
+    isGenerating: isGenerating ?? this.isGenerating,
+    generationError: generationError ?? this.generationError,
+  );
 }
 
-final chatProvider = StateNotifierProvider<ChatNotifier, ChatState>(
-  (ref) => ChatNotifier(),
-);
+final chatProvider = StateNotifierProvider<ChatNotifier, ChatState>((ref) {
+  final conversationRepo = ref.watch(conversationRepositoryProvider);
+  final messageRepo = ref.watch(messageRepositoryProvider);
+  return ChatNotifier(
+    conversationRepository: conversationRepo,
+    messageRepository: messageRepo,
+  );
+});
 
 class ChatNotifier extends StateNotifier<ChatState> {
+  final ConversationRepository _conversationRepository;
+  final MessageRepository _messageRepository;
   int _nextId = 1;
 
-  ChatNotifier() : super(const ChatState());
+  ChatNotifier({
+    required ConversationRepository conversationRepository,
+    required MessageRepository messageRepository,
+  }) : _conversationRepository = conversationRepository,
+       _messageRepository = messageRepository,
+       super(const ChatState()) {
+    _loadSessions();
+  }
+
+  Future<void> _loadSessions() async {
+    try {
+      final conversations = await _conversationRepository.getAll();
+      final sessions = <ChatSession>[];
+      for (final conv in conversations) {
+        final messages = await _messageRepository.getByConversation(conv.id!);
+        sessions.add(ChatSession.fromEntities(conv, messages));
+      }
+      state = state.copyWith(
+        sessions: sessions,
+        activeSession: sessions.isNotEmpty ? sessions.first : null,
+      );
+    } catch (e) {
+      state = state.copyWith(generationError: 'Failed to load sessions: $e');
+    }
+  }
 
   Future<ChatSession> newSession({String? mode}) async {
-    final session = ChatSession(
-      id: _nextId++,
+    final conversation = domain.Conversation(
       title: 'New Conversation',
       mode: mode ?? 'chat',
-      lastMessageTime: DateTime.now(),
+      context: '',
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
     );
+
+    final saved = await _conversationRepository.create(conversation);
+    final session = ChatSession(
+      id: saved.id!,
+      title: saved.title,
+      mode: saved.mode ?? 'chat',
+      lastMessageTime: saved.updatedAt,
+    );
+
     state = ChatState(
       sessions: [session, ...state.sessions],
       activeSession: session,
@@ -75,20 +158,23 @@ class ChatNotifier extends StateNotifier<ChatState> {
   }
 
   Future<void> sendMessage(String text) async {
-    if (text.trim().isEmpty) return;
-
-    final userMsg = ChatMessage(
-      id: _nextId++,
-      content: text.trim(),
-      isUser: true,
-      timestamp: DateTime.now(),
-    );
+    if (text.trim().isEmpty || state.activeSession == null) return;
 
     final session = state.activeSession!;
+
+    // Save user message to database
+    final userMessageEntity = domain_msg.Message(
+      conversationId: session.id,
+      role: 'user',
+      content: text.trim(),
+      createdAt: DateTime.now(),
+    );
+    final savedUserMsg = await _messageRepository.create(userMessageEntity);
+
     final updatedSession = ChatSession(
       id: session.id,
       title: text.length > 40 ? '${text.substring(0, 40)}...' : text,
-      messages: [...session.messages, userMsg],
+      messages: [...session.messages, ChatMessage.fromEntity(savedUserMsg)],
       mode: session.mode,
       lastMessageTime: DateTime.now(),
     );
@@ -102,14 +188,13 @@ class ChatNotifier extends StateNotifier<ChatState> {
       isGenerating: true,
     );
 
-    // Simulate AI response (real implementation calls local inference engine)
-    await _simulateResponse(updatedSession);
+    // Generate AI response (placeholder for now, real implementation in Phase 3)
+    await _generateResponse(updatedSession, text.trim());
   }
 
-  Future<void> _simulateResponse(ChatSession session) async {
-    // In production this calls the local inference engine via FFI.
-    // The streaming implementation connects to FfiInferenceEngine.
-    final thinking = ChatMessage(
+  Future<void> _generateResponse(ChatSession session, String userQuery) async {
+    // Show thinking indicator
+    final thinkingMsg = ChatMessage(
       id: _nextId++,
       content: '',
       isUser: false,
@@ -117,41 +202,59 @@ class ChatNotifier extends StateNotifier<ChatState> {
       isStreaming: true,
     );
 
-    final updated = ChatSession(
+    final withThinking = ChatSession(
       id: session.id,
       title: session.title,
-      messages: [...session.messages, thinking],
+      messages: [...session.messages, thinkingMsg],
       mode: session.mode,
       lastMessageTime: DateTime.now(),
     );
 
     state = ChatState(
       sessions:
-          state.sessions.map((s) => s.id == session.id ? updated : s).toList(),
-      activeSession: updated,
+          state.sessions
+              .map((s) => s.id == session.id ? withThinking : s)
+              .toList(),
+      activeSession: withThinking,
       isGenerating: true,
     );
 
-    // Simulated streaming response
+    // TODO: Replace with real FFI inference engine call in Phase 3
     await Future.delayed(const Duration(milliseconds: 500));
-    final response = ChatMessage(
-      id: _nextId++,
-      content: _generatePlaceholderResponse(
-        session.messages.lastWhere((m) => m.isUser).content,
-      ),
-      isUser: false,
-      timestamp: DateTime.now(),
+    final responseText = _generatePlaceholderResponse(userQuery);
+
+    // Save assistant message to database
+    final assistantMessageEntity = domain_msg.Message(
+      conversationId: session.id,
+      role: 'assistant',
+      content: responseText,
+      createdAt: DateTime.now(),
+    );
+    final savedAssistantMsg = await _messageRepository.create(
+      assistantMessageEntity,
     );
 
     final finalSession = ChatSession(
       id: session.id,
       title: session.title,
       messages: [
-        ...session.messages.sublist(0, session.messages.length - 1),
-        response,
+        ...session.messages,
+        ChatMessage.fromEntity(savedAssistantMsg),
       ],
       mode: session.mode,
       lastMessageTime: DateTime.now(),
+    );
+
+    // Update conversation title and timestamp
+    await _conversationRepository.update(
+      domain.Conversation(
+        id: session.id,
+        title: finalSession.title,
+        mode: finalSession.mode,
+        context: '',
+        createdAt: session.messages.first.timestamp,
+        updatedAt: DateTime.now(),
+      ),
     );
 
     state = ChatState(
@@ -176,6 +279,7 @@ class ChatNotifier extends StateNotifier<ChatState> {
   }
 
   Future<void> deleteSession(int sessionId) async {
+    await _conversationRepository.delete(sessionId);
     final filtered = state.sessions.where((s) => s.id != sessionId).toList();
     state = ChatState(
       sessions: filtered,
@@ -187,6 +291,18 @@ class ChatNotifier extends StateNotifier<ChatState> {
   }
 
   Future<void> renameSession(int sessionId, String newTitle) async {
+    final session = state.sessions.firstWhere((s) => s.id == sessionId);
+    await _conversationRepository.update(
+      domain.Conversation(
+        id: sessionId,
+        title: newTitle,
+        mode: session.mode,
+        context: '',
+        createdAt: session.messages.first.timestamp,
+        updatedAt: DateTime.now(),
+      ),
+    );
+
     final updated =
         state.sessions
             .map(
@@ -216,18 +332,4 @@ class ChatNotifier extends StateNotifier<ChatState> {
 
     state = ChatState(sessions: updated, activeSession: active);
   }
-}
-
-extension on ChatState {
-  ChatState copyWith({
-    List<ChatSession>? sessions,
-    ChatSession? activeSession,
-    bool? isGenerating,
-    String? generationError,
-  }) => ChatState(
-    sessions: sessions ?? this.sessions,
-    activeSession: activeSession ?? this.activeSession,
-    isGenerating: isGenerating ?? this.isGenerating,
-    generationError: generationError ?? this.generationError,
-  );
 }

@@ -31,9 +31,3 @@ class GlassStatusBadge extends StatelessWidget {
     );
   }
 }
-
-class BottomNavDestination {
-  final String label;
-  final IconData icon;
-  const BottomNavDestination({required this.label, required this.icon});
-}

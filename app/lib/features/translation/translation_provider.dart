@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class TranslationState {
   final String sourceText;
   final String translatedText;
+  final String inputText;
   final String sourceLang;
   final String targetLang;
   final bool isTranslating;
@@ -11,6 +12,7 @@ class TranslationState {
   const TranslationState({
     this.sourceText = '',
     this.translatedText = '',
+    this.inputText = '',
     this.sourceLang = 'en',
     this.targetLang = 'hi',
     this.isTranslating = false,
@@ -94,8 +96,21 @@ class TranslationNotifier extends StateNotifier<TranslationState> {
     state = TranslationState(
       sourceText: state.sourceText,
       translatedText: state.translatedText,
+      inputText: state.inputText,
       sourceLang: src,
       targetLang: tgt,
+      isTranslating: false,
+      history: state.history,
+    );
+  }
+
+  Future<void> setInputText(String text) async {
+    state = TranslationState(
+      sourceText: state.sourceText,
+      translatedText: state.translatedText,
+      inputText: text,
+      sourceLang: state.sourceLang,
+      targetLang: state.targetLang,
       isTranslating: false,
       history: state.history,
     );

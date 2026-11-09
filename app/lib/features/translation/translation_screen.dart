@@ -100,7 +100,7 @@ class TranslationScreen extends ConsumerWidget {
                 child: GlassTextField(
                   maxLines: null,
                   hintText: 'Enter text to translate...',
-                  onChanged: (v) {},
+                  onChanged: (v) => notifier.setInputText(v),
                 ),
               ),
             ),
@@ -110,7 +110,7 @@ class TranslationScreen extends ConsumerWidget {
             child: GlassButton(
               width: double.infinity,
               label: 'Translate',
-              onTap: () => notifier.translate('sample'),
+              onTap: state.inputText.isNotEmpty ? () => notifier.translate(state.inputText) : null,
             ),
           ),
           Padding(

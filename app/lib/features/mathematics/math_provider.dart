@@ -159,7 +159,7 @@ class MathNotifier extends StateNotifier<MathState> {
         } else if (op == '/') {
           result /= right;
         } else {
-          result = right % (result.abs());
+          result = result % right;
         }
       }
       return result;

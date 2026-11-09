@@ -1,27 +1,6 @@
 import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-class HardwareProfile {
-  final int totalRamMb;
-  final int availableRamMb;
-  final int cpuCores;
-  final String platform;
-  final bool hasGpu;
-  final int storageFreeMb;
-
-  const HardwareProfile({
-    required this.totalRamMb,
-    required this.availableRamMb,
-    required this.cpuCores,
-    required this.platform,
-    required this.hasGpu,
-    required this.storageFreeMb,
-  });
-
-  bool get isLowEnd => totalRamMb <= 4096;
-  bool get isMidRange => totalRamMb > 4096 && totalRamMb <= 8192;
-  bool get isHighEnd => totalRamMb > 8192;
-}
+import '../ai/models/hardware_profile.dart';
 
 final hardwareServiceProvider = Provider<HardwareService>(
   (ref) => HardwareService(),
@@ -54,10 +33,13 @@ class HardwareService {
     return HardwareProfile(
       totalRamMb: totalRamMb,
       availableRamMb: freeMb,
-      cpuCores: cores,
-      platform: platform,
-      hasGpu: hasGpu,
       storageFreeMb: 10000,
+      cpuArchitecture: Platform.isAndroid ? 'arm64' : 'x64',
+      cpuCores: cores,
+      gpuAvailable: hasGpu,
+      gpuName: hasGpu ? 'Integrated/Discrete' : 'None',
+      os: platform,
+      osVersion: 0,
     );
   }
 }

@@ -102,7 +102,7 @@ class GlassCard extends StatelessWidget {
   );
 
   List<BoxShadow> _buildShadows(bool isDark) {
-    if (glow)
+    if (glow) {
       return isDark
           ? [
             BoxShadow(
@@ -112,7 +112,8 @@ class GlassCard extends StatelessWidget {
             ),
           ]
           : [];
-    if (elevated)
+    }
+    if (elevated) {
       return isDark
           ? [
             BoxShadow(
@@ -127,6 +128,7 @@ class GlassCard extends StatelessWidget {
               blurRadius: 10,
             ),
           ];
+    }
     return [];
   }
 }

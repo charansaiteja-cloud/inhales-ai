@@ -87,4 +87,33 @@ class ModelManagerNotifier extends StateNotifier<ModelManagerState> {
   void setActiveModel(ModelCatalogEntry model) {
     state = state.copyWith(activeModel: model);
   }
+
+  void deleteModel(String modelId) {
+    final updated =
+        state.installedModels.where((m) => m.id != modelId).toList();
+    ModelCatalogEntry? newActive = state.activeModel;
+    if (state.activeModel?.id == modelId) {
+      newActive = updated.isNotEmpty ? updated.first : null;
+    }
+    state = state.copyWith(installedModels: updated, activeModel: newActive);
+  }
+
+  void refresh() {
+    // Trigger a state update to refresh UI
+    state = state.copyWith();
+  }
+
+  void updateDownloadProgress(
+    String modelId,
+    double progress, {
+    bool isComplete = false,
+  }) {
+    final downloads = Map<String, DownloadProgress>.from(state.downloads);
+    downloads[modelId] = DownloadProgress(
+      modelId: modelId,
+      progress: progress,
+      isComplete: isComplete,
+    );
+    state = state.copyWith(downloads: downloads);
+  }
 }

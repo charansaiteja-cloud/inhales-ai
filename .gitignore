@@ -30,8 +30,8 @@ linux/build/
 .DS_Store
 Thumbs.db
 
-# Generated
-*.g.dart
+# Generated (drift database.g.dart is committed to CI)
+# *.g.dart
 *.rs
 *.pyc
 

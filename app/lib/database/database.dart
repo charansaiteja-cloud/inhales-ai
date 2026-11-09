@@ -34,16 +34,19 @@ class AppDatabase extends _$AppDatabase {
   int get schemaVersion => 3;
 
   @override
-  MigrationStrategy get migration => MigrationStrategy(
-    onUpgrade: (migrator, from, to) async {
-      if (from < 2) {
-        await migrator.createTable(bookmarks);
-        await migrator.createTable(quizHistory);
-        await migrator.createTable(learningActivity);
-        await migrator.createTable(appModels);
-        await migrator.createTable(preferences);
-        await migrator.createTable(documents);
-      }
-    },
-  );
+  MigrationStrategy get migration {
+    final db = this;
+    return MigrationStrategy(
+      onUpgrade: (migrator, from, to) async {
+        if (from < 2) {
+          await migrator.createTable(db.bookmarks);
+          await migrator.createTable(db.quizHistory);
+          await migrator.createTable(db.learningActivity);
+          await migrator.createTable(db.appModels);
+          await migrator.createTable(db.preferences);
+          await migrator.createTable(db.documents);
+        }
+      },
+    );
+  }
 }

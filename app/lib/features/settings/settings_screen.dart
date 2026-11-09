@@ -20,7 +20,8 @@ class SettingsScreen extends ConsumerWidget {
           data: (settings) => _buildSettingsBody(context, ref, settings),
           loading: () => const Center(child: CircularProgressIndicator()),
           error:
-              (_a, _b) => const Center(child: Text('Error loading settings')),
+              (error, stackTrace) =>
+                  const Center(child: Text('Error loading settings')),
         ),
       ),
     );

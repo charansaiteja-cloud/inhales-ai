@@ -18,7 +18,7 @@ class GlassBottomSheet extends StatelessWidget {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (context) => GlassBottomSheet(child: child, title: title),
+      builder: (ctx) => GlassBottomSheet(child: child, title: title),
     );
   }
 

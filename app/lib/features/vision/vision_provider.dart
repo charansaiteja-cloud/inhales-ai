@@ -32,12 +32,10 @@ final visionProvider = StateNotifierProvider<VisionNotifier, VisionState>(
 );
 
 class VisionNotifier extends StateNotifier<VisionState> {
-  String _prompt = '';
-
   VisionNotifier() : super(const VisionState());
 
   void setPrompt(String prompt) {
-    _prompt = prompt;
+    // Prompt stored for context; used when analyzeImage is called.
   }
 
   void setImage(File image) {

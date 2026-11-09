@@ -45,8 +45,9 @@ class TranslationScreen extends ConsumerWidget {
                               )
                               .toList(),
                       onChanged: (v) {
-                        if (v != null)
+                        if (v != null) {
                           notifier.setLanguages(v, state.targetLang);
+                        }
                       },
                     ),
                   ),
@@ -81,8 +82,9 @@ class TranslationScreen extends ConsumerWidget {
                               )
                               .toList(),
                       onChanged: (v) {
-                        if (v != null)
+                        if (v != null) {
                           notifier.setLanguages(state.sourceLang, v);
+                        }
                       },
                     ),
                   ),

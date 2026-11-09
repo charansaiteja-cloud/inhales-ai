@@ -19,7 +19,8 @@ class SettingsScreen extends ConsumerWidget {
         child: settingsAsync.when(
           data: (settings) => _buildSettingsBody(context, ref, settings),
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (_, __) => const Center(child: Text('Error loading settings')),
+          error:
+              (_a, _b) => const Center(child: Text('Error loading settings')),
         ),
       ),
     );

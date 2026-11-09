@@ -44,6 +44,10 @@ class CodingScreen extends ConsumerWidget {
                         horizontal: 12,
                         vertical: 6,
                       ),
+                      backgroundColor:
+                          selected
+                              ? InhaleColors.primaryBlue
+                              : InhaleColors.glassSurface,
                       child: Text(
                         lang,
                         style: TextStyle(
@@ -56,10 +60,6 @@ class CodingScreen extends ConsumerWidget {
                           fontSize: 12,
                         ),
                       ),
-                      backgroundColor:
-                          selected
-                              ? InhaleColors.primaryBlue
-                              : InhaleColors.glassSurface,
                     );
                   }).toList(),
             ),

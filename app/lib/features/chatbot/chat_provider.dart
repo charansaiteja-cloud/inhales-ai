@@ -87,7 +87,7 @@ class ChatNotifier extends StateNotifier<ChatState> {
     final session = state.activeSession!;
     final updatedSession = ChatSession(
       id: session.id,
-      title: text.length > 40 ? text.substring(0, 40) + '...' : text,
+      title: text.length > 40 ? '${text.substring(0, 40)}...' : text,
       messages: [...session.messages, userMsg],
       mode: session.mode,
       lastMessageTime: DateTime.now(),

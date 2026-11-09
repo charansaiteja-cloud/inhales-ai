@@ -29,7 +29,7 @@ class InhaleSkillApp extends ConsumerWidget {
           ),
       loading: () => const Center(child: CircularProgressIndicator()),
       error:
-          (_, __) => MaterialApp.router(
+          (_a, _b) => MaterialApp.router(
             title: AppConstants.appName,
             debugShowCheckedModeBanner: false,
             theme: InhaleTheme.lightTheme,

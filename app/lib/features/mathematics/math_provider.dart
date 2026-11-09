@@ -66,10 +66,10 @@ class MathNotifier extends StateNotifier<MathState> {
             .toStringAsFixed(6)
             .replaceAll(RegExp(r'0+$'), '')
             .replaceAll(RegExp(r'\.$'), '');
-        steps = 'Expression: ${input}\nResult: $result';
+        steps = 'Expression: $input\nResult: $result';
       } else {
         result = 'Use AI model for complex math.';
-        steps = 'Expression: ${input}\nInstall a model for detailed solutions.';
+        steps = 'Expression: $input\nInstall a model for detailed solutions.';
       }
     } catch (_) {
       result = 'Could not evaluate: $input';
@@ -154,12 +154,13 @@ class MathNotifier extends StateNotifier<MathState> {
           (tokens[pos] == '*' || tokens[pos] == '/' || tokens[pos] == '%')) {
         final op = tokens[pos++];
         final right = parseFactor();
-        if (op == '*')
+        if (op == '*') {
           result *= right;
-        else if (op == '/')
+        } else if (op == '/') {
           result /= right;
-        else
+        } else {
           result = right % (result.abs());
+        }
       }
       return result;
     };

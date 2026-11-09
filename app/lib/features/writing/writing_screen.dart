@@ -52,6 +52,10 @@ class WritingScreen extends ConsumerWidget {
                         horizontal: 16,
                         vertical: 8,
                       ),
+                      backgroundColor:
+                          selected
+                              ? InhaleColors.primaryBlue
+                              : InhaleColors.glassSurface,
                       child: Text(
                         modeLabels[m]!,
                         style: TextStyle(
@@ -63,10 +67,6 @@ class WritingScreen extends ConsumerWidget {
                               selected ? FontWeight.w600 : FontWeight.w400,
                         ),
                       ),
-                      backgroundColor:
-                          selected
-                              ? InhaleColors.primaryBlue
-                              : InhaleColors.glassSurface,
                     );
                   }).toList(),
             ),

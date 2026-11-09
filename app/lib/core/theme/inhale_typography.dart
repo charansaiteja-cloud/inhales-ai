@@ -1,5 +1,7 @@
 /// InhaleSkill AI — Typography scale.
 /// Premium, readable typography for a learning/productivity app.
+library;
+
 import 'package:flutter/material.dart';
 import 'inhale_colors.dart';
 

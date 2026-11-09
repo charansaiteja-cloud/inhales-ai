@@ -45,6 +45,10 @@ class SchoolScreen extends ConsumerWidget {
                     onTap:
                         () =>
                             ref.read(schoolProvider.notifier).selectClass(cls),
+                    backgroundColor:
+                        selected
+                            ? InhaleColors.primaryBlue
+                            : InhaleColors.glassSurface,
                     child: Center(
                       child: Text(
                         'Class $cls',
@@ -58,10 +62,6 @@ class SchoolScreen extends ConsumerWidget {
                         ),
                       ),
                     ),
-                    backgroundColor:
-                        selected
-                            ? InhaleColors.primaryBlue
-                            : InhaleColors.glassSurface,
                   );
                 }, childCount: 10),
               ),

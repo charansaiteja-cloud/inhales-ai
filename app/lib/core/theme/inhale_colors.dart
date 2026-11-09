@@ -1,5 +1,7 @@
-// InhaleSkill AI — Blue /// InhaleSkill AI — Blue & White Liquid Glass Colour Palette. White Liquid Glass Colour Palette.
+/// InhaleSkill AI — Blue & White Liquid Glass Colour Palette.
 /// Centralised colour definitions. Never hardcode colours elsewhere.
+library;
+
 import 'package:flutter/material.dart';
 
 class InhaleColors {

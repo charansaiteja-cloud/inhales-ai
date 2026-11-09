@@ -12,10 +12,13 @@ import 'notes_provider.dart';
 
 class NotesScreen extends ConsumerWidget {
   const NotesScreen({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(notesProvider);
     final notifier = ref.read(notesProvider.notifier);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       appBar: GlassAppBar(
         title: 'Notes',
@@ -23,19 +26,42 @@ class NotesScreen extends ConsumerWidget {
           GlassIconButton(
             onTap: () => notifier.toggleSearch(),
             icon: Icons.search_rounded,
-            color: InhaleColors.textPrimary,
+            color:
+                isDark
+                    ? InhaleColors.electricBlue
+                    : InhaleColors.lightPrimaryBlue,
+          ),
+          GlassIconButton(
+            onTap: () => notifier.addNote(),
+            icon: Icons.add_rounded,
+            color:
+                isDark
+                    ? InhaleColors.electricBlue
+                    : InhaleColors.lightPrimaryBlue,
           ),
         ],
       ),
       body: Container(
-        decoration: BoxDecoration(gradient: InhaleColors.gradientBackground),
+        decoration: BoxDecoration(
+          gradient:
+              isDark
+                  ? InhaleColors.gradientBackgroundDark
+                  : InhaleColors.gradientBackground,
+        ),
         child: Column(
           children: [
             if (state.isSearching)
               Padding(
-                padding: EdgeInsets.all(InhaleSpacing.md),
+                padding: const EdgeInsets.all(InhaleSpacing.md),
                 child: GlassTextField(
                   hintText: 'Search notes...',
+                  prefixIcon: Icon(
+                    Icons.search_rounded,
+                    color:
+                        isDark
+                            ? InhaleColors.textMuted
+                            : InhaleColors.lightTextMuted,
+                  ),
                   onChanged: (v) => notifier.search(v),
                 ),
               ),
@@ -43,39 +69,70 @@ class NotesScreen extends ConsumerWidget {
               child:
                   state.notes.isEmpty
                       ? Center(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              Icons.note_outlined,
-                              size: 64,
-                              color: InhaleColors.secondaryText,
-                            ),
-                            const SizedBox(height: InhaleSpacing.md),
-                            Text(
-                              'No Notes Yet',
-                              style: InhaleTypography.titleMedium,
-                            ),
-                            const SizedBox(height: InhaleSpacing.sm),
-                            Text(
-                              'Create a note to get started',
-                              style: InhaleTypography.bodyMedium.copyWith(
-                                color: InhaleColors.secondaryText,
+                        child: Padding(
+                          padding: const EdgeInsets.all(InhaleSpacing.xl),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                width: 100,
+                                height: 100,
+                                decoration: BoxDecoration(
+                                  gradient: InhaleColors.gradientAccent,
+                                  borderRadius: BorderRadius.circular(
+                                    InhaleRadius.md,
+                                  ),
+                                ),
+                                child: Icon(
+                                  Icons.note_outlined,
+                                  size: 48,
+                                  color: Colors.white.withValues(alpha: 0.8),
+                                ),
                               ),
-                            ),
-                          ],
+                              const SizedBox(height: InhaleSpacing.lg),
+                              Text(
+                                'No Notes Yet',
+                                style: InhaleTypography.headlineSmall.copyWith(
+                                  color:
+                                      isDark
+                                          ? InhaleColors.textPrimary
+                                          : InhaleColors.lightNavyText,
+                                ),
+                              ),
+                              const SizedBox(height: InhaleSpacing.sm),
+                              Text(
+                                'Create your first note to start organizing your thoughts.',
+                                style: InhaleTypography.bodyMedium.copyWith(
+                                  color:
+                                      isDark
+                                          ? InhaleColors.textSecondary
+                                          : InhaleColors.lightTextSecondary,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: InhaleSpacing.lg),
+                              GlassButton(
+                                label: 'Create Note',
+                                onTap: () => notifier.addNote(),
+                                width: 200,
+                              ),
+                            ],
+                          ),
                         ),
                       )
                       : ListView.builder(
-                        padding: EdgeInsets.all(InhaleSpacing.md),
+                        padding: const EdgeInsets.all(InhaleSpacing.md),
                         itemCount: state.notes.length,
                         itemBuilder: (context, index) {
                           final note = state.notes[index];
                           return Padding(
-                            padding: const EdgeInsets.only(bottom: 8),
+                            padding: const EdgeInsets.only(
+                              bottom: InhaleSpacing.sm,
+                            ),
                             child: GlassCard(
                               onTap: () => notifier.openNote(index),
-                              padding: EdgeInsets.all(InhaleSpacing.md),
+                              padding: const EdgeInsets.all(InhaleSpacing.md),
+                              elevated: true,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -84,7 +141,15 @@ class NotesScreen extends ConsumerWidget {
                                       Expanded(
                                         child: Text(
                                           note['title'] ?? 'Untitled',
-                                          style: InhaleTypography.titleSmall,
+                                          style: InhaleTypography.titleSmall
+                                              .copyWith(
+                                                color:
+                                                    isDark
+                                                        ? InhaleColors
+                                                            .textPrimary
+                                                        : InhaleColors
+                                                            .lightNavyText,
+                                              ),
                                         ),
                                       ),
                                       GlassIconButton(
@@ -95,14 +160,53 @@ class NotesScreen extends ConsumerWidget {
                                       ),
                                     ],
                                   ),
-                                  const SizedBox(height: 4),
+                                  const SizedBox(height: InhaleSpacing.xs),
                                   Text(
                                     note['content'] ?? '',
                                     style: InhaleTypography.bodySmall.copyWith(
-                                      color: InhaleColors.secondaryText,
+                                      color:
+                                          isDark
+                                              ? InhaleColors.textSecondary
+                                              : InhaleColors.lightTextSecondary,
                                     ),
                                     maxLines: 3,
                                     overflow: TextOverflow.ellipsis,
+                                  ),
+                                  const SizedBox(height: InhaleSpacing.xs),
+                                  Row(
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 8,
+                                          vertical: 2,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color:
+                                              isDark
+                                                  ? InhaleColors.electricBlue
+                                                      .withValues(alpha: 0.2)
+                                                  : InhaleColors
+                                                      .lightPrimaryBlue
+                                                      .withValues(alpha: 0.15),
+                                          borderRadius: BorderRadius.circular(
+                                            InhaleRadius.xs,
+                                          ),
+                                        ),
+                                        child: Text(
+                                          '${note['wordCount'] ?? 0} words',
+                                          style: InhaleTypography.labelSmall
+                                              .copyWith(
+                                                color:
+                                                    isDark
+                                                        ? InhaleColors
+                                                            .electricBlue
+                                                        : InhaleColors
+                                                            .lightPrimaryBlue,
+                                                fontSize: 10,
+                                              ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
@@ -112,14 +216,14 @@ class NotesScreen extends ConsumerWidget {
                       ),
             ),
             Padding(
-              padding: EdgeInsets.all(InhaleSpacing.md),
+              padding: const EdgeInsets.all(InhaleSpacing.md),
               child: GlassButton(
                 width: double.infinity,
                 label: 'New Note',
                 onTap: () => notifier.addNote(),
+                glow: true,
               ),
             ),
-            const SizedBox(height: InhaleSpacing.md),
           ],
         ),
       ),

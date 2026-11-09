@@ -10,10 +10,13 @@ import 'coding_provider.dart';
 
 class CodingScreen extends ConsumerWidget {
   const CodingScreen({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(codingProvider);
     final notifier = ref.read(codingProvider.notifier);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     final languages = [
       'Python',
       'Java',
@@ -24,80 +27,128 @@ class CodingScreen extends ConsumerWidget {
       'HTML/CSS',
       'SQL',
     ];
+
     return Scaffold(
-      appBar: GlassAppBar(title: 'Coding Assistant'),
-      body: Column(
-        children: [
+      appBar: GlassAppBar(
+        title: 'Coding Assistant',
+        actions: [
           Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: InhaleSpacing.md,
-              vertical: InhaleSpacing.sm,
-            ),
-            child: Wrap(
-              spacing: 8,
-              children:
-                  languages.map((lang) {
-                    final selected = lang.toLowerCase() == state.language;
-                    return GlassCard(
-                      onTap: () => notifier.setLanguage(lang.toLowerCase()),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 6,
-                      ),
-                      backgroundColor:
-                          selected
-                              ? InhaleColors.primaryBlue
-                              : InhaleColors.glassSurface,
-                      child: Text(
-                        lang,
-                        style: TextStyle(
-                          color:
-                              selected
-                                  ? Colors.white
-                                  : InhaleColors.primaryBlue,
-                          fontWeight:
-                              selected ? FontWeight.w600 : FontWeight.w400,
-                          fontSize: 12,
-                        ),
-                      ),
-                    );
-                  }).toList(),
-            ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.all(InhaleSpacing.md),
-              child: GlassCard(
-                padding: EdgeInsets.all(InhaleSpacing.md),
-                child: GlassTextField(
-                  maxLines: null,
-                  hintText: 'Write or paste your code here...',
-                  onChanged: (v) => notifier.setCode(v),
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(InhaleSpacing.md),
-            child: Row(
-              children: [
-                Expanded(
-                  child: GlassButton(
-                    label: 'Ask AI to Explain',
-                    onTap: () => notifier.askAI(state.code),
-                  ),
-                ),
-                const SizedBox(width: InhaleSpacing.sm),
-                Expanded(
-                  child: GlassButton(
-                    label: 'Fix Bugs',
-                    onTap: () => notifier.askAI('Fix bugs: ${state.code}'),
-                  ),
-                ),
-              ],
+            padding: const EdgeInsets.only(right: InhaleSpacing.md),
+            child: GlassButton(
+              label: state.language.toUpperCase(),
+              onTap: null,
+              outlined: true,
             ),
           ),
         ],
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient:
+              isDark
+                  ? InhaleColors.gradientBackgroundDark
+                  : InhaleColors.gradientBackground,
+        ),
+        child: Column(
+          children: [
+            // Language selector
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: InhaleSpacing.md,
+                vertical: InhaleSpacing.sm,
+              ),
+              child: Wrap(
+                spacing: InhaleSpacing.sm,
+                runSpacing: InhaleSpacing.sm,
+                children:
+                    languages.map((lang) {
+                      final selected = lang.toLowerCase() == state.language;
+                      return GlassCard(
+                        onTap: () => notifier.setLanguage(lang.toLowerCase()),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        elevated: selected,
+                        glow: selected,
+                        child: Text(
+                          lang,
+                          style: TextStyle(
+                            color:
+                                selected
+                                    ? Colors.white
+                                    : (isDark
+                                        ? InhaleColors.electricBlue
+                                        : InhaleColors.lightPrimaryBlue),
+                            fontWeight:
+                                selected ? FontWeight.w600 : FontWeight.w400,
+                            fontSize: 13,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+              ),
+            ),
+
+            // Code editor area
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(InhaleSpacing.md),
+                child: GlassCard(
+                  padding: const EdgeInsets.all(InhaleSpacing.md),
+                  elevated: true,
+                  child: GlassTextField(
+                    maxLines: null,
+                    minLines: 20,
+                    hintText: 'Write or paste your code here...',
+                    onChanged: (v) => notifier.setCode(v),
+                  ),
+                ),
+              ),
+            ),
+
+            // Action buttons
+            Padding(
+              padding: const EdgeInsets.all(InhaleSpacing.md),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: GlassButton(
+                      label: 'Ask AI to Explain',
+                      onTap:
+                          state.code.isNotEmpty
+                              ? () => notifier.askAI(state.code)
+                              : null,
+                      glow: true,
+                    ),
+                  ),
+                  const SizedBox(width: InhaleSpacing.sm),
+                  Expanded(
+                    child: GlassButton(
+                      label: 'Fix Bugs',
+                      onTap:
+                          state.code.isNotEmpty
+                              ? () => notifier.askAI('Fix bugs: ${state.code}')
+                              : null,
+                      outlined: true,
+                    ),
+                  ),
+                  const SizedBox(width: InhaleSpacing.sm),
+                  Expanded(
+                    child: GlassButton(
+                      label: 'Optimize',
+                      onTap:
+                          state.code.isNotEmpty
+                              ? () => notifier.askAI('Optimize: ${state.code}')
+                              : null,
+                      outlined: true,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

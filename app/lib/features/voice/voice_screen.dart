@@ -6,143 +6,186 @@ import '../../core/theme/inhale_typography.dart';
 import '../../widgets/glass_card.dart';
 import '../../widgets/glass_button.dart';
 import '../../widgets/glass_text_field.dart';
-import '../../widgets/glass_icon_button.dart';
 import '../../widgets/glass_app_bar.dart';
+import '../../widgets/glass_icon_button.dart';
 import 'voice_provider.dart';
 
 class VoiceScreen extends ConsumerWidget {
   const VoiceScreen({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(voiceProvider);
     final notifier = ref.read(voiceProvider.notifier);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      appBar: GlassAppBar(title: 'Voice'),
+      appBar: GlassAppBar(title: 'Voice AI'),
       body: Container(
-        decoration: BoxDecoration(gradient: InhaleColors.gradientBackground),
+        decoration: BoxDecoration(
+          gradient:
+              isDark
+                  ? InhaleColors.gradientBackgroundDark
+                  : InhaleColors.gradientBackground,
+        ),
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(InhaleSpacing.md),
+          padding: const EdgeInsets.all(InhaleSpacing.md),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Speech to Text', style: InhaleTypography.headlineMedium),
-              const SizedBox(height: InhaleSpacing.sm),
+              Text(
+                'Speech to Text',
+                style: InhaleTypography.headlineMedium.copyWith(
+                  color:
+                      isDark
+                          ? InhaleColors.textPrimary
+                          : InhaleColors.lightNavyText,
+                ),
+              ),
+              const SizedBox(height: InhaleSpacing.xs),
+              Text(
+                'Record your voice and transcribe to text',
+                style: InhaleTypography.bodyMedium.copyWith(
+                  color:
+                      isDark
+                          ? InhaleColors.textSecondary
+                          : InhaleColors.lightTextSecondary,
+                ),
+              ),
+              const SizedBox(height: InhaleSpacing.md),
               GlassCard(
-                padding: EdgeInsets.all(InhaleSpacing.md),
-                child: Row(
+                padding: const EdgeInsets.all(InhaleSpacing.lg),
+                elevated: state.isRecording,
+                glow: state.isRecording,
+                child: Column(
                   children: [
-                    Expanded(
-                      child:
-                          state.transcribedText.isEmpty
-                              ? Text(
-                                'Tap the microphone to start speaking...',
-                                style: InhaleTypography.bodyMedium.copyWith(
-                                  color: InhaleColors.secondaryText,
-                                ),
-                              )
-                              : Text(
-                                state.transcribedText,
-                                style: InhaleTypography.bodyLarge,
-                              ),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(InhaleSpacing.md),
+                      decoration: BoxDecoration(
+                        color:
+                            isDark
+                                ? InhaleColors.glassSurface
+                                : InhaleColors.lightGlassSurface,
+                        borderRadius: BorderRadius.circular(InhaleRadius.md),
+                        border: Border.all(
+                          color:
+                              isDark
+                                  ? InhaleColors.glassBorderSubtle
+                                  : InhaleColors.lightGlassBorderSubtle,
+                        ),
+                      ),
+                      child: Text(
+                        state.transcribedText.isEmpty
+                            ? 'Tap the microphone to start speaking...'
+                            : state.transcribedText,
+                        style: InhaleTypography.bodyLarge.copyWith(
+                          color:
+                              state.transcribedText.isEmpty
+                                  ? (isDark
+                                      ? InhaleColors.textMuted
+                                      : InhaleColors.lightTextMuted)
+                                  : (isDark
+                                      ? InhaleColors.textPrimary
+                                      : InhaleColors.lightNavyText),
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
+                    const SizedBox(height: InhaleSpacing.lg),
+                    if (state.isRecording)
+                      _StatusChip(
+                        label: 'Recording...',
+                        color: InhaleColors.error,
+                        icon: Icons.mic_rounded,
+                        isDark: isDark,
+                      ),
+                    const SizedBox(height: InhaleSpacing.lg),
                     GlassIconButton(
                       onTap: () => notifier.toggleRecording(),
                       icon:
                           state.isRecording
-                              ? Icons.mic_rounded
-                              : Icons.mic_none_rounded,
+                              ? Icons.stop_rounded
+                              : Icons.mic_rounded,
                       color:
                           state.isRecording
                               ? InhaleColors.error
-                              : InhaleColors.primaryBlue,
-                      size: 64,
+                              : (isDark
+                                  ? InhaleColors.electricBlue
+                                  : InhaleColors.lightPrimaryBlue),
+                      size: 80,
                     ),
                   ],
                 ),
               ),
-              if (state.isRecording) ...[
-                const SizedBox(height: InhaleSpacing.sm),
-                Center(
-                  child: Text(
-                    'Recording...',
-                    style: TextStyle(
-                      color: InhaleColors.error,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ],
               const SizedBox(height: InhaleSpacing.xl),
-              Text('Text to Speech', style: InhaleTypography.headlineMedium),
-              const SizedBox(height: InhaleSpacing.sm),
-              GlassTextField(
-                maxLines: 3,
-                hintText: 'Enter text to speak...',
-                onChanged: (v) => notifier.setText(v),
+              Text(
+                'Text to Speech',
+                style: InhaleTypography.headlineMedium.copyWith(
+                  color:
+                      isDark
+                          ? InhaleColors.textPrimary
+                          : InhaleColors.lightNavyText,
+                ),
+              ),
+              const SizedBox(height: InhaleSpacing.xs),
+              Text(
+                'Convert text to natural speech',
+                style: InhaleTypography.bodyMedium.copyWith(
+                  color:
+                      isDark
+                          ? InhaleColors.textSecondary
+                          : InhaleColors.lightTextSecondary,
+                ),
               ),
               const SizedBox(height: InhaleSpacing.md),
-              Row(
-                children: [
-                  Expanded(
-                    child: GlassButton(
-                      label: 'Speak',
-                      onTap: () => notifier.speak(),
-                    ),
-                  ),
-                  const SizedBox(width: InhaleSpacing.sm),
-                  Expanded(
-                    child: GlassButton(
-                      label: 'Stop',
-                      onTap:
-                          state.isSpeaking
-                              ? () => notifier.stopSpeaking()
-                              : null,
-                    ),
-                  ),
-                ],
-              ),
-              if (state.isSpeaking) ...[
-                const SizedBox(height: InhaleSpacing.sm),
-                Center(
-                  child: Text(
-                    'Speaking...',
-                    style: TextStyle(
-                      color: InhaleColors.primaryBlue,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ],
-              const SizedBox(height: InhaleSpacing.xl),
-              Text('Voice Commands', style: InhaleTypography.headlineMedium),
-              const SizedBox(height: InhaleSpacing.sm),
               GlassCard(
-                padding: EdgeInsets.all(InhaleSpacing.md),
+                padding: const EdgeInsets.all(InhaleSpacing.lg),
+                elevated: state.isSpeaking,
+                glow: state.isSpeaking,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Quick Actions', style: InhaleTypography.titleSmall),
-                    const SizedBox(height: InhaleSpacing.sm),
-                    _voiceCommandRow(
-                      'Summarize this page',
-                      () => notifier.executeCommand('summarize'),
-                      context,
+                    GlassTextField(
+                      maxLines: 4,
+                      minLines: 2,
+                      hintText: 'Enter text to speak...',
+                      onChanged: (v) => notifier.setText(v),
                     ),
-                    _voiceCommandRow(
-                      'Read this aloud',
-                      () => notifier.executeCommand('read_aloud'),
-                      context,
+                    const SizedBox(height: InhaleSpacing.md),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: GlassButton(
+                            label: state.isSpeaking ? 'Speaking...' : 'Speak',
+                            onTap:
+                                state.isSpeaking
+                                    ? null
+                                    : () => notifier.speak(),
+                            glow: !state.isSpeaking,
+                          ),
+                        ),
+                        const SizedBox(width: InhaleSpacing.sm),
+                        Expanded(
+                          child: GlassButton(
+                            label: 'Stop',
+                            onTap:
+                                state.isSpeaking
+                                    ? () => notifier.stopSpeaking()
+                                    : null,
+                            outlined: true,
+                          ),
+                        ),
+                      ],
                     ),
-                    _voiceCommandRow(
-                      'Search the web',
-                      () => notifier.executeCommand('search'),
-                      context,
-                    ),
-                    _voiceCommandRow(
-                      'Create a note',
-                      () => notifier.executeCommand('create_note'),
-                      context,
-                    ),
+                    if (state.isSpeaking) ...[
+                      const SizedBox(height: InhaleSpacing.sm),
+                      _StatusChip(
+                        label: 'Speaking...',
+                        color: InhaleColors.electricBlue,
+                        icon: Icons.volume_up_rounded,
+                        isDark: isDark,
+                      ),
+                    ],
                   ],
                 ),
               ),
@@ -152,21 +195,41 @@ class VoiceScreen extends ConsumerWidget {
       ),
     );
   }
+}
 
-  Widget _voiceCommandRow(
-    String label,
-    VoidCallback onTap,
-    BuildContext context,
-  ) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+class _StatusChip extends StatelessWidget {
+  final String label;
+  final Color color;
+  final IconData icon;
+  final bool isDark;
+
+  const _StatusChip({
+    required this.label,
+    required this.color,
+    required this.icon,
+    required this.isDark,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(InhaleRadius.pill),
+        border: Border.all(color: color.withValues(alpha: 0.4)),
+      ),
       child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Expanded(child: Text(label, style: InhaleTypography.bodyMedium)),
-          Icon(
-            Icons.play_circle_outline_rounded,
-            color: InhaleColors.primaryBlue,
-            size: 20,
+          Icon(icon, color: color, size: 16),
+          const SizedBox(width: 8),
+          Text(
+            label,
+            style: InhaleTypography.labelMedium.copyWith(
+              color: color,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ],
       ),

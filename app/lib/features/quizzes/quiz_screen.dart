@@ -11,17 +11,26 @@ import 'quiz_provider.dart';
 
 class QuizScreen extends ConsumerWidget {
   const QuizScreen({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(quizProvider);
+    final notifier = ref.read(quizProvider.notifier);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       appBar: GlassAppBar(title: 'Quizzes'),
       body: Container(
-        decoration: BoxDecoration(gradient: InhaleColors.gradientBackground),
+        decoration: BoxDecoration(
+          gradient:
+              isDark
+                  ? InhaleColors.gradientBackgroundDark
+                  : InhaleColors.gradientBackground,
+        ),
         child:
             state.isInProgress
-                ? _buildActiveQuiz(context, ref, state)
-                : _buildQuizLibrary(context, ref, state),
+                ? _buildActiveQuiz(context, ref, state, notifier, isDark)
+                : _buildQuizLibrary(context, ref, state, notifier, isDark),
       ),
     );
   }
@@ -30,6 +39,8 @@ class QuizScreen extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
     QuizState state,
+    QuizNotifier notifier,
+    bool isDark,
   ) {
     final categories = [
       {'name': 'Mathematics', 'icon': Icons.calculate_rounded},
@@ -39,95 +50,117 @@ class QuizScreen extends ConsumerWidget {
       {'name': 'Programming', 'icon': Icons.code_rounded},
       {'name': 'Languages', 'icon': Icons.language_rounded},
     ];
-    return Column(
-      children: [
-        Expanded(
-          child: CustomScrollView(
-            slivers: [
-              SliverPadding(
-                padding: EdgeInsets.all(InhaleSpacing.md),
-                sliver: SliverToBoxAdapter(
-                  child: Text(
-                    'Create Custom Quiz',
-                    style: InhaleTypography.headlineMedium,
-                  ),
-                ),
-              ),
-              SliverPadding(
-                padding: EdgeInsets.symmetric(horizontal: InhaleSpacing.md),
-                sliver: SliverToBoxAdapter(
-                  child: GlassTextField(
-                    hintText: 'Enter a topic for an AI-generated quiz...',
-                    onChanged:
-                        (v) => ref.read(quizProvider.notifier).setTopic(v),
-                  ),
-                ),
-              ),
-              SliverPadding(
-                padding: EdgeInsets.all(InhaleSpacing.md),
-                sliver: SliverToBoxAdapter(
-                  child: GlassButton(
-                    width: double.infinity,
-                    label:
-                        state.isGenerating ? 'Generating...' : 'Generate Quiz',
-                    onTap:
-                        state.isGenerating
-                            ? null
-                            : () =>
-                                ref.read(quizProvider.notifier).generateQuiz(),
-                  ),
-                ),
-              ),
-              SliverPadding(
-                padding: EdgeInsets.all(InhaleSpacing.md),
-                sliver: SliverToBoxAdapter(
-                  child: Text(
-                    'Quick Topics',
-                    style: InhaleTypography.headlineMedium,
-                  ),
-                ),
-              ),
-              SliverPadding(
-                padding: EdgeInsets.symmetric(horizontal: InhaleSpacing.md),
-                sliver: SliverGrid(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisExtent: 90,
-                    crossAxisSpacing: 12,
-                    mainAxisSpacing: 12,
-                  ),
-                  delegate: SliverChildBuilderDelegate((context, index) {
-                    final cat = categories[index];
-                    return GlassCard(
-                      onTap:
-                          () => ref
-                              .read(quizProvider.notifier)
-                              .generateQuiz(topic: cat['name'].toString()),
-                      padding: EdgeInsets.all(InhaleSpacing.md),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            cat['icon'] as IconData,
-                            color: InhaleColors.primaryBlue,
-                            size: 28,
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            cat['name'] as String,
-                            style: InhaleTypography.titleSmall,
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                    );
-                  }, childCount: categories.length),
-                ),
-              ),
-            ],
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(InhaleSpacing.md),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Create Custom Quiz',
+            style: InhaleTypography.headlineMedium.copyWith(
+              color:
+                  isDark
+                      ? InhaleColors.textPrimary
+                      : InhaleColors.lightNavyText,
+            ),
           ),
-        ),
-      ],
+          const SizedBox(height: InhaleSpacing.sm),
+          Text(
+            'Enter a topic and generate AI-powered quizzes',
+            style: InhaleTypography.bodyMedium.copyWith(
+              color:
+                  isDark
+                      ? InhaleColors.textSecondary
+                      : InhaleColors.lightTextSecondary,
+            ),
+          ),
+          const SizedBox(height: InhaleSpacing.md),
+          GlassCard(
+            padding: const EdgeInsets.all(InhaleSpacing.md),
+            child: GlassTextField(
+              hintText: 'Enter a topic for an AI-generated quiz...',
+              onChanged: (v) => notifier.setTopic(v),
+            ),
+          ),
+          const SizedBox(height: InhaleSpacing.md),
+          GlassButton(
+            width: double.infinity,
+            label: state.isGenerating ? 'Generating...' : 'Generate Quiz',
+            onTap: state.isGenerating ? null : () => notifier.generateQuiz(),
+            glow: !state.isGenerating,
+          ),
+          const SizedBox(height: InhaleSpacing.xl),
+          Text(
+            'Quick Topics',
+            style: InhaleTypography.headlineMedium.copyWith(
+              color:
+                  isDark
+                      ? InhaleColors.textPrimary
+                      : InhaleColors.lightNavyText,
+            ),
+          ),
+          const SizedBox(height: InhaleSpacing.sm),
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisExtent: 110,
+              crossAxisSpacing: InhaleSpacing.md,
+              mainAxisSpacing: InhaleSpacing.md,
+            ),
+            itemCount: categories.length,
+            itemBuilder: (context, index) {
+              final cat = categories[index];
+              return GlassCard(
+                onTap:
+                    () => notifier.generateQuiz(topic: cat['name'] as String),
+                padding: const EdgeInsets.all(InhaleSpacing.md),
+                elevated: true,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color:
+                            isDark
+                                ? InhaleColors.electricBlue.withValues(
+                                  alpha: 0.2,
+                                )
+                                : InhaleColors.lightPrimaryBlue.withValues(
+                                  alpha: 0.15,
+                                ),
+                        borderRadius: BorderRadius.circular(InhaleRadius.md),
+                      ),
+                      child: Icon(
+                        cat['icon'] as IconData,
+                        color:
+                            isDark
+                                ? InhaleColors.electricBlue
+                                : InhaleColors.lightPrimaryBlue,
+                        size: 28,
+                      ),
+                    ),
+                    const SizedBox(height: InhaleSpacing.sm),
+                    Text(
+                      cat['name'] as String,
+                      style: InhaleTypography.titleSmall.copyWith(
+                        color:
+                            isDark
+                                ? InhaleColors.textPrimary
+                                : InhaleColors.lightNavyText,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 
@@ -135,97 +168,153 @@ class QuizScreen extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
     QuizState state,
+    QuizNotifier notifier,
+    bool isDark,
   ) {
     final question = state.questions[state.currentIndex];
+
     return Column(
       children: [
-        Padding(
-          padding: EdgeInsets.all(InhaleSpacing.md),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+        // Progress Header
+        Container(
+          padding: const EdgeInsets.all(InhaleSpacing.md),
+          child: Column(
             children: [
-              Text(
-                'Question ${state.currentIndex + 1} / ${state.questions.length}',
-                style: InhaleTypography.titleSmall,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Question ${state.currentIndex + 1} of ${state.questions.length}',
+                    style: InhaleTypography.titleSmall.copyWith(
+                      color:
+                          isDark
+                              ? InhaleColors.textSecondary
+                              : InhaleColors.lightTextSecondary,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: InhaleSpacing.sm),
+              LinearProgressIndicator(
+                value: (state.currentIndex + 1) / state.questions.length,
+                backgroundColor:
+                    isDark
+                        ? InhaleColors.glassBorderSubtle
+                        : InhaleColors.lightGlassBorderSubtle,
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  isDark
+                      ? InhaleColors.electricBlue
+                      : InhaleColors.lightPrimaryBlue,
+                ),
+                borderRadius: BorderRadius.circular(InhaleRadius.pill),
+                minHeight: 4,
               ),
             ],
           ),
         ),
+
+        // Question Card
         Expanded(
-          child: CustomScrollView(
-            slivers: [
-              SliverPadding(
-                padding: EdgeInsets.all(InhaleSpacing.md),
-                sliver: SliverToBoxAdapter(
-                  child: GlassCard(
-                    padding: EdgeInsets.all(InhaleSpacing.md),
-                    child: Text(
-                      question.question,
-                      style: InhaleTypography.titleMedium,
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(InhaleSpacing.md),
+            child: Column(
+              children: [
+                GlassCard(
+                  padding: const EdgeInsets.all(InhaleSpacing.lg),
+                  elevated: true,
+                  child: Text(
+                    question.question,
+                    style: InhaleTypography.titleMedium.copyWith(
+                      color:
+                          isDark
+                              ? InhaleColors.textPrimary
+                              : InhaleColors.lightNavyText,
                     ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
-              ),
-              SliverPadding(
-                padding: EdgeInsets.symmetric(horizontal: InhaleSpacing.md),
-                sliver: SliverGrid(
+                const SizedBox(height: InhaleSpacing.lg),
+
+                // Options
+                GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     mainAxisExtent: 80,
-                    crossAxisSpacing: 12,
-                    mainAxisSpacing: 12,
+                    crossAxisSpacing: InhaleSpacing.md,
+                    mainAxisSpacing: InhaleSpacing.md,
                   ),
-                  delegate: SliverChildBuilderDelegate((context, index) {
+                  itemCount: 4,
+                  itemBuilder: (context, index) {
                     final label = String.fromCharCode(65 + index);
                     return GlassCard(
                       onTap:
-                          () => ref
-                              .read(quizProvider.notifier)
-                              .submitAnswer(state.currentIndex, label),
-                      padding: EdgeInsets.all(InhaleSpacing.md),
+                          () =>
+                              notifier.submitAnswer(state.currentIndex, label),
+                      padding: const EdgeInsets.all(InhaleSpacing.md),
+                      elevated: true,
                       child: Row(
                         children: [
                           Container(
-                            width: 28,
-                            height: 28,
+                            width: 32,
+                            height: 32,
                             decoration: BoxDecoration(
-                              color: InhaleColors.primaryBlue.withAlpha(40),
+                              color:
+                                  isDark
+                                      ? InhaleColors.electricBlue.withValues(
+                                        alpha: 0.2,
+                                      )
+                                      : InhaleColors.lightPrimaryBlue
+                                          .withValues(alpha: 0.15),
                               shape: BoxShape.circle,
                             ),
                             child: Center(
                               child: Text(
                                 label,
-                                style: const TextStyle(
-                                  color: InhaleColors.primaryBlue,
+                                style: TextStyle(
+                                  color:
+                                      isDark
+                                          ? InhaleColors.electricBlue
+                                          : InhaleColors.lightPrimaryBlue,
                                   fontWeight: FontWeight.bold,
+                                  fontSize: 14,
                                 ),
                               ),
                             ),
                           ),
-                          const SizedBox(width: 12),
+                          const SizedBox(width: InhaleSpacing.md),
                           Expanded(
                             child: Text(
                               'Option $label',
-                              style: InhaleTypography.bodyMedium,
+                              style: InhaleTypography.bodyMedium.copyWith(
+                                color:
+                                    isDark
+                                        ? InhaleColors.textPrimary
+                                        : InhaleColors.lightNavyText,
+                              ),
                             ),
                           ),
                         ],
                       ),
                     );
-                  }, childCount: 4),
+                  },
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
+
+        // End Quiz Button
         Padding(
-          padding: EdgeInsets.all(InhaleSpacing.md),
+          padding: const EdgeInsets.all(InhaleSpacing.md),
           child: Row(
             children: [
               Expanded(
                 child: GlassButton(
                   label: 'End Quiz',
-                  onTap: () => ref.read(quizProvider.notifier).reset(),
+                  onTap: () => notifier.reset(),
+                  outlined: true,
                 ),
               ),
             ],

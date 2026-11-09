@@ -13,10 +13,17 @@ class GlassBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       decoration: BoxDecoration(
-        gradient: useGradient ? InhaleColors.gradientBackground : null,
-        color: useGradient ? null : InhaleColors.pureWhite,
+        gradient: useGradient
+            ? (isDark
+                ? InhaleColors.gradientBackgroundDark
+                : InhaleColors.gradientBackground)
+            : null,
+        color: useGradient
+            ? null
+            : (isDark ? InhaleColors.midnight : InhaleColors.pureWhite),
       ),
       child: child,
     );

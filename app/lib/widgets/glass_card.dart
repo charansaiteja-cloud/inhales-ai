@@ -40,7 +40,7 @@ class GlassCard extends StatelessWidget {
         borderRadius ??
         const BorderRadius.all(Radius.circular(InhaleRadius.md));
     final effectiveShadows =
-        shadows ?? (elevated ? InhaleShadows.glass : InhaleShadows.softBlue);
+        shadows ?? (elevated ? InhaleShadows.floating : InhaleShadows.soft);
 
     return Container(
       width: width,

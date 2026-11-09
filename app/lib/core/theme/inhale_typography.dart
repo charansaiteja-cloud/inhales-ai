@@ -6,28 +6,35 @@ import 'package:flutter/material.dart';
 import 'inhale_colors.dart';
 
 class InhaleTypography {
+  InhaleTypography._();
+
+  static const String _fontFamily = 'SF Pro Display';
+
   // Display
   static const TextStyle displayLarge = TextStyle(
-    fontSize: 38,
+    fontSize: 40,
     fontWeight: FontWeight.w700,
-    height: 1.15,
-    color: InhaleColors.navyText,
+    height: 1.1,
+    color: InhaleColors.textPrimary,
     letterSpacing: -0.5,
+    fontFamily: _fontFamily,
   );
 
   static const TextStyle displayMedium = TextStyle(
-    fontSize: 30,
+    fontSize: 32,
     fontWeight: FontWeight.w700,
-    height: 1.2,
-    color: InhaleColors.navyText,
-    letterSpacing: -0.4,
+    height: 1.15,
+    color: InhaleColors.textPrimary,
+    letterSpacing: -0.3,
+    fontFamily: _fontFamily,
   );
 
   static const TextStyle displaySmall = TextStyle(
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: FontWeight.w600,
-    height: 1.25,
-    color: InhaleColors.navyText,
+    height: 1.2,
+    color: InhaleColors.textPrimary,
+    fontFamily: _fontFamily,
   );
 
   // Headline
@@ -35,21 +42,24 @@ class InhaleTypography {
     fontSize: 22,
     fontWeight: FontWeight.w600,
     height: 1.3,
-    color: InhaleColors.navyText,
+    color: InhaleColors.textPrimary,
+    fontFamily: _fontFamily,
   );
 
   static const TextStyle headlineMedium = TextStyle(
     fontSize: 20,
     fontWeight: FontWeight.w600,
     height: 1.3,
-    color: InhaleColors.navyText,
+    color: InhaleColors.textPrimary,
+    fontFamily: _fontFamily,
   );
 
   static const TextStyle headlineSmall = TextStyle(
     fontSize: 18,
     fontWeight: FontWeight.w600,
     height: 1.35,
-    color: InhaleColors.navyText,
+    color: InhaleColors.textPrimary,
+    fontFamily: _fontFamily,
   );
 
   // Title
@@ -57,21 +67,24 @@ class InhaleTypography {
     fontSize: 16,
     fontWeight: FontWeight.w600,
     height: 1.4,
-    color: InhaleColors.navyText,
+    color: InhaleColors.textPrimary,
+    fontFamily: _fontFamily,
   );
 
   static const TextStyle titleMedium = TextStyle(
     fontSize: 15,
     fontWeight: FontWeight.w600,
     height: 1.4,
-    color: InhaleColors.navyText,
+    color: InhaleColors.textPrimary,
+    fontFamily: _fontFamily,
   );
 
   static const TextStyle titleSmall = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w600,
     height: 1.4,
-    color: InhaleColors.navyText,
+    color: InhaleColors.textPrimary,
+    fontFamily: _fontFamily,
   );
 
   // Body
@@ -79,21 +92,24 @@ class InhaleTypography {
     fontSize: 16,
     fontWeight: FontWeight.w400,
     height: 1.5,
-    color: InhaleColors.navyText,
+    color: InhaleColors.textPrimary,
+    fontFamily: _fontFamily,
   );
 
   static const TextStyle bodyMedium = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w400,
     height: 1.5,
-    color: InhaleColors.navyText,
+    color: InhaleColors.textSecondary,
+    fontFamily: _fontFamily,
   );
 
   static const TextStyle bodySmall = TextStyle(
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: FontWeight.w400,
     height: 1.5,
-    color: InhaleColors.secondaryText,
+    color: InhaleColors.textMuted,
+    fontFamily: _fontFamily,
   );
 
   // Label
@@ -101,50 +117,57 @@ class InhaleTypography {
     fontSize: 14,
     fontWeight: FontWeight.w500,
     height: 1.4,
-    color: InhaleColors.secondaryText,
+    color: InhaleColors.textSecondary,
+    fontFamily: _fontFamily,
   );
 
   static const TextStyle labelMedium = TextStyle(
     fontSize: 12,
     fontWeight: FontWeight.w500,
     height: 1.4,
-    color: InhaleColors.secondaryText,
+    color: InhaleColors.textSecondary,
+    fontFamily: _fontFamily,
   );
 
   static const TextStyle labelSmall = TextStyle(
     fontSize: 11,
     fontWeight: FontWeight.w500,
     height: 1.4,
-    color: InhaleColors.secondaryText,
+    color: InhaleColors.textMuted,
+    fontFamily: _fontFamily,
   );
 
-  // Dark variants
-  static const TextStyle darkDisplayLarge = TextStyle(
-    fontSize: 38,
+  // Light theme variants
+  static const TextStyle lightDisplayLarge = TextStyle(
+    fontSize: 40,
     fontWeight: FontWeight.w700,
-    height: 1.15,
-    color: InhaleColors.darkNavyText,
+    height: 1.1,
+    color: InhaleColors.lightNavyText,
     letterSpacing: -0.5,
+    fontFamily: _fontFamily,
   );
 
-  static const TextStyle darkBodyLarge = TextStyle(
+  static const TextStyle lightBodyLarge = TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.w400,
     height: 1.5,
-    color: InhaleColors.darkNavyText,
+    color: InhaleColors.lightTextPrimary,
+    fontFamily: _fontFamily,
   );
 
-  static const TextStyle darkBodySmall = TextStyle(
-    fontSize: 12,
+  static const TextStyle lightBodySmall = TextStyle(
+    fontSize: 13,
     fontWeight: FontWeight.w400,
     height: 1.5,
-    color: InhaleColors.darkSecondaryText,
+    color: InhaleColors.lightTextSecondary,
+    fontFamily: _fontFamily,
   );
 
-  static const TextStyle darkHeadlineLarge = TextStyle(
+  static const TextStyle lightHeadlineLarge = TextStyle(
     fontSize: 22,
     fontWeight: FontWeight.w600,
     height: 1.3,
-    color: InhaleColors.darkNavyText,
+    color: InhaleColors.lightNavyText,
+    fontFamily: _fontFamily,
   );
 }

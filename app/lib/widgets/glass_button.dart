@@ -73,7 +73,7 @@ class GlassButton extends StatelessWidget {
             boxShadow:
                 enabled
                     ? (outlined
-                        ? InhaleShadows.softBlue
+                        ? InhaleShadows.soft
                         : InhaleShadows.floating)
                     : null,
           ),

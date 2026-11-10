@@ -1,9 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../ai/engine/ffi_inference_engine.dart';
 
-final examSchedulesProvider = StateNotifierProvider<ExamSchedulesNotifier, List<ExamSchedule>>((ref) {
-  return ExamSchedulesNotifier();
-});
+final examSchedulesProvider =
+    StateNotifierProvider<ExamSchedulesNotifier, List<ExamSchedule>>((ref) {
+      return ExamSchedulesNotifier();
+    });
 
 class ExamSchedulesNotifier extends StateNotifier<List<ExamSchedule>> {
   ExamSchedulesNotifier() : super([]);
@@ -44,7 +45,8 @@ class ExamSchedulesNotifier extends StateNotifier<List<ExamSchedule>> {
     final exam = state.firstWhere((exam) => exam.id == examId);
     final inferenceEngine = FfiInferenceEngine();
     await inferenceEngine.init();
-    final prompt = 'Generate study recommendations for ${exam.subject} (${exam.examType}), target score: ${exam.targetScore}, exam date: ${exam.examDate.toLocal()}';
+    final prompt =
+        'Generate study recommendations for ${exam.subject} (${exam.examType}), target score: ${exam.targetScore}, exam date: ${exam.examDate.toLocal()}';
     final response = await inferenceEngine.generate(prompt).join();
     return response;
   }

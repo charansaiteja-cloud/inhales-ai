@@ -82,7 +82,11 @@ class FfiAIEngine implements AIEngine {
     _engine.unloadModel();
   }
 
-  String _buildPrompt(List<ChatMessage> history, String currentPrompt, String? systemPrompt) {
+  String _buildPrompt(
+    List<ChatMessage> history,
+    String currentPrompt,
+    String? systemPrompt,
+  ) {
     final buffer = StringBuffer();
 
     // System prompt

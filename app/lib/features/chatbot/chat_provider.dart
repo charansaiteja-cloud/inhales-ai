@@ -232,7 +232,7 @@ class ChatNotifier extends StateNotifier<ChatState> {
 
     // Set tutor personality for this mode
     final tutor = getTutorPersonality(session.mode);
-    
+
     state = ChatState(
       sessions: [session, ...state.sessions],
       activeSession: session,
@@ -334,9 +334,12 @@ class ChatNotifier extends StateNotifier<ChatState> {
 
       // Build system prompt with tutor personality and response mode
       final systemPrompt = tutor.systemPrompt + responseMode.promptModifier;
-      
+
       // Get effective generation parameters
-      final params = tutor.getEffectiveParams({'temperature': 0.7, 'topP': 0.9});
+      final params = tutor.getEffectiveParams({
+        'temperature': 0.7,
+        'topP': 0.9,
+      });
 
       // Stream inference from the AI engine with system prompt
       final buffer = StringBuffer();
@@ -437,7 +440,7 @@ class ChatNotifier extends StateNotifier<ChatState> {
     String responseText,
   ) {
     final suggestions = <FollowUpSuggestion>[];
-    
+
     // Add tutor-specific follow-ups
     for (final template in tutor.suggestedFollowUps) {
       suggestions.add(FollowUpSuggestion(text: template));

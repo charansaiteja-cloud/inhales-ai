@@ -27,21 +27,20 @@ class VideoLearningState {
     String? summary,
     List<String>? keyTopics,
     String? error,
-  }) =>
-      VideoLearningState(
-        isLoading: isLoading ?? this.isLoading,
-        videoUrl: videoUrl ?? this.videoUrl,
-        transcript: transcript ?? this.transcript,
-        summary: summary ?? this.summary,
-        keyTopics: keyTopics ?? this.keyTopics,
-        error: error ?? this.error,
-      );
+  }) => VideoLearningState(
+    isLoading: isLoading ?? this.isLoading,
+    videoUrl: videoUrl ?? this.videoUrl,
+    transcript: transcript ?? this.transcript,
+    summary: summary ?? this.summary,
+    keyTopics: keyTopics ?? this.keyTopics,
+    error: error ?? this.error,
+  );
 }
 
 final videoLearningProvider =
     StateNotifierProvider<VideoLearningNotifier, VideoLearningState>((ref) {
-  return VideoLearningNotifier(ref);
-});
+      return VideoLearningNotifier(ref);
+    });
 
 class VideoLearningNotifier extends StateNotifier<VideoLearningState> {
   final Ref ref;
@@ -73,7 +72,10 @@ class VideoLearningNotifier extends StateNotifier<VideoLearningState> {
         keyTopics: summaryResult.keyTopics,
       );
     } catch (e) {
-      state = state.copyWith(isLoading: false, error: 'Failed to process video: $e');
+      state = state.copyWith(
+        isLoading: false,
+        error: 'Failed to process video: $e',
+      );
     }
   }
 
@@ -103,10 +105,7 @@ SUMMARY: <summary here>
 TOPICS: <topic1>, <topic2>, <topic3>
 ''';
 
-    final response = aiEngine.generate(
-      prompt: prompt,
-      history: const [],
-    );
+    final response = aiEngine.generate(prompt: prompt, history: const []);
 
     String fullResponse = '';
     await for (final chunk in response) {
@@ -114,12 +113,19 @@ TOPICS: <topic1>, <topic2>, <topic3>
     }
 
     // Parse response
-    final summaryMatch = RegExp(r'SUMMARY:\s*(.+)', multiLine: true).firstMatch(fullResponse);
-    final topicsMatch = RegExp(r'TOPICS:\s*(.+)', multiLine: true).firstMatch(fullResponse);
+    final summaryMatch = RegExp(
+      r'SUMMARY:\s*(.+)',
+      multiLine: true,
+    ).firstMatch(fullResponse);
+    final topicsMatch = RegExp(
+      r'TOPICS:\s*(.+)',
+      multiLine: true,
+    ).firstMatch(fullResponse);
 
     return (
       summary: summaryMatch?.group(1)?.trim() ?? 'Summary not available',
-      keyTopics: topicsMatch
+      keyTopics:
+          topicsMatch
               ?.group(1)
               ?.split(',')
               .map((t) => t.trim())
@@ -163,10 +169,7 @@ Question: $question
 Provide a clear, educational answer grounded in the transcript content.
 ''';
 
-    final response = aiEngine.generate(
-      prompt: prompt,
-      history: const [],
-    );
+    final response = aiEngine.generate(prompt: prompt, history: const []);
 
     String answer = '';
     await for (final chunk in response) {

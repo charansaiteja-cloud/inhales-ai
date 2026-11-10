@@ -10,7 +10,8 @@ class StudyPlanItemData {
   final int? topicId;
   final int? resourceId;
   final String title;
-  final String type; // 'read', 'video', 'quiz', 'flashcard', 'practice', 'review'
+  final String
+  type; // 'read', 'video', 'quiz', 'flashcard', 'practice', 'review'
   final int estimatedMinutes;
   final int orderIndex;
   final DateTime scheduledDate;
@@ -187,9 +188,10 @@ class SchedulingEngine {
   }) {
     final now = DateTime.now();
     final effectiveStart = startDate.isAfter(now) ? startDate : now;
-    final effectiveEnd = endDate.isBefore(effectiveStart)
-        ? effectiveStart.add(const Duration(days: 7))
-        : endDate;
+    final effectiveEnd =
+        endDate.isBefore(effectiveStart)
+            ? effectiveStart.add(const Duration(days: 7))
+            : endDate;
 
     final totalDays = effectiveEnd.difference(effectiveStart).inDays + 1;
     final totalHours = (hoursPerWeek * totalDays) / 7.0;
@@ -253,17 +255,25 @@ class SchedulingEngine {
         final scheduledDate = effectiveStart.add(Duration(days: dayOffset));
 
         // Cycle through activity types
-        final activityTypes = ['read', 'practice', 'review', 'quiz', 'flashcard'];
+        final activityTypes = [
+          'read',
+          'practice',
+          'review',
+          'quiz',
+          'flashcard',
+        ];
         final activityType = activityTypes[itemIndex % activityTypes.length];
 
-        items.add(StudyPlanItemData(
-          topicId: topic.id,
-          title: '${topic.name} - Session ${i + 1}',
-          type: activityType,
-          estimatedMinutes: minutesPerSession.clamp(25, 45),
-          orderIndex: itemIndex,
-          scheduledDate: scheduledDate,
-        ));
+        items.add(
+          StudyPlanItemData(
+            topicId: topic.id,
+            title: '${topic.name} - Session ${i + 1}',
+            type: activityType,
+            estimatedMinutes: minutesPerSession.clamp(25, 45),
+            orderIndex: itemIndex,
+            scheduledDate: scheduledDate,
+          ),
+        );
 
         allocatedMinutes += minutesPerSession;
         itemIndex++;
@@ -273,13 +283,15 @@ class SchedulingEngine {
     // Add review sessions at the end
     final reviewDate = effectiveEnd.subtract(const Duration(days: 1));
     if (reviewDate.isAfter(effectiveStart)) {
-      items.add(StudyPlanItemData(
-        title: 'Comprehensive Review',
-        type: 'review',
-        estimatedMinutes: 60,
-        orderIndex: itemIndex,
-        scheduledDate: reviewDate,
-      ));
+      items.add(
+        StudyPlanItemData(
+          title: 'Comprehensive Review',
+          type: 'review',
+          estimatedMinutes: 60,
+          orderIndex: itemIndex,
+          scheduledDate: reviewDate,
+        ),
+      );
     }
 
     return StudyPlanData(
@@ -305,12 +317,13 @@ class SchedulingEngine {
     final items = List<StudyPlanItemData>.from(plan.items);
 
     // Find items that need rescheduling
-    final missedItems = items.where((item) {
-      if (missedItemIds.contains(item.orderIndex)) return true;
-      if (item.scheduledDate.isBefore(now) &&
-          item.type != 'review') return true;
-      return false;
-    }).toList();
+    final missedItems =
+        items.where((item) {
+          if (missedItemIds.contains(item.orderIndex)) return true;
+          if (item.scheduledDate.isBefore(now) && item.type != 'review')
+            return true;
+          return false;
+        }).toList();
 
     if (missedItems.isEmpty) return plan;
 
@@ -324,7 +337,8 @@ class SchedulingEngine {
     final remainingDays = plan.endDate.difference(now).inDays + 1;
     final availableMinutesPerDay =
         ((plan.targetHoursPerWeek ?? 10) * 60 / 7).round();
-    final extraDaysNeeded = (totalMissedMinutes / availableMinutesPerDay).ceil();
+    final extraDaysNeeded =
+        (totalMissedMinutes / availableMinutesPerDay).ceil();
 
     final newEndDate = plan.endDate.add(Duration(days: extraDaysNeeded));
 
@@ -347,10 +361,7 @@ class SchedulingEngine {
     // Sort by scheduled date
     items.sort((a, b) => a.scheduledDate.compareTo(b.scheduledDate));
 
-    return plan.copyWith(
-      endDate: newEndDate,
-      items: items,
-    );
+    return plan.copyWith(endDate: newEndDate, items: items);
   }
 
   /// Create a focused study plan leading up to an exam.
@@ -369,9 +380,10 @@ class SchedulingEngine {
     }
 
     // Filter topics relevant to the exam
-    final relevantTopics = exam.topicIds != null && exam.topicIds!.isNotEmpty
-        ? topics.where((t) => exam.topicIds!.contains(t.id)).toList()
-        : topics;
+    final relevantTopics =
+        exam.topicIds != null && exam.topicIds!.isNotEmpty
+            ? topics.where((t) => exam.topicIds!.contains(t.id)).toList()
+            : topics;
 
     if (relevantTopics.isEmpty) {
       // No specific topics - create general review plan
@@ -402,14 +414,16 @@ class SchedulingEngine {
         final scheduledDate = now.add(Duration(days: dayOffset));
         final activityType = i == sessionsNeeded - 1 ? 'review' : 'practice';
 
-        items.add(StudyPlanItemData(
-          topicId: topic.id,
-          title: '${topic.name} - Exam Prep ${i + 1}',
-          type: activityType,
-          estimatedMinutes: 40,
-          orderIndex: itemIndex,
-          scheduledDate: scheduledDate,
-        ));
+        items.add(
+          StudyPlanItemData(
+            topicId: topic.id,
+            title: '${topic.name} - Exam Prep ${i + 1}',
+            type: activityType,
+            estimatedMinutes: 40,
+            orderIndex: itemIndex,
+            scheduledDate: scheduledDate,
+          ),
+        );
         itemIndex++;
       }
     }
@@ -417,18 +431,21 @@ class SchedulingEngine {
     // Add final review day before exam
     final dayBeforeExam = exam.examDate.subtract(const Duration(days: 1));
     if (dayBeforeExam.isAfter(now)) {
-      items.add(StudyPlanItemData(
-        title: 'Final Exam Review - ${exam.name}',
-        type: 'review',
-        estimatedMinutes: 120,
-        orderIndex: itemIndex,
-        scheduledDate: dayBeforeExam,
-      ));
+      items.add(
+        StudyPlanItemData(
+          title: 'Final Exam Review - ${exam.name}',
+          type: 'review',
+          estimatedMinutes: 120,
+          orderIndex: itemIndex,
+          scheduledDate: dayBeforeExam,
+        ),
+      );
     }
 
     return StudyPlanData(
       name: name ?? 'Exam Prep: ${exam.name}',
-      description: 'Focused study plan for ${exam.name} on ${_formatDate(exam.examDate)}',
+      description:
+          'Focused study plan for ${exam.name} on ${_formatDate(exam.examDate)}',
       startDate: now,
       endDate: exam.examDate.subtract(const Duration(days: 1)),
       goals: [
@@ -451,14 +468,16 @@ class SchedulingEngine {
     final items = <StudyPlanItemData>[];
 
     for (int i = 0; i < topics.length && i < 5; i++) {
-      items.add(StudyPlanItemData(
-        topicId: topics[i].id,
-        title: 'Rapid Review: ${topics[i].name}',
-        type: 'review',
-        estimatedMinutes: 30,
-        orderIndex: i,
-        scheduledDate: now.add(Duration(minutes: i * 45)),
-      ));
+      items.add(
+        StudyPlanItemData(
+          topicId: topics[i].id,
+          title: 'Rapid Review: ${topics[i].name}',
+          type: 'review',
+          estimatedMinutes: 30,
+          orderIndex: i,
+          scheduledDate: now.add(Duration(minutes: i * 45)),
+        ),
+      );
     }
 
     return StudyPlanData(
@@ -481,13 +500,20 @@ class SchedulingEngine {
     final items = <StudyPlanItemData>[];
 
     for (int day = 0; day < daysUntilExam && day < 14; day++) {
-      items.add(StudyPlanItemData(
-        title: 'General Study Session ${day + 1}',
-        type: day % 3 == 0 ? 'read' : day % 3 == 1 ? 'practice' : 'review',
-        estimatedMinutes: 60,
-        orderIndex: day,
-        scheduledDate: now.add(Duration(days: day)),
-      ));
+      items.add(
+        StudyPlanItemData(
+          title: 'General Study Session ${day + 1}',
+          type:
+              day % 3 == 0
+                  ? 'read'
+                  : day % 3 == 1
+                  ? 'practice'
+                  : 'review',
+          estimatedMinutes: 60,
+          orderIndex: day,
+          scheduledDate: now.add(Duration(days: day)),
+        ),
+      );
     }
 
     return StudyPlanData(
@@ -508,13 +534,13 @@ class SchedulingEngine {
   ) {
     final targetDate = DateTime(date.year, date.month, date.day);
     return plan.items.where((item) {
-      final itemDate = DateTime(
-        item.scheduledDate.year,
-        item.scheduledDate.month,
-        item.scheduledDate.day,
-      );
-      return itemDate == targetDate;
-    }).toList()
+        final itemDate = DateTime(
+          item.scheduledDate.year,
+          item.scheduledDate.month,
+          item.scheduledDate.day,
+        );
+        return itemDate == targetDate;
+      }).toList()
       ..sort((a, b) => a.orderIndex.compareTo(b.orderIndex));
   }
 
@@ -539,10 +565,7 @@ class SchedulingEngine {
         item.scheduledDate.day,
       );
       if (!itemDate.isBefore(startDate) && !itemDate.isAfter(endDate)) {
-        weeklyLoad[itemDate] = [
-          ...weeklyLoad[itemDate]!,
-          item,
-        ];
+        weeklyLoad[itemDate] = [...weeklyLoad[itemDate]!, item];
       }
     }
 

@@ -122,15 +122,14 @@ class RecommendationsState {
     String? error,
     String? filterType,
     bool? isGenerating,
-  }) =>
-      RecommendationsState(
-        recommendations: recommendations ?? this.recommendations,
-        activeRecommendations: activeRecommendations ?? this.activeRecommendations,
-        isLoading: isLoading ?? this.isLoading,
-        error: error ?? this.error,
-        filterType: filterType ?? this.filterType,
-        isGenerating: isGenerating ?? this.isGenerating,
-      );
+  }) => RecommendationsState(
+    recommendations: recommendations ?? this.recommendations,
+    activeRecommendations: activeRecommendations ?? this.activeRecommendations,
+    isLoading: isLoading ?? this.isLoading,
+    error: error ?? this.error,
+    filterType: filterType ?? this.filterType,
+    isGenerating: isGenerating ?? this.isGenerating,
+  );
 
   /// Filtered list based on current filter.
   List<RecommendationViewModel> get filteredRecommendations {
@@ -158,23 +157,29 @@ class RecommendationsState {
 
 final recommendationsProvider =
     StateNotifierProvider<RecommendationsNotifier, RecommendationsState>(
-  (ref) => RecommendationsNotifier(
-    ref.watch(databaseProvider),
-    ref.watch(aiEngineProvider),
-  ),
-);
+      (ref) => RecommendationsNotifier(
+        ref.watch(databaseProvider),
+        ref.watch(aiEngineProvider),
+      ),
+    );
 
 /// Convenience provider for all active recommendations.
-final activeRecommendationsProvider =
-    Provider<List<RecommendationViewModel>>((ref) {
-  return ref.watch(recommendationsProvider.select((s) => s.activeRecommendations));
+final activeRecommendationsProvider = Provider<List<RecommendationViewModel>>((
+  ref,
+) {
+  return ref.watch(
+    recommendationsProvider.select((s) => s.activeRecommendations),
+  );
 });
 
 /// Convenience provider for filtered recommendations.
-final filteredRecommendationsProvider =
-    Provider<List<RecommendationViewModel>>((ref) {
-  return ref.watch(recommendationsProvider.select((s) => s.filteredRecommendations));
-});
+final filteredRecommendationsProvider = Provider<List<RecommendationViewModel>>(
+  (ref) {
+    return ref.watch(
+      recommendationsProvider.select((s) => s.filteredRecommendations),
+    );
+  },
+);
 
 // ═══════════════════════════════════════════════════════════════════
 // Notifier
@@ -185,7 +190,7 @@ class RecommendationsNotifier extends StateNotifier<RecommendationsState> {
   final AIEngine _aiEngine;
 
   RecommendationsNotifier(this._db, this._aiEngine)
-      : super(const RecommendationsState()) {
+    : super(const RecommendationsState()) {
     _loadRecommendations();
   }
 
@@ -195,13 +200,17 @@ class RecommendationsNotifier extends StateNotifier<RecommendationsState> {
     try {
       state = state.copyWith(isLoading: true, error: null);
 
-      final recs = await (
-        _db.select(_db.recommendations)
-          ..where((t) => t.isDismissed.equals(false))
-          ..orderBy([(t) => drift.OrderingTerm.asc(t.priority), (t) => drift.OrderingTerm.desc(t.createdAt)])
-      ).get();
+      final recs =
+          await (_db.select(_db.recommendations)
+                ..where((t) => t.isDismissed.equals(false))
+                ..orderBy([
+                  (t) => drift.OrderingTerm.asc(t.priority),
+                  (t) => drift.OrderingTerm.desc(t.createdAt),
+                ]))
+              .get();
 
-      final viewModels = recs.map((r) => RecommendationViewModel.fromTable(r)).toList();
+      final viewModels =
+          recs.map((r) => RecommendationViewModel.fromTable(r)).toList();
 
       state = state.copyWith(
         recommendations: viewModels,
@@ -228,10 +237,10 @@ class RecommendationsNotifier extends StateNotifier<RecommendationsState> {
   /// Dismiss a recommendation.
   Future<void> dismiss(int id) async {
     try {
-      await (_db.update(_db.recommendations)..where((t) => t.id.equals(id)))
-          .write(db.RecommendationsCompanion(
-        isDismissed: const drift.Value(true),
-      ));
+      await (_db.update(_db.recommendations)
+        ..where((t) => t.id.equals(id))).write(
+        db.RecommendationsCompanion(isDismissed: const drift.Value(true)),
+      );
       await _loadRecommendations();
     } catch (e) {
       state = state.copyWith(error: e.toString());
@@ -241,10 +250,10 @@ class RecommendationsNotifier extends StateNotifier<RecommendationsState> {
   /// Accept a recommendation.
   Future<void> accept(int id) async {
     try {
-      await (_db.update(_db.recommendations)..where((t) => t.id.equals(id)))
-          .write(db.RecommendationsCompanion(
-        isAccepted: const drift.Value(true),
-      ));
+      await (_db.update(_db.recommendations)
+        ..where((t) => t.id.equals(id))).write(
+        db.RecommendationsCompanion(isAccepted: const drift.Value(true)),
+      );
       await _loadRecommendations();
     } catch (e) {
       state = state.copyWith(error: e.toString());
@@ -255,10 +264,9 @@ class RecommendationsNotifier extends StateNotifier<RecommendationsState> {
   Future<void> dismissAll() async {
     try {
       await (_db.update(_db.recommendations)
-            ..where((t) => t.isDismissed.equals(false)))
-          .write(db.RecommendationsCompanion(
-        isDismissed: const drift.Value(true),
-      ));
+        ..where((t) => t.isDismissed.equals(false))).write(
+        db.RecommendationsCompanion(isDismissed: const drift.Value(true)),
+      );
       await _loadRecommendations();
     } catch (e) {
       state = state.copyWith(error: e.toString());
@@ -280,21 +288,25 @@ class RecommendationsNotifier extends StateNotifier<RecommendationsState> {
 
       // Save recommendations to database
       for (final rec in recommendations) {
-        await _db.into(_db.recommendations).insert(
-          db.RecommendationsCompanion(
-            type: rec.type,
-            title: rec.title,
-            description: rec.description,
-            reason: rec.reason,
-            priority: rec.priority,
-            topicId: rec.topicId,
-            resourceId: rec.resourceId,
-            isDismissed: const drift.Value(false),
-            isAccepted: const drift.Value(false),
-            createdAt: drift.Value(DateTime.now()),
-            expiresAt: drift.Value(DateTime.now().add(const Duration(days: 7))),
-          ),
-        );
+        await _db
+            .into(_db.recommendations)
+            .insert(
+              db.RecommendationsCompanion(
+                type: rec.type,
+                title: rec.title,
+                description: rec.description,
+                reason: rec.reason,
+                priority: rec.priority,
+                topicId: rec.topicId,
+                resourceId: rec.resourceId,
+                isDismissed: const drift.Value(false),
+                isAccepted: const drift.Value(false),
+                createdAt: drift.Value(DateTime.now()),
+                expiresAt: drift.Value(
+                  DateTime.now().add(const Duration(days: 7)),
+                ),
+              ),
+            );
       }
 
       await _loadRecommendations();
@@ -308,50 +320,61 @@ class RecommendationsNotifier extends StateNotifier<RecommendationsState> {
     final context = <String, dynamic>{};
 
     // Get recent study sessions
-    final sessions = await (
-      _db.select(_db.studySessions)
-        ..orderBy([(t) => drift.OrderingTerm.desc(t.startedAt)])
-        ..limit(10)
-    ).get();
+    final sessions =
+        await (_db.select(_db.studySessions)
+              ..orderBy([(t) => drift.OrderingTerm.desc(t.startedAt)])
+              ..limit(10))
+            .get();
 
-    context['recentActivities'] = sessions.map((s) => {
-      'type': s.activityType,
-      'duration': s.durationMinutes,
-      'focusScore': s.focusScore,
-    }).toList();
+    context['recentActivities'] =
+        sessions
+            .map(
+              (s) => {
+                'type': s.activityType,
+                'duration': s.durationMinutes,
+                'focusScore': s.focusScore,
+              },
+            )
+            .toList();
 
     // Get quiz history
-    final quizzes = await (
-      _db.select(_db.quizHistory)
-        ..orderBy([(t) => drift.OrderingTerm.desc(t.createdAt)])
-        ..limit(5)
-    ).get();
+    final quizzes =
+        await (_db.select(_db.quizHistory)
+              ..orderBy([(t) => drift.OrderingTerm.desc(t.createdAt)])
+              ..limit(5))
+            .get();
 
-    context['quizHistory'] = quizzes.map((q) => {
-      'subject': q.subject,
-      'score': q.score,
-      'totalQuestions': q.totalQuestions,
-      'correctAnswers': q.correctAnswers,
-    }).toList();
+    context['quizHistory'] =
+        quizzes
+            .map(
+              (q) => {
+                'subject': q.subject,
+                'score': q.score,
+                'totalQuestions': q.totalQuestions,
+                'correctAnswers': q.correctAnswers,
+              },
+            )
+            .toList();
 
     // Get active study plans
-    final plans = await (
-      _db.select(_db.studyPlans)
-        ..where((t) => t.isActive.equals(true))
-    ).get();
+    final plans =
+        await (_db.select(_db.studyPlans)
+          ..where((t) => t.isActive.equals(true))).get();
 
-    context['activePlans'] = plans.map((p) => {
-      'name': p.name,
-      'goals': p.goals,
-    }).toList();
+    context['activePlans'] =
+        plans.map((p) => {'name': p.name, 'goals': p.goals}).toList();
 
     // Get upcoming flashcard reviews
     final now = DateTime.now();
-    final dueFlashcards = await (
-      _db.select(_db.flashcards)
-        ..where((t) => t.dueDate.isSmallerOrEqualValue(now) & t.dueDate.isNotNull())
-        ..limit(10)
-    ).get();
+    final dueFlashcards =
+        await (_db.select(_db.flashcards)
+              ..where(
+                (t) =>
+                    t.dueDate.isSmallerOrEqualValue(now) &
+                    t.dueDate.isNotNull(),
+              )
+              ..limit(10))
+            .get();
 
     context['dueFlashcards'] = dueFlashcards.length;
 
@@ -430,9 +453,13 @@ Generate personalized recommendations for me.
         final map = item as Map<String, dynamic>;
         return db.RecommendationsCompanion(
           type: drift.Value(map['type']?.toString() ?? 'topic'),
-          title: drift.Value(map['title']?.toString() ?? 'Study Recommendation'),
+          title: drift.Value(
+            map['title']?.toString() ?? 'Study Recommendation',
+          ),
           description: drift.Value(map['description']?.toString() ?? ''),
-          reason: drift.Value(map['reason']?.toString() ?? 'AI-generated recommendation'),
+          reason: drift.Value(
+            map['reason']?.toString() ?? 'AI-generated recommendation',
+          ),
           priority: drift.Value((map['priority'] as num?)?.toInt() ?? 2),
           topicId: const drift.Value.absent(),
           resourceId: const drift.Value.absent(),
@@ -453,7 +480,9 @@ Generate personalized recommendations for me.
       db.RecommendationsCompanion(
         type: const drift.Value('review'),
         title: const drift.Value('Review Recent Topics'),
-        description: const drift.Value('Spend 15 minutes reviewing what you studied yesterday'),
+        description: const drift.Value(
+          'Spend 15 minutes reviewing what you studied yesterday',
+        ),
         reason: const drift.Value('Regular review improves retention'),
         priority: const drift.Value(1),
         topicId: const drift.Value.absent(),
@@ -466,7 +495,9 @@ Generate personalized recommendations for me.
       db.RecommendationsCompanion(
         type: const drift.Value('quiz'),
         title: const drift.Value('Test Your Knowledge'),
-        description: const drift.Value('Take a quick quiz on your current subject'),
+        description: const drift.Value(
+          'Take a quick quiz on your current subject',
+        ),
         reason: const drift.Value('Self-assessment helps identify gaps'),
         priority: const drift.Value(2),
         topicId: const drift.Value.absent(),
@@ -479,7 +510,9 @@ Generate personalized recommendations for me.
       db.RecommendationsCompanion(
         type: const drift.Value('schedule'),
         title: const drift.Value('Plan Your Week'),
-        description: const drift.Value('Set aside dedicated study time for upcoming goals'),
+        description: const drift.Value(
+          'Set aside dedicated study time for upcoming goals',
+        ),
         reason: const drift.Value('Consistent scheduling improves progress'),
         priority: const drift.Value(3),
         topicId: const drift.Value.absent(),
@@ -511,10 +544,7 @@ Generate personalized recommendations for me.
     return subjectScores.entries.map((entry) {
       final scores = entry.value;
       final avgScore = scores.reduce((a, b) => a + b) / scores.length;
-      return {
-        'subject': entry.key,
-        'avgScore': avgScore,
-      };
+      return {'subject': entry.key, 'avgScore': avgScore};
     }).toList();
   }
 }

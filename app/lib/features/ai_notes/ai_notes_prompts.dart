@@ -7,7 +7,8 @@ class AiNotesPrompts {
   AiNotesPrompts._();
 
   /// Study notes prompt - generates structured notes with headings, key points, and examples.
-  static const String studyNotes = '''You are an expert educational content creator. Generate comprehensive study notes for the following topic.
+  static const String studyNotes =
+      '''You are an expert educational content creator. Generate comprehensive study notes for the following topic.
 
 Format your response with:
 1. Clear headings and subheadings
@@ -24,7 +25,8 @@ Topic/Content:
 Generate study notes:''';
 
   /// Summary notes prompt - generates condensed overview.
-  static const String summaryNotes = '''You are an expert summarizer. Create a concise summary of the following content.
+  static const String summaryNotes =
+      '''You are an expert summarizer. Create a concise summary of the following content.
 
 Your summary should:
 1. Capture the main ideas in 3-5 paragraphs
@@ -38,7 +40,8 @@ Content:
 Generate summary notes:''';
 
   /// Revision notes prompt - generates bullet points for quick review.
-  static const String revisionNotes = '''You are an expert at creating revision materials. Generate quick revision notes for the following topic.
+  static const String revisionNotes =
+      '''You are an expert at creating revision materials. Generate quick revision notes for the following topic.
 
 Format your response as:
 1. Bullet points only
@@ -55,7 +58,8 @@ Topic/Content:
 Generate revision notes:''';
 
   /// System prompt for note generation.
-  static const String systemPrompt = '''You are an AI learning assistant specialized in creating educational notes. 
+  static const String systemPrompt =
+      '''You are an AI learning assistant specialized in creating educational notes. 
 Your goal is to help students learn effectively by providing clear, accurate, and well-structured notes.
 Always format your output in Markdown for better readability.
 Use bold text for key terms, lists for organization, and headers for sections.''';

@@ -21,8 +21,8 @@ class LanguageLearningScreen extends ConsumerStatefulWidget {
       _LanguageLearningScreenState();
 }
 
-class _LanguageLearningScreenState
-    extends ConsumerState<LanguageLearningScreen> with TickerProviderStateMixin {
+class _LanguageLearningScreenState extends ConsumerState<LanguageLearningScreen>
+    with TickerProviderStateMixin {
   late TabController _tabController;
   final _textController = TextEditingController();
   final _grammarController = TextEditingController();
@@ -68,39 +68,50 @@ class _LanguageLearningScreenState
     );
 
     final state = ref.watch(languageLearningProvider);
-    final layout = Responsive.isDesktop(context)
-        ? _buildDesktop(context, reducedBlur, state)
-        : _buildMobile(context, reducedBlur, state);
+    final layout =
+        Responsive.isDesktop(context)
+            ? _buildDesktop(context, reducedBlur, state)
+            : _buildMobile(context, reducedBlur, state);
 
     return Scaffold(
       body: SafeArea(child: layout),
-      bottomNavigationBar: Responsive.isDesktop(context)
-          ? null
-          : GlassBottomNavigationBar(
-              currentIndex: 0,
-              onTap: (index) {
-                if (index == 0) {
-                  GoRouter.of(context).go('/home');
-                } else if (index == 1) {
-                  GoRouter.of(context).go('/chat');
-                }
-              },
-              items: const [
-                GlassBottomNavItem(label: 'Learn', icon: Icons.school_rounded),
-                GlassBottomNavItem(label: 'Chat', icon: Icons.chat_rounded),
-                GlassBottomNavItem(label: 'Home', icon: Icons.home_rounded),
-              ],
-            ),
+      bottomNavigationBar:
+          Responsive.isDesktop(context)
+              ? null
+              : GlassBottomNavigationBar(
+                currentIndex: 0,
+                onTap: (index) {
+                  if (index == 0) {
+                    GoRouter.of(context).go('/home');
+                  } else if (index == 1) {
+                    GoRouter.of(context).go('/chat');
+                  }
+                },
+                items: const [
+                  GlassBottomNavItem(
+                    label: 'Learn',
+                    icon: Icons.school_rounded,
+                  ),
+                  GlassBottomNavItem(label: 'Chat', icon: Icons.chat_rounded),
+                  GlassBottomNavItem(label: 'Home', icon: Icons.home_rounded),
+                ],
+              ),
     );
   }
 
   Widget _buildMobile(
-      BuildContext context, bool reducedBlur, LanguageLearningState state) {
+    BuildContext context,
+    bool reducedBlur,
+    LanguageLearningState state,
+  ) {
     return _buildContent(context, reducedBlur, state, isDesktop: false);
   }
 
   Widget _buildDesktop(
-      BuildContext context, bool reducedBlur, LanguageLearningState state) {
+    BuildContext context,
+    bool reducedBlur,
+    LanguageLearningState state,
+  ) {
     return Row(
       children: [
         SizedBox(
@@ -140,21 +151,27 @@ class _LanguageLearningScreenState
             },
           ),
         ),
-        Expanded(child: _buildContent(context, reducedBlur, state, isDesktop: true)),
+        Expanded(
+          child: _buildContent(context, reducedBlur, state, isDesktop: true),
+        ),
       ],
     );
   }
 
-  Widget _buildContent(BuildContext context, bool reducedBlur,
-      LanguageLearningState state,
-      {required bool isDesktop}) {
+  Widget _buildContent(
+    BuildContext context,
+    bool reducedBlur,
+    LanguageLearningState state, {
+    required bool isDesktop,
+  }) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
       decoration: BoxDecoration(
-        gradient: isDark
-            ? InhaleColors.gradientBackgroundDark
-            : InhaleColors.gradientBackground,
+        gradient:
+            isDark
+                ? InhaleColors.gradientBackgroundDark
+                : InhaleColors.gradientBackground,
       ),
       child: Column(
         children: [
@@ -196,7 +213,11 @@ class _LanguageLearningScreenState
               ],
             ),
             child: const Center(
-              child: Icon(Icons.language_rounded, color: Colors.white, size: 28),
+              child: Icon(
+                Icons.language_rounded,
+                color: Colors.white,
+                size: 28,
+              ),
             ),
           ),
           const SizedBox(width: InhaleSpacing.sm),
@@ -206,13 +227,19 @@ class _LanguageLearningScreenState
               Text(
                 'Language Learning',
                 style: InhaleTypography.displaySmall.copyWith(
-                  color: isDark ? InhaleColors.textPrimary : InhaleColors.lightNavyText,
+                  color:
+                      isDark
+                          ? InhaleColors.textPrimary
+                          : InhaleColors.lightNavyText,
                 ),
               ),
               Text(
                 'Practice, translate, and learn',
                 style: InhaleTypography.bodyMedium.copyWith(
-                  color: isDark ? InhaleColors.textSecondary : InhaleColors.lightTextSecondary,
+                  color:
+                      isDark
+                          ? InhaleColors.textSecondary
+                          : InhaleColors.lightTextSecondary,
                 ),
               ),
             ],
@@ -232,9 +259,10 @@ class _LanguageLearningScreenState
     return Container(
       margin: EdgeInsets.symmetric(horizontal: InhaleSpacing.lg),
       decoration: BoxDecoration(
-        color: isDark
-            ? InhaleColors.glassGrey.withValues(alpha: 0.5)
-            : InhaleColors.lightGlassSurface.withValues(alpha: 0.5),
+        color:
+            isDark
+                ? InhaleColors.glassGrey.withValues(alpha: 0.5)
+                : InhaleColors.lightGlassSurface.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(InhaleRadius.md),
       ),
       child: TabBar(
@@ -245,9 +273,10 @@ class _LanguageLearningScreenState
         ),
         indicatorSize: TabBarIndicatorSize.tab,
         labelColor: Colors.white,
-        unselectedLabelColor: isDark
-            ? InhaleColors.textSecondary
-            : InhaleColors.lightTextSecondary,
+        unselectedLabelColor:
+            isDark
+                ? InhaleColors.textSecondary
+                : InhaleColors.lightTextSecondary,
         tabs: const [
           Tab(icon: Icon(Icons.translate_rounded), text: 'Translate'),
           Tab(icon: Icon(Icons.chat_rounded), text: 'Conversation'),
@@ -260,7 +289,10 @@ class _LanguageLearningScreenState
 
   // ==================== Translate Tab ====================
   Widget _buildTranslateTab(
-      BuildContext context, LanguageLearningState state, bool isDark) {
+    BuildContext context,
+    LanguageLearningState state,
+    bool isDark,
+  ) {
     final translationState = state.translation;
 
     return SingleChildScrollView(
@@ -287,69 +319,75 @@ class _LanguageLearningScreenState
   }
 
   Widget _buildLanguageSelector(
-      String sourceLang, String targetLang, Function(String, String) onChanged, bool isDark) {
+    String sourceLang,
+    String targetLang,
+    Function(String, String) onChanged,
+    bool isDark,
+  ) {
     return Row(
       children: [
         Expanded(
-          child: _buildLanguageDropdown(
-            sourceLang,
-            'From',
-            (value) {
-              if (value != null) {
-                onChanged(value, targetLang);
-              }
-            },
-            isDark,
-          ),
+          child: _buildLanguageDropdown(sourceLang, 'From', (value) {
+            if (value != null) {
+              onChanged(value, targetLang);
+            }
+          }, isDark),
         ),
         IconButton(
           icon: const Icon(Icons.swap_horiz_rounded),
           onPressed: () {
             onChanged(targetLang, sourceLang);
           },
-          color: isDark ? InhaleColors.electricBlue : InhaleColors.lightPrimaryBlue,
+          color:
+              isDark
+                  ? InhaleColors.electricBlue
+                  : InhaleColors.lightPrimaryBlue,
         ),
         Expanded(
-          child: _buildLanguageDropdown(
-            targetLang,
-            'To',
-            (value) {
-              if (value != null) {
-                onChanged(sourceLang, value);
-              }
-            },
-            isDark,
-          ),
+          child: _buildLanguageDropdown(targetLang, 'To', (value) {
+            if (value != null) {
+              onChanged(sourceLang, value);
+            }
+          }, isDark),
         ),
       ],
     );
   }
 
   Widget _buildLanguageDropdown(
-      String value, String label, Function(String?) onChanged, bool isDark) {
+    String value,
+    String label,
+    Function(String?) onChanged,
+    bool isDark,
+  ) {
     return DropdownButtonFormField<String>(
       value: value,
       decoration: InputDecoration(
         labelText: label,
         filled: true,
-        fillColor: isDark
-            ? InhaleColors.glassGrey
-            : InhaleColors.lightSurface,
+        fillColor: isDark ? InhaleColors.glassGrey : InhaleColors.lightSurface,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(InhaleRadius.sm),
           borderSide: BorderSide.none,
         ),
       ),
-      items: _languageOptions
-          .map((lang) => DropdownMenuItem(
-                value: lang.$1,
-                child: Text(lang.$2,
+      items:
+          _languageOptions
+              .map(
+                (lang) => DropdownMenuItem(
+                  value: lang.$1,
+                  child: Text(
+                    lang.$2,
                     style: InhaleTypography.bodyMedium.copyWith(
                       color:
-                          isDark ? InhaleColors.textPrimary : InhaleColors.lightNavyText,
-                    )),
-              ))
-          .toList(),
+                          isDark
+                              ? InhaleColors.textPrimary
+                              : InhaleColors.lightNavyText,
+                    ),
+                  ),
+                ),
+              )
+              .toList(),
       onChanged: onChanged,
     );
   }
@@ -363,7 +401,8 @@ class _LanguageLearningScreenState
           Text(
             _langName(state.sourceLang),
             style: InhaleTypography.labelSmall.copyWith(
-              color: isDark ? InhaleColors.textMuted : InhaleColors.lightTextMuted,
+              color:
+                  isDark ? InhaleColors.textMuted : InhaleColors.lightTextMuted,
             ),
           ),
           const SizedBox(height: InhaleSpacing.xs),
@@ -376,7 +415,10 @@ class _LanguageLearningScreenState
               filled: false,
             ),
             style: InhaleTypography.bodyMedium.copyWith(
-              color: isDark ? InhaleColors.textPrimary : InhaleColors.lightNavyText,
+              color:
+                  isDark
+                      ? InhaleColors.textPrimary
+                      : InhaleColors.lightNavyText,
             ),
           ),
           const SizedBox(height: InhaleSpacing.sm),
@@ -384,23 +426,29 @@ class _LanguageLearningScreenState
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               ElevatedButton.icon(
-                onPressed: state.isTranslating
-                    ? null
-                    : () {
-                        ref.read(languageLearningProvider.notifier).translate(
-                              text: _textController.text,
-                              fromLang: state.sourceLang,
-                              toLang: state.targetLang,
-                            );
-                      },
-                icon: state.isTranslating
-                    ? const SizedBox(
-                        width: 16,
-                        height: 16,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : const Icon(Icons.translate_rounded),
-                label: Text(state.isTranslating ? 'Translating...' : 'Translate'),
+                onPressed:
+                    state.isTranslating
+                        ? null
+                        : () {
+                          ref
+                              .read(languageLearningProvider.notifier)
+                              .translate(
+                                text: _textController.text,
+                                fromLang: state.sourceLang,
+                                toLang: state.targetLang,
+                              );
+                        },
+                icon:
+                    state.isTranslating
+                        ? const SizedBox(
+                          width: 16,
+                          height: 16,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                        : const Icon(Icons.translate_rounded),
+                label: Text(
+                  state.isTranslating ? 'Translating...' : 'Translate',
+                ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: InhaleColors.electricBlue,
                   foregroundColor: Colors.white,
@@ -425,7 +473,8 @@ class _LanguageLearningScreenState
           Text(
             _langName(state.targetLang),
             style: InhaleTypography.labelSmall.copyWith(
-              color: isDark ? InhaleColors.textMuted : InhaleColors.lightTextMuted,
+              color:
+                  isDark ? InhaleColors.textMuted : InhaleColors.lightTextMuted,
             ),
           ),
           const SizedBox(height: InhaleSpacing.xs),
@@ -447,14 +496,20 @@ class _LanguageLearningScreenState
             Text(
               state.translatedText,
               style: InhaleTypography.bodyLarge.copyWith(
-                color: isDark ? InhaleColors.textPrimary : InhaleColors.lightNavyText,
+                color:
+                    isDark
+                        ? InhaleColors.textPrimary
+                        : InhaleColors.lightNavyText,
               ),
             )
           else
             Text(
               'Translation will appear here',
               style: InhaleTypography.bodyMedium.copyWith(
-                color: isDark ? InhaleColors.textSecondary : InhaleColors.lightTextSecondary,
+                color:
+                    isDark
+                        ? InhaleColors.textSecondary
+                        : InhaleColors.lightTextSecondary,
               ),
             ),
         ],
@@ -464,7 +519,10 @@ class _LanguageLearningScreenState
 
   // ==================== Conversation Tab ====================
   Widget _buildConversationTab(
-      BuildContext context, LanguageLearningState state, bool isDark) {
+    BuildContext context,
+    LanguageLearningState state,
+    bool isDark,
+  ) {
     final conversationState = state.conversation;
 
     return Column(
@@ -485,34 +543,44 @@ class _LanguageLearningScreenState
           ),
         ),
         Expanded(
-          child: conversationState.messages.isEmpty
-              ? Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.chat_bubble_outline_rounded,
-                        size: 64,
-                        color: isDark ? InhaleColors.textMuted : InhaleColors.lightTextMuted,
-                      ),
-                      const SizedBox(height: InhaleSpacing.md),
-                      Text(
-                        'Start a conversation!',
-                        style: InhaleTypography.titleMedium.copyWith(
-                          color: isDark ? InhaleColors.textPrimary : InhaleColors.lightNavyText,
+          child:
+              conversationState.messages.isEmpty
+                  ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.chat_bubble_outline_rounded,
+                          size: 64,
+                          color:
+                              isDark
+                                  ? InhaleColors.textMuted
+                                  : InhaleColors.lightTextMuted,
                         ),
-                      ),
-                      const SizedBox(height: InhaleSpacing.xs),
-                      Text(
-                        'Practice speaking with AI tutor',
-                        style: InhaleTypography.bodyMedium.copyWith(
-                          color: isDark ? InhaleColors.textSecondary : InhaleColors.lightTextSecondary,
+                        const SizedBox(height: InhaleSpacing.md),
+                        Text(
+                          'Start a conversation!',
+                          style: InhaleTypography.titleMedium.copyWith(
+                            color:
+                                isDark
+                                    ? InhaleColors.textPrimary
+                                    : InhaleColors.lightNavyText,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                )
-              : _buildChatList(conversationState, isDark),
+                        const SizedBox(height: InhaleSpacing.xs),
+                        Text(
+                          'Practice speaking with AI tutor',
+                          style: InhaleTypography.bodyMedium.copyWith(
+                            color:
+                                isDark
+                                    ? InhaleColors.textSecondary
+                                    : InhaleColors.lightTextSecondary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                  : _buildChatList(conversationState, isDark),
         ),
         _buildChatInput(conversationState, isDark),
       ],
@@ -532,9 +600,7 @@ class _LanguageLearningScreenState
             margin: EdgeInsets.only(bottom: InhaleSpacing.sm),
             padding: EdgeInsets.all(InhaleSpacing.md),
             decoration: BoxDecoration(
-              gradient: message.isUser
-                  ? InhaleColors.gradientPrimary
-                  : null,
+              gradient: message.isUser ? InhaleColors.gradientPrimary : null,
               borderRadius: BorderRadius.circular(InhaleRadius.md),
             ),
             constraints: BoxConstraints(
@@ -543,11 +609,12 @@ class _LanguageLearningScreenState
             child: Text(
               message.content,
               style: InhaleTypography.bodyMedium.copyWith(
-                color: message.isUser
-                    ? Colors.white
-                    : (isDark
-                        ? InhaleColors.textPrimary
-                        : InhaleColors.lightNavyText),
+                color:
+                    message.isUser
+                        ? Colors.white
+                        : (isDark
+                            ? InhaleColors.textPrimary
+                            : InhaleColors.lightNavyText),
               ),
             ),
           ),
@@ -560,9 +627,10 @@ class _LanguageLearningScreenState
     return Container(
       padding: EdgeInsets.all(InhaleSpacing.md),
       decoration: BoxDecoration(
-        color: isDark
-            ? InhaleColors.glassGrey.withValues(alpha: 0.8)
-            : InhaleColors.lightGlassSurface.withValues(alpha: 0.8),
+        color:
+            isDark
+                ? InhaleColors.glassGrey.withValues(alpha: 0.8)
+                : InhaleColors.lightGlassSurface.withValues(alpha: 0.8),
       ),
       child: Row(
         children: [
@@ -583,7 +651,10 @@ class _LanguageLearningScreenState
                 ),
               ),
               style: InhaleTypography.bodyMedium.copyWith(
-                color: isDark ? InhaleColors.textPrimary : InhaleColors.lightNavyText,
+                color:
+                    isDark
+                        ? InhaleColors.textPrimary
+                        : InhaleColors.lightNavyText,
               ),
               onChanged: (value) {
                 ref
@@ -601,16 +672,19 @@ class _LanguageLearningScreenState
             ),
             child: IconButton(
               onPressed: state.isGenerating ? null : _sendConversationMessage,
-              icon: state.isGenerating
-                  ? const SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                      ),
-                    )
-                  : const Icon(Icons.send_rounded, color: Colors.white),
+              icon:
+                  state.isGenerating
+                      ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            Colors.white,
+                          ),
+                        ),
+                      )
+                      : const Icon(Icons.send_rounded, color: Colors.white),
             ),
           ),
         ],
@@ -632,25 +706,23 @@ class _LanguageLearningScreenState
 
   // ==================== Grammar Tab ====================
   Widget _buildGrammarTab(
-      BuildContext context, LanguageLearningState state, bool isDark) {
+    BuildContext context,
+    LanguageLearningState state,
+    bool isDark,
+  ) {
     final grammarState = state.grammar;
 
     return SingleChildScrollView(
       padding: EdgeInsets.all(InhaleSpacing.lg),
       child: Column(
         children: [
-          _buildLanguageDropdown(
-            grammarState.language,
-            'Language',
-            (value) {
-              if (value != null) {
-                ref
-                    .read(languageLearningProvider.notifier)
-                    .setGrammarLanguage(value);
-              }
-            },
-            isDark,
-          ),
+          _buildLanguageDropdown(grammarState.language, 'Language', (value) {
+            if (value != null) {
+              ref
+                  .read(languageLearningProvider.notifier)
+                  .setGrammarLanguage(value);
+            }
+          }, isDark),
           const SizedBox(height: InhaleSpacing.lg),
           GlassCard(
             padding: const EdgeInsets.all(InhaleSpacing.md),
@@ -660,7 +732,10 @@ class _LanguageLearningScreenState
                 Text(
                   'Ask about grammar',
                   style: InhaleTypography.labelSmall.copyWith(
-                    color: isDark ? InhaleColors.textMuted : InhaleColors.lightTextMuted,
+                    color:
+                        isDark
+                            ? InhaleColors.textMuted
+                            : InhaleColors.lightTextMuted,
                   ),
                 ),
                 const SizedBox(height: InhaleSpacing.xs),
@@ -673,7 +748,10 @@ class _LanguageLearningScreenState
                     filled: false,
                   ),
                   style: InhaleTypography.bodyMedium.copyWith(
-                    color: isDark ? InhaleColors.textPrimary : InhaleColors.lightNavyText,
+                    color:
+                        isDark
+                            ? InhaleColors.textPrimary
+                            : InhaleColors.lightNavyText,
                   ),
                 ),
                 const SizedBox(height: InhaleSpacing.sm),
@@ -681,22 +759,30 @@ class _LanguageLearningScreenState
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     ElevatedButton.icon(
-                      onPressed: grammarState.isLoading
-                          ? null
-                          : () {
-                              ref.read(languageLearningProvider.notifier).explainGrammar(
-                                    query: _grammarController.text,
-                                    language: grammarState.language,
-                                  );
-                            },
-                      icon: grammarState.isLoading
-                          ? const SizedBox(
-                              width: 16,
-                              height: 16,
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            )
-                          : const Icon(Icons.book_rounded),
-                      label: Text(grammarState.isLoading ? 'Explaining...' : 'Explain'),
+                      onPressed:
+                          grammarState.isLoading
+                              ? null
+                              : () {
+                                ref
+                                    .read(languageLearningProvider.notifier)
+                                    .explainGrammar(
+                                      query: _grammarController.text,
+                                      language: grammarState.language,
+                                    );
+                              },
+                      icon:
+                          grammarState.isLoading
+                              ? const SizedBox(
+                                width: 16,
+                                height: 16,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
+                              : const Icon(Icons.book_rounded),
+                      label: Text(
+                        grammarState.isLoading ? 'Explaining...' : 'Explain',
+                      ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: InhaleColors.electricBlue,
                         foregroundColor: Colors.white,
@@ -737,14 +823,20 @@ class _LanguageLearningScreenState
                   Text(
                     'Grammar Explanation',
                     style: InhaleTypography.titleMedium.copyWith(
-                      color: isDark ? InhaleColors.textPrimary : InhaleColors.lightNavyText,
+                      color:
+                          isDark
+                              ? InhaleColors.textPrimary
+                              : InhaleColors.lightNavyText,
                     ),
                   ),
                   const SizedBox(height: InhaleSpacing.sm),
                   Text(
                     grammarState.explanation,
                     style: InhaleTypography.bodyMedium.copyWith(
-                      color: isDark ? InhaleColors.textSecondary : InhaleColors.lightTextSecondary,
+                      color:
+                          isDark
+                              ? InhaleColors.textSecondary
+                              : InhaleColors.lightTextSecondary,
                     ),
                   ),
                 ],
@@ -757,7 +849,10 @@ class _LanguageLearningScreenState
 
   // ==================== Vocabulary Tab ====================
   Widget _buildVocabularyTab(
-      BuildContext context, LanguageLearningState state, bool isDark) {
+    BuildContext context,
+    LanguageLearningState state,
+    bool isDark,
+  ) {
     final vocabState = state.vocabulary;
 
     return SingleChildScrollView(
@@ -767,18 +862,15 @@ class _LanguageLearningScreenState
           Row(
             children: [
               Expanded(
-                child: _buildLanguageDropdown(
-                  vocabState.language,
-                  'Language',
-                  (value) {
-                    if (value != null) {
-                      ref
-                          .read(languageLearningProvider.notifier)
-                          .setVocabularyLanguage(value);
-                    }
-                  },
-                  isDark,
-                ),
+                child: _buildLanguageDropdown(vocabState.language, 'Language', (
+                  value,
+                ) {
+                  if (value != null) {
+                    ref
+                        .read(languageLearningProvider.notifier)
+                        .setVocabularyLanguage(value);
+                  }
+                }, isDark),
               ),
               const SizedBox(width: InhaleSpacing.sm),
               Expanded(
@@ -787,18 +879,28 @@ class _LanguageLearningScreenState
                   decoration: InputDecoration(
                     labelText: 'Level',
                     filled: true,
-                    fillColor: isDark
-                        ? InhaleColors.glassGrey
-                        : InhaleColors.lightSurface,
+                    fillColor:
+                        isDark
+                            ? InhaleColors.glassGrey
+                            : InhaleColors.lightSurface,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(InhaleRadius.sm),
                       borderSide: BorderSide.none,
                     ),
                   ),
                   items: const [
-                    DropdownMenuItem(value: 'Beginner', child: Text('Beginner')),
-                    DropdownMenuItem(value: 'Intermediate', child: Text('Intermediate')),
-                    DropdownMenuItem(value: 'Advanced', child: Text('Advanced')),
+                    DropdownMenuItem(
+                      value: 'Beginner',
+                      child: Text('Beginner'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'Intermediate',
+                      child: Text('Intermediate'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'Advanced',
+                      child: Text('Advanced'),
+                    ),
                   ],
                   onChanged: (value) {
                     if (value != null) {
@@ -818,7 +920,10 @@ class _LanguageLearningScreenState
                 Text(
                   'Topics (comma separated)',
                   style: InhaleTypography.labelSmall.copyWith(
-                    color: isDark ? InhaleColors.textMuted : InhaleColors.lightTextMuted,
+                    color:
+                        isDark
+                            ? InhaleColors.textMuted
+                            : InhaleColors.lightTextMuted,
                   ),
                 ),
                 const SizedBox(height: InhaleSpacing.xs),
@@ -830,7 +935,10 @@ class _LanguageLearningScreenState
                     filled: false,
                   ),
                   style: InhaleTypography.bodyMedium.copyWith(
-                    color: isDark ? InhaleColors.textPrimary : InhaleColors.lightNavyText,
+                    color:
+                        isDark
+                            ? InhaleColors.textPrimary
+                            : InhaleColors.lightNavyText,
                   ),
                 ),
                 const SizedBox(height: InhaleSpacing.sm),
@@ -838,27 +946,38 @@ class _LanguageLearningScreenState
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ElevatedButton.icon(
-                      onPressed: vocabState.isLoading
-                          ? null
-                          : () {
-                              final topics = _topicController.text
-                                  .split(',')
-                                  .map((s) => s.trim())
-                                  .where((s) => s.isNotEmpty)
-                                  .toList();
-                              ref.read(languageLearningProvider.notifier).generateVocabulary(
-                                    topics: topics,
-                                    language: vocabState.language,
-                                  );
-                            },
-                      icon: vocabState.isLoading
-                          ? const SizedBox(
-                              width: 16,
-                              height: 16,
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            )
-                          : const Icon(Icons.school),
-                      label: Text(vocabState.isLoading ? 'Generating...' : 'Generate Vocab'),
+                      onPressed:
+                          vocabState.isLoading
+                              ? null
+                              : () {
+                                final topics =
+                                    _topicController.text
+                                        .split(',')
+                                        .map((s) => s.trim())
+                                        .where((s) => s.isNotEmpty)
+                                        .toList();
+                                ref
+                                    .read(languageLearningProvider.notifier)
+                                    .generateVocabulary(
+                                      topics: topics,
+                                      language: vocabState.language,
+                                    );
+                              },
+                      icon:
+                          vocabState.isLoading
+                              ? const SizedBox(
+                                width: 16,
+                                height: 16,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
+                              : const Icon(Icons.school),
+                      label: Text(
+                        vocabState.isLoading
+                            ? 'Generating...'
+                            : 'Generate Vocab',
+                      ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: InhaleColors.electricBlue,
                         foregroundColor: Colors.white,
@@ -868,22 +987,32 @@ class _LanguageLearningScreenState
                       ),
                     ),
                     ElevatedButton.icon(
-                      onPressed: vocabState.isLoading
-                          ? null
-                          : () {
-                              ref.read(languageLearningProvider.notifier).generateSentences(
-                                    level: _selectedLevel,
-                                    language: vocabState.language,
-                                  );
-                            },
-                      icon: vocabState.isLoading
-                          ? const SizedBox(
-                              width: 16,
-                              height: 16,
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            )
-                          : const Icon(Icons.format_quote_rounded),
-                      label: Text(vocabState.isLoading ? 'Generating...' : 'Generate Sentences'),
+                      onPressed:
+                          vocabState.isLoading
+                              ? null
+                              : () {
+                                ref
+                                    .read(languageLearningProvider.notifier)
+                                    .generateSentences(
+                                      level: _selectedLevel,
+                                      language: vocabState.language,
+                                    );
+                              },
+                      icon:
+                          vocabState.isLoading
+                              ? const SizedBox(
+                                width: 16,
+                                height: 16,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
+                              : const Icon(Icons.format_quote_rounded),
+                      label: Text(
+                        vocabState.isLoading
+                            ? 'Generating...'
+                            : 'Generate Sentences',
+                      ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: InhaleColors.success,
                         foregroundColor: Colors.white,
@@ -916,60 +1045,77 @@ class _LanguageLearningScreenState
               ),
             )
           else if (vocabState.items.isNotEmpty)
-            ...vocabState.items.map((item) => Padding(
-                  padding: EdgeInsets.only(bottom: InhaleSpacing.sm),
-                  child: GlassCard(
-                    padding: const EdgeInsets.all(InhaleSpacing.md),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+            ...vocabState.items.map(
+              (item) => Padding(
+                padding: EdgeInsets.only(bottom: InhaleSpacing.sm),
+                child: GlassCard(
+                  padding: const EdgeInsets.all(InhaleSpacing.md),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        item.word,
+                        style: InhaleTypography.titleMedium.copyWith(
+                          color:
+                              isDark
+                                  ? InhaleColors.textPrimary
+                                  : InhaleColors.lightNavyText,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      if (item.pronunciation != null) ...[
+                        const SizedBox(height: InhaleSpacing.xs),
                         Text(
-                          item.word,
-                          style: InhaleTypography.titleMedium.copyWith(
-                            color: isDark ? InhaleColors.textPrimary : InhaleColors.lightNavyText,
-                            fontWeight: FontWeight.bold,
+                          item.pronunciation!,
+                          style: InhaleTypography.bodySmall.copyWith(
+                            color:
+                                isDark
+                                    ? InhaleColors.textMuted
+                                    : InhaleColors.lightTextMuted,
+                            fontStyle: FontStyle.italic,
                           ),
                         ),
-                        if (item.pronunciation != null) ...[
-                          const SizedBox(height: InhaleSpacing.xs),
-                          Text(
-                            item.pronunciation!,
+                      ],
+                      const SizedBox(height: InhaleSpacing.xs),
+                      Text(
+                        item.definition,
+                        style: InhaleTypography.bodyMedium.copyWith(
+                          color:
+                              isDark
+                                  ? InhaleColors.textSecondary
+                                  : InhaleColors.lightTextSecondary,
+                        ),
+                      ),
+                      if (item.example.isNotEmpty) ...[
+                        const SizedBox(height: InhaleSpacing.xs),
+                        Container(
+                          padding: EdgeInsets.all(InhaleSpacing.xs),
+                          decoration: BoxDecoration(
+                            color:
+                                isDark
+                                    ? InhaleColors.glassGrey
+                                    : InhaleColors.lightSurface,
+                            borderRadius: BorderRadius.circular(
+                              InhaleRadius.xs,
+                            ),
+                          ),
+                          child: Text(
+                            item.example,
                             style: InhaleTypography.bodySmall.copyWith(
-                              color: isDark ? InhaleColors.textMuted : InhaleColors.lightTextMuted,
+                              color:
+                                  isDark
+                                      ? InhaleColors.textPrimary
+                                      : InhaleColors.lightNavyText,
                               fontStyle: FontStyle.italic,
                             ),
                           ),
-                        ],
-                        const SizedBox(height: InhaleSpacing.xs),
-                        Text(
-                          item.definition,
-                          style: InhaleTypography.bodyMedium.copyWith(
-                            color: isDark ? InhaleColors.textSecondary : InhaleColors.lightTextSecondary,
-                          ),
                         ),
-                        if (item.example.isNotEmpty) ...[
-                          const SizedBox(height: InhaleSpacing.xs),
-                          Container(
-                            padding: EdgeInsets.all(InhaleSpacing.xs),
-                            decoration: BoxDecoration(
-                              color: isDark
-                                  ? InhaleColors.glassGrey
-                                  : InhaleColors.lightSurface,
-                              borderRadius: BorderRadius.circular(InhaleRadius.xs),
-                            ),
-                            child: Text(
-                              item.example,
-                              style: InhaleTypography.bodySmall.copyWith(
-                                color: isDark ? InhaleColors.textPrimary : InhaleColors.lightNavyText,
-                                fontStyle: FontStyle.italic,
-                              ),
-                            ),
-                          ),
-                        ],
                       ],
-                    ),
+                    ],
                   ),
-                )),
+                ),
+              ),
+            ),
         ],
       ),
     );

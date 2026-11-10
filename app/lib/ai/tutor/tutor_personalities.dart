@@ -41,25 +41,25 @@ sealed class ResponseMode {
 
   /// Standard balanced response
   static const balanced = _Balanced();
-  
+
   /// Simplified explanation for beginners
   static const explainSimply = _ExplainSimply();
-  
+
   /// Step-by-step guided solution
   static const stepByStep = _StepByStep();
-  
+
   /// Socratic questioning method
   static const socratic = _Socratic();
-  
+
   /// Practice problems generator
   static const practiceProblems = _PracticeProblems();
-  
+
   /// Exam-focused preparation
   static const examPrep = _ExamPrep();
-  
+
   /// Code-focused with explanations
   static const codeTutor = _CodeTutor();
-  
+
   static const List<ResponseMode> values = [
     balanced,
     explainSimply,
@@ -72,66 +72,79 @@ sealed class ResponseMode {
 }
 
 class _Balanced extends ResponseMode {
-  const _Balanced() : super(
-    id: 'balanced',
-    label: 'Balanced',
-    description: 'Clear, comprehensive answer with examples',
-    promptModifier: '',
-  );
+  const _Balanced()
+    : super(
+        id: 'balanced',
+        label: 'Balanced',
+        description: 'Clear, comprehensive answer with examples',
+        promptModifier: '',
+      );
 }
 
 class _ExplainSimply extends ResponseMode {
-  const _ExplainSimply() : super(
-    id: 'explain_simply',
-    label: 'Explain Simply',
-    description: 'Break down complex concepts with analogies',
-    promptModifier: '\n\nExplain this as if teaching a curious 12-year-old. Use simple language, analogies, and avoid jargon.',
-  );
+  const _ExplainSimply()
+    : super(
+        id: 'explain_simply',
+        label: 'Explain Simply',
+        description: 'Break down complex concepts with analogies',
+        promptModifier:
+            '\n\nExplain this as if teaching a curious 12-year-old. Use simple language, analogies, and avoid jargon.',
+      );
 }
 
 class _StepByStep extends ResponseMode {
-  const _StepByStep() : super(
-    id: 'step_by_step',
-    label: 'Step-by-Step',
-    description: 'Guided solution with numbered steps and checkpoints',
-    promptModifier: '\n\nProvide a clear step-by-step solution. Number each step. Include checkpoints where the learner can verify understanding.',
-  );
+  const _StepByStep()
+    : super(
+        id: 'step_by_step',
+        label: 'Step-by-Step',
+        description: 'Guided solution with numbered steps and checkpoints',
+        promptModifier:
+            '\n\nProvide a clear step-by-step solution. Number each step. Include checkpoints where the learner can verify understanding.',
+      );
 }
 
 class _Socratic extends ResponseMode {
-  const _Socratic() : super(
-    id: 'socratic',
-    label: 'Socratic Method',
-    description: 'Guide with questions instead of direct answers',
-    promptModifier: '\n\nDo NOT give the direct answer. Instead, ask guiding questions that help the learner discover the answer themselves. Start with simpler questions and progress.',
-  );
+  const _Socratic()
+    : super(
+        id: 'socratic',
+        label: 'Socratic Method',
+        description: 'Guide with questions instead of direct answers',
+        promptModifier:
+            '\n\nDo NOT give the direct answer. Instead, ask guiding questions that help the learner discover the answer themselves. Start with simpler questions and progress.',
+      );
 }
 
 class _PracticeProblems extends ResponseMode {
-  const _PracticeProblems() : super(
-    id: 'practice_problems',
-    label: 'Practice Problems',
-    description: 'Generate similar problems for practice',
-    promptModifier: '\n\nAfter explaining, generate 3 similar practice problems with increasing difficulty. Provide hints but not full solutions.',
-  );
+  const _PracticeProblems()
+    : super(
+        id: 'practice_problems',
+        label: 'Practice Problems',
+        description: 'Generate similar problems for practice',
+        promptModifier:
+            '\n\nAfter explaining, generate 3 similar practice problems with increasing difficulty. Provide hints but not full solutions.',
+      );
 }
 
 class _ExamPrep extends ResponseMode {
-  const _ExamPrep() : super(
-    id: 'exam_prep',
-    label: 'Exam Prep',
-    description: 'Concise, high-yield format for exam review',
-    promptModifier: '\n\nFormat as exam review notes: key concepts, formulas, common pitfalls, and 1-2 example questions with solutions.',
-  );
+  const _ExamPrep()
+    : super(
+        id: 'exam_prep',
+        label: 'Exam Prep',
+        description: 'Concise, high-yield format for exam review',
+        promptModifier:
+            '\n\nFormat as exam review notes: key concepts, formulas, common pitfalls, and 1-2 example questions with solutions.',
+      );
 }
 
 class _CodeTutor extends ResponseMode {
-  const _CodeTutor() : super(
-    id: 'code_tutor',
-    label: 'Code Tutor',
-    description: 'Explain code line-by-line with best practices',
-    promptModifier: '\n\nExplain the code line-by-line. Highlight best practices, potential bugs, time/space complexity, and alternative approaches.',
-  );
+  const _CodeTutor()
+    : super(
+        id: 'code_tutor',
+        label: 'Code Tutor',
+        description: 'Explain code line-by-line with best practices',
+        promptModifier:
+            '\n\nExplain the code line-by-line. Highlight best practices, potential bugs, time/space complexity, and alternative approaches.',
+      );
 }
 
 /// Tutor personalities mapped to app modes.
@@ -140,7 +153,8 @@ final Map<String, TutorPersonality> tutorPersonalities = {
     id: 'general_tutor',
     name: 'General Tutor',
     description: 'Helpful assistant for any topic',
-    systemPrompt: '''You are an expert tutor and learning companion. Your goal is to help the user understand concepts deeply, not just provide answers.
+    systemPrompt:
+        '''You are an expert tutor and learning companion. Your goal is to help the user understand concepts deeply, not just provide answers.
 
 TEACHING PRINCIPLES:
 - Adapt your explanation level to the user's apparent knowledge
@@ -167,7 +181,8 @@ RESPONSE STYLE:
     id: 'school_tutor',
     name: 'School Tutor (Grades 1-10)',
     description: 'Curriculum-aligned tutor for K-10 subjects',
-    systemPrompt: '''You are a friendly, patient tutor for school students (Grades 1-10). You teach: Mathematics, Science, English, Social Studies, and Languages.
+    systemPrompt:
+        '''You are a friendly, patient tutor for school students (Grades 1-10). You teach: Mathematics, Science, English, Social Studies, and Languages.
 
 TEACHING APPROACH:
 - Align with standard curriculum (CBSE/ICSE/State boards)
@@ -202,7 +217,8 @@ SAFETY:
     id: 'college_tutor',
     name: 'College Tutor (Undergrad)',
     description: 'University-level tutor for STEM, Humanities, Commerce',
-    systemPrompt: '''You are a university-level teaching assistant. You support: Engineering, Computer Science, Sciences, Commerce, Humanities.
+    systemPrompt:
+        '''You are a university-level teaching assistant. You support: Engineering, Computer Science, Sciences, Commerce, Humanities.
 
 TEACHING APPROACH:
 - Assume foundational knowledge but fill gaps when needed
@@ -238,7 +254,8 @@ FOR ESSAYS/WRITING:
     id: 'coding_tutor',
     name: 'Code Mentor',
     description: 'Programming tutor: algorithms, debugging, best practices',
-    systemPrompt: '''You are an experienced software engineer mentoring a developer. Languages: Python, JavaScript/TypeScript, Java, C++, Go, Rust, Dart/Flutter.
+    systemPrompt:
+        '''You are an experienced software engineer mentoring a developer. Languages: Python, JavaScript/TypeScript, Java, C++, Go, Rust, Dart/Flutter.
 
 MENTORING PHILOSOPHY:
 - Teach problem-solving, not just syntax
@@ -278,7 +295,8 @@ DEBUGGING:
     id: 'math_tutor',
     name: 'Math Tutor',
     description: 'Mathematics tutor: arithmetic to advanced calculus',
-    systemPrompt: '''You are a mathematics tutor covering: Arithmetic, Algebra, Geometry, Trigonometry, Calculus, Linear Algebra, Statistics, Discrete Math.
+    systemPrompt:
+        '''You are a mathematics tutor covering: Arithmetic, Algebra, Geometry, Trigonometry, Calculus, Linear Algebra, Statistics, Discrete Math.
 
 MATHEMATICAL PEDAGOGY:
 - Definitions first, then theorems, then applications
@@ -314,7 +332,8 @@ COMMON PITFALLS TO ADDRESS:
     id: 'writing_tutor',
     name: 'Writing Coach',
     description: 'Essay, creative, professional, and academic writing',
-    systemPrompt: '''You are a writing coach for: Essays, Creative Writing, Professional Communication, Academic Papers, Resumes/Cover Letters.
+    systemPrompt:
+        '''You are a writing coach for: Essays, Creative Writing, Professional Communication, Academic Papers, Resumes/Cover Letters.
 
 COACHING APPROACH:
 - Analyze: purpose, audience, tone, structure
@@ -350,7 +369,8 @@ PROFESSIONAL:
     id: 'translation_tutor',
     name: 'Language Tutor',
     description: 'Translation, grammar, vocabulary, conversation practice',
-    systemPrompt: '''You are a language learning tutor. Support: Translation, Grammar, Vocabulary, Conversation Practice, Cultural Context.
+    systemPrompt:
+        '''You are a language learning tutor. Support: Translation, Grammar, Vocabulary, Conversation Practice, Cultural Context.
 
 LANGUAGE PEDAGOGY:
 - Comprehensible input: slightly above current level (i+1)
@@ -386,7 +406,8 @@ CONVERSATION:
     id: 'vision_tutor',
     name: 'Visual Learning Tutor',
     description: 'Image analysis, diagram explanation, visual problem solving',
-    systemPrompt: '''You are a tutor specializing in visual learning. You analyze images, diagrams, charts, handwritten notes, and visual problems.
+    systemPrompt:
+        '''You are a tutor specializing in visual learning. You analyze images, diagrams, charts, handwritten notes, and visual problems.
 
 VISUAL ANALYSIS APPROACH:
 - Describe what you see systematically (type, components, relationships)
@@ -415,7 +436,8 @@ final TutorPersonality defaultTutorPersonality = TutorPersonality(
   id: 'default',
   name: 'AI Tutor',
   description: 'General purpose learning assistant',
-  systemPrompt: '''You are a helpful AI tutor. Explain concepts clearly, use examples, and guide the learner to understanding.''',
+  systemPrompt:
+      '''You are a helpful AI tutor. Explain concepts clearly, use examples, and guide the learner to understanding.''',
   generationParams: {'temperature': 0.7, 'topP': 0.9},
   suggestedFollowUps: [
     'Can you explain that differently?',
@@ -444,7 +466,11 @@ List<ResponseMode> getAvailableResponseModes(String mode) {
     case 'coding':
       return [...baseModes, ResponseMode.codeTutor];
     case 'math':
-      return [...baseModes, ResponseMode.examPrep, ResponseMode.practiceProblems];
+      return [
+        ...baseModes,
+        ResponseMode.examPrep,
+        ResponseMode.practiceProblems,
+      ];
     case 'writing':
       return [...baseModes, ResponseMode.examPrep];
     default:

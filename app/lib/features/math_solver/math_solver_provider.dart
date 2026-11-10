@@ -39,18 +39,17 @@ class MathSolverState {
     bool? isProcessing,
     String? error,
     List<MathSolverHistoryEntry>? history,
-  }) =>
-      MathSolverState(
-        image: image ?? this.image,
-        imageBytes: imageBytes ?? this.imageBytes,
-        recognizedExpression: recognizedExpression ?? this.recognizedExpression,
-        solution: solution ?? this.solution,
-        steps: steps ?? this.steps,
-        answer: answer ?? this.answer,
-        isProcessing: isProcessing ?? this.isProcessing,
-        error: error ?? this.error,
-        history: history ?? this.history,
-      );
+  }) => MathSolverState(
+    image: image ?? this.image,
+    imageBytes: imageBytes ?? this.imageBytes,
+    recognizedExpression: recognizedExpression ?? this.recognizedExpression,
+    solution: solution ?? this.solution,
+    steps: steps ?? this.steps,
+    answer: answer ?? this.answer,
+    isProcessing: isProcessing ?? this.isProcessing,
+    error: error ?? this.error,
+    history: history ?? this.history,
+  );
 }
 
 class MathSolverHistoryEntry {
@@ -71,8 +70,8 @@ class MathSolverHistoryEntry {
 
 final mathSolverProvider =
     StateNotifierProvider<MathSolverNotifier, MathSolverState>(
-  (ref) => MathSolverNotifier(ref.watch(aiEngineProvider)),
-);
+      (ref) => MathSolverNotifier(ref.watch(aiEngineProvider)),
+    );
 
 class MathSolverNotifier extends StateNotifier<MathSolverState> {
   final AIEngine _aiEngine;
@@ -277,12 +276,12 @@ Please solve this step by step with clear explanations.
     // TODO: Implement actual vision inference with a multimodal model
     // For now, return a placeholder that prompts the user
     // This simulates what would happen with a vision-capable model
-    
+
     // In production, this would:
     // 1. Encode the image bytes appropriately
     // 2. Send to a vision model (LLaVA, Qwen2.5-VL, etc.)
     // 3. Parse the model's response for the recognized expression
-    
+
     return 'Please edit this to match the expression in your image';
   }
 
@@ -298,19 +297,23 @@ Please solve this step by step with clear explanations.
     };
 
     // Try to extract ANSWER: line
-    final answerMatch = RegExp(r'ANSWER:\s*(.+)', multiLine: true)
-        .firstMatch(response);
+    final answerMatch = RegExp(
+      r'ANSWER:\s*(.+)',
+      multiLine: true,
+    ).firstMatch(response);
     if (answerMatch != null) {
       result['answer'] = answerMatch.group(1)?.trim();
     }
 
     // Try to extract STEPS section
-    final stepsMatch = RegExp(r'STEPS:\s*([\s\S]+?)(?:\n\n|\$|$)', multiLine: true)
-        .firstMatch(response);
+    final stepsMatch = RegExp(
+      r'STEPS:\s*([\s\S]+?)(?:\n\n|\$|$)',
+      multiLine: true,
+    ).firstMatch(response);
     if (stepsMatch != null) {
       final stepsText = stepsMatch.group(1)?.trim() ?? '';
       final steps = <String>[];
-      
+
       // Parse numbered steps
       final stepLines = stepsText.split('\n');
       for (var line in stepLines) {
@@ -321,7 +324,7 @@ Please solve this step by step with clear explanations.
           steps.add(line);
         }
       }
-      
+
       if (steps.isNotEmpty) {
         result['steps'] = steps;
       }

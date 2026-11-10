@@ -151,7 +151,8 @@ class Chapters extends Table {
   @override
   String get tableName => 'chapters';
   IntColumn get id => integer().autoIncrement()();
-  IntColumn get subjectId => integer().references(Subjects, #id, onDelete: KeyAction.cascade)();
+  IntColumn get subjectId =>
+      integer().references(Subjects, #id, onDelete: KeyAction.cascade)();
   TextColumn get name => text()();
   TextColumn get description => text().nullable()();
   IntColumn get orderIndex => integer().withDefault(const Constant(0))();
@@ -161,9 +162,13 @@ class Chapters extends Table {
   DateTimeColumn get updatedAt => dateTime()();
 
   @override
-  List<Index> get indexes => {
-    Index('idx_chapters_subject', 'CREATE INDEX idx_chapters_subject ON chapters(subject_id)'),
-  }.toList();
+  List<Index> get indexes =>
+      {
+        Index(
+          'idx_chapters_subject',
+          'CREATE INDEX idx_chapters_subject ON chapters(subject_id)',
+        ),
+      }.toList();
 }
 
 /// Topics within chapters (granular learning units).
@@ -171,20 +176,27 @@ class Topics extends Table {
   @override
   String get tableName => 'topics';
   IntColumn get id => integer().autoIncrement()();
-  IntColumn get chapterId => integer().references(Chapters, #id, onDelete: KeyAction.cascade)();
+  IntColumn get chapterId =>
+      integer().references(Chapters, #id, onDelete: KeyAction.cascade)();
   TextColumn get name => text()();
   TextColumn get description => text().nullable()();
-  TextColumn get difficulty => text().nullable()(); // 'beginner', 'intermediate', 'advanced'
+  TextColumn get difficulty =>
+      text().nullable()(); // 'beginner', 'intermediate', 'advanced'
   IntColumn get orderIndex => integer().withDefault(const Constant(0))();
   IntColumn get estimatedMinutes => integer().nullable()();
-  TextColumn get prerequisites => text().nullable()(); // JSON array of topic IDs
+  TextColumn get prerequisites =>
+      text().nullable()(); // JSON array of topic IDs
   DateTimeColumn get createdAt => dateTime()();
   DateTimeColumn get updatedAt => dateTime()();
 
   @override
-  List<Index> get indexes => {
-    Index('idx_topics_chapter', 'CREATE INDEX idx_topics_chapter ON topics(chapter_id)'),
-  }.toList();
+  List<Index> get indexes =>
+      {
+        Index(
+          'idx_topics_chapter',
+          'CREATE INDEX idx_topics_chapter ON topics(chapter_id)',
+        ),
+      }.toList();
 }
 
 /// Unified learning resources (documents, videos, links, notes) linked to topics.
@@ -192,10 +204,17 @@ class LearningResources extends Table {
   @override
   String get tableName => 'learning_resources';
   IntColumn get id => integer().autoIncrement()();
-  IntColumn get topicId => integer().references(Topics, #id, onDelete: KeyAction.cascade).nullable()();
-  IntColumn get subjectId => integer().references(Subjects, #id, onDelete: KeyAction.cascade).nullable()();
+  IntColumn get topicId =>
+      integer()
+          .references(Topics, #id, onDelete: KeyAction.cascade)
+          .nullable()();
+  IntColumn get subjectId =>
+      integer()
+          .references(Subjects, #id, onDelete: KeyAction.cascade)
+          .nullable()();
   TextColumn get title => text()();
-  TextColumn get type => text()(); // 'document', 'video', 'link', 'note', 'quiz', 'flashcard_set'
+  TextColumn get type =>
+      text()(); // 'document', 'video', 'link', 'note', 'quiz', 'flashcard_set'
   TextColumn get sourceUrl => text().nullable()();
   TextColumn get localPath => text().nullable()();
   TextColumn get description => text().nullable()();
@@ -206,9 +225,13 @@ class LearningResources extends Table {
   DateTimeColumn get createdAt => dateTime()();
   DateTimeColumn get updatedAt => dateTime()();
   @override
-  List<Index> get indexes => {
-    Index('idx_learning_resources_topic', 'CREATE INDEX idx_learning_resources_topic ON learning_resources(topic_id)'),
-  }.toList();
+  List<Index> get indexes =>
+      {
+        Index(
+          'idx_learning_resources_topic',
+          'CREATE INDEX idx_learning_resources_topic ON learning_resources(topic_id)',
+        ),
+      }.toList();
 }
 
 /// Flashcard decks (collections of flashcards).
@@ -218,9 +241,16 @@ class FlashcardDecks extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get name => text()();
   TextColumn get description => text().nullable()();
-  IntColumn get subjectId => integer().references(Subjects, #id, onDelete: KeyAction.setNull).nullable()();
-  IntColumn get topicId => integer().references(Topics, #id, onDelete: KeyAction.setNull).nullable()();
-  TextColumn get sourceDocumentId => text().nullable()(); // Link to Documents table
+  IntColumn get subjectId =>
+      integer()
+          .references(Subjects, #id, onDelete: KeyAction.setNull)
+          .nullable()();
+  IntColumn get topicId =>
+      integer()
+          .references(Topics, #id, onDelete: KeyAction.setNull)
+          .nullable()();
+  TextColumn get sourceDocumentId =>
+      text().nullable()(); // Link to Documents table
   IntColumn get cardCount => integer().withDefault(const Constant(0))();
   BoolColumn get isPublic => boolean().withDefault(const Constant(false))();
   DateTimeColumn get createdAt => dateTime()();
@@ -232,15 +262,18 @@ class Flashcards extends Table {
   @override
   String get tableName => 'flashcards';
   IntColumn get id => integer().autoIncrement()();
-  IntColumn get deckId => integer().references(FlashcardDecks, #id, onDelete: KeyAction.cascade)();
+  IntColumn get deckId =>
+      integer().references(FlashcardDecks, #id, onDelete: KeyAction.cascade)();
   TextColumn get front => text()(); // Question/prompt
   TextColumn get back => text()(); // Answer
   TextColumn get hint => text().nullable()();
   TextColumn get tags => text().nullable()(); // JSON array
-  TextColumn get sourceChunkId => text().nullable()(); // Citation link to RAG chunk
+  TextColumn get sourceChunkId =>
+      text().nullable()(); // Citation link to RAG chunk
   // FSRS fields
   RealColumn get stability => real().withDefault(const Constant(0.0))(); // Days
-  RealColumn get difficulty => real().withDefault(const Constant(0.0))(); // 0-10
+  RealColumn get difficulty =>
+      real().withDefault(const Constant(0.0))(); // 0-10
   IntColumn get elapsedDays => integer().withDefault(const Constant(0))();
   IntColumn get scheduledDays => integer().withDefault(const Constant(0))();
   DateTimeColumn get dueDate => dateTime().nullable()();
@@ -251,10 +284,17 @@ class Flashcards extends Table {
   DateTimeColumn get updatedAt => dateTime()();
 
   @override
-  List<Index> get indexes => {
-    Index('idx_flashcards_deck_due', 'CREATE INDEX idx_flashcards_deck_due ON flashcards(deck_id, due_date)'),
-    Index('idx_flashcards_due', 'CREATE INDEX idx_flashcards_due ON flashcards(due_date)'),
-  }.toList();
+  List<Index> get indexes =>
+      {
+        Index(
+          'idx_flashcards_deck_due',
+          'CREATE INDEX idx_flashcards_deck_due ON flashcards(deck_id, due_date)',
+        ),
+        Index(
+          'idx_flashcards_due',
+          'CREATE INDEX idx_flashcards_due ON flashcards(due_date)',
+        ),
+      }.toList();
 }
 
 /// Flashcard review history for FSRS algorithm.
@@ -262,7 +302,8 @@ class FlashcardReviews extends Table {
   @override
   String get tableName => 'flashcard_reviews';
   IntColumn get id => integer().autoIncrement()();
-  IntColumn get flashcardId => integer().references(Flashcards, #id, onDelete: KeyAction.cascade)();
+  IntColumn get flashcardId =>
+      integer().references(Flashcards, #id, onDelete: KeyAction.cascade)();
   IntColumn get rating => integer()(); // 1=Again, 2=Hard, 3=Good, 4=Easy
   RealColumn get stabilityBefore => real()();
   RealColumn get difficultyBefore => real()();
@@ -284,7 +325,8 @@ class StudyPlans extends Table {
   DateTimeColumn get endDate => dateTime()();
   TextColumn get goals => text().nullable()(); // JSON array of goal strings
   IntColumn get targetHoursPerWeek => integer().nullable()();
-  TextColumn get scheduleConfig => text().nullable()(); // JSON: preferred days, hours, break config
+  TextColumn get scheduleConfig =>
+      text().nullable()(); // JSON: preferred days, hours, break config
   BoolColumn get isActive => boolean().withDefault(const Constant(true))();
   DateTimeColumn get createdAt => dateTime()();
   DateTimeColumn get updatedAt => dateTime()();
@@ -295,11 +337,19 @@ class StudyPlanItems extends Table {
   @override
   String get tableName => 'study_plan_items';
   IntColumn get id => integer().autoIncrement()();
-  IntColumn get planId => integer().references(StudyPlans, #id, onDelete: KeyAction.cascade)();
-  IntColumn get topicId => integer().references(Topics, #id, onDelete: KeyAction.cascade).nullable()();
-  IntColumn get resourceId => integer().references(LearningResources, #id, onDelete: KeyAction.setNull).nullable()();
+  IntColumn get planId =>
+      integer().references(StudyPlans, #id, onDelete: KeyAction.cascade)();
+  IntColumn get topicId =>
+      integer()
+          .references(Topics, #id, onDelete: KeyAction.cascade)
+          .nullable()();
+  IntColumn get resourceId =>
+      integer()
+          .references(LearningResources, #id, onDelete: KeyAction.setNull)
+          .nullable()();
   TextColumn get title => text()();
-  TextColumn get type => text()(); // 'read', 'video', 'quiz', 'flashcard', 'practice', 'review'
+  TextColumn get type =>
+      text()(); // 'read', 'video', 'quiz', 'flashcard', 'practice', 'review'
   IntColumn get estimatedMinutes => integer()();
   IntColumn get orderIndex => integer().withDefault(const Constant(0))();
   DateTimeColumn get scheduledDate => dateTime().nullable()();
@@ -308,9 +358,13 @@ class StudyPlanItems extends Table {
   DateTimeColumn get createdAt => dateTime()();
 
   @override
-  List<Index> get indexes => {
-    Index('idx_study_plan_items_plan', 'CREATE INDEX idx_study_plan_items_plan ON study_plan_items(plan_id)'),
-  }.toList();
+  List<Index> get indexes =>
+      {
+        Index(
+          'idx_study_plan_items_plan',
+          'CREATE INDEX idx_study_plan_items_plan ON study_plan_items(plan_id)',
+        ),
+      }.toList();
 }
 
 /// Study sessions (actual study time tracking).
@@ -318,10 +372,20 @@ class StudySessions extends Table {
   @override
   String get tableName => 'study_sessions';
   IntColumn get id => integer().autoIncrement()();
-  IntColumn get planId => integer().references(StudyPlans, #id, onDelete: KeyAction.setNull).nullable()();
-  IntColumn get planItemId => integer().references(StudyPlanItems, #id, onDelete: KeyAction.setNull).nullable()();
-  IntColumn get topicId => integer().references(Topics, #id, onDelete: KeyAction.setNull).nullable()();
-  TextColumn get activityType => text()(); // 'reading', 'video', 'quiz', 'flashcard', 'practice', 'review'
+  IntColumn get planId =>
+      integer()
+          .references(StudyPlans, #id, onDelete: KeyAction.setNull)
+          .nullable()();
+  IntColumn get planItemId =>
+      integer()
+          .references(StudyPlanItems, #id, onDelete: KeyAction.setNull)
+          .nullable()();
+  IntColumn get topicId =>
+      integer()
+          .references(Topics, #id, onDelete: KeyAction.setNull)
+          .nullable()();
+  TextColumn get activityType =>
+      text()(); // 'reading', 'video', 'quiz', 'flashcard', 'practice', 'review'
   IntColumn get durationMinutes => integer()();
   IntColumn get focusScore => integer().nullable()(); // 1-10 self-rated focus
   TextColumn get notes => text().nullable()();
@@ -329,9 +393,13 @@ class StudySessions extends Table {
   DateTimeColumn get endedAt => dateTime()();
 
   @override
-  List<Index> get indexes => {
-    Index('idx_study_sessions_date', 'CREATE INDEX idx_study_sessions_date ON study_sessions(started_at)'),
-  }.toList();
+  List<Index> get indexes =>
+      {
+        Index(
+          'idx_study_sessions_date',
+          'CREATE INDEX idx_study_sessions_date ON study_sessions(started_at)',
+        ),
+      }.toList();
 }
 
 /// Exam schedules and configuration.
@@ -341,10 +409,13 @@ class ExamSchedules extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get name => text()();
   TextColumn get subject => text().nullable()();
-  TextColumn get examType => text().nullable()(); // 'midterm', 'final', 'quiz', 'certification', 'custom'
+  TextColumn get examType =>
+      text()
+          .nullable()(); // 'midterm', 'final', 'quiz', 'certification', 'custom'
   DateTimeColumn get examDate => dateTime()();
   IntColumn get durationMinutes => integer().nullable()();
-  TextColumn get topicsCovered => text().nullable()(); // JSON array of topic IDs
+  TextColumn get topicsCovered =>
+      text().nullable()(); // JSON array of topic IDs
   TextColumn get resources => text().nullable()(); // JSON array of resource IDs
   IntColumn get targetScore => integer().nullable()(); // Percentage
   TextColumn get notes => text().nullable()();
@@ -359,12 +430,17 @@ class Achievements extends Table {
   @override
   String get tableName => 'achievements';
   IntColumn get id => integer().autoIncrement()();
-  TextColumn get key => text()(); // Unique identifier: 'streak_7', 'quiz_master_100', etc.
+  TextColumn get key =>
+      text()(); // Unique identifier: 'streak_7', 'quiz_master_100', etc.
   TextColumn get name => text()();
   TextColumn get description => text()();
   TextColumn get icon => text().nullable()();
-  TextColumn get category => text()(); // 'streak', 'quiz', 'flashcard', 'study_time', 'completion', 'social'
-  IntColumn get tier => integer().withDefault(const Constant(1))(); // 1=bronze, 2=silver, 3=gold, 4=platinum
+  TextColumn get category =>
+      text()(); // 'streak', 'quiz', 'flashcard', 'study_time', 'completion', 'social'
+  IntColumn get tier =>
+      integer().withDefault(
+        const Constant(1),
+      )(); // 1=bronze, 2=silver, 3=gold, 4=platinum
   IntColumn get xpReward => integer().withDefault(const Constant(0))();
   TextColumn get criteria => text().nullable()(); // JSON: conditions to unlock
   BoolColumn get isSecret => boolean().withDefault(const Constant(false))();
@@ -376,18 +452,25 @@ class UserAchievements extends Table {
   @override
   String get tableName => 'user_achievements';
   IntColumn get id => integer().autoIncrement()();
-  IntColumn get achievementId => integer().references(Achievements, #id, onDelete: KeyAction.cascade)();
-  IntColumn get progress => integer().withDefault(const Constant(0))(); // Current progress
-  IntColumn get target => integer().withDefault(const Constant(1))(); // Target for unlock
+  IntColumn get achievementId =>
+      integer().references(Achievements, #id, onDelete: KeyAction.cascade)();
+  IntColumn get progress =>
+      integer().withDefault(const Constant(0))(); // Current progress
+  IntColumn get target =>
+      integer().withDefault(const Constant(1))(); // Target for unlock
   BoolColumn get isUnlocked => boolean().withDefault(const Constant(false))();
   DateTimeColumn get unlockedAt => dateTime().nullable()();
   DateTimeColumn get createdAt => dateTime()();
   DateTimeColumn get updatedAt => dateTime()();
 
   @override
-  List<Index> get indexes => {
-    Index('idx_user_achievements_unlocked', 'CREATE INDEX idx_user_achievements_unlocked ON user_achievements(is_unlocked)'),
-  }.toList();
+  List<Index> get indexes =>
+      {
+        Index(
+          'idx_user_achievements_unlocked',
+          'CREATE INDEX idx_user_achievements_unlocked ON user_achievements(is_unlocked)',
+        ),
+      }.toList();
 }
 
 /// Notifications and reminders.
@@ -395,7 +478,8 @@ class Notifications extends Table {
   @override
   String get tableName => 'notifications';
   IntColumn get id => integer().autoIncrement()();
-  TextColumn get type => text()(); // 'study_reminder', 'exam_approaching', 'streak_risk', 'achievement', 'review_due', 'plan_due'
+  TextColumn get type =>
+      text()(); // 'study_reminder', 'exam_approaching', 'streak_risk', 'achievement', 'review_due', 'plan_due'
   TextColumn get title => text()();
   TextColumn get body => text()();
   TextColumn get payload => text().nullable()(); // JSON: deep link data
@@ -406,9 +490,13 @@ class Notifications extends Table {
   DateTimeColumn get createdAt => dateTime()();
 
   @override
-  List<Index> get indexes => {
-    Index('idx_notifications_scheduled', 'CREATE INDEX idx_notifications_scheduled ON notifications(scheduled_for)'),
-  }.toList();
+  List<Index> get indexes =>
+      {
+        Index(
+          'idx_notifications_scheduled',
+          'CREATE INDEX idx_notifications_scheduled ON notifications(scheduled_for)',
+        ),
+      }.toList();
 }
 
 /// AI-generated recommendations.
@@ -416,22 +504,34 @@ class Recommendations extends Table {
   @override
   String get tableName => 'recommendations';
   IntColumn get id => integer().autoIncrement()();
-  TextColumn get type => text()(); // 'topic', 'resource', 'quiz', 'flashcard', 'review', 'schedule'
+  TextColumn get type =>
+      text()(); // 'topic', 'resource', 'quiz', 'flashcard', 'review', 'schedule'
   TextColumn get title => text()();
   TextColumn get description => text()();
   TextColumn get reason => text()(); // Why this was recommended
-  IntColumn get priority => integer().withDefault(const Constant(1))(); // 1=high, 2=medium, 3=low
-  IntColumn get topicId => integer().references(Topics, #id, onDelete: KeyAction.setNull).nullable()();
-  IntColumn get resourceId => integer().references(LearningResources, #id, onDelete: KeyAction.setNull).nullable()();
+  IntColumn get priority =>
+      integer().withDefault(const Constant(1))(); // 1=high, 2=medium, 3=low
+  IntColumn get topicId =>
+      integer()
+          .references(Topics, #id, onDelete: KeyAction.setNull)
+          .nullable()();
+  IntColumn get resourceId =>
+      integer()
+          .references(LearningResources, #id, onDelete: KeyAction.setNull)
+          .nullable()();
   BoolColumn get isDismissed => boolean().withDefault(const Constant(false))();
   BoolColumn get isAccepted => boolean().withDefault(const Constant(false))();
   DateTimeColumn get expiresAt => dateTime().nullable()();
   DateTimeColumn get createdAt => dateTime()();
 
   @override
-  List<Index> get indexes => {
-    Index('idx_recommendations_topic', 'CREATE INDEX idx_recommendations_topic ON recommendations(topic_id)'),
-  }.toList();
+  List<Index> get indexes =>
+      {
+        Index(
+          'idx_recommendations_topic',
+          'CREATE INDEX idx_recommendations_topic ON recommendations(topic_id)',
+        ),
+      }.toList();
 }
 
 /// Mind maps for visual learning.
@@ -441,11 +541,20 @@ class MindMaps extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get title => text()();
   TextColumn get description => text().nullable()();
-  IntColumn get topicId => integer().references(Topics, #id, onDelete: KeyAction.setNull).nullable()();
-  IntColumn get subjectId => integer().references(Subjects, #id, onDelete: KeyAction.setNull).nullable()();
-  TextColumn get data => text()(); // JSON: nodes and edges for graph visualization
-  TextColumn get layout => text().nullable()(); // 'radial', 'hierarchical', 'force-directed'
-  BoolColumn get isAiGenerated => boolean().withDefault(const Constant(false))();
+  IntColumn get topicId =>
+      integer()
+          .references(Topics, #id, onDelete: KeyAction.setNull)
+          .nullable()();
+  IntColumn get subjectId =>
+      integer()
+          .references(Subjects, #id, onDelete: KeyAction.setNull)
+          .nullable()();
+  TextColumn get data =>
+      text()(); // JSON: nodes and edges for graph visualization
+  TextColumn get layout =>
+      text().nullable()(); // 'radial', 'hierarchical', 'force-directed'
+  BoolColumn get isAiGenerated =>
+      boolean().withDefault(const Constant(false))();
   DateTimeColumn get createdAt => dateTime()();
   DateTimeColumn get updatedAt => dateTime()();
 }
@@ -455,7 +564,12 @@ class VideoTranscripts extends Table {
   @override
   String get tableName => 'video_transcripts';
   IntColumn get id => integer().autoIncrement()();
-  IntColumn get resourceId => integer().references(LearningResources, #id, onDelete: KeyAction.cascade)();
+  IntColumn get resourceId =>
+      integer().references(
+        LearningResources,
+        #id,
+        onDelete: KeyAction.cascade,
+      )();
   TextColumn get language => text().withDefault(const Constant('en'))();
   TextColumn get fullText => text()(); // Full transcript
   TextColumn get segments => text()(); // JSON: [{start, end, text}, ...]

@@ -17,7 +17,6 @@ import '../../widgets/glass_bottom_sheet.dart';
 import '../../widgets/glass_dialog.dart';
 import 'ai_notes_provider.dart';
 
-
 /// AI Notes screen - handles both list view and edit view.
 class AINotesScreen extends ConsumerStatefulWidget {
   final int? noteId;
@@ -43,7 +42,7 @@ class _AINotesScreenState extends ConsumerState<AINotesScreen> {
   void initState() {
     super.initState();
     ref.read(aiNotesProvider.notifier).loadNotes();
-    
+
     if (widget.noteId != null) {
       _isEditing = true;
       _loadNoteForEditing();
@@ -51,7 +50,9 @@ class _AINotesScreenState extends ConsumerState<AINotesScreen> {
   }
 
   Future<void> _loadNoteForEditing() async {
-    final note = await ref.read(aiNotesProvider.notifier).loadNote(widget.noteId!);
+    final note = await ref
+        .read(aiNotesProvider.notifier)
+        .loadNote(widget.noteId!);
     if (note != null && mounted) {
       _titleController.text = note.title;
       _contentController.text = note.content;
@@ -95,20 +96,27 @@ class _AINotesScreenState extends ConsumerState<AINotesScreen> {
           GlassIconButton(
             onTap: () => _showFilterOptions(),
             icon: Icons.filter_list_rounded,
-            color: isDark ? InhaleColors.electricBlue : InhaleColors.lightPrimaryBlue,
+            color:
+                isDark
+                    ? InhaleColors.electricBlue
+                    : InhaleColors.lightPrimaryBlue,
           ),
           GlassIconButton(
             onTap: () => ref.read(aiNotesProvider.notifier).toggleSearch(),
             icon: Icons.search_rounded,
-            color: isDark ? InhaleColors.electricBlue : InhaleColors.lightPrimaryBlue,
+            color:
+                isDark
+                    ? InhaleColors.electricBlue
+                    : InhaleColors.lightPrimaryBlue,
           ),
         ],
       ),
       body: Container(
         decoration: BoxDecoration(
-          gradient: isDark
-              ? InhaleColors.gradientBackgroundDark
-              : InhaleColors.gradientBackground,
+          gradient:
+              isDark
+                  ? InhaleColors.gradientBackgroundDark
+                  : InhaleColors.gradientBackground,
         ),
         child: Column(
           children: [
@@ -119,9 +127,13 @@ class _AINotesScreenState extends ConsumerState<AINotesScreen> {
                   hintText: 'Search notes...',
                   prefixIcon: Icon(
                     Icons.search_rounded,
-                    color: isDark ? InhaleColors.textMuted : InhaleColors.lightTextMuted,
+                    color:
+                        isDark
+                            ? InhaleColors.textMuted
+                            : InhaleColors.lightTextMuted,
                   ),
-                  onChanged: (v) => ref.read(aiNotesProvider.notifier).search(v),
+                  onChanged:
+                      (v) => ref.read(aiNotesProvider.notifier).search(v),
                   onSubmitted: (_) {},
                 ),
               ),
@@ -136,12 +148,18 @@ class _AINotesScreenState extends ConsumerState<AINotesScreen> {
                     if (state.selectedFolder != null)
                       _FilterChip(
                         label: '📁 ${state.selectedFolder}',
-                        onRemove: () => ref.read(aiNotesProvider.notifier).filterByFolder(null),
+                        onRemove:
+                            () => ref
+                                .read(aiNotesProvider.notifier)
+                                .filterByFolder(null),
                       ),
                     if (state.selectedTag != null)
                       _FilterChip(
                         label: '🏷️ ${state.selectedTag}',
-                        onRemove: () => ref.read(aiNotesProvider.notifier).filterByTag(null),
+                        onRemove:
+                            () => ref
+                                .read(aiNotesProvider.notifier)
+                                .filterByTag(null),
                       ),
                     const Spacer(),
                     TextButton(
@@ -155,9 +173,10 @@ class _AINotesScreenState extends ConsumerState<AINotesScreen> {
                 ),
               ),
             Expanded(
-              child: state.isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : state.notes.isEmpty
+              child:
+                  state.isLoading
+                      ? const Center(child: CircularProgressIndicator())
+                      : state.notes.isEmpty
                       ? _buildEmptyState(isDark)
                       : _buildNotesList(state, isDark),
             ),
@@ -200,14 +219,20 @@ class _AINotesScreenState extends ConsumerState<AINotesScreen> {
             Text(
               'Generate Your First AI Note',
               style: InhaleTypography.headlineSmall.copyWith(
-                color: isDark ? InhaleColors.textPrimary : InhaleColors.lightNavyText,
+                color:
+                    isDark
+                        ? InhaleColors.textPrimary
+                        : InhaleColors.lightNavyText,
               ),
             ),
             const SizedBox(height: InhaleSpacing.sm),
             Text(
               'Create notes from topics, documents, or video transcripts using AI.',
               style: InhaleTypography.bodyMedium.copyWith(
-                color: isDark ? InhaleColors.textSecondary : InhaleColors.lightTextSecondary,
+                color:
+                    isDark
+                        ? InhaleColors.textSecondary
+                        : InhaleColors.lightTextSecondary,
               ),
               textAlign: TextAlign.center,
             ),
@@ -245,7 +270,9 @@ class _AINotesScreenState extends ConsumerState<AINotesScreen> {
                         children: [
                           if (note.isPinned)
                             Padding(
-                              padding: const EdgeInsets.only(right: InhaleSpacing.xs),
+                              padding: const EdgeInsets.only(
+                                right: InhaleSpacing.xs,
+                              ),
                               child: Icon(
                                 Icons.push_pin_rounded,
                                 size: 16,
@@ -256,7 +283,10 @@ class _AINotesScreenState extends ConsumerState<AINotesScreen> {
                             child: Text(
                               note.title,
                               style: InhaleTypography.titleSmall.copyWith(
-                                color: isDark ? InhaleColors.textPrimary : InhaleColors.lightNavyText,
+                                color:
+                                    isDark
+                                        ? InhaleColors.textPrimary
+                                        : InhaleColors.lightNavyText,
                               ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
@@ -269,9 +299,18 @@ class _AINotesScreenState extends ConsumerState<AINotesScreen> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         GlassIconButton(
-                          onTap: () => ref.read(aiNotesProvider.notifier).togglePin(note.id),
-                          icon: note.isPinned ? Icons.push_pin_rounded : Icons.push_pin_outlined,
-                          color: note.isPinned ? InhaleColors.pink : InhaleColors.textMuted,
+                          onTap:
+                              () => ref
+                                  .read(aiNotesProvider.notifier)
+                                  .togglePin(note.id),
+                          icon:
+                              note.isPinned
+                                  ? Icons.push_pin_rounded
+                                  : Icons.push_pin_outlined,
+                          color:
+                              note.isPinned
+                                  ? InhaleColors.pink
+                                  : InhaleColors.textMuted,
                           size: 36,
                         ),
                         const SizedBox(width: InhaleSpacing.xs),
@@ -289,7 +328,10 @@ class _AINotesScreenState extends ConsumerState<AINotesScreen> {
                 Text(
                   note.content,
                   style: InhaleTypography.bodySmall.copyWith(
-                    color: isDark ? InhaleColors.textSecondary : InhaleColors.lightTextSecondary,
+                    color:
+                        isDark
+                            ? InhaleColors.textSecondary
+                            : InhaleColors.lightTextSecondary,
                   ),
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
@@ -299,24 +341,37 @@ class _AINotesScreenState extends ConsumerState<AINotesScreen> {
                   Wrap(
                     spacing: 4,
                     runSpacing: 4,
-                    children: note.tags.take(5).map((tag) {
-                      return Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                        decoration: BoxDecoration(
-                          color: isDark
-                              ? InhaleColors.electricBlue.withValues(alpha: 0.2)
-                              : InhaleColors.lightPrimaryBlue.withValues(alpha: 0.15),
-                          borderRadius: BorderRadius.circular(InhaleRadius.xs),
-                        ),
-                        child: Text(
-                          tag,
-                          style: InhaleTypography.labelSmall.copyWith(
-                            color: isDark ? InhaleColors.electricBlue : InhaleColors.lightPrimaryBlue,
-                            fontSize: 10,
-                          ),
-                        ),
-                      );
-                    }).toList(),
+                    children:
+                        note.tags.take(5).map((tag) {
+                          return Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 6,
+                              vertical: 2,
+                            ),
+                            decoration: BoxDecoration(
+                              color:
+                                  isDark
+                                      ? InhaleColors.electricBlue.withValues(
+                                        alpha: 0.2,
+                                      )
+                                      : InhaleColors.lightPrimaryBlue
+                                          .withValues(alpha: 0.15),
+                              borderRadius: BorderRadius.circular(
+                                InhaleRadius.xs,
+                              ),
+                            ),
+                            child: Text(
+                              tag,
+                              style: InhaleTypography.labelSmall.copyWith(
+                                color:
+                                    isDark
+                                        ? InhaleColors.electricBlue
+                                        : InhaleColors.lightPrimaryBlue,
+                                fontSize: 10,
+                              ),
+                            ),
+                          );
+                        }).toList(),
                   ),
                 ],
                 const SizedBox(height: InhaleSpacing.xs),
@@ -369,16 +424,18 @@ class _AINotesScreenState extends ConsumerState<AINotesScreen> {
           GlassIconButton(
             onTap: () => Navigator.of(context).pop(),
             icon: Icons.close_rounded,
-            color: isDark ? InhaleColors.textMuted : InhaleColors.lightTextMuted,
+            color:
+                isDark ? InhaleColors.textMuted : InhaleColors.lightTextMuted,
             size: 40,
           ),
         ],
       ),
       body: Container(
         decoration: BoxDecoration(
-          gradient: isDark
-              ? InhaleColors.gradientBackgroundDark
-              : InhaleColors.gradientBackground,
+          gradient:
+              isDark
+                  ? InhaleColors.gradientBackgroundDark
+                  : InhaleColors.gradientBackground,
         ),
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(InhaleSpacing.md),
@@ -459,29 +516,51 @@ class _AINotesScreenState extends ConsumerState<AINotesScreen> {
 
   Future<void> _saveNote() async {
     final currentNote = ref.read(aiNotesProvider).currentNote;
-    final tags = _tagsController.text
-        .split(',')
-        .map((t) => t.trim())
-        .where((t) => t.isNotEmpty)
-        .toList();
+    final tags =
+        _tagsController.text
+            .split(',')
+            .map((t) => t.trim())
+            .where((t) => t.isNotEmpty)
+            .toList();
 
     if (currentNote != null) {
-      await ref.read(aiNotesProvider.notifier).updateNote(
+      await ref
+          .read(aiNotesProvider.notifier)
+          .updateNote(
             id: currentNote.id,
             title: _titleController.text,
             content: _contentController.text,
-            folder: _folderController.text.isEmpty ? null : _folderController.text,
-            subject: _subjectController.text.isEmpty ? null : _subjectController.text,
-            classLevel: _classLevelController.text.isEmpty ? null : _classLevelController.text,
+            folder:
+                _folderController.text.isEmpty ? null : _folderController.text,
+            subject:
+                _subjectController.text.isEmpty
+                    ? null
+                    : _subjectController.text,
+            classLevel:
+                _classLevelController.text.isEmpty
+                    ? null
+                    : _classLevelController.text,
             tags: tags,
           );
     } else {
-      await ref.read(aiNotesProvider.notifier).createNote(
-            title: _titleController.text.isEmpty ? 'Untitled Note' : _titleController.text,
+      await ref
+          .read(aiNotesProvider.notifier)
+          .createNote(
+            title:
+                _titleController.text.isEmpty
+                    ? 'Untitled Note'
+                    : _titleController.text,
             content: _contentController.text,
-            folder: _folderController.text.isEmpty ? null : _folderController.text,
-            subject: _subjectController.text.isEmpty ? null : _subjectController.text,
-            classLevel: _classLevelController.text.isEmpty ? null : _classLevelController.text,
+            folder:
+                _folderController.text.isEmpty ? null : _folderController.text,
+            subject:
+                _subjectController.text.isEmpty
+                    ? null
+                    : _subjectController.text,
+            classLevel:
+                _classLevelController.text.isEmpty
+                    ? null
+                    : _classLevelController.text,
             tags: tags,
           );
     }
@@ -528,38 +607,45 @@ class _AINotesScreenState extends ConsumerState<AINotesScreen> {
     final option = await showModalBottomSheet<String>(
       context: context,
       backgroundColor: Colors.transparent,
-      builder: (context) => GlassBottomSheet(
-        title: 'Create AI Note',
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: const Icon(Icons.lightbulb_outline_rounded),
-              title: const Text('From Topic'),
-              subtitle: const Text('Generate notes from a topic description'),
-              onTap: () => Navigator.pop(context, 'topic'),
+      builder:
+          (context) => GlassBottomSheet(
+            title: 'Create AI Note',
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.lightbulb_outline_rounded),
+                  title: const Text('From Topic'),
+                  subtitle: const Text(
+                    'Generate notes from a topic description',
+                  ),
+                  onTap: () => Navigator.pop(context, 'topic'),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.description_rounded),
+                  title: const Text('From Document'),
+                  subtitle: const Text(
+                    'Generate notes from an uploaded PDF/document',
+                  ),
+                  onTap: () => Navigator.pop(context, 'document'),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.video_library_rounded),
+                  title: const Text('From Video'),
+                  subtitle: const Text(
+                    'Generate notes from a video transcript',
+                  ),
+                  onTap: () => Navigator.pop(context, 'video'),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.edit_rounded),
+                  title: const Text('Manual Note'),
+                  subtitle: const Text('Create an empty note to edit manually'),
+                  onTap: () => Navigator.pop(context, 'manual'),
+                ),
+              ],
             ),
-            ListTile(
-              leading: const Icon(Icons.description_rounded),
-              title: const Text('From Document'),
-              subtitle: const Text('Generate notes from an uploaded PDF/document'),
-              onTap: () => Navigator.pop(context, 'document'),
-            ),
-            ListTile(
-              leading: const Icon(Icons.video_library_rounded),
-              title: const Text('From Video'),
-              subtitle: const Text('Generate notes from a video transcript'),
-              onTap: () => Navigator.pop(context, 'video'),
-            ),
-            ListTile(
-              leading: const Icon(Icons.edit_rounded),
-              title: const Text('Manual Note'),
-              subtitle: const Text('Create an empty note to edit manually'),
-              onTap: () => Navigator.pop(context, 'manual'),
-            ),
-          ],
-        ),
-      ),
+          ),
     );
 
     if (!mounted) return;
@@ -598,73 +684,84 @@ class _AINotesScreenState extends ConsumerState<AINotesScreen> {
 
     showDialog(
       context: context,
-      builder: (context) => StatefulBuilder(
-        builder: (context, setDialogState) => GlassDialog(
-          title: 'Generate Notes from Topic',
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              GlassTextField(
-                hintText: 'Enter topic or description',
-                controller: _topicController,
-                maxLines: 3,
-              ),
-              const SizedBox(height: InhaleSpacing.md),
-              DropdownButtonFormField<String>(
-                initialValue: selectedType,
-                decoration: const InputDecoration(
-                  labelText: 'Note Type',
-                  border: OutlineInputBorder(),
+      builder:
+          (context) => StatefulBuilder(
+            builder:
+                (context, setDialogState) => GlassDialog(
+                  title: 'Generate Notes from Topic',
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      GlassTextField(
+                        hintText: 'Enter topic or description',
+                        controller: _topicController,
+                        maxLines: 3,
+                      ),
+                      const SizedBox(height: InhaleSpacing.md),
+                      DropdownButtonFormField<String>(
+                        initialValue: selectedType,
+                        decoration: const InputDecoration(
+                          labelText: 'Note Type',
+                          border: OutlineInputBorder(),
+                        ),
+                        items: const [
+                          DropdownMenuItem(
+                            value: 'study',
+                            child: Text('Study Notes'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'summary',
+                            child: Text('Summary Notes'),
+                          ),
+                          DropdownMenuItem(
+                            value: 'revision',
+                            child: Text('Revision Notes'),
+                          ),
+                        ],
+                        onChanged: (v) {
+                          setDialogState(() {
+                            selectedType = v!;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: InhaleSpacing.md),
+                      GlassTextField(
+                        hintText: 'Folder (optional)',
+                        controller: folderController,
+                      ),
+                      const SizedBox(height: InhaleSpacing.sm),
+                      GlassTextField(
+                        hintText: 'Subject (optional)',
+                        controller: subjectController,
+                      ),
+                      const SizedBox(height: InhaleSpacing.sm),
+                      GlassTextField(
+                        hintText: 'Tags (comma-separated, optional)',
+                        controller: tagsController,
+                      ),
+                    ],
+                  ),
+                  actions: [
+                    GlassButton(
+                      label: 'Cancel',
+                      onTap: () => Navigator.pop(context),
+                      outlined: true,
+                    ),
+                    GlassButton(
+                      label: 'Generate',
+                      onTap: () async {
+                        Navigator.pop(context);
+                        await _generateNotesFromTopic(
+                          selectedType,
+                          folderController.text,
+                          subjectController.text,
+                          tagsController.text,
+                        );
+                      },
+                    ),
+                  ],
                 ),
-                items: const [
-                  DropdownMenuItem(value: 'study', child: Text('Study Notes')),
-                  DropdownMenuItem(value: 'summary', child: Text('Summary Notes')),
-                  DropdownMenuItem(value: 'revision', child: Text('Revision Notes')),
-                ],
-                onChanged: (v) {
-                  setDialogState(() {
-                    selectedType = v!;
-                  });
-                },
-              ),
-              const SizedBox(height: InhaleSpacing.md),
-              GlassTextField(
-                hintText: 'Folder (optional)',
-                controller: folderController,
-              ),
-              const SizedBox(height: InhaleSpacing.sm),
-              GlassTextField(
-                hintText: 'Subject (optional)',
-                controller: subjectController,
-              ),
-              const SizedBox(height: InhaleSpacing.sm),
-              GlassTextField(
-                hintText: 'Tags (comma-separated, optional)',
-                controller: tagsController,
-              ),
-            ],
           ),
-          actions: [
-            GlassButton(
-              label: 'Cancel',
-              onTap: () => Navigator.pop(context),
-              outlined: true,
-            ),
-            GlassButton(
-              label: 'Generate',
-              onTap: () async {
-                Navigator.pop(context);
-                await _generateNotesFromTopic(
-                  selectedType,
-                  folderController.text,
-                  subjectController.text,
-                  tagsController.text,
-                );
-              },
-            ),
-          ],
-        ),
-      ),
     );
   }
 
@@ -676,13 +773,16 @@ class _AINotesScreenState extends ConsumerState<AINotesScreen> {
   ) async {
     if (_topicController.text.isEmpty) return;
 
-    final tags = tagsStr
-        .split(',')
-        .map((t) => t.trim())
-        .where((t) => t.isNotEmpty)
-        .toList();
+    final tags =
+        tagsStr
+            .split(',')
+            .map((t) => t.trim())
+            .where((t) => t.isNotEmpty)
+            .toList();
 
-    final note = await ref.read(aiNotesProvider.notifier).generateFromTopic(
+    final note = await ref
+        .read(aiNotesProvider.notifier)
+        .generateFromTopic(
           topicDescription: _topicController.text,
           noteType: noteType,
           folder: folder.isEmpty ? null : folder,
@@ -706,12 +806,11 @@ class _AINotesScreenState extends ConsumerState<AINotesScreen> {
       await GlassDialog.show(
         context: context,
         title: 'No Documents',
-        content: const Text('Please upload documents first in the Documents section.'),
+        content: const Text(
+          'Please upload documents first in the Documents section.',
+        ),
         actions: [
-          GlassButton(
-            label: 'OK',
-            onTap: () => Navigator.pop(context),
-          ),
+          GlassButton(label: 'OK', onTap: () => Navigator.pop(context)),
         ],
       );
       return;
@@ -719,32 +818,35 @@ class _AINotesScreenState extends ConsumerState<AINotesScreen> {
 
     final selectedDoc = await showDialog<db.Document>(
       context: context,
-      builder: (context) => GlassDialog(
-        title: 'Select Document',
-        content: SizedBox(
-          width: double.maxFinite,
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: documents.length,
-            itemBuilder: (context, index) {
-              final doc = documents[index];
-              return ListTile(
-                leading: const Icon(Icons.description_rounded),
-                title: Text(doc.title),
-                subtitle: Text('${doc.fileType.toUpperCase()} • ${(doc.sizeBytes / 1024).toStringAsFixed(1)} KB'),
-                onTap: () => Navigator.pop(context, doc),
-              );
-            },
+      builder:
+          (context) => GlassDialog(
+            title: 'Select Document',
+            content: SizedBox(
+              width: double.maxFinite,
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: documents.length,
+                itemBuilder: (context, index) {
+                  final doc = documents[index];
+                  return ListTile(
+                    leading: const Icon(Icons.description_rounded),
+                    title: Text(doc.title),
+                    subtitle: Text(
+                      '${doc.fileType.toUpperCase()} • ${(doc.sizeBytes / 1024).toStringAsFixed(1)} KB',
+                    ),
+                    onTap: () => Navigator.pop(context, doc),
+                  );
+                },
+              ),
+            ),
+            actions: [
+              GlassButton(
+                label: 'Cancel',
+                onTap: () => Navigator.pop(context),
+                outlined: true,
+              ),
+            ],
           ),
-        ),
-        actions: [
-          GlassButton(
-            label: 'Cancel',
-            onTap: () => Navigator.pop(context),
-            outlined: true,
-          ),
-        ],
-      ),
     );
 
     if (selectedDoc != null && mounted) {
@@ -753,10 +855,9 @@ class _AINotesScreenState extends ConsumerState<AINotesScreen> {
   }
 
   Future<void> _generateNotesFromDocument(int documentId) async {
-    final note = await ref.read(aiNotesProvider.notifier).generateFromDocument(
-          documentId: documentId,
-          noteType: 'study',
-        );
+    final note = await ref
+        .read(aiNotesProvider.notifier)
+        .generateFromDocument(documentId: documentId, noteType: 'study');
 
     if (mounted && note != null) {
       _openNoteForEditing(note);
@@ -773,12 +874,11 @@ class _AINotesScreenState extends ConsumerState<AINotesScreen> {
       await GlassDialog.show(
         context: context,
         title: 'No Video Transcripts',
-        content: const Text('No video transcripts available. Add videos with transcripts first.'),
+        content: const Text(
+          'No video transcripts available. Add videos with transcripts first.',
+        ),
         actions: [
-          GlassButton(
-            label: 'OK',
-            onTap: () => Navigator.pop(context),
-          ),
+          GlassButton(label: 'OK', onTap: () => Navigator.pop(context)),
         ],
       );
       return;
@@ -786,32 +886,35 @@ class _AINotesScreenState extends ConsumerState<AINotesScreen> {
 
     final selectedTranscript = await showDialog<db.VideoTranscript>(
       context: context,
-      builder: (context) => GlassDialog(
-        title: 'Select Video',
-        content: SizedBox(
-          width: double.maxFinite,
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: transcripts.length,
-            itemBuilder: (context, index) {
-              final transcript = transcripts[index];
-              return ListTile(
-                leading: const Icon(Icons.video_library_rounded),
-                title: Text('Video #${transcript.id}'),
-                subtitle: Text('${transcript.language} • ${transcript.fullText.length} chars'),
-                onTap: () => Navigator.pop(context, transcript),
-              );
-            },
+      builder:
+          (context) => GlassDialog(
+            title: 'Select Video',
+            content: SizedBox(
+              width: double.maxFinite,
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: transcripts.length,
+                itemBuilder: (context, index) {
+                  final transcript = transcripts[index];
+                  return ListTile(
+                    leading: const Icon(Icons.video_library_rounded),
+                    title: Text('Video #${transcript.id}'),
+                    subtitle: Text(
+                      '${transcript.language} • ${transcript.fullText.length} chars',
+                    ),
+                    onTap: () => Navigator.pop(context, transcript),
+                  );
+                },
+              ),
+            ),
+            actions: [
+              GlassButton(
+                label: 'Cancel',
+                onTap: () => Navigator.pop(context),
+                outlined: true,
+              ),
+            ],
           ),
-        ),
-        actions: [
-          GlassButton(
-            label: 'Cancel',
-            onTap: () => Navigator.pop(context),
-            outlined: true,
-          ),
-        ],
-      ),
     );
 
     if (selectedTranscript != null && mounted) {
@@ -820,7 +923,9 @@ class _AINotesScreenState extends ConsumerState<AINotesScreen> {
   }
 
   Future<void> _generateNotesFromVideo(int resourceId) async {
-    final note = await ref.read(aiNotesProvider.notifier).generateFromVideoTranscript(
+    final note = await ref
+        .read(aiNotesProvider.notifier)
+        .generateFromVideoTranscript(
           resourceId: resourceId,
           noteType: 'summary',
         );
@@ -838,48 +943,59 @@ class _AINotesScreenState extends ConsumerState<AINotesScreen> {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
-      builder: (context) => GlassBottomSheet(
-        title: 'Filter Notes',
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (folders.isNotEmpty) ...[
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: InhaleSpacing.md),
-                child: Text('Folders', style: TextStyle(fontWeight: FontWeight.bold)),
-              ),
-              ...folders.map((folder) => ListTile(
-                leading: const Icon(Icons.folder_rounded),
-                title: Text(folder),
-                onTap: () {
-                  notifier.filterByFolder(folder);
-                  Navigator.pop(context);
-                },
-              )),
-              const Divider(),
-            ],
-            if (tags.isNotEmpty) ...[
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: InhaleSpacing.md),
-                child: Text('Tags', style: TextStyle(fontWeight: FontWeight.bold)),
-              ),
-              ...tags.map((tag) => ListTile(
-                leading: const Icon(Icons.label_rounded),
-                title: Text(tag),
-                onTap: () {
-                  notifier.filterByTag(tag);
-                  Navigator.pop(context);
-                },
-              )),
-            ],
-            if (folders.isEmpty && tags.isEmpty)
-              const Padding(
-                padding: EdgeInsets.all(InhaleSpacing.md),
-                child: Text('No folders or tags yet.'),
-              ),
-          ],
-        ),
-      ),
+      builder:
+          (context) => GlassBottomSheet(
+            title: 'Filter Notes',
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (folders.isNotEmpty) ...[
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: InhaleSpacing.md),
+                    child: Text(
+                      'Folders',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  ...folders.map(
+                    (folder) => ListTile(
+                      leading: const Icon(Icons.folder_rounded),
+                      title: Text(folder),
+                      onTap: () {
+                        notifier.filterByFolder(folder);
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                  const Divider(),
+                ],
+                if (tags.isNotEmpty) ...[
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: InhaleSpacing.md),
+                    child: Text(
+                      'Tags',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  ...tags.map(
+                    (tag) => ListTile(
+                      leading: const Icon(Icons.label_rounded),
+                      title: Text(tag),
+                      onTap: () {
+                        notifier.filterByTag(tag);
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                ],
+                if (folders.isEmpty && tags.isEmpty)
+                  const Padding(
+                    padding: EdgeInsets.all(InhaleSpacing.md),
+                    child: Text('No folders or tags yet.'),
+                  ),
+              ],
+            ),
+          ),
     );
   }
 }
@@ -896,9 +1012,10 @@ class _FilterChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: isDark
-            ? InhaleColors.electricBlue.withValues(alpha: 0.2)
-            : InhaleColors.lightPrimaryBlue.withValues(alpha: 0.15),
+        color:
+            isDark
+                ? InhaleColors.electricBlue.withValues(alpha: 0.2)
+                : InhaleColors.lightPrimaryBlue.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -921,27 +1038,42 @@ class _InfoChip extends StatelessWidget {
   final String label;
   final bool isDark;
 
-  const _InfoChip({required this.icon, required this.label, required this.isDark});
+  const _InfoChip({
+    required this.icon,
+    required this.label,
+    required this.isDark,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: BoxDecoration(
-        color: isDark
-            ? InhaleColors.electricBlue.withValues(alpha: 0.2)
-            : InhaleColors.lightPrimaryBlue.withValues(alpha: 0.15),
+        color:
+            isDark
+                ? InhaleColors.electricBlue.withValues(alpha: 0.2)
+                : InhaleColors.lightPrimaryBlue.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(InhaleRadius.xs),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 12, color: isDark ? InhaleColors.electricBlue : InhaleColors.lightPrimaryBlue),
+          Icon(
+            icon,
+            size: 12,
+            color:
+                isDark
+                    ? InhaleColors.electricBlue
+                    : InhaleColors.lightPrimaryBlue,
+          ),
           const SizedBox(width: 4),
           Text(
             label,
             style: InhaleTypography.labelSmall.copyWith(
-              color: isDark ? InhaleColors.electricBlue : InhaleColors.lightPrimaryBlue,
+              color:
+                  isDark
+                      ? InhaleColors.electricBlue
+                      : InhaleColors.lightPrimaryBlue,
               fontSize: 10,
             ),
           ),

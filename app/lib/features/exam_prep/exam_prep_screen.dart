@@ -10,9 +10,7 @@ class ExamPrepScreen extends ConsumerWidget {
     final examSchedules = ref.watch(examSchedulesProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Exam Prep'),
-      ),
+      appBar: AppBar(title: const Text('Exam Prep')),
       body: Column(
         children: [
           Expanded(
@@ -24,7 +22,11 @@ class ExamPrepScreen extends ConsumerWidget {
                   child: ListTile(
                     title: Text(exam.name),
                     subtitle: Text('${exam.subject} - ${exam.examType}'),
-                    trailing: Text(ref.read(examSchedulesProvider.notifier).examCountdown(exam.id)),
+                    trailing: Text(
+                      ref
+                          .read(examSchedulesProvider.notifier)
+                          .examCountdown(exam.id),
+                    ),
                     onTap: () {
                       _showExamDetailDialog(context, ref, exam);
                     },
@@ -95,7 +97,9 @@ class ExamPrepScreen extends ConsumerWidget {
                   ),
                   TextFormField(
                     controller: _examDateController,
-                    decoration: const InputDecoration(labelText: 'Exam Date (YYYY-MM-DD)'),
+                    decoration: const InputDecoration(
+                      labelText: 'Exam Date (YYYY-MM-DD)',
+                    ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter exam date';
@@ -105,7 +109,9 @@ class ExamPrepScreen extends ConsumerWidget {
                   ),
                   TextFormField(
                     controller: _targetScoreController,
-                    decoration: const InputDecoration(labelText: 'Target Score'),
+                    decoration: const InputDecoration(
+                      labelText: 'Target Score',
+                    ),
                     keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -128,13 +134,15 @@ class ExamPrepScreen extends ConsumerWidget {
             TextButton(
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
-                  await ref.read(examSchedulesProvider.notifier).createExamSchedule(
-                    name: _nameController.text,
-                    subject: _subjectController.text,
-                    examType: _examTypeController.text,
-                    examDate: DateTime.parse(_examDateController.text),
-                    targetScore: int.parse(_targetScoreController.text),
-                  );
+                  await ref
+                      .read(examSchedulesProvider.notifier)
+                      .createExamSchedule(
+                        name: _nameController.text,
+                        subject: _subjectController.text,
+                        examType: _examTypeController.text,
+                        examDate: DateTime.parse(_examDateController.text),
+                        targetScore: int.parse(_targetScoreController.text),
+                      );
                   if (context.mounted) {
                     Navigator.of(context).pop();
                   }
@@ -148,7 +156,11 @@ class ExamPrepScreen extends ConsumerWidget {
     );
   }
 
-  void _showExamDetailDialog(BuildContext context, WidgetRef ref, ExamSchedule exam) {
+  void _showExamDetailDialog(
+    BuildContext context,
+    WidgetRef ref,
+    ExamSchedule exam,
+  ) {
     showDialog(
       context: context,
       builder: (context) {
@@ -164,11 +176,14 @@ class ExamPrepScreen extends ConsumerWidget {
                 Text('Date: ${exam.examDate.toLocal().toString()}'),
                 Text('Target Score: ${exam.targetScore}'),
                 const SizedBox(height: 20),
-                Text('Readiness: ${ref.read(examSchedulesProvider.notifier).examReadiness(exam.id)}%'),
+                Text(
+                  'Readiness: ${ref.read(examSchedulesProvider.notifier).examReadiness(exam.id)}%',
+                ),
                 const SizedBox(height: 20),
-                FutureBuilder<
-                  String>(
-                  future: ref.read(examSchedulesProvider.notifier).generateRecommendations(exam.id),
+                FutureBuilder<String>(
+                  future: ref
+                      .read(examSchedulesProvider.notifier)
+                      .generateRecommendations(exam.id),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const CircularProgressIndicator();

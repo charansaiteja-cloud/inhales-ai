@@ -33,20 +33,17 @@ class StudyPlanScreen extends ConsumerWidget {
     }
 
     return Scaffold(
-      body: _StudyPlanBody(
-        state: state,
-        isDark: isDark,
-        isMobile: isMobile,
-      ),
-      floatingActionButton: !isMobile
-          ? null
-          : FloatingActionButton.extended(
-              onPressed: () => _showCreatePlanDialog(context, ref),
-              icon: const Icon(Icons.add_rounded),
-              label: const Text('New Plan'),
-              backgroundColor: InhaleColors.blue,
-              foregroundColor: Colors.white,
-            ),
+      body: _StudyPlanBody(state: state, isDark: isDark, isMobile: isMobile),
+      floatingActionButton:
+          !isMobile
+              ? null
+              : FloatingActionButton.extended(
+                onPressed: () => _showCreatePlanDialog(context, ref),
+                icon: const Icon(Icons.add_rounded),
+                label: const Text('New Plan'),
+                backgroundColor: InhaleColors.blue,
+                foregroundColor: Colors.white,
+              ),
     );
   }
 
@@ -75,14 +72,17 @@ class _StudyPlanBody extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final primaryText = isDark ? InhaleColors.textPrimary : InhaleColors.lightNavyText;
-    final mutedText = isDark ? InhaleColors.textMuted : InhaleColors.lightTextMuted;
+    final primaryText =
+        isDark ? InhaleColors.textPrimary : InhaleColors.lightNavyText;
+    final mutedText =
+        isDark ? InhaleColors.textMuted : InhaleColors.lightTextMuted;
 
     return Container(
       decoration: BoxDecoration(
-        gradient: isDark
-            ? InhaleColors.gradientBackgroundDark
-            : InhaleColors.gradientBackground,
+        gradient:
+            isDark
+                ? InhaleColors.gradientBackgroundDark
+                : InhaleColors.gradientBackground,
       ),
       child: CustomScrollView(
         slivers: [
@@ -111,22 +111,35 @@ class _StudyPlanBody extends ConsumerWidget {
                         ),
                       ],
                     ),
-                    child: const Icon(Icons.calendar_month_rounded, color: Colors.white),
+                    child: const Icon(
+                      Icons.calendar_month_rounded,
+                      color: Colors.white,
+                    ),
                   ),
                   const SizedBox(width: InhaleSpacing.sm),
                   Text(
                     'Study Planner',
-                    style: InhaleTypography.headlineMedium.copyWith(color: primaryText),
+                    style: InhaleTypography.headlineMedium.copyWith(
+                      color: primaryText,
+                    ),
                   ),
                   const Spacer(),
                   if (!isMobile)
                     GlassButton(
-                      onTap: () => StudyPlanScreen()._showCreatePlanDialog(context, ref),
+                      onTap:
+                          () => StudyPlanScreen()._showCreatePlanDialog(
+                            context,
+                            ref,
+                          ),
                       label: 'New Plan',
                     ),
                   if (isMobile)
                     IconButton(
-                      onPressed: () => StudyPlanScreen()._showCreatePlanDialog(context, ref),
+                      onPressed:
+                          () => StudyPlanScreen()._showCreatePlanDialog(
+                            context,
+                            ref,
+                          ),
                       icon: Icon(Icons.add_rounded, color: primaryText),
                     ),
                 ],
@@ -149,10 +162,7 @@ class _StudyPlanBody extends ConsumerWidget {
           SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: InhaleSpacing.lg),
-              child: _TodayAgenda(
-                todayItems: state.todayItems,
-                isDark: isDark,
-              ),
+              child: _TodayAgenda(todayItems: state.todayItems, isDark: isDark),
             ),
           ),
 
@@ -182,12 +192,16 @@ class _StudyPlanBody extends ConsumerWidget {
                       const SizedBox(height: InhaleSpacing.md),
                       Text(
                         'No study plans yet',
-                        style: InhaleTypography.titleMedium.copyWith(color: mutedText),
+                        style: InhaleTypography.titleMedium.copyWith(
+                          color: mutedText,
+                        ),
                       ),
                       const SizedBox(height: InhaleSpacing.xs),
                       Text(
                         'Create one to get started',
-                        style: InhaleTypography.bodyMedium.copyWith(color: mutedText),
+                        style: InhaleTypography.bodyMedium.copyWith(
+                          color: mutedText,
+                        ),
                       ),
                     ],
                   ),
@@ -196,27 +210,29 @@ class _StudyPlanBody extends ConsumerWidget {
             )
           else
             SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: InhaleSpacing.lg, vertical: InhaleSpacing.sm),
+              padding: EdgeInsets.symmetric(
+                horizontal: InhaleSpacing.lg,
+                vertical: InhaleSpacing.sm,
+              ),
               sliver: SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    final plan = state.plans[index];
-                    final items = state.items.where((i) => i.planId == plan.id).toList();
-                    final completed = items.where((i) => i.isCompleted).length;
-                    final progress = items.isEmpty ? 0.0 : completed / items.length;
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  final plan = state.plans[index];
+                  final items =
+                      state.items.where((i) => i.planId == plan.id).toList();
+                  final completed = items.where((i) => i.isCompleted).length;
+                  final progress =
+                      items.isEmpty ? 0.0 : completed / items.length;
 
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: InhaleSpacing.sm),
-                      child: _PlanCard(
-                        plan: plan,
-                        items: items,
-                        progress: progress,
-                        isDark: isDark,
-                      ),
-                    );
-                  },
-                  childCount: state.plans.length,
-                ),
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: InhaleSpacing.sm),
+                    child: _PlanCard(
+                      plan: plan,
+                      items: items,
+                      progress: progress,
+                      isDark: isDark,
+                    ),
+                  );
+                }, childCount: state.plans.length),
               ),
             ),
 
@@ -227,23 +243,25 @@ class _StudyPlanBody extends ConsumerWidget {
                 padding: EdgeInsets.symmetric(horizontal: InhaleSpacing.lg),
                 child: Text(
                   'Recent Sessions',
-                  style: InhaleTypography.titleLarge.copyWith(color: primaryText),
+                  style: InhaleTypography.titleLarge.copyWith(
+                    color: primaryText,
+                  ),
                 ),
               ),
             ),
             SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: InhaleSpacing.lg, vertical: InhaleSpacing.sm),
+              padding: EdgeInsets.symmetric(
+                horizontal: InhaleSpacing.lg,
+                vertical: InhaleSpacing.sm,
+              ),
               sliver: SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    final session = state.sessions[index];
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: InhaleSpacing.xs),
-                      child: _SessionRow(session: session, isDark: isDark),
-                    );
-                  },
-                  childCount: state.sessions.length.clamp(0, 5),
-                ),
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  final session = state.sessions[index];
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: InhaleSpacing.xs),
+                    child: _SessionRow(session: session, isDark: isDark),
+                  );
+                }, childCount: state.sessions.length.clamp(0, 5)),
               ),
             ),
           ],
@@ -268,8 +286,10 @@ class _OverallProgressCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final primaryText = isDark ? InhaleColors.textPrimary : InhaleColors.lightNavyText;
-    final mutedText = isDark ? InhaleColors.textMuted : InhaleColors.lightTextMuted;
+    final primaryText =
+        isDark ? InhaleColors.textPrimary : InhaleColors.lightNavyText;
+    final mutedText =
+        isDark ? InhaleColors.textMuted : InhaleColors.lightTextMuted;
     final pct = (state.overallProgress * 100).toInt();
     final activeCount = state.plans.where((p) => p.isActive).length;
 
@@ -309,7 +329,9 @@ class _OverallProgressCard extends StatelessWidget {
               children: [
                 Text(
                   'Overall Progress',
-                  style: InhaleTypography.titleMedium.copyWith(color: primaryText),
+                  style: InhaleTypography.titleMedium.copyWith(
+                    color: primaryText,
+                  ),
                 ),
                 Text(
                   '$activeCount active plan${activeCount != 1 ? 's' : ''} · ${state.todayItems.length} due today',
@@ -332,17 +354,18 @@ class _TodayAgenda extends ConsumerWidget {
   final List<StudyPlanItemViewModel> todayItems;
   final bool isDark;
 
-  const _TodayAgenda({
-    required this.todayItems,
-    required this.isDark,
-  });
+  const _TodayAgenda({required this.todayItems, required this.isDark});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final primaryText = isDark ? InhaleColors.textPrimary : InhaleColors.lightNavyText;
+    final primaryText =
+        isDark ? InhaleColors.textPrimary : InhaleColors.lightNavyText;
 
     return Padding(
-      padding: const EdgeInsets.only(top: InhaleSpacing.lg, bottom: InhaleSpacing.sm),
+      padding: const EdgeInsets.only(
+        top: InhaleSpacing.lg,
+        bottom: InhaleSpacing.sm,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -358,7 +381,9 @@ class _TodayAgenda extends ConsumerWidget {
               if (todayItems.isNotEmpty)
                 Text(
                   '${todayItems.where((i) => i.isCompleted).length}/${todayItems.length}',
-                  style: InhaleTypography.bodySmall.copyWith(color: InhaleColors.blue),
+                  style: InhaleTypography.bodySmall.copyWith(
+                    color: InhaleColors.blue,
+                  ),
                 ),
             ],
           ),
@@ -368,18 +393,20 @@ class _TodayAgenda extends ConsumerWidget {
               child: Text(
                 'Nothing scheduled for today',
                 style: InhaleTypography.bodyMedium.copyWith(
-                  color: isDark ? InhaleColors.textMuted : InhaleColors.lightTextMuted,
+                  color:
+                      isDark
+                          ? InhaleColors.textMuted
+                          : InhaleColors.lightTextMuted,
                 ),
               ),
             )
           else
-            ...todayItems.map((item) => Padding(
-              padding: const EdgeInsets.only(top: InhaleSpacing.xs),
-              child: _AgendaItem(
-                item: item,
-                isDark: isDark,
+            ...todayItems.map(
+              (item) => Padding(
+                padding: const EdgeInsets.only(top: InhaleSpacing.xs),
+                child: _AgendaItem(item: item, isDark: isDark),
               ),
-            )),
+            ),
         ],
       ),
     );
@@ -390,16 +417,15 @@ class _AgendaItem extends ConsumerWidget {
   final StudyPlanItemViewModel item;
   final bool isDark;
 
-  const _AgendaItem({
-    required this.item,
-    required this.isDark,
-  });
+  const _AgendaItem({required this.item, required this.isDark});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final notifier = ref.read(studyPlanProvider.notifier);
-    final primaryText = isDark ? InhaleColors.textPrimary : InhaleColors.lightNavyText;
-    final secondaryText = isDark ? InhaleColors.textSecondary : InhaleColors.lightTextSecondary;
+    final primaryText =
+        isDark ? InhaleColors.textPrimary : InhaleColors.lightNavyText;
+    final secondaryText =
+        isDark ? InhaleColors.textSecondary : InhaleColors.lightTextSecondary;
     final typeIcon = _typeIcon(item.type);
     final typeColor = _typeColor(item.type);
 
@@ -430,15 +456,21 @@ class _AgendaItem extends ConsumerWidget {
                 Text(
                   item.title,
                   style: InhaleTypography.bodyMedium.copyWith(
-                    color: item.isCompleted
-                        ? (isDark ? InhaleColors.textMuted : InhaleColors.lightTextMuted)
-                        : primaryText,
-                    decoration: item.isCompleted ? TextDecoration.lineThrough : null,
+                    color:
+                        item.isCompleted
+                            ? (isDark
+                                ? InhaleColors.textMuted
+                                : InhaleColors.lightTextMuted)
+                            : primaryText,
+                    decoration:
+                        item.isCompleted ? TextDecoration.lineThrough : null,
                   ),
                 ),
                 Text(
                   '${item.estimatedMinutes} min · ${item.type}',
-                  style: InhaleTypography.bodySmall.copyWith(color: secondaryText),
+                  style: InhaleTypography.bodySmall.copyWith(
+                    color: secondaryText,
+                  ),
                 ),
               ],
             ),
@@ -448,11 +480,17 @@ class _AgendaItem extends ConsumerWidget {
               onPressed: () => _showSessionBottomSheet(context, ref),
               child: Text(
                 'Log',
-                style: InhaleTypography.labelSmall.copyWith(color: InhaleColors.blue),
+                style: InhaleTypography.labelSmall.copyWith(
+                  color: InhaleColors.blue,
+                ),
               ),
             )
           else
-            const Icon(Icons.check_circle_rounded, color: InhaleColors.success, size: 20),
+            const Icon(
+              Icons.check_circle_rounded,
+              color: InhaleColors.success,
+              size: 20,
+            ),
         ],
       ),
     );
@@ -460,7 +498,9 @@ class _AgendaItem extends ConsumerWidget {
 
   void _showSessionBottomSheet(BuildContext context, WidgetRef ref) {
     final notifier = ref.read(studyPlanProvider.notifier);
-    final durationCtrl = TextEditingController(text: item.estimatedMinutes.toString());
+    final durationCtrl = TextEditingController(
+      text: item.estimatedMinutes.toString(),
+    );
     final notesCtrl = TextEditingController();
     final focusScore = ValueNotifier<int?>(null);
 
@@ -468,104 +508,122 @@ class _AgendaItem extends ConsumerWidget {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (ctx) => GlassDialog(
-        title: 'Log Study Session',
-        content: StatefulBuilder(
-          builder: (ctx2, setModalState) => Padding(
-            padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).viewInsets.bottom,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                GlassTextField(
-                  labelText: 'Duration (minutes)',
-                  hintText: item.estimatedMinutes.toString(),
-                  controller: durationCtrl,
-                  keyboardType: TextInputType.number,
-                ),
-                const SizedBox(height: InhaleSpacing.sm),
-                GlassTextField(
-                  labelText: 'Notes (optional)',
-                  hintText: 'What did you learn?',
-                  controller: notesCtrl,
-                  maxLines: 3,
-                ),
-                const SizedBox(height: InhaleSpacing.sm),
-                Text(
-                  'Focus Score',
-                  style: InhaleTypography.bodyMedium.copyWith(
-                    color: isDark ? InhaleColors.textPrimary : InhaleColors.lightNavyText,
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: List.generate(10, (i) {
-                    final score = i + 1;
-                    final isSelected = focusScore.value == score;
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 2),
-                      child: ChoiceChip(
-                        label: Text(score.toString()),
-                        selected: isSelected,
-                        onSelected: (v) => focusScore.value = v ? score : null,
-                        selectedColor: InhaleColors.blue,
-                        labelStyle: TextStyle(
-                          color: isSelected ? Colors.white : (isDark ? InhaleColors.textPrimary : InhaleColors.lightNavyText),
-                          fontSize: 12,
+      builder:
+          (ctx) => GlassDialog(
+            title: 'Log Study Session',
+            content: StatefulBuilder(
+              builder:
+                  (ctx2, setModalState) => Padding(
+                    padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom,
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        GlassTextField(
+                          labelText: 'Duration (minutes)',
+                          hintText: item.estimatedMinutes.toString(),
+                          controller: durationCtrl,
+                          keyboardType: TextInputType.number,
                         ),
-                        visualDensity: VisualDensity.compact,
-                      ),
-                    );
-                  }),
-                ),
-                const SizedBox(height: InhaleSpacing.md),
-                Row(
-                  children: [
-                    Expanded(
-                      child: GlassButton(
-                        onTap: () {
-                          Navigator.pop(ctx2);
-                          Navigator.pop(context);
-                        },
-                        label: 'Cancel',
-                        outlined: true,
-                      ),
-                    ),
-                    const SizedBox(width: InhaleSpacing.sm),
-                    Expanded(
-                      child: GlassButton(
-                        onTap: () async {
-                          final duration = int.tryParse(durationCtrl.text) ?? item.estimatedMinutes;
-
-                          // Start and immediately stop a session to log it
-                          final sessionId = await notifier.startSession(
-                            planItemId: item.id,
-                            activityType: item.type,
-                          );
-                          if (sessionId > 0) {
-                            await notifier.stopSession(
-                              sessionId: sessionId,
-                              durationMinutes: duration,
-                              focusScore: focusScore.value,
-                              notes: notesCtrl.text.isEmpty ? null : notesCtrl.text,
+                        const SizedBox(height: InhaleSpacing.sm),
+                        GlassTextField(
+                          labelText: 'Notes (optional)',
+                          hintText: 'What did you learn?',
+                          controller: notesCtrl,
+                          maxLines: 3,
+                        ),
+                        const SizedBox(height: InhaleSpacing.sm),
+                        Text(
+                          'Focus Score',
+                          style: InhaleTypography.bodyMedium.copyWith(
+                            color:
+                                isDark
+                                    ? InhaleColors.textPrimary
+                                    : InhaleColors.lightNavyText,
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: List.generate(10, (i) {
+                            final score = i + 1;
+                            final isSelected = focusScore.value == score;
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 2,
+                              ),
+                              child: ChoiceChip(
+                                label: Text(score.toString()),
+                                selected: isSelected,
+                                onSelected:
+                                    (v) => focusScore.value = v ? score : null,
+                                selectedColor: InhaleColors.blue,
+                                labelStyle: TextStyle(
+                                  color:
+                                      isSelected
+                                          ? Colors.white
+                                          : (isDark
+                                              ? InhaleColors.textPrimary
+                                              : InhaleColors.lightNavyText),
+                                  fontSize: 12,
+                                ),
+                                visualDensity: VisualDensity.compact,
+                              ),
                             );
-                          }
-                          // Also mark the item as completed
-                          await notifier.completeItem(item.id);
-                          if (context.mounted) Navigator.pop(context);
-                        },
-                        label: 'Complete',
-                      ),
+                          }),
+                        ),
+                        const SizedBox(height: InhaleSpacing.md),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: GlassButton(
+                                onTap: () {
+                                  Navigator.pop(ctx2);
+                                  Navigator.pop(context);
+                                },
+                                label: 'Cancel',
+                                outlined: true,
+                              ),
+                            ),
+                            const SizedBox(width: InhaleSpacing.sm),
+                            Expanded(
+                              child: GlassButton(
+                                onTap: () async {
+                                  final duration =
+                                      int.tryParse(durationCtrl.text) ??
+                                      item.estimatedMinutes;
+
+                                  // Start and immediately stop a session to log it
+                                  final sessionId = await notifier.startSession(
+                                    planItemId: item.id,
+                                    activityType: item.type,
+                                  );
+                                  if (sessionId > 0) {
+                                    await notifier.stopSession(
+                                      sessionId: sessionId,
+                                      durationMinutes: duration,
+                                      focusScore: focusScore.value,
+                                      notes:
+                                          notesCtrl.text.isEmpty
+                                              ? null
+                                              : notesCtrl.text,
+                                    );
+                                  }
+                                  // Also mark the item as completed
+                                  await notifier.completeItem(item.id);
+                                  if (context.mounted) Navigator.pop(context);
+                                },
+                                label: 'Complete',
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: InhaleSpacing.sm),
+                      ],
                     ),
-                  ],
-                ),
-                const SizedBox(height: InhaleSpacing.sm),
-              ],
+                  ),
             ),
           ),
-        ),
-      ),
     );
   }
 
@@ -635,8 +693,10 @@ class _PlanCardState extends ConsumerState<_PlanCard> {
   @override
   Widget build(BuildContext context) {
     final notifier = ref.read(studyPlanProvider.notifier);
-    final primaryText = widget.isDark ? InhaleColors.textPrimary : InhaleColors.lightNavyText;
-    final mutedText = widget.isDark ? InhaleColors.textMuted : InhaleColors.lightTextMuted;
+    final primaryText =
+        widget.isDark ? InhaleColors.textPrimary : InhaleColors.lightNavyText;
+    final mutedText =
+        widget.isDark ? InhaleColors.textMuted : InhaleColors.lightTextMuted;
     final pct = (widget.progress * 100).toInt();
 
     return GlassCard(
@@ -661,13 +721,17 @@ class _PlanCardState extends ConsumerState<_PlanCard> {
                   children: [
                     Text(
                       widget.plan.name,
-                      style: InhaleTypography.titleMedium.copyWith(color: primaryText),
+                      style: InhaleTypography.titleMedium.copyWith(
+                        color: primaryText,
+                      ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
                       '${_formatDate(widget.plan.startDate)} → ${_formatDate(widget.plan.endDate)}',
-                      style: InhaleTypography.bodySmall.copyWith(color: mutedText),
+                      style: InhaleTypography.bodySmall.copyWith(
+                        color: mutedText,
+                      ),
                     ),
                   ],
                 ),
@@ -684,7 +748,9 @@ class _PlanCardState extends ConsumerState<_PlanCard> {
                       strokeWidth: 4,
                       backgroundColor: InhaleColors.glassSurface,
                       valueColor: AlwaysStoppedAnimation<Color>(
-                        widget.progress >= 1.0 ? InhaleColors.success : InhaleColors.blue,
+                        widget.progress >= 1.0
+                            ? InhaleColors.success
+                            : InhaleColors.blue,
                       ),
                     ),
                     Center(
@@ -704,8 +770,13 @@ class _PlanCardState extends ConsumerState<_PlanCard> {
               IconButton(
                 onPressed: () => setState(() => _expanded = !_expanded),
                 icon: Icon(
-                  _expanded ? Icons.expand_less_rounded : Icons.expand_more_rounded,
-                  color: widget.isDark ? InhaleColors.textSecondary : InhaleColors.lightTextSecondary,
+                  _expanded
+                      ? Icons.expand_less_rounded
+                      : Icons.expand_more_rounded,
+                  color:
+                      widget.isDark
+                          ? InhaleColors.textSecondary
+                          : InhaleColors.lightTextSecondary,
                 ),
               ),
               IconButton(
@@ -739,19 +810,32 @@ class _PlanCardState extends ConsumerState<_PlanCard> {
             Wrap(
               spacing: InhaleSpacing.xs,
               runSpacing: InhaleSpacing.xs,
-              children: widget.plan.goals.take(3).map((g) => Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                decoration: BoxDecoration(
-                  color: InhaleColors.blue.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(InhaleRadius.xs),
-                ),
-                child: Text(
-                  g,
-                  style: InhaleTypography.labelSmall.copyWith(color: InhaleColors.blue),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              )).toList(),
+              children:
+                  widget.plan.goals
+                      .take(3)
+                      .map(
+                        (g) => Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 3,
+                          ),
+                          decoration: BoxDecoration(
+                            color: InhaleColors.blue.withValues(alpha: 0.12),
+                            borderRadius: BorderRadius.circular(
+                              InhaleRadius.xs,
+                            ),
+                          ),
+                          child: Text(
+                            g,
+                            style: InhaleTypography.labelSmall.copyWith(
+                              color: InhaleColors.blue,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      )
+                      .toList(),
             ),
           ],
 
@@ -759,20 +843,23 @@ class _PlanCardState extends ConsumerState<_PlanCard> {
           if (_expanded && widget.items.isNotEmpty) ...[
             const SizedBox(height: InhaleSpacing.md),
             Divider(color: mutedText.withValues(alpha: 0.3)),
-            ...widget.items.take(20).map((item) => Padding(
-              padding: const EdgeInsets.only(top: InhaleSpacing.xs),
-              child: _PlanItemRow(
-                item: item,
-                isDark: widget.isDark,
-              ),
-            )),
+            ...widget.items
+                .take(20)
+                .map(
+                  (item) => Padding(
+                    padding: const EdgeInsets.only(top: InhaleSpacing.xs),
+                    child: _PlanItemRow(item: item, isDark: widget.isDark),
+                  ),
+                ),
             if (widget.items.length > 20)
               Center(
                 child: TextButton(
                   onPressed: () {},
                   child: Text(
                     'View all ${widget.items.length} items',
-                    style: InhaleTypography.bodySmall.copyWith(color: InhaleColors.blue),
+                    style: InhaleTypography.bodySmall.copyWith(
+                      color: InhaleColors.blue,
+                    ),
                   ),
                 ),
               ),
@@ -785,48 +872,66 @@ class _PlanCardState extends ConsumerState<_PlanCard> {
   void _confirmDelete(BuildContext context) {
     showDialog<void>(
       context: context,
-      builder: (ctx) => GlassDialog(
-        title: 'Delete Plan',
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'Are you sure you want to delete "${widget.plan.name}"?',
-              style: InhaleTypography.bodyMedium.copyWith(
-                color: widget.isDark ? InhaleColors.textSecondary : InhaleColors.lightTextSecondary,
-              ),
-            ),
-            const SizedBox(height: InhaleSpacing.md),
-            Row(
+      builder:
+          (ctx) => GlassDialog(
+            title: 'Delete Plan',
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Expanded(
-                  child: GlassButton(
-                    onTap: () => Navigator.pop(ctx),
-                    label: 'Cancel',
-                    outlined: true,
+                Text(
+                  'Are you sure you want to delete "${widget.plan.name}"?',
+                  style: InhaleTypography.bodyMedium.copyWith(
+                    color:
+                        widget.isDark
+                            ? InhaleColors.textSecondary
+                            : InhaleColors.lightTextSecondary,
                   ),
                 ),
-                const SizedBox(width: InhaleSpacing.sm),
-                Expanded(
-                  child: GlassButton(
-                    onTap: () {
-                      ref.read(studyPlanProvider.notifier).deletePlan(widget.plan.id);
-                      Navigator.pop(ctx);
-                    },
-                    label: 'Delete',
-                  ),
+                const SizedBox(height: InhaleSpacing.md),
+                Row(
+                  children: [
+                    Expanded(
+                      child: GlassButton(
+                        onTap: () => Navigator.pop(ctx),
+                        label: 'Cancel',
+                        outlined: true,
+                      ),
+                    ),
+                    const SizedBox(width: InhaleSpacing.sm),
+                    Expanded(
+                      child: GlassButton(
+                        onTap: () {
+                          ref
+                              .read(studyPlanProvider.notifier)
+                              .deletePlan(widget.plan.id);
+                          Navigator.pop(ctx);
+                        },
+                        label: 'Delete',
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
-        ),
-      ),
+          ),
     );
   }
 
   String _formatDate(DateTime dt) {
-    final months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    final months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
     return '${months[dt.month - 1]} ${dt.day}';
   }
 }
@@ -839,16 +944,15 @@ class _PlanItemRow extends ConsumerWidget {
   final StudyPlanItemViewModel item;
   final bool isDark;
 
-  const _PlanItemRow({
-    required this.item,
-    required this.isDark,
-  });
+  const _PlanItemRow({required this.item, required this.isDark});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final notifier = ref.read(studyPlanProvider.notifier);
-    final primaryText = isDark ? InhaleColors.textPrimary : InhaleColors.lightNavyText;
-    final mutedText = isDark ? InhaleColors.textMuted : InhaleColors.lightTextMuted;
+    final primaryText =
+        isDark ? InhaleColors.textPrimary : InhaleColors.lightNavyText;
+    final mutedText =
+        isDark ? InhaleColors.textMuted : InhaleColors.lightTextMuted;
     final typeColor = _typeColor(item.type);
 
     return Row(
@@ -863,10 +967,7 @@ class _PlanItemRow extends ConsumerWidget {
         Container(
           width: 6,
           height: 6,
-          decoration: BoxDecoration(
-            color: typeColor,
-            shape: BoxShape.circle,
-          ),
+          decoration: BoxDecoration(color: typeColor, shape: BoxShape.circle),
         ),
         const SizedBox(width: InhaleSpacing.sm),
         Expanded(
@@ -913,8 +1014,20 @@ class _PlanItemRow extends ConsumerWidget {
   }
 
   String _shortDate(DateTime dt) {
-    final months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    final months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
     return '${months[dt.month - 1]} ${dt.day}';
   }
 }
@@ -931,11 +1044,16 @@ class _SessionRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final primaryText = isDark ? InhaleColors.textPrimary : InhaleColors.lightNavyText;
-    final mutedText = isDark ? InhaleColors.textMuted : InhaleColors.lightTextMuted;
+    final primaryText =
+        isDark ? InhaleColors.textPrimary : InhaleColors.lightNavyText;
+    final mutedText =
+        isDark ? InhaleColors.textMuted : InhaleColors.lightTextMuted;
 
     return GlassCard(
-      padding: const EdgeInsets.symmetric(horizontal: InhaleSpacing.md, vertical: InhaleSpacing.sm),
+      padding: const EdgeInsets.symmetric(
+        horizontal: InhaleSpacing.md,
+        vertical: InhaleSpacing.sm,
+      ),
       child: Row(
         children: [
           Container(
@@ -953,7 +1071,9 @@ class _SessionRow extends StatelessWidget {
               children: [
                 Text(
                   session.activityType,
-                  style: InhaleTypography.bodyMedium.copyWith(color: primaryText),
+                  style: InhaleTypography.bodyMedium.copyWith(
+                    color: primaryText,
+                  ),
                 ),
                 Text(
                   '${session.durationMinutes} min${session.focusScore != null ? ' · Focus ${session.focusScore}/10' : ''}',
@@ -1010,8 +1130,10 @@ class _CreatePlanDialogState extends ConsumerState<_CreatePlanDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final primaryText = isDark ? InhaleColors.textPrimary : InhaleColors.lightNavyText;
-    final secondaryText = isDark ? InhaleColors.textSecondary : InhaleColors.lightTextSecondary;
+    final primaryText =
+        isDark ? InhaleColors.textPrimary : InhaleColors.lightNavyText;
+    final secondaryText =
+        isDark ? InhaleColors.textSecondary : InhaleColors.lightTextSecondary;
 
     return GlassDialog(
       title: 'Create Study Plan',
@@ -1050,12 +1172,16 @@ class _CreatePlanDialogState extends ConsumerState<_CreatePlanDialog> {
                         children: [
                           Text(
                             'Start Date',
-                            style: InhaleTypography.labelSmall.copyWith(color: secondaryText),
+                            style: InhaleTypography.labelSmall.copyWith(
+                              color: secondaryText,
+                            ),
                           ),
                           const SizedBox(height: 4),
                           Text(
                             _formatDate(_startDate),
-                            style: InhaleTypography.bodyMedium.copyWith(color: primaryText),
+                            style: InhaleTypography.bodyMedium.copyWith(
+                              color: primaryText,
+                            ),
                           ),
                         ],
                       ),
@@ -1079,12 +1205,16 @@ class _CreatePlanDialogState extends ConsumerState<_CreatePlanDialog> {
                         children: [
                           Text(
                             'End Date',
-                            style: InhaleTypography.labelSmall.copyWith(color: secondaryText),
+                            style: InhaleTypography.labelSmall.copyWith(
+                              color: secondaryText,
+                            ),
                           ),
                           const SizedBox(height: 4),
                           Text(
                             _formatDate(_endDate),
-                            style: InhaleTypography.bodyMedium.copyWith(color: primaryText),
+                            style: InhaleTypography.bodyMedium.copyWith(
+                              color: primaryText,
+                            ),
                           ),
                         ],
                       ),
@@ -1112,10 +1242,7 @@ class _CreatePlanDialogState extends ConsumerState<_CreatePlanDialog> {
                 ),
                 const SizedBox(width: InhaleSpacing.sm),
                 Expanded(
-                  child: GlassButton(
-                    onTap: _submit,
-                    label: 'Create Plan',
-                  ),
+                  child: GlassButton(onTap: _submit, label: 'Create Plan'),
                 ),
               ],
             ),
@@ -1153,29 +1280,45 @@ class _CreatePlanDialogState extends ConsumerState<_CreatePlanDialog> {
   void _submit() {
     if (_nameCtrl.text.trim().isEmpty) return;
 
-    final goals = _goalsCtrl.text.split(',')
-        .map((s) => s.trim())
-        .where((s) => s.isNotEmpty)
-        .toList();
+    final goals =
+        _goalsCtrl.text
+            .split(',')
+            .map((s) => s.trim())
+            .where((s) => s.isNotEmpty)
+            .toList();
 
     if (goals.isEmpty) goals.add('Learn new topics');
 
     final hours = int.tryParse(_hoursCtrl.text) ?? 10;
 
-    ref.read(studyPlanProvider.notifier).createPlan(
-      name: _nameCtrl.text.trim(),
-      goals: goals,
-      startDate: _startDate,
-      endDate: _endDate,
-      hoursPerWeek: hours,
-    );
+    ref
+        .read(studyPlanProvider.notifier)
+        .createPlan(
+          name: _nameCtrl.text.trim(),
+          goals: goals,
+          startDate: _startDate,
+          endDate: _endDate,
+          hoursPerWeek: hours,
+        );
 
     Navigator.pop(context);
   }
 
   String _formatDate(DateTime dt) {
-    final months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    final months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
     return '${months[dt.month - 1]} ${dt.day}, ${dt.year}';
   }
 }

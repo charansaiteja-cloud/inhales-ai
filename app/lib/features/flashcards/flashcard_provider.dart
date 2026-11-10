@@ -217,24 +217,23 @@ class FlashcardState {
   }
 
   int get totalDue => dueCards.length;
-  double get progress => dailyGoal > 0 ? (todayReviews / dailyGoal).clamp(0, 1) : 0;
+  double get progress =>
+      dailyGoal > 0 ? (todayReviews / dailyGoal).clamp(0, 1) : 0;
 }
 
 // ── Providers ───────────────────────────────────────────────
 
 final flashcardProvider =
-    StateNotifierProvider<FlashcardNotifier, FlashcardState>(
-  (ref) {
-    final database = ref.watch(databaseProvider);
-    final aiEngine = ref.watch(aiEngineProvider);
-    final ragService = ref.watch(ragServiceProvider);
-    return FlashcardNotifier(
-      database: database,
-      aiEngine: aiEngine,
-      ragService: ragService,
-    );
-  },
-);
+    StateNotifierProvider<FlashcardNotifier, FlashcardState>((ref) {
+      final database = ref.watch(databaseProvider);
+      final aiEngine = ref.watch(aiEngineProvider);
+      final ragService = ref.watch(ragServiceProvider);
+      return FlashcardNotifier(
+        database: database,
+        aiEngine: aiEngine,
+        ragService: ragService,
+      );
+    });
 
 final flashcardDecksProvider = Provider<List<FlashcardDeck>>((ref) {
   return ref.watch(flashcardProvider).decks;
@@ -244,14 +243,12 @@ final dueFlashcardsProvider = Provider<List<Flashcard>>((ref) {
   return ref.watch(flashcardProvider).dueCards;
 });
 
-final flashcardsProvider =
-    Provider.family<List<Flashcard>, int>((ref, deckId) {
+final flashcardsProvider = Provider.family<List<Flashcard>, int>((ref, deckId) {
   final state = ref.watch(flashcardProvider);
   return state.deckCards[deckId] ?? [];
 });
 
-final dueCountProvider =
-    Provider.family<int, int>((ref, deckId) {
+final dueCountProvider = Provider.family<int, int>((ref, deckId) {
   final cards = ref.watch(flashcardsProvider(deckId));
   return cards.where((c) => c.isDue).length;
 });
@@ -268,11 +265,11 @@ class FlashcardNotifier extends StateNotifier<FlashcardState> {
     required db.AppDatabase database,
     required ai_engine.AIEngine aiEngine,
     required RAGService ragService,
-  })  : _database = database,
-        _aiEngine = aiEngine,
-        _ragService = ragService,
-        _fsrsParams = const FSRSParameters(),
-        super(const FlashcardState()) {
+  }) : _database = database,
+       _aiEngine = aiEngine,
+       _ragService = ragService,
+       _fsrsParams = const FSRSParameters(),
+       super(const FlashcardState()) {
     _loadAll();
   }
 
@@ -292,9 +289,7 @@ class FlashcardNotifier extends StateNotifier<FlashcardState> {
 
   Future<void> _loadDecks() async {
     final decks = await _database.select(_database.flashcardDecks).get();
-    state = state.copyWith(
-      decks: decks.map(FlashcardDeck.fromDb).toList(),
-    );
+    state = state.copyWith(decks: decks.map(FlashcardDeck.fromDb).toList());
   }
 
   Future<void> _loadDueCards() async {
@@ -309,18 +304,14 @@ class FlashcardNotifier extends StateNotifier<FlashcardState> {
       deckCards.putIfAbsent(card.deckId, () => []).add(card);
     }
 
-    state = state.copyWith(
-      dueCards: due,
-      deckCards: deckCards,
-    );
+    state = state.copyWith(dueCards: due, deckCards: deckCards);
   }
 
   Future<void> loadCardsForDeck(int deckId) async {
     try {
-      final raw = await (
-        _database.select(_database.flashcards)
-          ..where((t) => t.deckId.equals(deckId))
-      ).get();
+      final raw =
+          await (_database.select(_database.flashcards)
+            ..where((t) => t.deckId.equals(deckId))).get();
       final cards = raw.map(Flashcard.fromDb).toList();
       final updated = Map<int, List<Flashcard>>.from(state.deckCards);
       updated[deckId] = cards;
@@ -341,19 +332,21 @@ class FlashcardNotifier extends StateNotifier<FlashcardState> {
   }) async {
     try {
       final now = DateTime.now();
-      final id = await _database.into(_database.flashcardDecks).insert(
-        db.FlashcardDecksCompanion(
-          name: drift.Value(name),
-          description: drift.Value(description),
-          subjectId: drift.Value(subjectId),
-          topicId: drift.Value(topicId),
-          sourceDocumentId: drift.Value(sourceDocumentId),
-          cardCount: drift.Value(0),
-          isPublic: drift.Value(false),
-          createdAt: drift.Value(now),
-          updatedAt: drift.Value(now),
-        ),
-      );
+      final id = await _database
+          .into(_database.flashcardDecks)
+          .insert(
+            db.FlashcardDecksCompanion(
+              name: drift.Value(name),
+              description: drift.Value(description),
+              subjectId: drift.Value(subjectId),
+              topicId: drift.Value(topicId),
+              sourceDocumentId: drift.Value(sourceDocumentId),
+              cardCount: drift.Value(0),
+              isPublic: drift.Value(false),
+              createdAt: drift.Value(now),
+              updatedAt: drift.Value(now),
+            ),
+          );
       await _loadDecks();
       return id;
     } catch (e) {
@@ -385,7 +378,10 @@ class FlashcardNotifier extends StateNotifier<FlashcardState> {
 
   String _getDeckName(int id) {
     return state.decks
-        .firstWhere((d) => d.id == id, orElse: () => throw StateError('Deck not found'))
+        .firstWhere(
+          (d) => d.id == id,
+          orElse: () => throw StateError('Deck not found'),
+        )
         .name;
   }
 
@@ -418,33 +414,33 @@ class FlashcardNotifier extends StateNotifier<FlashcardState> {
   }) async {
     try {
       final now = DateTime.now();
-      final id = await _database.into(_database.flashcards).insert(
-        db.FlashcardsCompanion(
-          deckId: drift.Value(deckId),
-          front: drift.Value(front),
-          back: drift.Value(back),
-          hint: drift.Value(hint),
-          tags: drift.Value(tags != null ? jsonEncode(tags) : null),
-          sourceChunkId: drift.Value(sourceChunkId),
-          stability: drift.Value(0.0),
-          difficulty: drift.Value(0.0),
-          elapsedDays: drift.Value(0),
-          scheduledDays: drift.Value(0),
-          dueDate: drift.Value(now),
-          lastReviewed: drift.Value(null),
-          reviewCount: drift.Value(0),
-          lapseCount: drift.Value(0),
-          createdAt: drift.Value(now),
-          updatedAt: drift.Value(now),
-        ),
-      );
+      final id = await _database
+          .into(_database.flashcards)
+          .insert(
+            db.FlashcardsCompanion(
+              deckId: drift.Value(deckId),
+              front: drift.Value(front),
+              back: drift.Value(back),
+              hint: drift.Value(hint),
+              tags: drift.Value(tags != null ? jsonEncode(tags) : null),
+              sourceChunkId: drift.Value(sourceChunkId),
+              stability: drift.Value(0.0),
+              difficulty: drift.Value(0.0),
+              elapsedDays: drift.Value(0),
+              scheduledDays: drift.Value(0),
+              dueDate: drift.Value(now),
+              lastReviewed: drift.Value(null),
+              reviewCount: drift.Value(0),
+              lapseCount: drift.Value(0),
+              createdAt: drift.Value(now),
+              updatedAt: drift.Value(now),
+            ),
+          );
 
       // Update deck card count
       await (_database.update(_database.flashcardDecks)
         ..where((t) => t.id.equals(deckId))).write(
-        db.FlashcardDecksCompanion(
-          updatedAt: drift.Value(DateTime.now()),
-        ),
+        db.FlashcardDecksCompanion(updatedAt: drift.Value(DateTime.now())),
       );
 
       await loadCardsForDeck(deckId);
@@ -469,7 +465,8 @@ class FlashcardNotifier extends StateNotifier<FlashcardState> {
         front: front != null ? drift.Value(front) : drift.Value.absent(),
         back: back != null ? drift.Value(back) : drift.Value.absent(),
         hint: hint != null ? drift.Value(hint) : drift.Value.absent(),
-        tags: tags != null ? drift.Value(jsonEncode(tags)) : drift.Value.absent(),
+        tags:
+            tags != null ? drift.Value(jsonEncode(tags)) : drift.Value.absent(),
         updatedAt: drift.Value(DateTime.now()),
       );
       await (_database.update(_database.flashcards)
@@ -527,19 +524,21 @@ class FlashcardNotifier extends StateNotifier<FlashcardState> {
       final result = fsrsNext(fsrsState, rating, _fsrsParams);
 
       // Record the review
-      await _database.into(_database.flashcardReviews).insert(
-        db.FlashcardReviewsCompanion(
-          flashcardId: drift.Value(cardId),
-          rating: drift.Value(rating.value),
-          stabilityBefore: drift.Value(card.stability),
-          difficultyBefore: drift.Value(card.difficulty),
-          stabilityAfter: drift.Value(result.stability),
-          difficultyAfter: drift.Value(result.difficulty),
-          elapsedDays: drift.Value(card.elapsedDays),
-          scheduledDays: drift.Value(result.scheduledDays),
-          reviewedAt: drift.Value(DateTime.now()),
-        ),
-      );
+      await _database
+          .into(_database.flashcardReviews)
+          .insert(
+            db.FlashcardReviewsCompanion(
+              flashcardId: drift.Value(cardId),
+              rating: drift.Value(rating.value),
+              stabilityBefore: drift.Value(card.stability),
+              difficultyBefore: drift.Value(card.difficulty),
+              stabilityAfter: drift.Value(result.stability),
+              difficultyAfter: drift.Value(result.difficulty),
+              elapsedDays: drift.Value(card.elapsedDays),
+              scheduledDays: drift.Value(result.scheduledDays),
+              reviewedAt: drift.Value(DateTime.now()),
+            ),
+          );
 
       // Update the card with new FSRS state
       final now = DateTime.now();
@@ -596,9 +595,7 @@ class FlashcardNotifier extends StateNotifier<FlashcardState> {
         limit: 10,
       );
 
-      final content = results
-          .map((r) => r.chunk.content)
-          .join('\n\n');
+      final content = results.map((r) => r.chunk.content).join('\n\n');
 
       if (content.isEmpty) {
         state = state.copyWith(error: 'No content found in document');
@@ -654,7 +651,8 @@ $content''';
       await for (final chunk in _aiEngine.generate(
         prompt: prompt,
         history: [],
-        systemPrompt: 'You are a flashcard generator. Output valid JSON array only.',
+        systemPrompt:
+            'You are a flashcard generator. Output valid JSON array only.',
         maxTokens: 2048,
         temperature: 0.7,
         topP: 0.9,
@@ -685,15 +683,14 @@ $content''';
       state = state.copyWith(isLoading: false);
       return deckId;
     } catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        error: 'Generation failed: $e',
-      );
+      state = state.copyWith(isLoading: false, error: 'Generation failed: $e');
       return -1;
     }
   }
 
-  List<({String front, String back, String? hint})> _parseFlashcards(String response) {
+  List<({String front, String back, String? hint})> _parseFlashcards(
+    String response,
+  ) {
     final results = <({String front, String back, String? hint})>[];
     try {
       // Strip markdown code blocks if present
@@ -721,7 +718,9 @@ $content''';
         final trimmed = line.trim();
         if (trimmed.startsWith('Q:') || trimmed.startsWith('Question:')) {
           currentFront = trimmed.substring(2).trim();
-        } else if ((trimmed.startsWith('A:') || trimmed.startsWith('Answer:')) && currentFront != null) {
+        } else if ((trimmed.startsWith('A:') ||
+                trimmed.startsWith('Answer:')) &&
+            currentFront != null) {
           results.add((
             front: currentFront,
             back: trimmed.substring(2).trim(),

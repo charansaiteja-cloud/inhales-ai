@@ -507,15 +507,18 @@ class RAGService {
 
   /// Get all chunks for a specific document (with citation info).
   Future<List<DocumentChunk>> getDocumentChunks(String documentId) async {
-    final rows = await _database.customSelect(
-      '''
+    final rows =
+        await _database
+            .customSelect(
+              '''
       SELECT id, document_id, chunk_index, content, metadata, embedding
       FROM document_chunks
       WHERE document_id = ?
       ORDER BY chunk_index
     ''',
-      variables: [Variable.withString(documentId)],
-    ).get();
+              variables: [Variable.withString(documentId)],
+            )
+            .get();
 
     final chunks = <DocumentChunk>[];
     for (final row in rows) {
@@ -566,13 +569,15 @@ class RAGService {
     AIEngine? generationEngine,
   }) async {
     // Search for relevant chunks
-    final results = documentId != null
-        ? await searchInDocument(query, documentId, limit: limit)
-        : await hybridSearch(query, limit: limit);
+    final results =
+        documentId != null
+            ? await searchInDocument(query, documentId, limit: limit)
+            : await hybridSearch(query, limit: limit);
 
     if (results.isEmpty) {
       return (
-        answer: 'I couldn\'t find relevant information in the uploaded documents.',
+        answer:
+            'I couldn\'t find relevant information in the uploaded documents.',
         citations: <CitationRef>[],
       );
     }
@@ -584,18 +589,19 @@ class RAGService {
         .join('\n\n');
 
     // Create citation references
-    final citations = contextChunks.asMap().entries.map((entry) {
-      final idx = entry.key + 1;
-      final result = entry.value;
-      return CitationRef(
-        index: idx,
-        documentId: result.chunk.documentId,
-        chunkId: result.chunk.id,
-        citation: result.citation,
-        preview: result.preview,
-        score: result.score,
-      );
-    }).toList();
+    final citations =
+        contextChunks.asMap().entries.map((entry) {
+          final idx = entry.key + 1;
+          final result = entry.value;
+          return CitationRef(
+            index: idx,
+            documentId: result.chunk.documentId,
+            chunkId: result.chunk.id,
+            citation: result.citation,
+            preview: result.preview,
+            score: result.score,
+          );
+        }).toList();
 
     // Generate answer with citations
     String answer;
@@ -615,7 +621,8 @@ Answer:''';
       await for (final chunk in generationEngine.generate(
         prompt: prompt,
         history: [],
-        systemPrompt: 'You are a document Q&A assistant. Answer based only on provided context. Use inline citations [1], [2], etc.',
+        systemPrompt:
+            'You are a document Q&A assistant. Answer based only on provided context. Use inline citations [1], [2], etc.',
         maxTokens: 512,
         temperature: 0.3,
         topP: 0.9,
@@ -625,8 +632,14 @@ Answer:''';
       answer = buffer.toString().trim();
     } else {
       // Fallback: return top chunks as answer
-      answer = 'Based on the document(s):\n\n' +
-          contextChunks.map((r) => '• ${r.chunk.content.substring(0, math.min(200, r.chunk.content.length))}...').join('\n\n');
+      answer =
+          'Based on the document(s):\n\n' +
+          contextChunks
+              .map(
+                (r) =>
+                    '• ${r.chunk.content.substring(0, math.min(200, r.chunk.content.length))}...',
+              )
+              .join('\n\n');
     }
 
     return (answer: answer, citations: citations);
@@ -676,10 +689,7 @@ Answer:''';
     if (chunks.isEmpty) return null;
 
     // Combine first few chunks for summary (or all if small)
-    final content = chunks
-        .take(10)
-        .map((c) => c.content)
-        .join('\n\n');
+    final content = chunks.take(10).map((c) => c.content).join('\n\n');
 
     final prompt = '''Analyze this document and provide:
 1. A concise summary (3-5 sentences)
@@ -701,7 +711,8 @@ Format as JSON:
     await for (final chunk in generationEngine.generate(
       prompt: prompt,
       history: [],
-      systemPrompt: 'You are a document analysis assistant. Output valid JSON only.',
+      systemPrompt:
+          'You are a document analysis assistant. Output valid JSON only.',
       maxTokens: 512,
       temperature: 0.4,
       topP: 0.9,
@@ -739,7 +750,8 @@ Format as JSON:
   // ── Study Material Generation ────────────────────────────────
 
   /// Generate study materials from a document (flashcard-style Q&A).
-  Future<List<({String question, String answer, String citation})>> generateStudyQA(
+  Future<List<({String question, String answer, String citation})>>
+  generateStudyQA(
     String documentId, {
     int count = 10,
     AIEngine? generationEngine,
@@ -754,7 +766,8 @@ Format as JSON:
         .map((c) => '[${c.chunkIndex + 1}] ${c.content}')
         .join('\n\n');
 
-    final prompt = '''Generate $count study questions and answers from this document.
+    final prompt =
+        '''Generate $count study questions and answers from this document.
 Each Q&A should be self-contained and educational.
 Include the source chunk number [N] for each answer.
 
@@ -772,7 +785,8 @@ Format as JSON array:
     await for (final chunk in generationEngine.generate(
       prompt: prompt,
       history: [],
-      systemPrompt: 'You are a study material generator. Output valid JSON array only.',
+      systemPrompt:
+          'You are a study material generator. Output valid JSON array only.',
       maxTokens: 1024,
       temperature: 0.5,
       topP: 0.9,

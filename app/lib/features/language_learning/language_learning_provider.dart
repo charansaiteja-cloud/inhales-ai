@@ -2,10 +2,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../di/di.dart';
 import '../../ai/engine/ai_engine.dart' show AIEngine, ChatMessage;
 
-final languageLearningProvider = StateNotifierProvider<
-    LanguageLearningNotifier, LanguageLearningState>((ref) {
-  return LanguageLearningNotifier(ref.watch(aiEngineProvider));
-});
+final languageLearningProvider =
+    StateNotifierProvider<LanguageLearningNotifier, LanguageLearningState>((
+      ref,
+    ) {
+      return LanguageLearningNotifier(ref.watch(aiEngineProvider));
+    });
 
 class LanguageLearningState {
   final TranslationState translation;
@@ -25,13 +27,12 @@ class LanguageLearningState {
     ConversationState? conversation,
     GrammarState? grammar,
     VocabularyState? vocabulary,
-  }) =>
-      LanguageLearningState(
-        translation: translation ?? this.translation,
-        conversation: conversation ?? this.conversation,
-        grammar: grammar ?? this.grammar,
-        vocabulary: vocabulary ?? this.vocabulary,
-      );
+  }) => LanguageLearningState(
+    translation: translation ?? this.translation,
+    conversation: conversation ?? this.conversation,
+    grammar: grammar ?? this.grammar,
+    vocabulary: vocabulary ?? this.vocabulary,
+  );
 }
 
 class TranslationState {
@@ -58,15 +59,14 @@ class TranslationState {
     String? targetLang,
     bool? isTranslating,
     String? error,
-  }) =>
-      TranslationState(
-        sourceText: sourceText ?? this.sourceText,
-        translatedText: translatedText ?? this.translatedText,
-        sourceLang: sourceLang ?? this.sourceLang,
-        targetLang: targetLang ?? this.targetLang,
-        isTranslating: isTranslating ?? this.isTranslating,
-        error: error ?? this.error,
-      );
+  }) => TranslationState(
+    sourceText: sourceText ?? this.sourceText,
+    translatedText: translatedText ?? this.translatedText,
+    sourceLang: sourceLang ?? this.sourceLang,
+    targetLang: targetLang ?? this.targetLang,
+    isTranslating: isTranslating ?? this.isTranslating,
+    error: error ?? this.error,
+  );
 }
 
 class ConversationState {
@@ -90,14 +90,13 @@ class ConversationState {
     String? targetLanguage,
     bool? isGenerating,
     String? error,
-  }) =>
-      ConversationState(
-        messages: messages ?? this.messages,
-        currentInput: currentInput ?? this.currentInput,
-        targetLanguage: targetLanguage ?? this.targetLanguage,
-        isGenerating: isGenerating ?? this.isGenerating,
-        error: error ?? this.error,
-      );
+  }) => ConversationState(
+    messages: messages ?? this.messages,
+    currentInput: currentInput ?? this.currentInput,
+    targetLanguage: targetLanguage ?? this.targetLanguage,
+    isGenerating: isGenerating ?? this.isGenerating,
+    error: error ?? this.error,
+  );
 }
 
 class ConversationMessage {
@@ -133,14 +132,13 @@ class GrammarState {
     String? language,
     bool? isLoading,
     String? error,
-  }) =>
-      GrammarState(
-        query: query ?? this.query,
-        explanation: explanation ?? this.explanation,
-        language: language ?? this.language,
-        isLoading: isLoading ?? this.isLoading,
-        error: error ?? this.error,
-      );
+  }) => GrammarState(
+    query: query ?? this.query,
+    explanation: explanation ?? this.explanation,
+    language: language ?? this.language,
+    isLoading: isLoading ?? this.isLoading,
+    error: error ?? this.error,
+  );
 }
 
 class VocabularyItem {
@@ -178,21 +176,20 @@ class VocabularyState {
     List<VocabularyItem>? items,
     bool? isLoading,
     String? error,
-  }) =>
-      VocabularyState(
-        topics: topics ?? this.topics,
-        language: language ?? this.language,
-        items: items ?? this.items,
-        isLoading: isLoading ?? this.isLoading,
-        error: error ?? this.error,
-      );
+  }) => VocabularyState(
+    topics: topics ?? this.topics,
+    language: language ?? this.language,
+    items: items ?? this.items,
+    isLoading: isLoading ?? this.isLoading,
+    error: error ?? this.error,
+  );
 }
 
 class LanguageLearningNotifier extends StateNotifier<LanguageLearningState> {
   final AIEngine _aiEngine;
 
   LanguageLearningNotifier(this._aiEngine)
-      : super(const LanguageLearningState());
+    : super(const LanguageLearningState());
 
   // ==================== Translation ====================
   Future<void> translate({
@@ -283,13 +280,16 @@ class LanguageLearningNotifier extends StateNotifier<LanguageLearningState> {
     );
 
     try {
-      final history = state.conversation.messages
-          .map((m) => ChatMessage(
-                role: m.isUser ? 'user' : 'assistant',
-                content: m.content,
-                timestamp: m.timestamp,
-              ))
-          .toList();
+      final history =
+          state.conversation.messages
+              .map(
+                (m) => ChatMessage(
+                  role: m.isUser ? 'user' : 'assistant',
+                  content: m.content,
+                  timestamp: m.timestamp,
+                ),
+              )
+              .toList();
 
       final prompt = _buildConversationPrompt(message, language);
       final buffer = StringBuffer();
@@ -342,9 +342,7 @@ class LanguageLearningNotifier extends StateNotifier<LanguageLearningState> {
   }
 
   void clearConversation() {
-    state = state.copyWith(
-      conversation: const ConversationState(),
-    );
+    state = state.copyWith(conversation: const ConversationState());
   }
 
   // ==================== Grammar Explanation ====================
@@ -387,24 +385,17 @@ class LanguageLearningNotifier extends StateNotifier<LanguageLearningState> {
       );
     } catch (e) {
       state = state.copyWith(
-        grammar: state.grammar.copyWith(
-          isLoading: false,
-          error: e.toString(),
-        ),
+        grammar: state.grammar.copyWith(isLoading: false, error: e.toString()),
       );
     }
   }
 
   void setGrammarQuery(String query) {
-    state = state.copyWith(
-      grammar: state.grammar.copyWith(query: query),
-    );
+    state = state.copyWith(grammar: state.grammar.copyWith(query: query));
   }
 
   void setGrammarLanguage(String language) {
-    state = state.copyWith(
-      grammar: state.grammar.copyWith(language: language),
-    );
+    state = state.copyWith(grammar: state.grammar.copyWith(language: language));
   }
 
   // ==================== Vocabulary Generation ====================
@@ -440,10 +431,7 @@ class LanguageLearningNotifier extends StateNotifier<LanguageLearningState> {
       final items = _parseVocabularyResponse(buffer.toString());
 
       state = state.copyWith(
-        vocabulary: state.vocabulary.copyWith(
-          items: items,
-          isLoading: false,
-        ),
+        vocabulary: state.vocabulary.copyWith(items: items, isLoading: false),
       );
     } catch (e) {
       state = state.copyWith(
@@ -497,10 +485,7 @@ class LanguageLearningNotifier extends StateNotifier<LanguageLearningState> {
       final items = _parseSentencesResponse(buffer.toString(), level);
 
       state = state.copyWith(
-        vocabulary: state.vocabulary.copyWith(
-          items: items,
-          isLoading: false,
-        ),
+        vocabulary: state.vocabulary.copyWith(items: items, isLoading: false),
       );
     } catch (e) {
       state = state.copyWith(
@@ -632,20 +617,21 @@ Format each as: SENTENCE | TRANSLATION | NOTES
       if (line.trim().isEmpty) continue;
       final parts = line.split('|').map((s) => s.trim()).toList();
       if (parts.length >= 3) {
-        items.add(VocabularyItem(
-          word: parts[0],
-          definition: parts[1],
-          example: parts[2],
-          pronunciation: parts.length > 3 ? parts[3] : null,
-        ));
+        items.add(
+          VocabularyItem(
+            word: parts[0],
+            definition: parts[1],
+            example: parts[2],
+            pronunciation: parts.length > 3 ? parts[3] : null,
+          ),
+        );
       }
     }
 
     return items;
   }
 
-  List<VocabularyItem> _parseSentencesResponse(
-      String response, String level) {
+  List<VocabularyItem> _parseSentencesResponse(String response, String level) {
     final items = <VocabularyItem>[];
     final lines = response.split('\n');
 
@@ -653,11 +639,13 @@ Format each as: SENTENCE | TRANSLATION | NOTES
       if (line.trim().isEmpty) continue;
       final parts = line.split('|').map((s) => s.trim()).toList();
       if (parts.length >= 2) {
-        items.add(VocabularyItem(
-          word: parts[0],
-          definition: '${parts[1]} ($level level)',
-          example: parts.length > 2 ? parts[2] : '',
-        ));
+        items.add(
+          VocabularyItem(
+            word: parts[0],
+            definition: '${parts[1]} ($level level)',
+            example: parts.length > 2 ? parts[2] : '',
+          ),
+        );
       }
     }
 

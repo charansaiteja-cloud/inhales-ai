@@ -1,5 +1,5 @@
 /// FSRS (Free Recall Scheduler) Algorithm for Spaced Repetition.
-/// 
+///
 /// Based on the FSRS algorithm for optimal review scheduling.
 /// Given a flashcard state + user rating (Again=1, Hard=2, Good=3, Easy=4),
 /// computes new stability, difficulty, scheduled days, and due date.
@@ -9,28 +9,28 @@ library;
 class FSRSParameters {
   /// Target retention rate (0.75 = 75% recall probability).
   final double requestRetention;
-  
+
   /// Maximum interval between reviews in days.
   final int maximumInterval;
-  
+
   /// Bonus multiplier for Easy rating.
   final double easyBonus;
-  
+
   /// Factor for Hard rating (typically < 1.0).
   final double hardFactor;
-  
+
   /// Minimum interval for new cards (days).
   final int newCardInterval;
-  
+
   /// Learning step interval (minutes).
   final int learningStepMinutes;
-  
+
   /// Relearning step interval (minutes).
   final int relearningStepMinutes;
-  
+
   /// Difficulty multiplier for stability calculation.
   final double difficultyMultiplier;
-  
+
   /// Weight for stability decay.
   final double decayWeight;
 
@@ -64,7 +64,8 @@ class FSRSParameters {
       hardFactor: hardFactor ?? this.hardFactor,
       newCardInterval: newCardInterval ?? this.newCardInterval,
       learningStepMinutes: learningStepMinutes ?? this.learningStepMinutes,
-      relearningStepMinutes: relearningStepMinutes ?? this.relearningStepMinutes,
+      relearningStepMinutes:
+          relearningStepMinutes ?? this.relearningStepMinutes,
       difficultyMultiplier: difficultyMultiplier ?? this.difficultyMultiplier,
       decayWeight: decayWeight ?? this.decayWeight,
     );
@@ -75,22 +76,22 @@ class FSRSParameters {
 class FSRSState {
   /// Current stability in days (how long memory lasts).
   final double stability;
-  
+
   /// Current difficulty (0-10 scale, higher = harder).
   final double difficulty;
-  
+
   /// Days since last review.
   final int elapsedDays;
-  
+
   /// Currently scheduled interval in days.
   final int scheduledDays;
-  
+
   /// Number of reviews completed.
   final int reviewCount;
-  
+
   /// Number of lapses (forgotten cards).
   final int lapseCount;
-  
+
   /// Whether this is a new card (never reviewed).
   final bool isNew;
 
@@ -127,21 +128,26 @@ class FSRSState {
 
 /// User rating for a flashcard review.
 enum FlashcardRating {
-  again(1),   // Complete forget, needs immediate relearn
-  hard(2),    // Difficult recall, short interval
-  good(3),    // Normal recall, standard interval
-  easy(4);    // Easy recall, extended interval
+  again(1), // Complete forget, needs immediate relearn
+  hard(2), // Difficult recall, short interval
+  good(3), // Normal recall, standard interval
+  easy(4); // Easy recall, extended interval
 
   final int value;
   const FlashcardRating(this.value);
 
   static FlashcardRating fromInt(int value) {
     switch (value) {
-      case 1: return FlashcardRating.again;
-      case 2: return FlashcardRating.hard;
-      case 3: return FlashcardRating.good;
-      case 4: return FlashcardRating.easy;
-      default: return FlashcardRating.good;
+      case 1:
+        return FlashcardRating.again;
+      case 2:
+        return FlashcardRating.hard;
+      case 3:
+        return FlashcardRating.good;
+      case 4:
+        return FlashcardRating.easy;
+      default:
+        return FlashcardRating.good;
     }
   }
 }
@@ -150,19 +156,19 @@ enum FlashcardRating {
 class FSRSResult {
   /// Updated stability in days.
   final double stability;
-  
+
   /// Updated difficulty (0-10 scale).
   final double difficulty;
-  
+
   /// New scheduled interval in days.
   final int scheduledDays;
-  
+
   /// Due date for next review.
   final DateTime dueDate;
-  
+
   /// Updated review count.
   final int reviewCount;
-  
+
   /// Updated lapse count.
   final int lapseCount;
 
@@ -190,7 +196,7 @@ FSRSState fsrsInit() {
 }
 
 /// Calculate next review state based on current state and user rating.
-/// 
+///
 /// This implements a simplified FSRS algorithm:
 /// - Again (1): Reset to learning step, increment lapse count
 /// - Hard (2): Short interval (3x current or minimum)
@@ -214,7 +220,8 @@ FSRSResult fsrsNext(
   switch (rating) {
     case FlashcardRating.again:
       // Complete forget - reset to learning state
-      newStability = params.learningStepMinutes / 1440.0; // Convert minutes to days
+      newStability =
+          params.learningStepMinutes / 1440.0; // Convert minutes to days
       newDifficulty = _clampDifficulty(state.difficulty + 2.0);
       newScheduledDays = 0; // Review again today (or in learningStepMinutes)
       newLapseCount = state.lapseCount + 1;
@@ -303,7 +310,7 @@ double _calculateStability({
 
   // Calculate retention probability using exponential decay
   final retention = _calculateRetention(currentStability, elapsedDays);
-  
+
   // Adjust stability based on rating and retention
   double stabilityFactor;
   switch (rating) {
@@ -322,16 +329,17 @@ double _calculateStability({
   }
 
   // Apply difficulty modifier (harder cards learn slower)
-  final difficultyModifier = 1.0 - ((difficulty - 5.0) * params.difficultyMultiplier * 0.1);
-  
+  final difficultyModifier =
+      1.0 - ((difficulty - 5.0) * params.difficultyMultiplier * 0.1);
+
   // Calculate new stability
   final newStability = currentStability * stabilityFactor * difficultyModifier;
-  
+
   // Apply decay weight for forgetting curve
   if (elapsedDays > currentStability) {
     return newStability * params.decayWeight;
   }
-  
+
   return newStability;
 }
 
@@ -365,7 +373,7 @@ int _calculateInterval({
 }) {
   // Base interval from stability
   double interval = stability;
-  
+
   // Apply rating modifier
   switch (rating) {
     case FlashcardRating.again:
@@ -396,10 +404,10 @@ int _calculateInterval({
       }
       break;
   }
-  
+
   // Clamp to valid range
   interval = interval.clamp(1.0, params.maximumInterval.toDouble());
-  
+
   return interval.round();
 }
 
@@ -417,11 +425,11 @@ double _exp(double x) {
 double _pow(double base, double exp) {
   if (exp == 0) return 1.0;
   if (exp < 0) return 1.0 / _pow(base, -exp);
-  
+
   double result = 1.0;
   double b = base;
   double e = exp;
-  
+
   while (e > 0) {
     if (e % 2 == 1) {
       result *= b;
@@ -429,7 +437,7 @@ double _pow(double base, double exp) {
     b *= b;
     e /= 2;
   }
-  
+
   return result;
 }
 
@@ -455,18 +463,18 @@ int calculateOptimalInterval({
 double _ln(double x) {
   if (x <= 0) return double.negativeInfinity;
   if (x == 1) return 0;
-  
+
   // Use Newton's method for ln calculation
   double result = 0.0;
   double y = (x - 1) / (x + 1);
   double y2 = y * y;
   double term = y;
-  
+
   for (int i = 0; i < 50; i++) {
     result += term / (2 * i + 1);
     term *= y2;
     if (term.abs() < 1e-10) break;
   }
-  
+
   return 2 * result;
 }

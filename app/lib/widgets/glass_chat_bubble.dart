@@ -73,7 +73,10 @@ class GlassChatBubble extends StatelessWidget {
             : Text(
               message,
               style: TextStyle(
-                color: isDark ? Colors.white70 : const Color(0xFFECECEC),
+                color:
+                    isDark
+                        ? InhaleColors.textPrimary
+                        : InhaleColors.lightTextPrimary,
                 fontSize: 15,
                 height: 1.5,
               ),
@@ -85,10 +88,12 @@ class GlassChatBubble extends StatelessWidget {
       decoration: BoxDecoration(
         color:
             isUser
-                ? (isDark ? const Color(0x405B8CFF) : const Color(0x1BA9B4F2))
+                ? (isDark
+                    ? InhaleColors.blue.withValues(alpha: 0.25)
+                    : InhaleColors.blue.withValues(alpha: 0.15))
                 : (isDark
-                    ? Colors.grey.shade900
-                    : Colors.white.withValues(alpha: 0.7)),
+                    ? InhaleColors.glassSurfaceMedium
+                    : InhaleColors.lightGlassSurfaceMedium),
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(isUser ? 8 : 4),
           topRight: Radius.circular(isUser ? 4 : 8),
@@ -96,7 +101,10 @@ class GlassChatBubble extends StatelessWidget {
           bottomRight: Radius.circular(8),
         ),
         border: Border.all(
-          color: isUser ? const Color(0x405B8CFF) : Colors.white24,
+          color:
+              isUser
+                  ? InhaleColors.blue.withValues(alpha: 0.3)
+                  : InhaleColors.glassBorderSubtle,
           width: 0.5,
         ),
       ),
@@ -161,9 +169,9 @@ class _StreamingDotState extends State<_StreamingDot>
             width: 6,
             height: 6,
             decoration: BoxDecoration(
-              color: const Color(
-                0x4C5B8CFF,
-              ).withValues(alpha: 0.3 + _controller.value * 0.7),
+              color: InhaleColors.blue.withValues(
+                alpha: 0.3 + _controller.value * 0.7,
+              ),
               shape: BoxShape.circle,
             ),
           ),

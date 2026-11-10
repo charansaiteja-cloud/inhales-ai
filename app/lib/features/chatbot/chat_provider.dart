@@ -4,6 +4,9 @@ import '../../../domain/entities/message.dart' as domain_msg;
 import '../../../domain/repositories/conversation_repository.dart';
 import '../../../domain/repositories/message_repository.dart';
 import '../../../di/di.dart';
+import '../../ai/engine/ai_engine.dart' as ai_engine;
+import '../../ai/engine/ai_engine.dart' show AIEngine;
+import '../../ai/memory/memory_manager.dart';
 
 /// Chat state model - UI-facing (maintains backward compatibility).
 class ChatMessage {
@@ -38,6 +41,7 @@ class ChatSession {
   final String title;
   final List<ChatMessage> messages;
   final String mode;
+  final bool isPinned;
   final DateTime lastMessageTime;
 
   const ChatSession({
@@ -45,6 +49,7 @@ class ChatSession {
     required this.title,
     this.messages = const [],
     this.mode = 'chat',
+    this.isPinned = false,
     required this.lastMessageTime,
   });
 
@@ -58,6 +63,7 @@ class ChatSession {
       title: conversation.title,
       messages: messages.map(ChatMessage.fromEntity).toList(),
       mode: conversation.mode ?? 'chat',
+      isPinned: conversation.isPinned,
       lastMessageTime: conversation.updatedAt,
     );
   }
@@ -92,41 +98,91 @@ class ChatState {
 final chatProvider = StateNotifierProvider<ChatNotifier, ChatState>((ref) {
   final conversationRepo = ref.watch(conversationRepositoryProvider);
   final messageRepo = ref.watch(messageRepositoryProvider);
+  final aiEngine = ref.watch(aiEngineProvider);
+  final memoryManager = ref.watch(memoryManagerProvider);
   return ChatNotifier(
     conversationRepository: conversationRepo,
     messageRepository: messageRepo,
+    aiEngine: aiEngine,
+    memoryManager: memoryManager,
   );
 });
 
 class ChatNotifier extends StateNotifier<ChatState> {
   final ConversationRepository _conversationRepository;
   final MessageRepository _messageRepository;
+  final AIEngine _aiEngine;
+  final MemoryManager _memoryManager;
   int _nextId = 1;
+  static const int _pageSize = 20;
+  int _currentPage = 0;
+  bool _hasMore = true;
+  bool _isLoading = false;
 
   ChatNotifier({
     required ConversationRepository conversationRepository,
     required MessageRepository messageRepository,
+    required AIEngine aiEngine,
+    required MemoryManager memoryManager,
   }) : _conversationRepository = conversationRepository,
        _messageRepository = messageRepository,
+       _aiEngine = aiEngine,
+       _memoryManager = memoryManager,
        super(const ChatState()) {
     _loadSessions();
   }
 
-  Future<void> _loadSessions() async {
+  Future<void> _loadSessions({bool refresh = false}) async {
+    if (_isLoading) return;
+
+    if (refresh) {
+      _currentPage = 0;
+      _hasMore = true;
+      state = state.copyWith(sessions: []);
+    }
+
+    _isLoading = true;
     try {
-      final conversations = await _conversationRepository.getAll();
+      final offset = _currentPage * _pageSize;
+      final conversations = await _conversationRepository.getAll(
+        limit: _pageSize,
+        offset: offset,
+      );
+
+      if (conversations.length < _pageSize) {
+        _hasMore = false;
+      } else {
+        _currentPage++;
+      }
+
       final sessions = <ChatSession>[];
       for (final conv in conversations) {
         final messages = await _messageRepository.getByConversation(conv.id!);
         sessions.add(ChatSession.fromEntities(conv, messages));
       }
+
       state = state.copyWith(
-        sessions: sessions,
-        activeSession: sessions.isNotEmpty ? sessions.first : null,
+        sessions: refresh ? sessions : [...state.sessions, ...sessions],
+        activeSession:
+            state.activeSession ??
+            (sessions.isNotEmpty ? sessions.first : null),
       );
     } catch (e) {
       state = state.copyWith(generationError: 'Failed to load sessions: $e');
+    } finally {
+      _isLoading = false;
     }
+  }
+
+  /// Load more conversations for infinite scroll.
+  Future<void> loadMoreSessions() async {
+    if (!_hasMore) return;
+    await _loadSessions();
+  }
+
+  /// Refresh all sessions.
+  Future<void> refreshSessions() async {
+    await _loadSessions(refresh: true);
   }
 
   Future<ChatSession> newSession({String? mode}) async {
@@ -219,63 +275,136 @@ class ChatNotifier extends StateNotifier<ChatState> {
       isGenerating: true,
     );
 
-    // TODO: Replace with real FFI inference engine call in Phase 3
-    await Future.delayed(const Duration(milliseconds: 500));
-    final responseText = _generatePlaceholderResponse(userQuery);
+    try {
+      // Build chat history from previous messages
+      final history =
+          session.messages
+              .map(
+                (m) => ai_engine.ChatMessage(
+                  role: m.isUser ? 'user' : 'assistant',
+                  content: m.content,
+                  timestamp: m.timestamp,
+                ),
+              )
+              .toList();
 
-    // Save assistant message to database
-    final assistantMessageEntity = domain_msg.Message(
-      conversationId: session.id,
-      role: 'assistant',
-      content: responseText,
-      createdAt: DateTime.now(),
-    );
-    final savedAssistantMsg = await _messageRepository.create(
-      assistantMessageEntity,
-    );
+      // Stream inference from the AI engine
+      final buffer = StringBuffer();
+      await for (final chunk in _aiEngine.generate(
+        prompt: userQuery,
+        history: history,
+        maxTokens: 512,
+        temperature: 0.7,
+        topP: 0.9,
+      )) {
+        buffer.write(chunk);
+      }
 
-    final finalSession = ChatSession(
-      id: session.id,
-      title: session.title,
-      messages: [
-        ...session.messages,
-        ChatMessage.fromEntity(savedAssistantMsg),
-      ],
-      mode: session.mode,
-      lastMessageTime: DateTime.now(),
-    );
+      final responseText = buffer.toString().trim();
+      if (responseText.isEmpty) {
+        throw StateError('Engine returned empty response');
+      }
 
-    // Update conversation title and timestamp
-    await _conversationRepository.update(
-      domain.Conversation(
+      // Save assistant message to database
+      final assistantMessageEntity = domain_msg.Message(
+        conversationId: session.id,
+        role: 'assistant',
+        content: responseText,
+        createdAt: DateTime.now(),
+      );
+      final savedAssistantMsg = await _messageRepository.create(
+        assistantMessageEntity,
+      );
+
+      final finalSession = ChatSession(
         id: session.id,
-        title: finalSession.title,
-        mode: finalSession.mode,
-        context: '',
-        createdAt: session.messages.first.timestamp,
-        updatedAt: DateTime.now(),
-      ),
-    );
+        title: session.title,
+        messages: [
+          ...session.messages,
+          ChatMessage.fromEntity(savedAssistantMsg),
+        ],
+        mode: session.mode,
+        lastMessageTime: DateTime.now(),
+      );
 
-    state = ChatState(
-      sessions:
-          state.sessions
-              .map((s) => s.id == session.id ? finalSession : s)
-              .toList(),
-      activeSession: finalSession,
-      isGenerating: false,
-    );
-  }
+      // Update conversation title and timestamp
+      await _conversationRepository.update(
+        domain.Conversation(
+          id: session.id,
+          title: finalSession.title,
+          mode: finalSession.mode,
+          context: '',
+          createdAt: session.messages.first.timestamp,
+          updatedAt: DateTime.now(),
+        ),
+      );
 
-  String _generatePlaceholderResponse(String query) {
-    return 'Thank you for your question about "${query.substring(0, query.length.clamp(0, 50))}". '
-        'To provide a real AI-powered response, install a local language model through the Model Manager. '
-        'Go to Settings > AI Model to download a compatible model for your device. '
-        'Once installed, all responses will be generated locally on your device, completely offline.';
+      // Extract facts for long-term memory (fire-and-forget)
+      _memoryManager
+          .extractFacts(session.id, [userQuery, responseText])
+          .catchError((_) {});
+
+      state = ChatState(
+        sessions:
+            state.sessions
+                .map((s) => s.id == session.id ? finalSession : s)
+                .toList(),
+        activeSession: finalSession,
+        isGenerating: false,
+      );
+    } catch (e) {
+      state = ChatState(
+        sessions:
+            state.sessions
+                .map((s) => s.id == session.id ? withThinking : s)
+                .toList(),
+        activeSession: withThinking,
+        isGenerating: false,
+        generationError: 'Generation failed: $e',
+      );
+    }
   }
 
   Future<void> stopGeneration() async {
+    _aiEngine.cancel();
     state = state.copyWith(isGenerating: false);
+  }
+
+  Future<void> togglePin(int sessionId) async {
+    final session = state.sessions.firstWhere((s) => s.id == sessionId);
+    final newPinned = !session.isPinned;
+    await _conversationRepository.setPinned(sessionId, newPinned);
+
+    final updated =
+        state.sessions
+            .map(
+              (s) =>
+                  s.id == sessionId
+                      ? ChatSession(
+                        id: s.id,
+                        title: s.title,
+                        messages: s.messages,
+                        mode: s.mode,
+                        isPinned: newPinned,
+                        lastMessageTime: s.lastMessageTime,
+                      )
+                      : s,
+            )
+            .toList();
+
+    final active =
+        state.activeSession?.id == sessionId
+            ? ChatSession(
+              id: state.activeSession!.id,
+              title: state.activeSession!.title,
+              messages: state.activeSession!.messages,
+              mode: state.activeSession!.mode,
+              isPinned: newPinned,
+              lastMessageTime: state.activeSession!.lastMessageTime,
+            )
+            : state.activeSession;
+
+    state = ChatState(sessions: updated, activeSession: active);
   }
 
   Future<void> deleteSession(int sessionId) async {
@@ -298,7 +427,10 @@ class ChatNotifier extends StateNotifier<ChatState> {
         title: newTitle,
         mode: session.mode,
         context: '',
-        createdAt: session.messages.first.timestamp,
+        createdAt:
+            session.messages.isNotEmpty
+                ? session.messages.first.timestamp
+                : session.lastMessageTime,
         updatedAt: DateTime.now(),
       ),
     );

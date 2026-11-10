@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
+import '../core/theme/inhale_colors.dart';
+import '../core/theme/inhale_tokens.dart';
 
 class GlassCard extends StatelessWidget {
   final Widget? child;
@@ -42,14 +44,19 @@ class GlassCard extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final settings = MediaQuery.of(context).accessibleNavigation;
     final shouldBlur = useBlur ?? !settings;
-    final radius = borderRadius ?? BorderRadius.circular(8);
+    final radius = borderRadius ?? BorderRadius.circular(InhaleRadius.md);
 
     final effectiveShadows = shadows ?? _buildShadows(isDark);
     final effectiveBorder =
-        borderColor ?? (isDark ? Colors.white24 : Colors.grey.shade300);
+        borderColor ??
+        (isDark
+            ? InhaleColors.glassBorderSubtle
+            : InhaleColors.lightGlassBorderSubtle);
     final effectiveBg =
         backgroundColor ??
-        (isDark ? Colors.grey.shade900 : Colors.white.withValues(alpha: 0.7));
+        (isDark
+            ? InhaleColors.glassSurfaceMedium
+            : InhaleColors.lightGlassSurfaceMedium);
 
     final hoverCard = MouseRegion(
       cursor: SystemMouseCursors.click,
@@ -106,7 +113,7 @@ class GlassCard extends StatelessWidget {
       return isDark
           ? [
             BoxShadow(
-              color: Colors.blue.withValues(alpha: 0.3),
+              color: InhaleColors.blue.withValues(alpha: 0.3),
               blurRadius: 20,
               spreadRadius: 5,
             ),
@@ -117,14 +124,14 @@ class GlassCard extends StatelessWidget {
       return isDark
           ? [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.2),
+              color: InhaleColors.black.withValues(alpha: 0.3),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
           ]
           : [
             BoxShadow(
-              color: Colors.blue.withValues(alpha: 0.15),
+              color: InhaleColors.blue.withValues(alpha: 0.15),
               blurRadius: 10,
             ),
           ];

@@ -26,6 +26,8 @@ class GlassDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Dialog(
       backgroundColor: Colors.transparent,
       child: ClipRRect(
@@ -34,8 +36,17 @@ class GlassDialog extends StatelessWidget {
           filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
           child: Container(
             decoration: BoxDecoration(
-              color: const Color(0xCCFFFFFF),
-              border: Border.all(color: const Color(0x99FFFFFF), width: 0.5),
+              color:
+                  isDark
+                      ? InhaleColors.glassSurfaceHeavy
+                      : InhaleColors.lightGlassSurfaceMedium,
+              border: Border.all(
+                color:
+                    isDark
+                        ? InhaleColors.glassBorder
+                        : InhaleColors.lightGlassBorder,
+                width: 0.5,
+              ),
             ),
             padding: const EdgeInsets.all(InhaleSpacing.lg),
             child: Column(
@@ -44,10 +55,13 @@ class GlassDialog extends StatelessWidget {
                 if (title != null) ...[
                   Text(
                     title!,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w600,
-                      color: InhaleColors.navyText,
+                      color:
+                          isDark
+                              ? InhaleColors.textPrimary
+                              : InhaleColors.lightNavyText,
                     ),
                   ),
                   const SizedBox(height: 16),

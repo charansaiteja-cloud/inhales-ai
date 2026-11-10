@@ -47,7 +47,7 @@ class GlassButton extends StatelessWidget {
             color:
                 outlined
                     ? (isDark
-                        ? InhaleColors.electricBlue
+                        ? InhaleColors.blue
                         : InhaleColors.lightPrimaryBlue)
                     : (isDark ? InhaleColors.textPrimary : Colors.white),
             fontWeight: FontWeight.w600,
@@ -78,7 +78,7 @@ class GlassButton extends StatelessWidget {
                         ? (outlined
                             ? InhaleColors.glassSurface
                             : (isDark
-                                ? InhaleColors.electricBlue
+                                ? InhaleColors.blue
                                 : InhaleColors.lightPrimaryBlue))
                         : (isDark
                             ? InhaleColors.glassSurface

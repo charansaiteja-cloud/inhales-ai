@@ -33,6 +33,16 @@ class VoiceScreen extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              if (state.error != null)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: InhaleSpacing.sm),
+                  child: Text(
+                    state.error!,
+                    style: InhaleTypography.bodySmall.copyWith(
+                      color: InhaleColors.error,
+                    ),
+                  ),
+                ),
               Text(
                 'Speech to Text',
                 style: InhaleTypography.headlineMedium.copyWith(
@@ -102,7 +112,10 @@ class VoiceScreen extends ConsumerWidget {
                       ),
                     const SizedBox(height: InhaleSpacing.lg),
                     GlassIconButton(
-                      onTap: () => notifier.toggleRecording(),
+                      onTap:
+                          state.isAvailable
+                              ? () => notifier.toggleRecording()
+                              : null,
                       icon:
                           state.isRecording
                               ? Icons.stop_rounded

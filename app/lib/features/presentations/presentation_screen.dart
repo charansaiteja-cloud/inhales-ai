@@ -5,6 +5,7 @@ import '../../core/theme/inhale_tokens.dart';
 import '../../core/theme/inhale_typography.dart';
 import '../../widgets/glass_card.dart';
 import '../../widgets/glass_button.dart';
+import '../../widgets/glass_text_field.dart';
 import '../../widgets/glass_app_bar.dart';
 import 'presentation_provider.dart';
 
@@ -27,7 +28,9 @@ class PresentationScreen extends ConsumerWidget {
                   : InhaleColors.gradientBackground,
         ),
         child:
-            state.presentations.isEmpty
+            state.isGenerating
+                ? const Center(child: CircularProgressIndicator())
+                : state.presentations.isEmpty
                 ? _buildEmptyState(context, notifier, isDark)
                 : _buildPresentationsList(
                   context,
@@ -45,6 +48,9 @@ class PresentationScreen extends ConsumerWidget {
     PresentationNotifier notifier,
     bool isDark,
   ) {
+    final topicController = TextEditingController();
+    final slidesController = TextEditingController(text: '5');
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(InhaleSpacing.xl),
@@ -91,10 +97,28 @@ class PresentationScreen extends ConsumerWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: InhaleSpacing.lg),
+            GlassTextField(
+              controller: topicController,
+              hintText: 'Enter topic...',
+            ),
+            const SizedBox(height: InhaleSpacing.sm),
+            GlassTextField(
+              controller: slidesController,
+              hintText: 'Number of slides (default 5)',
+              keyboardType: TextInputType.number,
+            ),
+            const SizedBox(height: InhaleSpacing.lg),
             GlassButton(
               width: 240,
-              label: 'Create from Topic',
-              onTap: () => notifier.showTopicInput(),
+              label: 'Generate with AI',
+              onTap: () {
+                final topic = topicController.text.trim();
+                if (topic.isNotEmpty) {
+                  final slides =
+                      int.tryParse(slidesController.text.trim()) ?? 5;
+                  notifier.generatePresentation(topic, slides: slides);
+                }
+              },
               glow: true,
             ),
           ],
@@ -154,7 +178,7 @@ class PresentationScreen extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              pres['title'] ?? 'Untitled',
+                              pres.title,
                               style: InhaleTypography.titleSmall.copyWith(
                                 color:
                                     isDark
@@ -163,7 +187,7 @@ class PresentationScreen extends ConsumerWidget {
                               ),
                             ),
                             Text(
-                              '${pres['slides'] ?? 0} slides',
+                              '${pres.slideCount} slides',
                               style: InhaleTypography.bodySmall.copyWith(
                                 color:
                                     isDark
@@ -193,12 +217,78 @@ class PresentationScreen extends ConsumerWidget {
           child: GlassButton(
             width: double.infinity,
             label: 'New Presentation',
-            onTap: () => notifier.showTopicInput(),
+            onTap: () => _showNewPresentationDialog(context, notifier, isDark),
             glow: true,
           ),
         ),
         const SizedBox(height: InhaleSpacing.md),
       ],
+    );
+  }
+
+  void _showNewPresentationDialog(
+    BuildContext context,
+    PresentationNotifier notifier,
+    bool isDark,
+  ) {
+    final topicController = TextEditingController();
+    final slidesController = TextEditingController(text: '5');
+
+    showDialog(
+      context: context,
+      builder:
+          (ctx) => AlertDialog(
+            backgroundColor:
+                isDark ? InhaleColors.darkCharcoal : InhaleColors.lightSurface,
+            title: Text(
+              'New Presentation',
+              style: TextStyle(
+                color:
+                    isDark
+                        ? InhaleColors.textPrimary
+                        : InhaleColors.lightNavyText,
+              ),
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                GlassTextField(
+                  controller: topicController,
+                  hintText: 'Enter topic...',
+                ),
+                const SizedBox(height: InhaleSpacing.sm),
+                GlassTextField(
+                  controller: slidesController,
+                  hintText: 'Number of slides (default 5)',
+                  keyboardType: TextInputType.number,
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx),
+                child: Text(
+                  'Cancel',
+                  style: TextStyle(color: InhaleColors.blue),
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  final topic = topicController.text.trim();
+                  if (topic.isNotEmpty) {
+                    final slides =
+                        int.tryParse(slidesController.text.trim()) ?? 5;
+                    notifier.generatePresentation(topic, slides: slides);
+                    Navigator.pop(ctx);
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: InhaleColors.blue,
+                ),
+                child: const Text('Generate'),
+              ),
+            ],
+          ),
     );
   }
 }

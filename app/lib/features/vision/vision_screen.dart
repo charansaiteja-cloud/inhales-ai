@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'dart:io';
 
 import '../../core/theme/inhale_colors.dart';
 import '../../core/theme/inhale_tokens.dart';
@@ -178,12 +177,6 @@ class VisionScreen extends ConsumerWidget {
   }
 
   Future<void> _pickImage(VisionNotifier notifier) async {
-    // Placeholder - real implementation would use image_picker
-    notifier.setImage(await _mockImageFile());
-  }
-
-  Future<File> _mockImageFile() async {
-    // Mock file for now
-    return File('/tmp/mock.jpg');
+    await notifier.pickImage();
   }
 }

@@ -74,9 +74,7 @@ class _GlassTextFieldState extends State<GlassTextField> {
         border: Border.all(
           color:
               _focusNode.hasFocus
-                  ? (isDark
-                      ? InhaleColors.electricBlue
-                      : InhaleColors.lightPrimaryBlue)
+                  ? (isDark ? InhaleColors.blue : InhaleColors.lightPrimaryBlue)
                   : (isDark
                       ? InhaleColors.glassBorderSubtle
                       : InhaleColors.lightGlassBorderSubtle),

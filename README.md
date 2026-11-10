@@ -84,13 +84,21 @@ cd app && flutter build windows --release
 cd app && flutter build macos --release
 ```
 
-## Termux
+## Termux (Build on Android Phone)
+
+Build directly on your Android device — no computer needed!
 
 ```bash
-bash scripts/install_termux.sh
+# Quick install
+pkg install -y git curl wget unzip xz-utils zip libclang clang cmake ninja-build openjdk-17 android-tools
+git clone --depth 1 https://github.com/charansaiteja-cloud/inhales-ai.git
+cd inhales-ai && bash scripts/install_termux.sh
 ```
 
-See `scripts/install_termux.sh` for details. Note: building in Termux requires significant storage and time. Using the pre-built APK from GitHub Actions is recommended.
+**Requirements:** 4GB+ RAM, 2.5GB+ storage, ARM64 device  
+**Build time:** 20-40 minutes
+
+📖 Full guide: [`docs/TERMUX_INSTALL.md`](docs/TERMUX_INSTALL.md)
 
 ## Project Structure
 

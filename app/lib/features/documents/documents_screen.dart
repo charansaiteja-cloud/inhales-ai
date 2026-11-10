@@ -8,10 +8,30 @@ import '../../widgets/glass_button.dart';
 import '../../widgets/glass_text_field.dart';
 import '../../widgets/glass_app_bar.dart';
 import '../../widgets/glass_icon_button.dart';
+import '../../widgets/glass_loading_indicator.dart';
 import 'documents_provider.dart';
 
 class DocumentsScreen extends ConsumerWidget {
   const DocumentsScreen({super.key});
+
+  String _formatSize(int bytes) {
+    if (bytes < 1024) return '$bytes B';
+    if (bytes < 1024 * 1024) return '${(bytes / 1024).toStringAsFixed(1)} KB';
+    return '${(bytes / (1024 * 1024)).toStringAsFixed(1)} MB';
+  }
+
+  IconData _getIcon(String type) {
+    switch (type.toLowerCase()) {
+      case 'pdf':
+        return Icons.picture_as_pdf_rounded;
+      case 'md':
+        return Icons.article_rounded;
+      case 'txt':
+        return Icons.note_rounded;
+      default:
+        return Icons.description_rounded;
+    }
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -19,12 +39,19 @@ class DocumentsScreen extends ConsumerWidget {
     final notifier = ref.read(documentsProvider.notifier);
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
+    // Load documents on first build
+    ref.listen<DocumentsState>(documentsProvider, (prev, next) {
+      if (prev == null && !next.isLoading) {
+        notifier.loadDocuments();
+      }
+    });
+
     return Scaffold(
       appBar: GlassAppBar(
         title: 'Documents',
         actions: [
           GlassIconButton(
-            onTap: () => notifier.addDocument(),
+            onTap: () => notifier.importDocument(),
             icon: Icons.add_rounded,
             color:
                 isDark
@@ -58,7 +85,9 @@ class DocumentsScreen extends ConsumerWidget {
             ),
             Expanded(
               child:
-                  state.documents.isEmpty
+                  state.isLoading
+                      ? const Center(child: GlassLoadingIndicator())
+                      : state.documents.isEmpty
                       ? Center(
                         child: Padding(
                           padding: const EdgeInsets.all(InhaleSpacing.xl),
@@ -92,7 +121,7 @@ class DocumentsScreen extends ConsumerWidget {
                               ),
                               const SizedBox(height: InhaleSpacing.sm),
                               Text(
-                                'Add a PDF or text document to start chatting with your files.',
+                                'Add a PDF, Markdown, or text document to start chatting with your files.',
                                 style: InhaleTypography.bodyMedium.copyWith(
                                   color:
                                       isDark
@@ -104,7 +133,7 @@ class DocumentsScreen extends ConsumerWidget {
                               const SizedBox(height: InhaleSpacing.lg),
                               GlassButton(
                                 label: 'Add Document',
-                                onTap: () => notifier.addDocument(),
+                                onTap: () => notifier.importDocument(),
                                 width: 200,
                               ),
                             ],
@@ -121,7 +150,10 @@ class DocumentsScreen extends ConsumerWidget {
                               bottom: InhaleSpacing.sm,
                             ),
                             child: GlassCard(
-                              onTap: () => notifier.openDocument(index),
+                              onTap: () {
+                                // Show document details
+                                _showDocDetails(context, doc, notifier);
+                              },
                               padding: const EdgeInsets.all(InhaleSpacing.md),
                               elevated: true,
                               child: Row(
@@ -134,8 +166,8 @@ class DocumentsScreen extends ConsumerWidget {
                                         InhaleRadius.sm,
                                       ),
                                     ),
-                                    child: const Icon(
-                                      Icons.description_rounded,
+                                    child: Icon(
+                                      _getIcon(doc.fileType),
                                       color: Colors.white,
                                       size: 24,
                                     ),
@@ -147,7 +179,7 @@ class DocumentsScreen extends ConsumerWidget {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          doc['name'] ?? 'Document',
+                                          doc.title,
                                           style: InhaleTypography.titleSmall
                                               .copyWith(
                                                 color:
@@ -186,7 +218,7 @@ class DocumentsScreen extends ConsumerWidget {
                                                     ),
                                               ),
                                               child: Text(
-                                                doc['type'] ?? 'PDF',
+                                                doc.fileType.toUpperCase(),
                                                 style: InhaleTypography
                                                     .labelSmall
                                                     .copyWith(
@@ -203,7 +235,7 @@ class DocumentsScreen extends ConsumerWidget {
                                               width: InhaleSpacing.sm,
                                             ),
                                             Text(
-                                              '${doc['size'] ?? 'Unknown'}',
+                                              _formatSize(doc.sizeBytes),
                                               style: InhaleTypography.bodySmall
                                                   .copyWith(
                                                     color:
@@ -220,8 +252,10 @@ class DocumentsScreen extends ConsumerWidget {
                                     ),
                                   ),
                                   GlassIconButton(
-                                    onTap: () => notifier.openDocument(index),
-                                    icon: Icons.chevron_right_rounded,
+                                    onTap: () {
+                                      notifier.deleteDocument(doc.id);
+                                    },
+                                    icon: Icons.delete_outline_rounded,
                                     color:
                                         isDark
                                             ? InhaleColors.textMuted
@@ -237,6 +271,82 @@ class DocumentsScreen extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+
+  void _showDocDetails(
+    BuildContext context,
+    DocumentItem doc,
+    DocumentsNotifier notifier,
+  ) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    showDialog(
+      context: context,
+      builder:
+          (ctx) => AlertDialog(
+            backgroundColor:
+                isDark ? InhaleColors.darkCharcoal : InhaleColors.lightSurface,
+            title: Text(
+              doc.title,
+              style: TextStyle(
+                color:
+                    isDark
+                        ? InhaleColors.textPrimary
+                        : InhaleColors.lightNavyText,
+              ),
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Type: ${doc.fileType.toUpperCase()}',
+                  style: TextStyle(
+                    color:
+                        isDark
+                            ? InhaleColors.textSecondary
+                            : InhaleColors.lightTextSecondary,
+                  ),
+                ),
+                Text(
+                  'Size: ${_formatSize(doc.sizeBytes)}',
+                  style: TextStyle(
+                    color:
+                        isDark
+                            ? InhaleColors.textSecondary
+                            : InhaleColors.lightTextSecondary,
+                  ),
+                ),
+                Text(
+                  'Imported: ${doc.importedAt.toString().split('.').first}',
+                  style: TextStyle(
+                    color:
+                        isDark
+                            ? InhaleColors.textSecondary
+                            : InhaleColors.lightTextSecondary,
+                  ),
+                ),
+                if (doc.summary != null) ...[
+                  const SizedBox(height: 8),
+                  Text(
+                    'Summary:',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text(doc.summary!),
+                ],
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx),
+                child: Text(
+                  'Close',
+                  style: TextStyle(color: InhaleColors.blue),
+                ),
+              ),
+            ],
+          ),
     );
   }
 }

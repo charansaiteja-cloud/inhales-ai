@@ -8,6 +8,12 @@ import '../data/repositories/conversation_repository_impl.dart';
 import '../data/repositories/message_repository_impl.dart';
 import '../data/repositories/model_repository_impl.dart';
 
+import '../ai/engine/ai_engine.dart' hide ChatMessage;
+import '../ai/engine/ffi_ai_engine.dart';
+import '../ai/rag/rag_service.dart';
+import '../ai/memory/memory_manager.dart';
+import '../ai/manager/model_manager.dart';
+
 /// Database provider - creates and manages the AppDatabase instance.
 final databaseProvider = Provider<AppDatabase>((ref) {
   final database = AppDatabase();
@@ -45,3 +51,31 @@ List<Override> getRepositoryOverrides({
     if (modelRepo != null) modelRepositoryProvider.overrideWithValue(modelRepo),
   ];
 }
+
+/// AI Engine provider - manages local LLM inference.
+final aiEngineProvider = Provider<AIEngine>((ref) {
+  final engine = FfiAIEngine();
+  ref.onDispose(() => engine.dispose());
+  return engine;
+});
+
+/// RAG Service provider - handles document retrieval.
+final ragServiceProvider = Provider<RAGService>((ref) {
+  final database = ref.watch(databaseProvider);
+  return RAGService(database);
+});
+
+/// Memory Manager provider - manages conversation memory.
+final memoryManagerProvider = Provider<MemoryManager>((ref) {
+  final database = ref.watch(databaseProvider);
+  return MemoryManager(database);
+});
+
+/// Model Manager provider - handles model lifecycle.
+final modelManagerProvider = Provider<ModelManager>((ref) {
+  // ModelManager is created lazily; this provider is overridden in main()
+  // when a real ModelManager instance is available.
+  throw UnimplementedError(
+    'modelManagerProvider must be overridden with a real ModelManager instance',
+  );
+});

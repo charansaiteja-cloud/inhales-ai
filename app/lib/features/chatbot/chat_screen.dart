@@ -5,6 +5,7 @@ import 'dart:async';
 import '../../core/theme/inhale_colors.dart';
 import '../../core/theme/inhale_tokens.dart';
 import '../../core/theme/inhale_typography.dart';
+import '../../core/responsive/responsive.dart';
 import '../../widgets/glass_button.dart';
 import '../../widgets/glass_text_field.dart';
 import '../../widgets/glass_icon_button.dart';
@@ -12,6 +13,7 @@ import '../../widgets/glass_chat_bubble.dart';
 import '../../widgets/glass_app_bar.dart';
 import '../../widgets/ai_orb.dart';
 import 'chat_provider.dart';
+import 'chat_history_sidebar.dart';
 
 class ChatScreen extends ConsumerStatefulWidget {
   const ChatScreen({super.key});
@@ -23,6 +25,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   final _inputController = TextEditingController();
   final _scrollController = ScrollController();
   Timer? _scrollTimer;
+  bool _isHistoryOpen = false;
 
   @override
   void dispose() {
@@ -53,10 +56,133 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     });
   }
 
+  void _toggleHistory() {
+    setState(() {
+      _isHistoryOpen = !_isHistoryOpen;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final chatState = ref.watch(chatProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isDesktop = Responsive.isDesktop(context);
+
+    final chatContent = Container(
+      decoration: BoxDecoration(
+        gradient:
+            isDark
+                ? InhaleColors.gradientBackgroundDark
+                : InhaleColors.gradientBackground,
+      ),
+      child: SafeArea(
+        child: Column(
+          children: [
+            if (chatState.activeSession != null) ...[
+              Expanded(
+                child: ListView.builder(
+                  controller: _scrollController,
+                  padding: const EdgeInsets.symmetric(
+                    vertical: InhaleSpacing.md,
+                  ),
+                  itemCount: chatState.activeSession!.messages.length,
+                  itemBuilder: (context, index) {
+                    final msg = chatState.activeSession!.messages[index];
+                    return GlassChatBubble(
+                      message: msg.content,
+                      isUser: msg.isUser,
+                      timestamp: _formatTime(msg.timestamp),
+                      isStreaming: msg.isStreaming,
+                    );
+                  },
+                ),
+              ),
+              if (chatState.isGenerating) _buildTypingIndicator(isDark),
+            ] else ...[
+              Expanded(
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(InhaleSpacing.xl),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const SizedBox(
+                          width: 100,
+                          height: 100,
+                          child: AIOrb(size: 100, isActive: true),
+                        ),
+                        const SizedBox(height: InhaleSpacing.lg),
+                        Text(
+                          'Start a Conversation',
+                          style: InhaleTypography.headlineMedium.copyWith(
+                            color:
+                                isDark
+                                    ? InhaleColors.textPrimary
+                                    : InhaleColors.lightNavyText,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: InhaleSpacing.sm),
+                        Text(
+                          'Ask questions, brainstorm ideas,\nor just chat.',
+                          style: InhaleTypography.bodyMedium.copyWith(
+                            color:
+                                isDark
+                                    ? InhaleColors.textSecondary
+                                    : InhaleColors.lightTextSecondary,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: InhaleSpacing.lg),
+                        GlassButton(
+                          label: 'New Conversation',
+                          onTap:
+                              () =>
+                                  ref.read(chatProvider.notifier).newSession(),
+                          width: 200,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+            _buildComposer(context, chatState.isGenerating, isDark),
+          ],
+        ),
+      ),
+    );
+
+    if (isDesktop) {
+      return Scaffold(
+        appBar: GlassAppBar(
+          title: 'AI Chat',
+          actions: [
+            if (chatState.activeSession != null)
+              Padding(
+                padding: const EdgeInsets.only(right: InhaleSpacing.md),
+                child: _ModelBadge(
+                  mode: chatState.activeSession!.mode,
+                  isGenerating: chatState.isGenerating,
+                ),
+              ),
+          ],
+        ),
+        body: Row(
+          children: [
+            ChatHistorySidebar(isOpen: true, onClose: () {}, isDesktop: true),
+            VerticalDivider(
+              width: 0.5,
+              color:
+                  isDark
+                      ? InhaleColors.glassBorderSubtle
+                      : InhaleColors.lightGlassBorderSubtle,
+            ),
+            Expanded(child: chatContent),
+          ],
+        ),
+      );
+    }
 
     return Scaffold(
       appBar: GlassAppBar(
@@ -70,93 +196,22 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 isGenerating: chatState.isGenerating,
               ),
             ),
+          GlassIconButton(
+            onTap: _toggleHistory,
+            icon: _isHistoryOpen ? Icons.close_rounded : Icons.history_rounded,
+            size: 44,
+          ),
         ],
       ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient:
-              isDark
-                  ? InhaleColors.gradientBackgroundDark
-                  : InhaleColors.gradientBackground,
-        ),
-        child: SafeArea(
-          child: Column(
-            children: [
-              if (chatState.activeSession != null) ...[
-                Expanded(
-                  child: ListView.builder(
-                    controller: _scrollController,
-                    padding: const EdgeInsets.symmetric(
-                      vertical: InhaleSpacing.md,
-                    ),
-                    itemCount: chatState.activeSession!.messages.length,
-                    itemBuilder: (context, index) {
-                      final msg = chatState.activeSession!.messages[index];
-                      return GlassChatBubble(
-                        message: msg.content,
-                        isUser: msg.isUser,
-                        timestamp: _formatTime(msg.timestamp),
-                        isStreaming: msg.isStreaming,
-                      );
-                    },
-                  ),
-                ),
-                if (chatState.isGenerating) _buildTypingIndicator(isDark),
-              ] else ...[
-                Expanded(
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(InhaleSpacing.xl),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const SizedBox(
-                            width: 100,
-                            height: 100,
-                            child: AIOrb(size: 100, isActive: true),
-                          ),
-                          const SizedBox(height: InhaleSpacing.lg),
-                          Text(
-                            'Start a Conversation',
-                            style: InhaleTypography.headlineMedium.copyWith(
-                              color:
-                                  isDark
-                                      ? InhaleColors.textPrimary
-                                      : InhaleColors.lightNavyText,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: InhaleSpacing.sm),
-                          Text(
-                            'Ask questions, brainstorm ideas,\nor just chat.',
-                            style: InhaleTypography.bodyMedium.copyWith(
-                              color:
-                                  isDark
-                                      ? InhaleColors.textSecondary
-                                      : InhaleColors.lightTextSecondary,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: InhaleSpacing.lg),
-                          GlassButton(
-                            label: 'New Conversation',
-                            onTap:
-                                () =>
-                                    ref
-                                        .read(chatProvider.notifier)
-                                        .newSession(),
-                            width: 200,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-              _buildComposer(context, chatState.isGenerating, isDark),
-            ],
+      body: Stack(
+        children: [
+          chatContent,
+          ChatHistorySidebar(
+            isOpen: _isHistoryOpen,
+            onClose: () => setState(() => _isHistoryOpen = false),
+            isDesktop: false,
           ),
-        ),
+        ],
       ),
     );
   }

@@ -3,7 +3,8 @@ import '../entities/conversation.dart';
 
 abstract class ConversationRepository {
   /// Get all conversations, optionally filtered by mode.
-  Future<List<Conversation>> getAll({String? mode});
+  /// Supports pagination with limit and offset.
+  Future<List<Conversation>> getAll({String? mode, int? limit, int? offset});
 
   /// Get a conversation by ID.
   Future<Conversation?> getById(int id);

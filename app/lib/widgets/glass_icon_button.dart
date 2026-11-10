@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
+import '../core/theme/inhale_colors.dart';
 import '../core/theme/inhale_tokens.dart';
 
 class GlassIconButton extends StatelessWidget {
@@ -22,7 +23,8 @@ class GlassIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final effectiveColor =
-        color ?? (isDark ? Colors.white : Colors.grey.shade800);
+        color ??
+        (isDark ? InhaleColors.textPrimary : InhaleColors.lightNavyText);
 
     return Semantics(
       button: true,
@@ -34,10 +36,16 @@ class GlassIconButton extends StatelessWidget {
           width: size,
           height: size,
           decoration: BoxDecoration(
-            color: isDark ? Colors.white10 : Colors.white24,
+            color:
+                isDark
+                    ? InhaleColors.glassSurface
+                    : InhaleColors.lightGlassSurface,
             shape: BoxShape.circle,
             border: Border.all(
-              color: isDark ? Colors.white24 : Colors.grey.shade400,
+              color:
+                  isDark
+                      ? InhaleColors.glassBorderSubtle
+                      : InhaleColors.lightGlassBorderSubtle,
               width: 0.5,
             ),
           ),

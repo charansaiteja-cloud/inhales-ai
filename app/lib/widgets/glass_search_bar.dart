@@ -32,6 +32,7 @@ class _GlassSearchBarState extends State<GlassSearchBar> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final hintText = widget.hintText ?? 'Search';
     final effectiveOnTap = widget.onTap ?? (() {});
 
@@ -48,10 +49,16 @@ class _GlassSearchBarState extends State<GlassSearchBar> {
                 filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: InhaleColors.glassSurface,
+                    color:
+                        isDark
+                            ? InhaleColors.glassSurface
+                            : InhaleColors.lightGlassSurface,
                     borderRadius: BorderRadius.circular(InhaleRadius.pill),
                     border: Border.all(
-                      color: InhaleColors.glassBorderSubtle,
+                      color:
+                          isDark
+                              ? InhaleColors.glassBorderSubtle
+                              : InhaleColors.lightGlassBorderSubtle,
                       width: 0.5,
                     ),
                   ),
@@ -60,7 +67,13 @@ class _GlassSearchBarState extends State<GlassSearchBar> {
                     enabled: widget.enabled,
                     onTap: () {},
                     onChanged: widget.onChanged,
-                    style: const TextStyle(color: Colors.black87, fontSize: 15),
+                    style: TextStyle(
+                      color:
+                          isDark
+                              ? InhaleColors.textPrimary
+                              : InhaleColors.lightNavyText,
+                      fontSize: 15,
+                    ),
                     decoration: InputDecoration(
                       hintText: hintText,
                       border: InputBorder.none,
@@ -68,8 +81,15 @@ class _GlassSearchBarState extends State<GlassSearchBar> {
                         horizontal: 16,
                         vertical: 12,
                       ),
+                      hintStyle: TextStyle(
+                        color:
+                            isDark
+                                ? InhaleColors.textMuted
+                                : InhaleColors.lightTextSecondary,
+                        fontSize: 15,
+                      ),
                     ),
-                    cursorColor: InhaleColors.primaryBlue,
+                    cursorColor: InhaleColors.blue,
                   ),
                 ),
               ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../core/theme/inhale_colors.dart';
 
 /// Premium AI Orb animation with state-specific visuals.
 class AIOrb extends StatefulWidget {
@@ -85,10 +86,10 @@ class _AIOrbState extends State<AIOrb> with SingleTickerProviderStateMixin {
                     child: Container(
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        gradient: const RadialGradient(
+                        gradient: RadialGradient(
                           colors: [
-                            Color(0x645B8CFF),
-                            Color(0x339B87FF),
+                            InhaleColors.blue.withValues(alpha: 0.4),
+                            InhaleColors.pink.withValues(alpha: 0.2),
                             Colors.transparent,
                           ],
                         ),
@@ -100,13 +101,13 @@ class _AIOrbState extends State<AIOrb> with SingleTickerProviderStateMixin {
               Container(
                 width: widget.size * 0.6,
                 height: widget.size * 0.6,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   gradient: RadialGradient(
                     colors: [
-                      Color(0xC985FFFF),
-                      Color(0x995B8CFF),
-                      Color(0x669B87FF),
+                      InhaleColors.skyBlue.withValues(alpha: 0.8),
+                      InhaleColors.blue.withValues(alpha: 0.6),
+                      InhaleColors.pink.withValues(alpha: 0.4),
                     ],
                   ),
                 ),
@@ -118,7 +119,7 @@ class _AIOrbState extends State<AIOrb> with SingleTickerProviderStateMixin {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: const Color(0x9985FFFF),
+                      color: InhaleColors.skyBlue.withValues(alpha: 0.6),
                       width: 2,
                     ),
                   ),
@@ -129,7 +130,9 @@ class _AIOrbState extends State<AIOrb> with SingleTickerProviderStateMixin {
                   margin: const EdgeInsets.only(top: 12),
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      InhaleColors.blue,
+                    ),
                   ),
                 ),
               if (widget.isSpeaking)
@@ -151,7 +154,7 @@ class _AIOrbState extends State<AIOrb> with SingleTickerProviderStateMixin {
                               margin: const EdgeInsets.symmetric(
                                 horizontal: 1.5,
                               ),
-                              color: Colors.white,
+                              color: InhaleColors.textPrimary,
                             );
                           },
                         ),

@@ -23,12 +23,19 @@ class ConversationRepositoryImpl implements ConversationRepository {
   }
 
   @override
-  Future<List<domain.Conversation>> getAll({String? mode}) async {
+  Future<List<domain.Conversation>> getAll({
+    String? mode,
+    int? limit,
+    int? offset,
+  }) async {
     final query = _database.select(_database.conversations);
     if (mode != null) {
       query.where((c) => c.mode.equals(mode));
     }
     query.orderBy([(c) => OrderingTerm.desc(c.updatedAt)]);
+    if (limit != null) {
+      query.limit(limit, offset: offset);
+    }
     final results = await query.get();
     return results.map(_mapToEntity).toList();
   }

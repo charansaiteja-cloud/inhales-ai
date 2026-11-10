@@ -23,7 +23,7 @@ class _SmoothPageTransitionBuilder extends PageTransitionsBuilder {
 }
 
 /// Centralised theme system for InhaleSkill AI.
-/// Dark theme is the primary visual identity.
+/// Black theme is the primary visual identity.
 class InhaleTheme {
   InhaleTheme._();
 
@@ -90,22 +90,23 @@ class InhaleTheme {
     ),
   );
 
-  static final ThemeData darkTheme = ThemeData(
+  // Primary dark theme — Black theme (Black theme is primary identity)
+  static final ThemeData blackTheme = ThemeData(
     useMaterial3: true,
     brightness: Brightness.dark,
     colorScheme: const ColorScheme.dark(
-      primary: InhaleColors.electricBlue,
-      onPrimary: InhaleColors.midnight,
-      secondary: InhaleColors.softCyan,
-      onSecondary: InhaleColors.midnight,
-      surface: InhaleColors.darkNavy,
+      primary: InhaleColors.blue,
+      onPrimary: InhaleColors.black,
+      secondary: InhaleColors.skyBlue,
+      onSecondary: InhaleColors.black,
+      surface: InhaleColors.darkCharcoal,
       onSurface: InhaleColors.textPrimary,
-      surfaceContainerHighest: InhaleColors.deepNavy,
+      surfaceContainerHighest: InhaleColors.glassGrey,
       error: InhaleColors.error,
       outline: InhaleColors.glassBorderSubtle,
     ),
-    scaffoldBackgroundColor: InhaleColors.midnight,
-    canvasColor: InhaleColors.darkNavy,
+    scaffoldBackgroundColor: InhaleColors.black,
+    canvasColor: InhaleColors.darkCharcoal,
     cardTheme: CardThemeData(
       color: InhaleColors.glassSurfaceMedium,
       elevation: 0,
@@ -119,7 +120,7 @@ class InhaleTheme {
     ),
     scrollbarTheme: ScrollbarThemeData(
       thumbColor: WidgetStateColor.resolveWith(
-        (_) => InhaleColors.electricBlue.withValues(alpha: 0.4),
+        (_) => InhaleColors.blue.withValues(alpha: 0.4),
       ),
     ),
     dividerTheme: const DividerThemeData(
@@ -175,14 +176,14 @@ class InhaleTheme {
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(InhaleRadius.sm),
-        borderSide: const BorderSide(
-          color: InhaleColors.electricBlue,
-          width: 1.5,
-        ),
+        borderSide: const BorderSide(color: InhaleColors.blue, width: 1.5),
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
     ),
   );
+
+  // Legacy dark theme alias (kept for backward compatibility)
+  static final ThemeData darkTheme = blackTheme;
 
   static InhaleThemeData of(BuildContext context) {
     return InhaleThemeData._(context);
@@ -198,7 +199,7 @@ class InhaleThemeData {
   bool get isDark => Theme.of(_context).brightness == Brightness.dark;
 
   Color get background =>
-      isDark ? InhaleColors.midnight : InhaleColors.lightBackground;
+      isDark ? InhaleColors.black : InhaleColors.lightBackground;
 
   Color get surface =>
       isDark ? InhaleColors.glassSurfaceMedium : InhaleColors.lightGlassSurface;
@@ -210,7 +211,7 @@ class InhaleThemeData {
       isDark ? InhaleColors.textSecondary : InhaleColors.lightTextSecondary;
 
   Color get primary =>
-      isDark ? InhaleColors.electricBlue : InhaleColors.lightPrimaryBlue;
+      isDark ? InhaleColors.blue : InhaleColors.lightPrimaryBlue;
 
   double get blur => isDark ? InhaleBlur.medium : InhaleBlur.light;
 }

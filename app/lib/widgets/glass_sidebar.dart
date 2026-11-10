@@ -19,27 +19,41 @@ class GlassSidebar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return ClipRect(
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 14, sigmaY: 14),
         child: Container(
           width: 260,
-          decoration: const BoxDecoration(
-            color: Color(0x99FFFFFF),
+          decoration: BoxDecoration(
+            color:
+                isDark
+                    ? InhaleColors.glassSurfaceHeavy
+                    : InhaleColors.lightGlassSurfaceMedium,
             border: Border(
-              right: BorderSide(color: Color(0x4DFFFFFF), width: 0.5),
+              right: BorderSide(
+                color:
+                    isDark
+                        ? InhaleColors.glassBorder
+                        : InhaleColors.lightGlassBorder,
+                width: 0.5,
+              ),
             ),
           ),
           child: SafeArea(
             child: ListView(
               padding: const EdgeInsets.symmetric(vertical: 16),
               children: [
-                const Text(
+                Text(
                   'InhaleSkill AI',
                   style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.w700,
-                    color: InhaleColors.primaryBlue,
+                    color:
+                        isDark
+                            ? InhaleColors.blue
+                            : InhaleColors.lightPrimaryBlue,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -61,9 +75,9 @@ class GlassSidebar extends StatelessWidget {
                       decoration: BoxDecoration(
                         color:
                             isActive
-                                ? InhaleColors.primaryBlue.withValues(
-                                  alpha: 0.12,
-                                )
+                                ? (isDark
+                                    ? InhaleColors.blue.withValues(alpha: 0.15)
+                                    : InhaleColors.blue.withValues(alpha: 0.1))
                                 : Colors.transparent,
                         borderRadius: const BorderRadius.all(
                           Radius.circular(InhaleRadius.md),
@@ -75,8 +89,12 @@ class GlassSidebar extends StatelessWidget {
                             item.icon,
                             color:
                                 isActive
-                                    ? InhaleColors.primaryBlue
-                                    : InhaleColors.secondaryText,
+                                    ? (isDark
+                                        ? InhaleColors.blue
+                                        : InhaleColors.lightPrimaryBlue)
+                                    : (isDark
+                                        ? InhaleColors.textSecondary
+                                        : InhaleColors.lightTextSecondary),
                             size: 22,
                           ),
                           const SizedBox(width: 14),
@@ -85,8 +103,12 @@ class GlassSidebar extends StatelessWidget {
                             style: TextStyle(
                               color:
                                   isActive
-                                      ? InhaleColors.primaryBlue
-                                      : InhaleColors.navyText,
+                                      ? (isDark
+                                          ? InhaleColors.blue
+                                          : InhaleColors.lightPrimaryBlue)
+                                      : (isDark
+                                          ? InhaleColors.textPrimary
+                                          : InhaleColors.lightNavyText),
                               fontWeight:
                                   isActive ? FontWeight.w600 : FontWeight.w400,
                               fontSize: 15,

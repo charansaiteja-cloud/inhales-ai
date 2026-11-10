@@ -56,7 +56,7 @@ class InhaleShadows {
 
   static const List<BoxShadow> glass = [
     BoxShadow(
-      color: Color(0x14080B16),
+      color: Color(0x14050505),
       blurRadius: 24,
       offset: Offset(0, 8),
       spreadRadius: -4,
@@ -65,7 +65,7 @@ class InhaleShadows {
 
   static const List<BoxShadow> glassBlue = [
     BoxShadow(
-      color: Color(0x145B8CFF),
+      color: Color(0x141677D2),
       blurRadius: 28,
       offset: Offset(0, 10),
       spreadRadius: -6,
@@ -74,7 +74,7 @@ class InhaleShadows {
 
   static const List<BoxShadow> floating = [
     BoxShadow(
-      color: Color(0x1A080B16),
+      color: Color(0x1A050505),
       blurRadius: 36,
       offset: Offset(0, 16),
       spreadRadius: -8,
@@ -92,16 +92,16 @@ class InhaleShadows {
 
   static const List<BoxShadow> glowBlue = [
     BoxShadow(
-      color: Color(0x265B8CFF),
+      color: Color(0x261677D2),
       blurRadius: 40,
       offset: Offset(0, 0),
       spreadRadius: 2,
     ),
   ];
 
-  static const List<BoxShadow> glowViolet = [
+  static const List<BoxShadow> glowPink = [
     BoxShadow(
-      color: Color(0x1A9B87FF),
+      color: Color(0x1AEC4899),
       blurRadius: 40,
       offset: Offset(0, 0),
       spreadRadius: 2,

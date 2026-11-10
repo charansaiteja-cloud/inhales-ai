@@ -1,3 +1,5 @@
+import 'dart:io';
+
 /// Hardware capability profile for adaptive model selection.
 class HardwareProfile {
   final int totalRamMb;
@@ -54,4 +56,37 @@ class HardwareProfile {
   @override
   String toString() =>
       'HardwareProfile(ram=${totalRamMb}MB, cores=$cpuCores, arch=$cpuArchitecture, gpu=$gpuAvailable, tier=$tierName)';
+
+  /// Detect the current device's hardware capabilities.
+  static Future<HardwareProfile> detect() async {
+    final cores = Platform.numberOfProcessors;
+    final arch = 'x86_64';
+    final os = Platform.operatingSystem;
+
+    int totalRamMb = 4096;
+    try {
+      final result = await Process.run('free', ['-m']);
+      if (result.exitCode == 0) {
+        final lines = result.stdout.toString().trim().split('\n');
+        if (lines.length > 1) {
+          final parts = lines[1].trim().split(RegExp(r'\s+'));
+          if (parts.length >= 2) {
+            totalRamMb = int.tryParse(parts[1]) ?? 4096;
+          }
+        }
+      }
+    } catch (_) {}
+
+    return HardwareProfile(
+      totalRamMb: totalRamMb,
+      availableRamMb: (totalRamMb * 0.7).round(),
+      storageFreeMb: 10000,
+      cpuArchitecture: arch,
+      cpuCores: cores,
+      gpuAvailable: false,
+      gpuName: 'none',
+      os: os,
+      osVersion: 0,
+    );
+  }
 }

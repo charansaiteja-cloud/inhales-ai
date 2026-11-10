@@ -1,5 +1,5 @@
-// InhaleSkill AI — CMake build for the native inference engine.
-// Produces a shared library consumed by Dart FFI on each platform.
+# InhaleSkill AI — CMake build for the native inference engine.
+# Produces a shared library consumed by Dart FFI on each platform.
 
 cmake_minimum_required(VERSION 3.16)
 project(InhaleInference LANGUAGES C CXX)
@@ -24,7 +24,7 @@ set(INFERENCE_SOURCES
 # Optional: llama.cpp integration.
 # When USE_LLAMA=ON, the llama.cpp source tree under native/llama.cpp is
 # compiled and linked. Otherwise the stub engine is used.
-option(USE_LLAMA "Build with llama.cpp integration" OFF)
+option(USE_LLAMA "Build with llama.cpp integration" ON)
 
 if(USE_LLAMA)
     message(STATUS "llama.cpp integration enabled")

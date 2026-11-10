@@ -29,9 +29,7 @@ class GlassBackground extends StatelessWidget {
         color:
             useGradient
                 ? null
-                : (isDark
-                    ? InhaleColors.midnight
-                    : InhaleColors.lightBackground),
+                : (isDark ? InhaleColors.black : InhaleColors.lightBackground),
       ),
       child: Stack(
         children: [
@@ -56,7 +54,7 @@ class GlassBackground extends StatelessWidget {
                 height: 250,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: InhaleColors.ambientViolet,
+                  color: InhaleColors.ambientPink,
                 ),
               ),
             ),

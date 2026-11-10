@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../core/theme/inhale_colors.dart';
 
 class GlassAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -24,7 +25,10 @@ class GlassAppBar extends StatelessWidget implements PreferredSizeWidget {
           color: Colors.transparent,
           border: Border(
             bottom: BorderSide(
-              color: isDark ? Colors.white24 : Colors.grey.shade300,
+              color:
+                  isDark
+                      ? InhaleColors.glassBorderSubtle
+                      : InhaleColors.lightGlassBorderSubtle,
               width: 0.5,
             ),
           ),
@@ -36,13 +40,22 @@ class GlassAppBar extends StatelessWidget implements PreferredSizeWidget {
               leading!
             else
               IconButton(
-                icon: const Icon(Icons.arrow_back_rounded),
+                icon: Icon(
+                  Icons.arrow_back_rounded,
+                  color:
+                      isDark
+                          ? InhaleColors.textPrimary
+                          : InhaleColors.lightNavyText,
+                ),
                 onPressed: () => Navigator.of(context).pop(),
               ),
             Text(
               title,
               style: TextStyle(
-                color: isDark ? Colors.white : Colors.grey.shade900,
+                color:
+                    isDark
+                        ? InhaleColors.textPrimary
+                        : InhaleColors.lightNavyText,
                 fontWeight: FontWeight.w600,
                 fontSize: 20,
               ),

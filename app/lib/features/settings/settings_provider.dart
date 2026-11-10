@@ -1,5 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:drift/drift.dart' as drift;
+
+import '../../../di/di.dart';
+import '../../../database/database.dart';
 
 /// User settings state.
 class AppSettings {
@@ -86,51 +92,108 @@ class AppSettings {
 
 final settingsProvider =
     StateNotifierProvider<SettingsNotifier, AsyncValue<AppSettings>>(
-      (ref) => SettingsNotifier(),
+      (ref) => SettingsNotifier(ref.watch(databaseProvider)),
     );
 
 class SettingsNotifier extends StateNotifier<AsyncValue<AppSettings>> {
-  SettingsNotifier() : super(const AsyncValue.loading()) {
+  final AppDatabase _database;
+
+  SettingsNotifier(this._database) : super(const AsyncValue.loading()) {
     _load();
   }
 
   Future<void> _load() async {
-    state = AsyncValue.data(const AppSettings());
+    final settings = await _loadSettings();
+    state = AsyncValue.data(settings);
+  }
+
+  Future<AppSettings> _loadSettings() async {
+    final prefs =
+        await (_database.select(_database.preferences)
+          ..where((p) => p.key.equals('app_settings'))).getSingleOrNull();
+
+    if (prefs == null) {
+      return const AppSettings();
+    }
+
+    try {
+      final json = Map<String, dynamic>.from(jsonDecode(prefs.value) as Map);
+      return AppSettings.fromJson(json);
+    } catch (_) {
+      return const AppSettings();
+    }
+  }
+
+  Future<void> _saveSettings(AppSettings settings) async {
+    final json = jsonEncode(settings.toJson());
+    await (_database.update(_database.preferences)..where(
+      (p) => p.key.equals('app_settings'),
+    )).write(PreferencesCompanion(value: drift.Value(json)));
   }
 
   Future<void> setTheme(ThemeMode mode) async {
-    state = AsyncValue.data(state.value!.copyWith(themeMode: mode));
+    final settings = state.value!.copyWith(themeMode: mode);
+    state = AsyncValue.data(settings);
+    await _saveSettings(settings);
   }
 
   Future<void> setOffline(bool value) async {
-    state = AsyncValue.data(state.value!.copyWith(offlineMode: value));
+    final settings = state.value!.copyWith(offlineMode: value);
+    state = AsyncValue.data(settings);
+    await _saveSettings(settings);
   }
 
   Future<void> setReducedBlur(bool value) async {
-    state = AsyncValue.data(state.value!.copyWith(reducedBlur: value));
+    final settings = state.value!.copyWith(reducedBlur: value);
+    state = AsyncValue.data(settings);
+    await _saveSettings(settings);
   }
 
   Future<void> setReducedAnimation(bool value) async {
-    state = AsyncValue.data(state.value!.copyWith(reducedAnimation: value));
+    final settings = state.value!.copyWith(reducedAnimation: value);
+    state = AsyncValue.data(settings);
+    await _saveSettings(settings);
   }
 
   Future<void> setFontSize(double value) async {
-    state = AsyncValue.data(state.value!.copyWith(fontSize: value));
+    final settings = state.value!.copyWith(fontSize: value);
+    state = AsyncValue.data(settings);
+    await _saveSettings(settings);
   }
 
   Future<void> setLanguage(String value) async {
-    state = AsyncValue.data(state.value!.copyWith(language: value));
+    final settings = state.value!.copyWith(language: value);
+    state = AsyncValue.data(settings);
+    await _saveSettings(settings);
   }
 
   Future<void> setContextLength(int value) async {
-    state = AsyncValue.data(state.value!.copyWith(contextLength: value));
+    final settings = state.value!.copyWith(contextLength: value);
+    state = AsyncValue.data(settings);
+    await _saveSettings(settings);
   }
 
   Future<void> setCpuThreads(int value) async {
-    state = AsyncValue.data(state.value!.copyWith(cpuThreads: value));
+    final settings = state.value!.copyWith(cpuThreads: value);
+    state = AsyncValue.data(settings);
+    await _saveSettings(settings);
   }
 
   Future<void> setUseGpu(bool value) async {
-    state = AsyncValue.data(state.value!.copyWith(useGpu: value));
+    final settings = state.value!.copyWith(useGpu: value);
+    state = AsyncValue.data(settings);
+    await _saveSettings(settings);
+  }
+
+  Future<void> setSpeechSpeed(double value) async {
+    final settings = state.value!.copyWith(speechSpeed: value);
+    state = AsyncValue.data(settings);
+    await _saveSettings(settings);
+  }
+
+  Future<void> setSpeechEnabled(bool value) async {
+    final settings = state.value!.copyWith(speechEnabled: value);
+    state = AsyncValue.data(settings);
+    await _saveSettings(settings);
   }
 }

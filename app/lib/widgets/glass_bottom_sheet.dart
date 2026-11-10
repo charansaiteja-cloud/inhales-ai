@@ -24,6 +24,8 @@ class GlassBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return ClipRRect(
       borderRadius: const BorderRadius.vertical(
         top: Radius.circular(InhaleRadius.lg),
@@ -31,13 +33,22 @@ class GlassBottomSheet extends StatelessWidget {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
         child: Container(
-          decoration: const BoxDecoration(
-            color: Color(0xCCFFFFFF),
+          decoration: BoxDecoration(
+            color:
+                isDark
+                    ? InhaleColors.glassSurfaceHeavy
+                    : InhaleColors.lightGlassSurfaceMedium,
             borderRadius: BorderRadius.vertical(
               top: Radius.circular(InhaleRadius.lg),
             ),
             border: Border(
-              top: BorderSide(color: Color(0x99FFFFFF), width: 0.5),
+              top: BorderSide(
+                color:
+                    isDark
+                        ? InhaleColors.glassBorder
+                        : InhaleColors.lightGlassBorder,
+                width: 0.5,
+              ),
             ),
           ),
           child: SafeArea(
@@ -49,10 +60,13 @@ class GlassBottomSheet extends StatelessWidget {
                   if (title != null) ...[
                     Text(
                       title!,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
-                        color: InhaleColors.navyText,
+                        color:
+                            isDark
+                                ? InhaleColors.textPrimary
+                                : InhaleColors.lightNavyText,
                       ),
                     ),
                     const SizedBox(height: 16),

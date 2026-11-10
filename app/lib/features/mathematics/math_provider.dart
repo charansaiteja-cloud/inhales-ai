@@ -1,4 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../di/di.dart';
+import '../../ai/engine/ai_engine.dart';
 
 class MathResult {
   final String expression;
@@ -18,6 +20,7 @@ class MathState {
   final String steps;
   final bool isComputing;
   final List<MathResult> history;
+  final String? error;
 
   const MathState({
     this.input = '',
@@ -25,15 +28,18 @@ class MathState {
     this.steps = '',
     this.isComputing = false,
     this.history = const [],
+    this.error,
   });
 }
 
 final mathProvider = StateNotifierProvider<MathNotifier, MathState>(
-  (ref) => MathNotifier(),
+  (ref) => MathNotifier(ref.watch(aiEngineProvider)),
 );
 
 class MathNotifier extends StateNotifier<MathState> {
-  MathNotifier() : super(const MathState());
+  final AIEngine _aiEngine;
+
+  MathNotifier(this._aiEngine) : super(const MathState());
 
   Future<void> setInput(String input) async {
     state = MathState(
@@ -47,13 +53,7 @@ class MathNotifier extends StateNotifier<MathState> {
 
   Future<void> compute() async {
     if (state.input.trim().isEmpty) return;
-    state = MathState(
-      input: state.input,
-      output: '',
-      steps: '',
-      isComputing: true,
-      history: state.history,
-    );
+    state = state.copyWith(isComputing: true, error: null);
 
     final input = state.input.trim();
     String result;
@@ -68,12 +68,27 @@ class MathNotifier extends StateNotifier<MathState> {
             .replaceAll(RegExp(r'\.$'), '');
         steps = 'Expression: $input\nResult: $result';
       } else {
-        result = 'Use AI model for complex math.';
-        steps = 'Expression: $input\nInstall a model for detailed solutions.';
+        // Fallback to AIEngine for complex math
+        final prompt = _buildPrompt(input);
+        final buffer = StringBuffer();
+
+        await for (final chunk in _aiEngine.generate(
+          prompt: prompt,
+          history: [],
+          maxTokens: 512,
+          temperature: 0.3,
+          topP: 0.9,
+        )) {
+          buffer.write(chunk);
+        }
+
+        final aiResponse = buffer.toString().trim();
+        result = aiResponse;
+        steps = 'AI-generated solution for: $input\n\n$aiResponse';
       }
-    } catch (_) {
+    } catch (e) {
       result = 'Could not evaluate: $input';
-      steps = 'Expression: $input\nThe expression may need AI analysis.';
+      steps = 'Expression: $input\nError: ${e.toString()}';
     }
 
     final mathResult = MathResult(
@@ -82,7 +97,7 @@ class MathNotifier extends StateNotifier<MathState> {
       steps: steps,
     );
 
-    state = MathState(
+    state = state.copyWith(
       input: state.input,
       output: result,
       steps: steps,
@@ -178,4 +193,36 @@ class MathNotifier extends StateNotifier<MathState> {
 
     return parseExpr();
   }
+
+  String _buildPrompt(String input) {
+    return '''
+<<SYS>>
+You are a math tutor. Solve the given problem step by step. Show your work clearly.
+<</SYS>>
+
+<<USER>>
+Problem: $input
+</USER>>
+
+<<ASSISTANT>>
+''';
+  }
+}
+
+extension on MathState {
+  MathState copyWith({
+    String? input,
+    String? output,
+    String? steps,
+    bool? isComputing,
+    List<MathResult>? history,
+    String? error,
+  }) => MathState(
+    input: input ?? this.input,
+    output: output ?? this.output,
+    steps: steps ?? this.steps,
+    isComputing: isComputing ?? this.isComputing,
+    history: history ?? this.history,
+    error: error ?? this.error,
+  );
 }

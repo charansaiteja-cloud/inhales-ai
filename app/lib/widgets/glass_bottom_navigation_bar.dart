@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
+import '../core/theme/inhale_colors.dart';
 
 class GlassBottomNavigationBar extends StatelessWidget {
   final int currentIndex;
@@ -19,15 +20,26 @@ class GlassBottomNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final navItems = _effectiveItems;
+
     return ClipRRect(
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
         child: Container(
-          decoration: const BoxDecoration(
-            color: Color(0x99FFFFFF),
+          decoration: BoxDecoration(
+            color:
+                isDark
+                    ? InhaleColors.glassSurfaceHeavy
+                    : InhaleColors.lightGlassSurfaceMedium,
             border: Border(
-              top: BorderSide(color: Color(0x4DFFFFFF), width: 0.5),
+              top: BorderSide(
+                color:
+                    isDark
+                        ? InhaleColors.glassBorder
+                        : InhaleColors.lightGlassBorder,
+                width: 0.5,
+              ),
             ),
           ),
           child: SafeArea(
@@ -53,7 +65,13 @@ class GlassBottomNavigationBar extends StatelessWidget {
                                   ? item.activeIcon ?? item.icon
                                   : item.icon,
                               color:
-                                  isActive ? Colors.blue : Colors.grey.shade500,
+                                  isActive
+                                      ? (isDark
+                                          ? InhaleColors.blue
+                                          : InhaleColors.lightPrimaryBlue)
+                                      : (isDark
+                                          ? InhaleColors.textMuted
+                                          : InhaleColors.lightTextMuted),
                               size: 24,
                             ),
                             const SizedBox(height: 2),
@@ -63,8 +81,12 @@ class GlassBottomNavigationBar extends StatelessWidget {
                                 fontSize: 12,
                                 color:
                                     isActive
-                                        ? Colors.blue
-                                        : Colors.grey.shade500,
+                                        ? (isDark
+                                            ? InhaleColors.blue
+                                            : InhaleColors.lightPrimaryBlue)
+                                        : (isDark
+                                            ? InhaleColors.textMuted
+                                            : InhaleColors.lightTextMuted),
                                 fontWeight:
                                     isActive
                                         ? FontWeight.w600

@@ -11,14 +11,21 @@ import '../../features/coding/coding_screen.dart';
 import '../../features/mathematics/math_screen.dart';
 import '../../features/translation/translation_screen.dart';
 import '../../features/vision/vision_screen.dart';
+import '../../features/math_solver/math_solver_screen.dart';
 import '../../features/documents/documents_screen.dart';
 import '../../features/quizzes/quiz_screen.dart';
 import '../../features/notes/notes_screen.dart';
+import '../../features/exam_prep/exam_prep_screen.dart';
+import '../../features/ai_notes/ai_notes_screen.dart';
 import '../../features/voice/voice_screen.dart';
+import '../../features/language_learning/language_learning_screen.dart';
 import '../../features/model_manager/model_manager_screen.dart';
 import '../../features/settings/settings_screen.dart';
 import '../../features/general/general_screen.dart';
 import '../../features/presentations/presentation_screen.dart';
+import '../../features/study_plan/study_plan_screen.dart';
+import '../../features/recommendations/recommendations_screen.dart';
+import '../../features/flashcards/flashcard_screen.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -90,6 +97,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const VisionScreen(),
       ),
       GoRoute(
+        path: '/math_solver',
+        name: 'math_solver',
+        builder: (context, state) => const MathSolverScreen(),
+      ),
+      GoRoute(
         path: '/documents',
         name: 'documents',
         builder: (context, state) => const DocumentsScreen(),
@@ -99,10 +111,49 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         name: 'quizzes',
         builder: (context, state) => const QuizScreen(),
       ),
+      // Exam Preparation feature routes
+      GoRoute(
+        path: '/exams',
+        name: 'exams',
+        builder: (context, state) => const ExamPrepScreen(),
+      ),
+      GoRoute(
+        path: '/exams/:id',
+        name: 'exam-detail',
+        builder: (context, state) {
+          final idStr = state.pathParameters['id'];
+          final id = idStr != null ? int.tryParse(idStr) : null;
+          return const ExamPrepScreen();
+        },
+      ),
+      GoRoute(
+        path: '/exams/:id/practice',
+        name: 'exam-practice',
+        builder: (context, state) => const ExamPrepScreen(),
+      ),
+      GoRoute(
+        path: '/exams/:id/results',
+        name: 'exam-results',
+        builder: (context, state) => const ExamPrepScreen(),
+      ),
       GoRoute(
         path: '/notes',
         name: 'notes',
         builder: (context, state) => const NotesScreen(),
+      ),
+      GoRoute(
+        path: '/ai-notes',
+        name: 'ai-notes',
+        builder: (context, state) => const AINotesScreen(),
+      ),
+      GoRoute(
+        path: '/ai-notes/:id',
+        name: 'ai-notes-detail',
+        builder: (context, state) {
+          final idStr = state.pathParameters['id'];
+          final id = idStr != null ? int.tryParse(idStr) : null;
+          return AINotesScreen(noteId: id);
+        },
       ),
       GoRoute(
         path: '/voice',
@@ -123,6 +174,35 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/settings',
         name: 'settings',
         builder: (context, state) => const SettingsScreen(),
+      ),
+      GoRoute(
+        path: '/study-plan',
+        name: 'study-plan',
+        builder: (context, state) => const StudyPlanScreen(),
+      ),
+      GoRoute(
+        path: '/recommendations',
+        name: 'recommendations',
+        builder: (context, state) => const RecommendationsScreen(),
+      ),
+      GoRoute(
+        path: '/flashcards',
+        name: 'flashcards',
+        builder: (context, state) => const FlashcardScreen(),
+      ),
+      GoRoute(
+        path: '/flashcards/study',
+        name: 'flashcards-study',
+        builder: (context, state) => const StudyScreen(),
+      ),
+      GoRoute(
+        path: '/flashcards/deck/:id',
+        name: 'flashcards-deck',
+        builder: (context, state) {
+          final idStr = state.pathParameters['id'];
+          final id = idStr != null ? int.tryParse(idStr) : 0;
+          return DeckDetailScreen(deckId: id ?? 0);
+        },
       ),
     ],
   );

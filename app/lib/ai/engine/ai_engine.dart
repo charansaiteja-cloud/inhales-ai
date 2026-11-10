@@ -33,6 +33,7 @@ abstract class AIEngine {
   Stream<String> generate({
     required String prompt,
     required List<ChatMessage> history,
+    String? systemPrompt,
     int maxTokens = 512,
     double temperature = 0.7,
     double topP = 0.9,

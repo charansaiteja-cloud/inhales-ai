@@ -7,6 +7,7 @@ import '../../../di/di.dart';
 import '../../ai/engine/ai_engine.dart' as ai_engine;
 import '../../ai/engine/ai_engine.dart' show AIEngine;
 import '../../ai/memory/memory_manager.dart';
+import '../../ai/tutor/tutor_personalities.dart';
 
 /// Chat state model - UI-facing (maintains backward compatibility).
 class ChatMessage {
@@ -74,12 +75,18 @@ class ChatState {
   final ChatSession? activeSession;
   final bool isGenerating;
   final String generationError;
+  final TutorPersonality? activeTutor;
+  final ResponseMode activeResponseMode;
+  final List<FollowUpSuggestion> followUpSuggestions;
 
   const ChatState({
     this.sessions = const [],
     this.activeSession,
     this.isGenerating = false,
     this.generationError = '',
+    this.activeTutor,
+    this.activeResponseMode = ResponseMode.balanced,
+    this.followUpSuggestions = const [],
   });
 
   ChatState copyWith({
@@ -87,11 +94,17 @@ class ChatState {
     ChatSession? activeSession,
     bool? isGenerating,
     String? generationError,
+    TutorPersonality? activeTutor,
+    ResponseMode? activeResponseMode,
+    List<FollowUpSuggestion>? followUpSuggestions,
   }) => ChatState(
     sessions: sessions ?? this.sessions,
     activeSession: activeSession ?? this.activeSession,
     isGenerating: isGenerating ?? this.isGenerating,
     generationError: generationError ?? this.generationError,
+    activeTutor: activeTutor ?? this.activeTutor,
+    activeResponseMode: activeResponseMode ?? this.activeResponseMode,
+    followUpSuggestions: followUpSuggestions ?? this.followUpSuggestions,
   );
 }
 
@@ -130,6 +143,21 @@ class ChatNotifier extends StateNotifier<ChatState> {
        _memoryManager = memoryManager,
        super(const ChatState()) {
     _loadSessions();
+  }
+
+  /// Initialize tutor personality for a mode.
+  void setTutorForMode(String mode) {
+    final tutor = getTutorPersonality(mode);
+    final responseMode = ResponseMode.balanced;
+    state = state.copyWith(
+      activeTutor: tutor,
+      activeResponseMode: responseMode,
+    );
+  }
+
+  /// Change response mode for current session.
+  void setResponseMode(ResponseMode mode) {
+    state = state.copyWith(activeResponseMode: mode);
   }
 
   Future<void> _loadSessions({bool refresh = false}) async {
@@ -202,9 +230,14 @@ class ChatNotifier extends StateNotifier<ChatState> {
       lastMessageTime: saved.updatedAt,
     );
 
+    // Set tutor personality for this mode
+    final tutor = getTutorPersonality(session.mode);
+    
     state = ChatState(
       sessions: [session, ...state.sessions],
       activeSession: session,
+      activeTutor: tutor,
+      activeResponseMode: ResponseMode.balanced,
     );
     return session;
   }
@@ -217,6 +250,8 @@ class ChatNotifier extends StateNotifier<ChatState> {
     if (text.trim().isEmpty || state.activeSession == null) return;
 
     final session = state.activeSession!;
+    final tutor = state.activeTutor ?? getTutorPersonality(session.mode);
+    final responseMode = state.activeResponseMode;
 
     // Save user message to database
     final userMessageEntity = domain_msg.Message(
@@ -242,13 +277,20 @@ class ChatNotifier extends StateNotifier<ChatState> {
               .toList(),
       activeSession: updatedSession,
       isGenerating: true,
+      activeTutor: tutor,
+      activeResponseMode: responseMode,
     );
 
-    // Generate AI response (placeholder for now, real implementation in Phase 3)
-    await _generateResponse(updatedSession, text.trim());
+    // Generate AI response with tutor personality
+    await _generateResponse(updatedSession, text.trim(), tutor, responseMode);
   }
 
-  Future<void> _generateResponse(ChatSession session, String userQuery) async {
+  Future<void> _generateResponse(
+    ChatSession session,
+    String userQuery,
+    TutorPersonality tutor,
+    ResponseMode responseMode,
+  ) async {
     // Show thinking indicator
     final thinkingMsg = ChatMessage(
       id: _nextId++,
@@ -273,6 +315,8 @@ class ChatNotifier extends StateNotifier<ChatState> {
               .toList(),
       activeSession: withThinking,
       isGenerating: true,
+      activeTutor: tutor,
+      activeResponseMode: responseMode,
     );
 
     try {
@@ -288,14 +332,21 @@ class ChatNotifier extends StateNotifier<ChatState> {
               )
               .toList();
 
-      // Stream inference from the AI engine
+      // Build system prompt with tutor personality and response mode
+      final systemPrompt = tutor.systemPrompt + responseMode.promptModifier;
+      
+      // Get effective generation parameters
+      final params = tutor.getEffectiveParams({'temperature': 0.7, 'topP': 0.9});
+
+      // Stream inference from the AI engine with system prompt
       final buffer = StringBuffer();
       await for (final chunk in _aiEngine.generate(
         prompt: userQuery,
         history: history,
-        maxTokens: 512,
-        temperature: 0.7,
-        topP: 0.9,
+        systemPrompt: systemPrompt,
+        maxTokens: 1024,
+        temperature: params['temperature'] ?? 0.7,
+        topP: params['topP'] ?? 0.9,
       )) {
         buffer.write(chunk);
       }
@@ -314,6 +365,14 @@ class ChatNotifier extends StateNotifier<ChatState> {
       );
       final savedAssistantMsg = await _messageRepository.create(
         assistantMessageEntity,
+      );
+
+      // Generate follow-up suggestions based on tutor and response mode
+      final followUps = _generateFollowUpSuggestions(
+        tutor,
+        responseMode,
+        userQuery,
+        responseText,
       );
 
       final finalSession = ChatSession(
@@ -351,6 +410,9 @@ class ChatNotifier extends StateNotifier<ChatState> {
                 .toList(),
         activeSession: finalSession,
         isGenerating: false,
+        activeTutor: tutor,
+        activeResponseMode: responseMode,
+        followUpSuggestions: followUps,
       );
     } catch (e) {
       state = ChatState(
@@ -361,8 +423,70 @@ class ChatNotifier extends StateNotifier<ChatState> {
         activeSession: withThinking,
         isGenerating: false,
         generationError: 'Generation failed: $e',
+        activeTutor: tutor,
+        activeResponseMode: responseMode,
       );
     }
+  }
+
+  /// Generate contextual follow-up suggestions.
+  List<FollowUpSuggestion> _generateFollowUpSuggestions(
+    TutorPersonality tutor,
+    ResponseMode responseMode,
+    String userQuery,
+    String responseText,
+  ) {
+    final suggestions = <FollowUpSuggestion>[];
+    
+    // Add tutor-specific follow-ups
+    for (final template in tutor.suggestedFollowUps) {
+      suggestions.add(FollowUpSuggestion(text: template));
+    }
+
+    // Add response-mode specific follow-ups
+    switch (responseMode) {
+      case ResponseMode.explainSimply:
+        suggestions.addAll([
+          FollowUpSuggestion(text: 'Can you use a different analogy?'),
+          FollowUpSuggestion(text: 'What are the key terms I should know?'),
+        ]);
+        break;
+      case ResponseMode.stepByStep:
+        suggestions.addAll([
+          FollowUpSuggestion(text: 'Can you explain step [N] in more detail?'),
+          FollowUpSuggestion(text: 'What if I get stuck on a step?'),
+        ]);
+        break;
+      case ResponseMode.socratic:
+        suggestions.addAll([
+          FollowUpSuggestion(text: 'I think the answer is...'),
+          FollowUpSuggestion(text: 'Can you give me a hint?'),
+        ]);
+        break;
+      case ResponseMode.practiceProblems:
+        suggestions.addAll([
+          FollowUpSuggestion(text: 'Show me the solution to problem 1'),
+          FollowUpSuggestion(text: 'Generate more practice problems'),
+        ]);
+        break;
+      case ResponseMode.examPrep:
+        suggestions.addAll([
+          FollowUpSuggestion(text: 'What are the most likely exam questions?'),
+          FollowUpSuggestion(text: 'Create a summary sheet for this topic'),
+        ]);
+        break;
+      case ResponseMode.codeTutor:
+        suggestions.addAll([
+          FollowUpSuggestion(text: 'How would you optimize this code?'),
+          FollowUpSuggestion(text: 'Write a test case for this function'),
+        ]);
+        break;
+      default:
+        break;
+    }
+
+    // Limit to 5 suggestions
+    return suggestions.take(5).toList();
   }
 
   Future<void> stopGeneration() async {

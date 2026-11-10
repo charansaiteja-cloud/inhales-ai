@@ -53,14 +53,15 @@ class FfiAIEngine implements AIEngine {
   Stream<String> generate({
     required String prompt,
     required List<ChatMessage> history,
+    String? systemPrompt,
     int maxTokens = 512,
     double temperature = 0.7,
     double topP = 0.9,
     int topK = 40,
     Map<String, dynamic>? options,
   }) async* {
-    // Build prompt with history
-    final fullPrompt = _buildPrompt(history, prompt);
+    // Build prompt with history and system prompt
+    final fullPrompt = _buildPrompt(history, prompt, systemPrompt);
 
     yield* _engine.generate(
       fullPrompt,
@@ -81,15 +82,19 @@ class FfiAIEngine implements AIEngine {
     _engine.unloadModel();
   }
 
-  String _buildPrompt(List<ChatMessage> history, String currentPrompt) {
+  String _buildPrompt(List<ChatMessage> history, String currentPrompt, String? systemPrompt) {
     final buffer = StringBuffer();
 
     // System prompt
     buffer.writeln('<<SYS>>');
-    buffer.writeln(
-      'You are InhaleSkill AI, a helpful offline learning assistant.',
-    );
-    buffer.writeln('Provide clear, accurate, and educational responses.');
+    if (systemPrompt != null && systemPrompt.isNotEmpty) {
+      buffer.writeln(systemPrompt);
+    } else {
+      buffer.writeln(
+        'You are InhaleSkill AI, a helpful offline learning assistant.',
+      );
+      buffer.writeln('Provide clear, accurate, and educational responses.');
+    }
     buffer.writeln('<</SYS>>');
     buffer.writeln();
 

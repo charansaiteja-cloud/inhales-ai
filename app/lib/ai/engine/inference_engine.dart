@@ -15,6 +15,7 @@ abstract class InferenceEngine {
   void setContext(int ctx);
   Stream<String> generate(
     String prompt, {
+    String? systemPrompt,
     int maxTokens = 512,
     double temperature = 0.7,
     double topP = 0.9,

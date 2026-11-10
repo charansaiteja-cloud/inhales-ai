@@ -633,7 +633,7 @@ Answer:''';
     } else {
       // Fallback: return top chunks as answer
       answer =
-          'Based on the document(s):\n\n${contextChunks.map((r) => '• ${r.chunk.content.substring(0, math.min(200, r.chunk.content.length))}...').join('\n\n')}';
+          "Based on the document(s):\n\n${contextChunks.map((r) => '• ${r.chunk.content.substring(0, math.min(200, r.chunk.content.length))}...').join('\n\n')}";
     }
 
     return (answer: answer, citations: citations);

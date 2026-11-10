@@ -1,6 +1,6 @@
 // Drift implementation of MessageRepository.
 import 'package:drift/drift.dart';
-import '../../../database/database.dart' as db;
+import '../../database/database.dart' as db;
 import '../../domain/entities/message.dart' as domain;
 import '../../domain/repositories/message_repository.dart';
 

@@ -1,6 +1,6 @@
 // Drift implementation of ModelRepository.
 import 'package:drift/drift.dart';
-import '../../../database/database.dart' as db;
+import '../../database/database.dart' as db;
 import '../../domain/entities/model.dart' as domain;
 import '../../domain/repositories/model_repository.dart';
 

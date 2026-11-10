@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:drift/drift.dart' as drift;
 
 import '../../../di/di.dart';
-import '../../../database/database.dart';
+import '../../database/database.dart';
 
 /// User settings state.
 class AppSettings {
@@ -98,7 +98,8 @@ final settingsProvider =
 class SettingsNotifier extends StateNotifier<AsyncValue<AppSettings>> {
   final AppDatabase _database;
 
-  SettingsNotifier(this._database) : super(const AsyncValue.loading()) {
+  SettingsNotifier(this._database)
+    : super(const AsyncValue.data(AppSettings())) {
     _load();
   }
 

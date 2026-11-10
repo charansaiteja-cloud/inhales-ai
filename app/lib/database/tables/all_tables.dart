@@ -113,3 +113,16 @@ class Documents extends Table {
   TextColumn get summary => text().nullable()();
   DateTimeColumn get importedAt => dateTime()();
 }
+
+/// Conversation memories for long-term context retention.
+class Memories extends Table {
+  @override
+  String get tableName => 'memories';
+  IntColumn get id => integer().autoIncrement()();
+  IntColumn get conversationId =>
+      integer().references(Conversations, #id, onDelete: KeyAction.cascade)();
+  TextColumn get type => text()(); // 'summary', 'fact', 'preference', 'topic'
+  TextColumn get content => text()();
+  RealColumn get importance => real().withDefault(const Constant(0.5))();
+  DateTimeColumn get createdAt => dateTime()();
+}

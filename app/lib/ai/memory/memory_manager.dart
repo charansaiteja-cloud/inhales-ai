@@ -1,15 +1,16 @@
-/// Memory Manager — conversation memory and context management.
+/// Memory Manager — conversation memory and context management with persistent storage.
 library;
 
 import 'dart:async';
 import 'dart:math' as math;
+
 import 'package:drift/drift.dart';
 
-import '../../../database/database.dart';
+import '../../database/database.dart';
 
 /// Memory entry for conversation context.
 class MemoryEntry {
-  final String id;
+  final int id;
   final int conversationId;
   final String type; // 'summary', 'fact', 'preference', 'topic'
   final String content;
@@ -24,6 +25,24 @@ class MemoryEntry {
     required this.createdAt,
     this.importance = 0.5,
   });
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'conversationId': conversationId,
+    'type': type,
+    'content': content,
+    'createdAt': createdAt.toIso8601String(),
+    'importance': importance,
+  };
+
+  factory MemoryEntry.fromJson(Map<String, dynamic> json) => MemoryEntry(
+    id: json['id'] as int,
+    conversationId: json['conversationId'] as int,
+    type: json['type'] as String,
+    content: json['content'] as String,
+    createdAt: DateTime.parse(json['createdAt'] as String),
+    importance: (json['importance'] as num?)?.toDouble() ?? 0.5,
+  );
 }
 
 /// Memory Manager for long-term conversation memory.
@@ -35,33 +54,36 @@ class MemoryManager {
   MemoryManager(this._database);
 
   /// Add a memory entry.
-  Future<void> addMemory({
+  Future<int> addMemory({
     required int conversationId,
     required String type,
     required String content,
     double importance = 0.5,
   }) async {
-    final entry = MemoryEntry(
-      id: '${conversationId}_${DateTime.now().millisecondsSinceEpoch}',
+    final now = DateTime.now();
+    final entry = MemoriesCompanion.insert(
       conversationId: conversationId,
       type: type,
       content: content,
-      createdAt: DateTime.now(),
+      importance: Value(importance),
+      createdAt: now,
+    );
+
+    final id = await _database.into(_database.memories).insert(entry);
+
+    final memoryEntry = MemoryEntry(
+      id: id,
+      conversationId: conversationId,
+      type: type,
+      content: content,
+      createdAt: now,
       importance: importance,
     );
 
-    _cache.putIfAbsent(conversationId, () => []).add(entry);
+    _cache.putIfAbsent(conversationId, () => []).add(memoryEntry);
     _pruneCache(conversationId);
 
-    // Persist to database (using preferences table for now)
-    await _database
-        .into(_database.preferences)
-        .insert(
-          PreferencesCompanion.insert(
-            key: 'memory_${entry.id}',
-            value: _encodeMemory(entry),
-          ),
-        );
+    return id;
   }
 
   /// Get memories for a conversation.
@@ -161,6 +183,25 @@ class MemoryManager {
     );
   }
 
+  /// Delete a specific memory.
+  Future<void> deleteMemory(int memoryId) async {
+    await (_database.delete(_database.memories)
+      ..where((m) => m.id.equals(memoryId))).go();
+
+    // Clear cache to force reload
+    for (final convId in _cache.keys) {
+      _cache[convId] = _cache[convId]!.where((m) => m.id != memoryId).toList();
+    }
+  }
+
+  /// Delete all memories for a conversation.
+  Future<void> deleteConversationMemories(int conversationId) async {
+    await (_database.delete(_database.memories)
+      ..where((m) => m.conversationId.equals(conversationId))).go();
+
+    _cache.remove(conversationId);
+  }
+
   void _pruneCache(int conversationId) {
     final list = _cache[conversationId];
     if (list != null && list.length > _maxMemoriesPerConversation) {
@@ -172,16 +213,27 @@ class MemoryManager {
   }
 
   Future<void> _loadMemories(int conversationId) async {
-    final prefs =
-        await (_database.select(_database.preferences)
-          ..where((p) => p.key.like('memory_${conversationId}_%'))).get();
+    final query =
+        _database.select(_database.memories)
+          ..where((m) => m.conversationId.equals(conversationId))
+          ..orderBy([(m) => OrderingTerm.desc(m.createdAt)])
+          ..limit(_maxMemoriesPerConversation);
 
-    final memories =
-        prefs
-            .map((p) => _decodeMemory(p.key, p.value))
-            .whereType<MemoryEntry>()
+    final rows = await query.get();
+
+    _cache[conversationId] =
+        rows
+            .map(
+              (row) => MemoryEntry(
+                id: row.id,
+                conversationId: row.conversationId,
+                type: row.type,
+                content: row.content,
+                createdAt: row.createdAt,
+                importance: row.importance,
+              ),
+            )
             .toList();
-    _cache[conversationId] = memories;
   }
 
   List<String> _tokenize(String text) {
@@ -224,29 +276,5 @@ class MemoryManager {
         lower.contains('i love') ||
         lower.contains('favorite') ||
         lower.contains('preferred');
-  }
-
-  String _encodeMemory(MemoryEntry entry) {
-    return '${entry.type}|${entry.content}|${entry.createdAt.toIso8601String()}|${entry.importance}';
-  }
-
-  MemoryEntry? _decodeMemory(String key, String value) {
-    try {
-      final parts = value.split('|');
-      if (parts.length != 4) return null;
-      final id = key.replaceFirst('memory_', '');
-      final conversationIdStr = id.split('_').first;
-      final conversationId = int.tryParse(conversationIdStr) ?? 0;
-      return MemoryEntry(
-        id: id,
-        conversationId: conversationId,
-        type: parts[0],
-        content: parts[1],
-        createdAt: DateTime.parse(parts[2]),
-        importance: double.parse(parts[3]),
-      );
-    } catch (_) {
-      return null;
-    }
   }
 }

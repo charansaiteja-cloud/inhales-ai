@@ -1,6 +1,6 @@
 // Drift implementation of ConversationRepository.
 import 'package:drift/drift.dart';
-import '../../../database/database.dart' as db;
+import '../../database/database.dart' as db;
 import '../../domain/entities/conversation.dart' as domain;
 import '../../domain/repositories/conversation_repository.dart';
 

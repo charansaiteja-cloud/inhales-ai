@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:drift/drift.dart' as drift;
 
 import '../../../di/di.dart';
-import '../../../database/database.dart' as db;
+import '../../database/database.dart' as db;
 import '../../ai/rag/rag_service.dart';
 
 class DocumentsState {

@@ -62,7 +62,8 @@ final aiEngineProvider = Provider<AIEngine>((ref) {
 /// RAG Service provider - handles document retrieval.
 final ragServiceProvider = Provider<RAGService>((ref) {
   final database = ref.watch(databaseProvider);
-  return RAGService(database);
+  final aiEngine = ref.watch(aiEngineProvider);
+  return RAGService(database, embeddingEngine: aiEngine);
 });
 
 /// Memory Manager provider - manages conversation memory.

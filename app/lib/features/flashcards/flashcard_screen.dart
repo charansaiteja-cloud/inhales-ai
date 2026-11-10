@@ -1064,7 +1064,7 @@ Future<void> _showCreateDeckDialog(BuildContext context, WidgetRef ref) {
                 description:
                     descCtrl.text.trim().isEmpty ? null : descCtrl.text.trim(),
               );
-          Navigator.of(context).pop();
+          if (context.mounted) Navigator.of(context).pop();
         },
       ),
     ],
@@ -1120,7 +1120,7 @@ Future<void> _showCreateCardDialog(BuildContext context, WidgetRef ref) {
                 hint:
                     hintCtrl.text.trim().isEmpty ? null : hintCtrl.text.trim(),
               );
-          Navigator.of(context).pop();
+          if (context.mounted) Navigator.of(context).pop();
         },
       ),
     ],
@@ -1235,7 +1235,7 @@ Future<void> _confirmDeleteDeck(
         label: 'Delete',
         onTap: () async {
           await ref.read(flashcardProvider.notifier).deleteDeck(deckId);
-          Navigator.of(context).pop();
+          if (context.mounted) Navigator.of(context).pop();
         },
       ),
     ],

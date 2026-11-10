@@ -47,12 +47,12 @@ class ExamPrepScreen extends ConsumerWidget {
   }
 
   void _showCreateExamDialog(BuildContext context, WidgetRef ref) {
-    final _formKey = GlobalKey<FormState>();
-    final _nameController = TextEditingController();
-    final _subjectController = TextEditingController();
-    final _examTypeController = TextEditingController();
-    final _examDateController = TextEditingController();
-    final _targetScoreController = TextEditingController();
+    final formKey = GlobalKey<FormState>();
+    final nameController = TextEditingController();
+    final subjectController = TextEditingController();
+    final examTypeController = TextEditingController();
+    final examDateController = TextEditingController();
+    final targetScoreController = TextEditingController();
 
     showDialog(
       context: context,
@@ -60,13 +60,13 @@ class ExamPrepScreen extends ConsumerWidget {
         return AlertDialog(
           title: const Text('Create Exam Schedule'),
           content: Form(
-            key: _formKey,
+            key: formKey,
             child: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   TextFormField(
-                    controller: _nameController,
+                    controller: nameController,
                     decoration: const InputDecoration(labelText: 'Exam Name'),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -76,7 +76,7 @@ class ExamPrepScreen extends ConsumerWidget {
                     },
                   ),
                   TextFormField(
-                    controller: _subjectController,
+                    controller: subjectController,
                     decoration: const InputDecoration(labelText: 'Subject'),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -86,7 +86,7 @@ class ExamPrepScreen extends ConsumerWidget {
                     },
                   ),
                   TextFormField(
-                    controller: _examTypeController,
+                    controller: examTypeController,
                     decoration: const InputDecoration(labelText: 'Exam Type'),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -96,7 +96,7 @@ class ExamPrepScreen extends ConsumerWidget {
                     },
                   ),
                   TextFormField(
-                    controller: _examDateController,
+                    controller: examDateController,
                     decoration: const InputDecoration(
                       labelText: 'Exam Date (YYYY-MM-DD)',
                     ),
@@ -108,7 +108,7 @@ class ExamPrepScreen extends ConsumerWidget {
                     },
                   ),
                   TextFormField(
-                    controller: _targetScoreController,
+                    controller: targetScoreController,
                     decoration: const InputDecoration(
                       labelText: 'Target Score',
                     ),
@@ -133,15 +133,15 @@ class ExamPrepScreen extends ConsumerWidget {
             ),
             TextButton(
               onPressed: () async {
-                if (_formKey.currentState!.validate()) {
+                if (formKey.currentState!.validate()) {
                   await ref
                       .read(examSchedulesProvider.notifier)
                       .createExamSchedule(
-                        name: _nameController.text,
-                        subject: _subjectController.text,
-                        examType: _examTypeController.text,
-                        examDate: DateTime.parse(_examDateController.text),
-                        targetScore: int.parse(_targetScoreController.text),
+                        name: nameController.text,
+                        subject: subjectController.text,
+                        examType: examTypeController.text,
+                        examDate: DateTime.parse(examDateController.text),
+                        targetScore: int.parse(targetScoreController.text),
                       );
                   if (context.mounted) {
                     Navigator.of(context).pop();

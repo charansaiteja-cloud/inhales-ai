@@ -361,7 +361,7 @@ class _LanguageLearningScreenState extends ConsumerState<LanguageLearningScreen>
     bool isDark,
   ) {
     return DropdownButtonFormField<String>(
-      value: value,
+      initialValue: value,
       decoration: InputDecoration(
         labelText: label,
         filled: true,
@@ -875,7 +875,7 @@ class _LanguageLearningScreenState extends ConsumerState<LanguageLearningScreen>
               const SizedBox(width: InhaleSpacing.sm),
               Expanded(
                 child: DropdownButtonFormField<String>(
-                  value: _selectedLevel,
+                  initialValue: _selectedLevel,
                   decoration: InputDecoration(
                     labelText: 'Level',
                     filled: true,

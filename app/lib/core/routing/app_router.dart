@@ -18,7 +18,7 @@ import '../../features/notes/notes_screen.dart';
 import '../../features/exam_prep/exam_prep_screen.dart';
 import '../../features/ai_notes/ai_notes_screen.dart';
 import '../../features/voice/voice_screen.dart';
-import '../../features/language_learning/language_learning_screen.dart';
+
 import '../../features/model_manager/model_manager_screen.dart';
 import '../../features/settings/settings_screen.dart';
 import '../../features/general/general_screen.dart';
@@ -121,8 +121,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/exams/:id',
         name: 'exam-detail',
         builder: (context, state) {
-          final idStr = state.pathParameters['id'];
-          final id = idStr != null ? int.tryParse(idStr) : null;
           return const ExamPrepScreen();
         },
       ),

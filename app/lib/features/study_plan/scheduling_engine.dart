@@ -230,7 +230,6 @@ class SchedulingEngine {
     // Generate items distributed across days
     final items = <StudyPlanItemData>[];
     int itemIndex = 0;
-    double allocatedMinutes = 0;
 
     // Sort topics by prerequisites first (topics with prereqs come later)
     final sortedTopics = List<PlanningTopic>.from(topics);
@@ -275,7 +274,6 @@ class SchedulingEngine {
           ),
         );
 
-        allocatedMinutes += minutesPerSession;
         itemIndex++;
       }
     }
@@ -320,8 +318,9 @@ class SchedulingEngine {
     final missedItems =
         items.where((item) {
           if (missedItemIds.contains(item.orderIndex)) return true;
-          if (item.scheduledDate.isBefore(now) && item.type != 'review')
+          if (item.scheduledDate.isBefore(now) && item.type != 'review') {
             return true;
+          }
           return false;
         }).toList();
 

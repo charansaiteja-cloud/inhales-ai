@@ -10,7 +10,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/theme/inhale_colors.dart';
 import '../../core/theme/inhale_tokens.dart';
 import '../../core/theme/inhale_typography.dart';
-import '../../core/responsive/responsive.dart';
+
 import '../../widgets/glass_card.dart';
 import '../../widgets/glass_button.dart';
 import '../../widgets/glass_dialog.dart';

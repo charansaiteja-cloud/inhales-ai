@@ -293,7 +293,6 @@ class FlashcardNotifier extends StateNotifier<FlashcardState> {
   }
 
   Future<void> _loadDueCards() async {
-    final now = DateTime.now();
     final raw = await _database.select(_database.flashcards).get();
     final cards = raw.map(Flashcard.fromDb).toList();
     final due = cards.where((c) => c.isDue).toList();
@@ -603,7 +602,7 @@ class FlashcardNotifier extends StateNotifier<FlashcardState> {
       }
 
       final deckName = 'Flashcards: Document $documentId';
-      return _generateCards(
+      return await _generateCards(
         deckName: deckName,
         content: content,
         context: 'Generate $count flashcards from this document content:',
@@ -620,7 +619,7 @@ class FlashcardNotifier extends StateNotifier<FlashcardState> {
     int count = 10,
     String? deckName,
   }) async {
-    return _generateCards(
+    return await _generateCards(
       deckName: deckName ?? 'Custom Flashcards',
       content: text,
       context: 'Generate $count flashcards from this text:',

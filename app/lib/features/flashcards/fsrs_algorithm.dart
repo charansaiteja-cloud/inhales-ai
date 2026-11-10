@@ -309,7 +309,6 @@ double _calculateStability({
   }
 
   // Calculate retention probability using exponential decay
-  final retention = _calculateRetention(currentStability, elapsedDays);
 
   // Adjust stability based on rating and retention
   double stabilityFactor;

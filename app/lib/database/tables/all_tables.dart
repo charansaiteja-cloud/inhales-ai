@@ -161,7 +161,6 @@ class Chapters extends Table {
   DateTimeColumn get createdAt => dateTime()();
   DateTimeColumn get updatedAt => dateTime()();
 
-  @override
   List<Index> get indexes =>
       {
         Index(
@@ -189,7 +188,6 @@ class Topics extends Table {
   DateTimeColumn get createdAt => dateTime()();
   DateTimeColumn get updatedAt => dateTime()();
 
-  @override
   List<Index> get indexes =>
       {
         Index(
@@ -224,7 +222,6 @@ class LearningResources extends Table {
   BoolColumn get isFavorite => boolean().withDefault(const Constant(false))();
   DateTimeColumn get createdAt => dateTime()();
   DateTimeColumn get updatedAt => dateTime()();
-  @override
   List<Index> get indexes =>
       {
         Index(
@@ -283,7 +280,6 @@ class Flashcards extends Table {
   DateTimeColumn get createdAt => dateTime()();
   DateTimeColumn get updatedAt => dateTime()();
 
-  @override
   List<Index> get indexes =>
       {
         Index(
@@ -357,7 +353,6 @@ class StudyPlanItems extends Table {
   DateTimeColumn get completedAt => dateTime().nullable()();
   DateTimeColumn get createdAt => dateTime()();
 
-  @override
   List<Index> get indexes =>
       {
         Index(
@@ -392,7 +387,6 @@ class StudySessions extends Table {
   DateTimeColumn get startedAt => dateTime()();
   DateTimeColumn get endedAt => dateTime()();
 
-  @override
   List<Index> get indexes =>
       {
         Index(
@@ -463,7 +457,6 @@ class UserAchievements extends Table {
   DateTimeColumn get createdAt => dateTime()();
   DateTimeColumn get updatedAt => dateTime()();
 
-  @override
   List<Index> get indexes =>
       {
         Index(
@@ -489,7 +482,6 @@ class Notifications extends Table {
   DateTimeColumn get readAt => dateTime().nullable()();
   DateTimeColumn get createdAt => dateTime()();
 
-  @override
   List<Index> get indexes =>
       {
         Index(
@@ -524,7 +516,6 @@ class Recommendations extends Table {
   DateTimeColumn get expiresAt => dateTime().nullable()();
   DateTimeColumn get createdAt => dateTime()();
 
-  @override
   List<Index> get indexes =>
       {
         Index(

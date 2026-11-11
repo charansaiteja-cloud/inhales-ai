@@ -1,4 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:share_plus/share_plus.dart';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
 import '../../../domain/entities/conversation.dart' as domain;
 import '../../../domain/entities/message.dart' as domain_msg;
 import '../../../domain/repositories/conversation_repository.dart';
@@ -590,5 +593,72 @@ class ChatNotifier extends StateNotifier<ChatState> {
             : state.activeSession;
 
     state = ChatState(sessions: updated, activeSession: active);
+  }
+
+  /// Search messages across all sessions.
+  List<ChatMessage> searchMessages(String query) {
+    if (query.trim().isEmpty) return [];
+    final lowerQuery = query.toLowerCase();
+    final results = <ChatMessage>[];
+    for (final session in state.sessions) {
+      for (final msg in session.messages) {
+        if (msg.content.toLowerCase().contains(lowerQuery)) {
+          results.add(msg);
+        }
+      }
+    }
+    return results;
+  }
+
+  /// Export a conversation as markdown.
+  Future<String> exportAsMarkdown(int sessionId) async {
+    final session = state.sessions.firstWhere((s) => s.id == sessionId);
+    final buffer = StringBuffer();
+    buffer.writeln('# ${session.title}');
+    buffer.writeln();
+    buffer.writeln('_Exported on ${DateTime.now().toString()}_');
+    buffer.writeln();
+    for (final msg in session.messages) {
+      buffer.writeln('## ${msg.isUser ? 'You' : 'InhaleSkill AI'}');
+      buffer.writeln();
+      buffer.writeln(msg.content);
+      buffer.writeln();
+      buffer.writeln('---');
+      buffer.writeln();
+    }
+    return buffer.toString();
+  }
+
+  /// Export a conversation as JSON.
+  Future<String> exportAsJson(int sessionId) async {
+    final session = state.sessions.firstWhere((s) => s.id == sessionId);
+    final buffer = StringBuffer('{');
+    buffer.writeln('  "id": ${session.id},');
+    buffer.writeln('  "title": "${session.title}",');
+    buffer.writeln('  "mode": "${session.mode}",');
+    buffer.writeln('  "messages": [');
+    for (var i = 0; i < session.messages.length; i++) {
+      final msg = session.messages[i];
+      final comma = i < session.messages.length - 1 ? ',' : '';
+      buffer.writeln('    {');
+      buffer.writeln('      "role": "${msg.isUser ? "user" : "assistant"}",');
+      buffer.writeln('      "content": "${msg.content.replaceAll('"', '\\"')}"');
+      buffer.writeln('    }$comma');
+    }
+    buffer.writeln('  ]');
+    buffer.write('}');
+    return buffer.toString();
+  }
+
+  /// Share a conversation via the system share sheet.
+  Future<void> shareConversation(int sessionId, {String format = 'markdown'}) async {
+    final content = format == 'json'
+        ? await exportAsJson(sessionId)
+        : await exportAsMarkdown(sessionId);
+    final tempDir = await getTemporaryDirectory();
+    final ext = format == 'json' ? 'json' : 'md';
+    final file = File('${tempDir.path}/conversation_$sessionId.$ext');
+    await file.writeAsString(content);
+    await Share.shareXFiles([XFile(file.path)]);
   }
 }

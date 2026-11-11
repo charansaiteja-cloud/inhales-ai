@@ -1,9 +1,11 @@
 /// Model Manager — handles model downloads, installation, and lifecycle.
+/// Includes memory pressure handling for automatic model unloading.
 library;
 
 import 'dart:async';
 import 'dart:io';
 import 'package:crypto/crypto.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -18,12 +20,28 @@ class ModelManager {
   final _downloadProgressController =
       StreamController<Map<String, DownloadProgress>>.broadcast();
   final Map<String, DownloadProgress> _downloads = {};
+  VoidCallback? _onMemoryPressure;
 
   ModelManager._({
     required Directory modelsDir,
     required HardwareProfile hardware,
   }) : _modelsDir = modelsDir,
-       _hardware = hardware;
+       _hardware = hardware {
+    _setupMemoryPressureListener();
+  }
+
+  void _setupMemoryPressureListener() {
+    SystemChannels.lifecycle.setMessageHandler((msg) async {
+      if (msg == 'memoryPressure') {
+        _onMemoryPressure?.call();
+      }
+      return null;
+    });
+  }
+
+  void setOnMemoryPressure(VoidCallback callback) {
+    _onMemoryPressure = callback;
+  }
 
   /// Create and initialize the model manager.
   static Future<ModelManager> create() async {
@@ -232,6 +250,7 @@ class ModelManager {
 
   void dispose() {
     _downloadProgressController.close();
+    SystemChannels.lifecycle.setMessageHandler(null);
   }
 }
 

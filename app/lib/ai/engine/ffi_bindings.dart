@@ -36,7 +36,19 @@ typedef InhaleGetContext = int Function();
 typedef InhaleCancelNative = Void Function();
 typedef InhaleCancel = void Function();
 
-/// Simplified generate: no callbacks, returns int status.
+/// Callback types matching native/inference/inhale_engine.cpp.
+///   void (*token_cb)(const char*)
+///   void (*done_cb)()
+///   void (*err_cb)(const char*)
+typedef TokenCallbackNative = Void Function(Pointer<Utf8>);
+typedef TokenCallback = void Function(Pointer<Utf8>);
+
+typedef DoneCallbackNative = Void Function();
+typedef DoneCallback = void Function();
+
+typedef ErrorCallbackNative = Void Function(Pointer<Utf8>);
+typedef ErrorCallback = void Function(Pointer<Utf8>);
+
 typedef InhaleGenerateNative =
     Int32 Function(
       Pointer<Utf8> prompt,
@@ -44,9 +56,9 @@ typedef InhaleGenerateNative =
       Float temp,
       Float topP,
       Int32 topK,
-      Pointer<Void>,
-      Pointer<Void>,
-      Pointer<Void>,
+      Pointer<NativeFunction<TokenCallbackNative>>,
+      Pointer<NativeFunction<DoneCallbackNative>>,
+      Pointer<NativeFunction<ErrorCallbackNative>>,
       Int32 cancel,
     );
 typedef InhaleGenerate =
@@ -56,9 +68,9 @@ typedef InhaleGenerate =
       double temp,
       double topP,
       int topK,
-      Pointer<Void>,
-      Pointer<Void>,
-      Pointer<Void>,
+      Pointer<NativeFunction<TokenCallbackNative>>,
+      Pointer<NativeFunction<DoneCallbackNative>>,
+      Pointer<NativeFunction<ErrorCallbackNative>>,
       int cancel,
     );
 

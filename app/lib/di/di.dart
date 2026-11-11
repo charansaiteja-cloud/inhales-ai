@@ -12,7 +12,6 @@ import '../ai/engine/ai_engine.dart' hide ChatMessage;
 import '../ai/engine/ffi_ai_engine.dart';
 import '../ai/rag/rag_service.dart';
 import '../ai/memory/memory_manager.dart';
-import '../ai/manager/model_manager.dart';
 
 /// Database provider - creates and manages the AppDatabase instance.
 final databaseProvider = Provider<AppDatabase>((ref) {
@@ -73,10 +72,6 @@ final memoryManagerProvider = Provider<MemoryManager>((ref) {
 });
 
 /// Model Manager provider - handles model lifecycle.
-final modelManagerProvider = Provider<ModelManager>((ref) {
-  // ModelManager is created lazily; this provider is overridden in main()
-  // when a real ModelManager instance is available.
-  throw UnimplementedError(
-    'modelManagerProvider must be overridden with a real ModelManager instance',
-  );
-});
+/// The concrete provider is defined in `ai/manager/model_manager_provider.dart`.
+/// This file no longer shadows it; the StateNotifierProvider there is the
+/// canonical implementation used by the UI.

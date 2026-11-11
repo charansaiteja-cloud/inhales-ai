@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import '../core/theme/inhale_colors.dart';
 import '../core/theme/inhale_tokens.dart';
 
@@ -70,15 +71,38 @@ class GlassChatBubble extends StatelessWidget {
     final effectiveContent =
         message.isEmpty && isStreaming
             ? _buildStreamingIndicator()
-            : Text(
-              message,
-              style: TextStyle(
-                color:
-                    isDark
-                        ? InhaleColors.textPrimary
-                        : InhaleColors.lightTextPrimary,
-                fontSize: 15,
-                height: 1.5,
+            : MarkdownBody(
+              data: message,
+              selectable: true,
+              styleSheet: MarkdownStyleSheet(
+                p: TextStyle(
+                  color:
+                      isDark
+                          ? InhaleColors.textPrimary
+                          : InhaleColors.lightTextPrimary,
+                  fontSize: 15,
+                  height: 1.5,
+                ),
+                code: TextStyle(
+                  color:
+                      isDark
+                          ? InhaleColors.blue
+                          : InhaleColors.deepNavy,
+                  backgroundColor:
+                      isDark
+                          ? InhaleColors.blue.withValues(alpha: 0.15)
+                          : InhaleColors.blue.withValues(alpha: 0.08),
+                  fontFamily: 'monospace',
+                  fontSize: 14,
+                ),
+                codeblockPadding: EdgeInsets.all(12),
+                codeblockDecoration: BoxDecoration(
+                  color:
+                      isDark
+                          ? InhaleColors.blue.withValues(alpha: 0.12)
+                          : InhaleColors.blue.withValues(alpha: 0.06),
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             );
 

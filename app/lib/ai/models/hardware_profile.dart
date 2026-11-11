@@ -58,30 +58,39 @@ class HardwareProfile {
       'HardwareProfile(ram=${totalRamMb}MB, cores=$cpuCores, arch=$cpuArchitecture, gpu=$gpuAvailable, tier=$tierName)';
 
   /// Detect the current device's hardware capabilities.
+  /// Uses platform-appropriate methods: `free -m` on Linux/macOS,
+  /// platform defaults on Android/iOS where `free` is unavailable.
   static Future<HardwareProfile> detect() async {
     final cores = Platform.numberOfProcessors;
-    final arch = 'x86_64';
     final os = Platform.operatingSystem;
 
     int totalRamMb = 4096;
-    try {
-      final result = await Process.run('free', ['-m']);
-      if (result.exitCode == 0) {
-        final lines = result.stdout.toString().trim().split('\n');
-        if (lines.length > 1) {
-          final parts = lines[1].trim().split(RegExp(r'\s+'));
-          if (parts.length >= 2) {
-            totalRamMb = int.tryParse(parts[1]) ?? 4096;
+    if (Platform.isAndroid || Platform.isIOS) {
+      // On mobile, use conservative defaults — real values would require
+      // device_info_plus. 4 GB is the baseline for modern Android devices.
+      totalRamMb = 4096;
+    } else {
+      try {
+        final result = await Process.run('free', ['-m']);
+        if (result.exitCode == 0) {
+          final lines = result.stdout.toString().trim().split('\n');
+          if (lines.length > 1) {
+            final parts = lines[1].trim().split(RegExp(r'\s+'));
+            if (parts.length >= 2) {
+              totalRamMb = int.tryParse(parts[1]) ?? 4096;
+            }
           }
         }
+      } catch (_) {
+        // `free` not available — fall back to platform default
       }
-    } catch (_) {}
+    }
 
     return HardwareProfile(
       totalRamMb: totalRamMb,
       availableRamMb: (totalRamMb * 0.7).round(),
       storageFreeMb: 10000,
-      cpuArchitecture: arch,
+      cpuArchitecture: Platform.isAndroid ? 'arm64' : 'x86_64',
       cpuCores: cores,
       gpuAvailable: false,
       gpuName: 'none',

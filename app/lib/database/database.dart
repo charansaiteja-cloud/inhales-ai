@@ -1,6 +1,8 @@
+import 'dart:io';
+
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
-import 'package:sqlite3/sqlite3.dart';
+import 'package:path/path.dart' as p;
 
 import 'tables/all_tables.dart';
 
@@ -42,18 +44,10 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   static QueryExecutor _openConnection() {
-    final db = sqlite3.open('inhaleskill_ai.db');
-
-    // Load sqlite-vec extension
-    try {
-      // sqlite-vec registers itself automatically on newer versions
-      db.execute('SELECT vec_version()');
-    } catch (e) {
-      // Extension not available, will use fallback search
-    }
-
-    return NativeDatabase.opened(
-      db,
+    final appDir = Directory.current;
+    final dbPath = p.join(appDir.path, 'databases', 'inhaleskill_ai.db');
+    return NativeDatabase(
+      File(dbPath),
       setup: (db) => db.execute('PRAGMA foreign_keys = ON'),
     );
   }

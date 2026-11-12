@@ -67,7 +67,6 @@ dev_dependencies:
   drift_dev: ^2.22.0
   json_serializable: ^6.8.0
   mockito: ^5.4.4
-  pdf: ^3.10.0
 
 flutter:
   uses-material-design: true

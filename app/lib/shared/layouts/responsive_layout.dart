@@ -155,8 +155,8 @@ class _DesktopLayoutState extends ConsumerState<DesktopLayout> {
               duration: const Duration(milliseconds: 250),
               curve: Curves.easeInOutCubic,
               width: _sidebarCollapsed
-                  ? AppSpacing.sidebarWidthCollapsed
-                  : AppSpacing.sidebarWidth,
+                  ? InhaleSpacing.sidebarWidthCollapsed
+                  : InhaleSpacing.sidebarWidth,
               child: AppSidebar(
                 items: widget.sidebarItems!,
                 selectedIndex: widget.selectedIndex,
@@ -201,7 +201,7 @@ class _DesktopLayoutState extends ConsumerState<DesktopLayout> {
       shadowColor: Theme.of(context).brightness == Brightness.dark
           ? AppColors.lightShadow
           : AppColors.lightShadow,
-      toolbarHeight: AppSpacing.headerHeight,
+      toolbarHeight: InhaleSpacing.headerHeight,
       title: widget.header,
       actions: [
         if (widget.onSidebarToggle != null)
@@ -326,7 +326,7 @@ class _TabletLayoutState extends ConsumerState<TabletLayout> {
       shadowColor: Theme.of(context).brightness == Brightness.dark
           ? AppColors.lightShadow
           : AppColors.lightShadow,
-      toolbarHeight: AppSpacing.headerHeight,
+      toolbarHeight: InhaleSpacing.headerHeight,
       leading: hasSidebar
           ? IconButton(
               icon: Icon(Icons.menu_rounded, color: cs.onSurface),
@@ -447,7 +447,7 @@ class _MobileLayoutState extends ConsumerState<MobileLayout> {
       shadowColor: Theme.of(context).brightness == Brightness.dark
           ? AppColors.lightShadow
           : AppColors.lightShadow,
-      toolbarHeight: AppSpacing.mobileTopBarHeight,
+      toolbarHeight: InhaleSpacing.mobileTopBarHeight,
       leading: hasDrawer
           ? IconButton(
               icon: Icon(Icons.menu_rounded, color: cs.onSurface),
@@ -584,13 +584,13 @@ class ResponsiveGrid extends StatelessWidget {
         double spacing;
         if (info.isDesktop) {
           crossAxisCount = desktopColumns;
-          spacing = desktopSpacing ?? AppSpacing.gridGapLarge;
+          spacing = desktopSpacing ?? InhaleSpacing.gridGapLarge;
         } else if (info.isTablet) {
           crossAxisCount = tabletColumns;
-          spacing = tabletSpacing ?? AppSpacing.gridGap;
+          spacing = tabletSpacing ?? InhaleSpacing.gridGap;
         } else {
           crossAxisCount = mobileColumns;
-          spacing = mobileSpacing ?? AppSpacing.gridGap;
+          spacing = mobileSpacing ?? InhaleSpacing.gridGap;
         }
 
         return GridView.builder(
@@ -627,8 +627,8 @@ class ResponsiveRow extends StatelessWidget {
   const ResponsiveRow({
     super.key,
     required this.children,
-    this.spacing = AppSpacing.md,
-    this.runSpacing = AppSpacing.md,
+    this.spacing = InhaleSpacing.md,
+    this.runSpacing = InhaleSpacing.md,
     this.wrapAlignment = WrapAlignment.start,
     this.wrapCrossAlignment = WrapCrossAlignment.start,
     this.textDirection,

@@ -102,7 +102,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               Align(
                 alignment: Alignment.topRight,
                 child: Padding(
-                  padding: EdgeInsets.all(AppSpacing.md),
+                  padding: EdgeInsets.all(InhaleSpacing.md),
                   child: AppButton(
                     label: 'Skip',
                     variant: AppButtonVariant.text,
@@ -120,7 +120,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   itemBuilder: (context, index) {
                     final page = _pages[index];
                     return Padding(
-                      padding: EdgeInsets.all(AppSpacing.xxl),
+                      padding: EdgeInsets.all(InhaleSpacing.xxl),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -132,7 +132,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                                   ? AppColors.primaryGradientDark
                                   : AppColors.primaryGradient,
                               borderRadius: BorderRadius.circular(
-                                AppRadius.xxxl,
+                                InhaleRadius.xxxl,
                               ),
                               boxShadow: isDark
                                   ? AppShadows.darkPrimaryGlow
@@ -144,7 +144,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                               color: Colors.white,
                             ),
                           ),
-                          SizedBox(height: AppSpacing.xxxl),
+                          SizedBox(height: InhaleSpacing.xxxl),
                           Text(
                             page.title,
                             style: AppTypography.headlineMedium.copyWith(
@@ -153,7 +153,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                             ),
                             textAlign: TextAlign.center,
                           ),
-                          SizedBox(height: AppSpacing.lg),
+                          SizedBox(height: InhaleSpacing.lg),
                           Text(
                             page.description,
                             style: AppTypography.bodyLarge.copyWith(
@@ -174,22 +174,22 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   _pages.length,
                   (index) => AnimatedContainer(
                     duration: const Duration(milliseconds: 300),
-                    margin: EdgeInsets.symmetric(horizontal: AppSpacing.xs),
+                    margin: EdgeInsets.symmetric(horizontal: InhaleSpacing.xs),
                     width: _currentPage == index ? 32 : 8,
                     height: 8,
                     decoration: BoxDecoration(
                       color: _currentPage == index
                           ? cs.primary
                           : cs.outlineVariant,
-                      borderRadius: BorderRadius.circular(AppRadius.full),
+                      borderRadius: BorderRadius.circular(InhaleRadius.full),
                     ),
                   ),
                 ),
               ),
-              SizedBox(height: AppSpacing.xxl),
+              SizedBox(height: InhaleSpacing.xxl),
               // Next/Get Started button
               Padding(
-                padding: EdgeInsets.all(AppSpacing.xl),
+                padding: EdgeInsets.all(InhaleSpacing.xl),
                 child: AppButton(
                   label: _currentPage == _pages.length - 1
                       ? 'Get Started'
@@ -206,7 +206,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: AppSpacing.xl),
+              SizedBox(height: InhaleSpacing.xl),
             ],
           ),
         ),

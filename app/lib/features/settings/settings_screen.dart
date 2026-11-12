@@ -6,6 +6,7 @@ import '../../core/theme/inhale_typography.dart';
 import '../../widgets/glass_card.dart';
 import '../../widgets/glass_app_bar.dart';
 import 'settings_provider.dart';
+import '../../di/ui_settings_provider.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -58,6 +59,24 @@ class SettingsScreen extends ConsumerWidget {
             value: settings.themeMode == ThemeMode.dark,
             onChanged: (v) =>
                 notifier.setTheme(v ? ThemeMode.dark : ThemeMode.light),
+            activeThumbColor: isDark
+                ? InhaleColors.electricBlue
+                : InhaleColors.lightPrimaryBlue,
+          ),
+        ),
+        _SettingsTile(
+          context: context,
+          icon: Icons.contrast,
+          title: 'High‑contrast mode',
+          subtitle: ref.watch(uiSettingsProvider).highContrast ? 'On' : 'Off',
+          isDark: isDark,
+          trailing: Switch(
+            value: ref.watch(uiSettingsProvider).highContrast,
+            onChanged: (v) =>
+                ref.read(uiSettingsProvider.notifier).state = UiSettings(
+              mode: ref.watch(uiSettingsProvider).mode,
+              highContrast: v,
+            ),
             activeThumbColor: isDark
                 ? InhaleColors.electricBlue
                 : InhaleColors.lightPrimaryBlue,

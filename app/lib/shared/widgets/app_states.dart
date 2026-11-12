@@ -40,7 +40,7 @@ class AppEmptyState extends StatelessWidget {
     final cs = theme.colorScheme;
 
     return Padding(
-      padding: padding ?? AppSpacing.pagePaddingLargeInsets,
+      padding: padding ?? InhaleSpacing.pagePaddingLargeInsets,
       child: Column(
         mainAxisAlignment: mainAxisAlignment,
         crossAxisAlignment: crossAxisAlignment,
@@ -52,14 +52,14 @@ class AppEmptyState extends StatelessWidget {
             height: 80,
             decoration: BoxDecoration(
               color: cs.primaryContainer.withValues(alpha: 0.5),
-              borderRadius: BorderRadius.circular(AppRadius.avatarRadius),
+              borderRadius: BorderRadius.circular(InhaleRadius.avatarRadius),
             ),
             child: Center(
               child: icon ??
                   Icon(Icons.inbox_rounded, size: 40, color: cs.primary),
             ),
           ),
-          SizedBox(height: AppSpacing.xl),
+          SizedBox(height: InhaleSpacing.xl),
           // Title
           Text(
             title,
@@ -71,7 +71,7 @@ class AppEmptyState extends StatelessWidget {
           ),
           // Message
           if (message != null) ...[
-            SizedBox(height: AppSpacing.sm),
+            SizedBox(height: InhaleSpacing.sm),
             Text(
               message!,
               style: AppTypography.body.copyWith(color: cs.onSurfaceVariant),
@@ -79,7 +79,7 @@ class AppEmptyState extends StatelessWidget {
             ),
           ],
           // Action
-          if (action != null) ...[SizedBox(height: AppSpacing.xl), action!],
+          if (action != null) ...[SizedBox(height: InhaleSpacing.xl), action!],
         ],
       ),
     );
@@ -156,7 +156,7 @@ class _AppSkeletonState extends State<AppSkeleton>
           decoration: BoxDecoration(
             color: Color.lerp(baseColor, highlightColor, _animation.value),
             borderRadius: widget.borderRadius ??
-                BorderRadius.circular(AppRadius.cardRadius),
+                BorderRadius.circular(InhaleRadius.cardRadius),
           ),
         );
       },
@@ -190,7 +190,7 @@ class AppSkeletonText extends StatelessWidget {
           child: AppSkeleton(
             width: isLast && width != null ? width! * 0.6 : width,
             height: lineHeight,
-            borderRadius: BorderRadius.circular(AppRadius.buttonSmallRadius),
+            borderRadius: BorderRadius.circular(InhaleRadius.buttonSmallRadius),
           ),
         );
       }),
@@ -217,7 +217,7 @@ class AppSkeletonCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppCard(
-      padding: AppSpacing.cardPaddingInsets,
+      padding: InhaleSpacing.cardPaddingInsets,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -227,37 +227,37 @@ class AppSkeletonCard extends StatelessWidget {
                 AppSkeleton(
                   width: 48,
                   height: 48,
-                  borderRadius: BorderRadius.circular(AppRadius.avatarRadius),
+                  borderRadius: BorderRadius.circular(InhaleRadius.avatarRadius),
                 ),
-              if (showAvatar) SizedBox(width: AppSpacing.md),
+              if (showAvatar) SizedBox(width: InhaleSpacing.md),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     AppSkeleton(width: 120, height: 16),
-                    SizedBox(height: AppSpacing.xs),
+                    SizedBox(height: InhaleSpacing.xs),
                     AppSkeleton(width: 80, height: 12),
                   ],
                 ),
               ),
             ],
           ),
-          SizedBox(height: AppSpacing.lg),
+          SizedBox(height: InhaleSpacing.lg),
           AppSkeletonText(lines: textLines),
           if (showAction) ...[
-            SizedBox(height: AppSpacing.lg),
+            SizedBox(height: InhaleSpacing.lg),
             Row(
               children: [
                 AppSkeleton(
                   width: 100,
                   height: 36,
-                  borderRadius: BorderRadius.circular(AppRadius.buttonRadius),
+                  borderRadius: BorderRadius.circular(InhaleRadius.buttonRadius),
                 ),
-                SizedBox(width: AppSpacing.sm),
+                SizedBox(width: InhaleSpacing.sm),
                 AppSkeleton(
                   width: 100,
                   height: 36,
-                  borderRadius: BorderRadius.circular(AppRadius.buttonRadius),
+                  borderRadius: BorderRadius.circular(InhaleRadius.buttonRadius),
                 ),
               ],
             ),
@@ -276,7 +276,7 @@ class AppSkeletonChatMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: AppSpacing.chatMessagePaddingInsets,
+      padding: InhaleSpacing.chatMessagePaddingInsets,
       child: Row(
         mainAxisAlignment:
             isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
@@ -286,9 +286,9 @@ class AppSkeletonChatMessage extends StatelessWidget {
             AppSkeleton(
               width: 32,
               height: 32,
-              borderRadius: BorderRadius.circular(AppRadius.avatarRadius),
+              borderRadius: BorderRadius.circular(InhaleRadius.avatarRadius),
             ),
-            SizedBox(width: AppSpacing.sm),
+            SizedBox(width: InhaleSpacing.sm),
           ],
           Flexible(
             child: Column(
@@ -299,20 +299,20 @@ class AppSkeletonChatMessage extends StatelessWidget {
                   width: 180,
                   height: 20,
                   borderRadius: BorderRadius.circular(
-                    AppRadius.buttonSmallRadius,
+                    InhaleRadius.buttonSmallRadius,
                   ),
                 ),
-                SizedBox(height: AppSpacing.sm),
+                SizedBox(height: InhaleSpacing.sm),
                 AppSkeletonText(lines: 3),
               ],
             ),
           ),
           if (isUser) ...[
-            SizedBox(width: AppSpacing.sm),
+            SizedBox(width: InhaleSpacing.sm),
             AppSkeleton(
               width: 32,
               height: 32,
-              borderRadius: BorderRadius.circular(AppRadius.avatarRadius),
+              borderRadius: BorderRadius.circular(InhaleRadius.avatarRadius),
             ),
           ],
         ],
@@ -340,7 +340,7 @@ class AppSkeletonList extends StatelessWidget {
     return ListView.separated(
       padding: EdgeInsets.zero,
       itemCount: itemCount,
-      separatorBuilder: (context, index) => SizedBox(height: AppSpacing.sm),
+      separatorBuilder: (context, index) => SizedBox(height: InhaleSpacing.sm),
       itemBuilder: (context, index) =>
           AppSkeletonCard(showAvatar: showAvatar, textLines: textLines),
     );
@@ -425,13 +425,13 @@ class AppLoadingOverlay extends StatelessWidget {
               color: barrierColor ?? cs.surface.withValues(alpha: 0.7),
               child: Center(
                 child: AppCard(
-                  padding: EdgeInsets.all(AppSpacing.xl),
+                  padding: EdgeInsets.all(InhaleSpacing.xl),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       AppLoadingIndicator(size: 40, strokeWidth: 4),
                       if (message != null) ...[
-                        SizedBox(height: AppSpacing.lg),
+                        SizedBox(height: InhaleSpacing.lg),
                         Text(
                           message!,
                           style: AppTypography.body.copyWith(
@@ -485,7 +485,7 @@ class AppErrorState extends StatelessWidget {
             height: 80,
             decoration: BoxDecoration(
               color: cs.errorContainer.withValues(alpha: 0.5),
-              borderRadius: BorderRadius.circular(AppRadius.avatarRadius),
+              borderRadius: BorderRadius.circular(InhaleRadius.avatarRadius),
             ),
             child: Icon(Icons.error_outline_rounded, size: 40, color: cs.error),
           ),
@@ -536,7 +536,7 @@ class AppSuccessState extends StatelessWidget {
             height: 80,
             decoration: BoxDecoration(
               color: cs.tertiaryContainer.withValues(alpha: 0.5),
-              borderRadius: BorderRadius.circular(AppRadius.avatarRadius),
+              borderRadius: BorderRadius.circular(InhaleRadius.avatarRadius),
             ),
             child: Icon(
               Icons.check_circle_rounded,
@@ -574,7 +574,7 @@ class AppOfflineState extends StatelessWidget {
         height: 80,
         decoration: BoxDecoration(
           color: cs.secondaryContainer.withValues(alpha: 0.5),
-          borderRadius: BorderRadius.circular(AppRadius.avatarRadius),
+          borderRadius: BorderRadius.circular(InhaleRadius.avatarRadius),
         ),
         child: Icon(Icons.wifi_off_rounded, size: 40, color: cs.secondary),
       ),

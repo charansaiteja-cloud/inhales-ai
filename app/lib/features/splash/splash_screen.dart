@@ -143,7 +143,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                       },
                     ),
                   ),
-                  SizedBox(height: AppSpacing.xxl),
+                  SizedBox(height: InhaleSpacing.xxl),
                   // App Name
                   Text(
                     AppConstants.appName,
@@ -154,7 +154,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: AppSpacing.sm),
+                  SizedBox(height: InhaleSpacing.sm),
                   // Tagline
                   Text(
                     AppConstants.tagline,
@@ -163,10 +163,10 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: AppSpacing.xxl),
+                  SizedBox(height: InhaleSpacing.xxl),
                   // Loading indicator
                   _buildLoadingIndicator(cs),
-                  SizedBox(height: AppSpacing.xl),
+                  SizedBox(height: InhaleSpacing.xl),
                   // Subtle message
                   Text(
                     'Your intelligence. Your device. Your possibilities.',

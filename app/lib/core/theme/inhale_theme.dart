@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'inhale_colors.dart';
 import 'inhale_typography.dart';
 import 'inhale_tokens.dart';
+import 'inhale_high_contrast_theme.dart';
 
 /// Centralised theme system for InhaleSkill AI.
 class InhaleTheme {
@@ -56,4 +57,9 @@ class InhaleTheme {
       ),
     ),
   );
+
+  static ThemeData get light => lightTheme;
+  static ThemeData get dark => darkTheme;
+  static ThemeData get highContrastDark => InhaleHighContrastTheme.dark;
+  static ThemeData get highContrastLight => InhaleHighContrastTheme.light;
 }

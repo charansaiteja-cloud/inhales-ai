@@ -143,11 +143,11 @@ class AppButton extends StatelessWidget {
   BorderRadius _getBorderRadius() {
     switch (size) {
       case AppButtonSize.small:
-        return BorderRadius.circular(AppRadius.buttonSmallRadius);
+        return BorderRadius.circular(InhaleRadius.buttonSmallRadius);
       case AppButtonSize.medium:
-        return BorderRadius.circular(AppRadius.buttonRadius);
+        return BorderRadius.circular(InhaleRadius.buttonRadius);
       case AppButtonSize.large:
-        return BorderRadius.circular(AppRadius.buttonLargeRadius);
+        return BorderRadius.circular(InhaleRadius.buttonLargeRadius);
     }
   }
 
@@ -155,13 +155,13 @@ class AppButton extends StatelessWidget {
     switch (size) {
       case AppButtonSize.small:
         return EdgeInsets.symmetric(
-          horizontal: AppSpacing.md,
-          vertical: AppSpacing.xs,
+          horizontal: InhaleSpacing.md,
+          vertical: InhaleSpacing.xs,
         );
       case AppButtonSize.medium:
-        return AppSpacing.buttonPaddingInsets;
+        return InhaleSpacing.buttonPaddingInsets;
       case AppButtonSize.large:
-        return AppSpacing.buttonPaddingLargeInsets;
+        return InhaleSpacing.buttonPaddingLargeInsets;
     }
   }
 
@@ -201,11 +201,11 @@ class AppButton extends StatelessWidget {
 
     if (leadingIcon != null) {
       children.add(leadingIcon!);
-      children.add(SizedBox(width: AppSpacing.sm));
+      children.add(SizedBox(width: InhaleSpacing.sm));
     } else if (icon != null) {
       children.add(icon!);
       if (label != null) {
-        children.add(SizedBox(width: AppSpacing.sm));
+        children.add(SizedBox(width: InhaleSpacing.sm));
       }
     }
 
@@ -222,7 +222,7 @@ class AppButton extends StatelessWidget {
     }
 
     if (trailingIcon != null) {
-      children.add(SizedBox(width: AppSpacing.sm));
+      children.add(SizedBox(width: InhaleSpacing.sm));
       children.add(trailingIcon!);
     }
 
@@ -497,7 +497,7 @@ class AppIconButton extends StatelessWidget {
     final effectiveSplashColor =
         splashColor ?? cs.primary.withValues(alpha: 0.1);
     final effectiveBorderRadius =
-        borderRadius ?? BorderRadius.circular(AppRadius.iconButtonRadius);
+        borderRadius ?? BorderRadius.circular(InhaleRadius.iconButtonRadius);
 
     final child = IconTheme(
       data: IconThemeData(
@@ -570,7 +570,7 @@ class AppFAB extends StatelessWidget {
     final effectiveBg = backgroundColor ?? cs.primary;
     final effectiveFg = foregroundColor ?? cs.onPrimary;
     final effectiveBorderRadius =
-        borderRadius ?? BorderRadius.circular(AppRadius.fab);
+        borderRadius ?? BorderRadius.circular(InhaleRadius.fab);
 
     Widget fab;
     if (isExtended && label != null) {
@@ -594,8 +594,8 @@ class AppFAB extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: effectiveBorderRadius),
         extendedPadding: extendedPadding ??
             EdgeInsets.symmetric(
-              horizontal: AppSpacing.xl,
-              vertical: AppSpacing.md,
+              horizontal: InhaleSpacing.xl,
+              vertical: InhaleSpacing.md,
             ),
       );
     } else {

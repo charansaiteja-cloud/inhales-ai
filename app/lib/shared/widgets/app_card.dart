@@ -64,8 +64,8 @@ class AppCard extends StatelessWidget {
             ? Border.all(color: selectedBorderColor ?? cs.primary, width: 2)
             : Border.all(color: cs.outlineVariant, width: 1));
     final effectiveBorderRadius =
-        borderRadius ?? BorderRadius.circular(AppRadius.cardRadius);
-    final effectivePadding = padding ?? AppSpacing.cardPaddingInsets;
+        borderRadius ?? BorderRadius.circular(InhaleRadius.cardRadius);
+    final effectivePadding = padding ?? InhaleSpacing.cardPaddingInsets;
     final effectiveMargin = margin ?? EdgeInsets.zero;
 
     Widget card = AnimatedContainer(
@@ -157,11 +157,11 @@ class AppSurface extends StatelessWidget {
 
     return Container(
       margin: margin ?? EdgeInsets.zero,
-      padding: padding ?? AppSpacing.cardPaddingInsets,
+      padding: padding ?? InhaleSpacing.cardPaddingInsets,
       decoration: BoxDecoration(
         color: color ?? cs.surface,
         borderRadius:
-            borderRadius ?? BorderRadius.circular(AppRadius.cardRadius),
+            borderRadius ?? BorderRadius.circular(InhaleRadius.cardRadius),
         border: border ?? Border.all(color: cs.outlineVariant, width: 1),
         boxShadow: shadows,
       ),
@@ -300,11 +300,11 @@ class _AppTextFieldState extends State<AppTextField> {
     final cs = theme.colorScheme;
 
     final effectiveBorderRadius =
-        widget.borderRadius ?? BorderRadius.circular(AppRadius.inputRadius);
+        widget.borderRadius ?? BorderRadius.circular(InhaleRadius.inputRadius);
     final effectiveFillColor = widget.fillColor ??
         (isDark ? AppColors.darkSurface : AppColors.lightSurface);
     final effectiveContentPadding =
-        widget.contentPadding ?? AppSpacing.inputPaddingInsets;
+        widget.contentPadding ?? InhaleSpacing.inputPaddingInsets;
 
     InputBorder border(Color color, double width) {
       return OutlineInputBorder(
@@ -499,12 +499,12 @@ class _AppSearchFieldState extends State<AppSearchField> {
       label: widget.hint ?? 'Search',
       child: Container(
         padding:
-            widget.padding ?? EdgeInsets.symmetric(horizontal: AppSpacing.md),
+            widget.padding ?? EdgeInsets.symmetric(horizontal: InhaleSpacing.md),
         decoration: BoxDecoration(
           color: _hasFocus
               ? cs.surface
               : cs.surfaceContainerHighest.withValues(alpha: 0.5),
-          borderRadius: BorderRadius.circular(AppRadius.inputRadius),
+          borderRadius: BorderRadius.circular(InhaleRadius.inputRadius),
           border: Border.all(
             color: _hasFocus ? cs.primary : cs.outlineVariant,
             width: _hasFocus ? 2 : 1,
@@ -513,7 +513,7 @@ class _AppSearchFieldState extends State<AppSearchField> {
         child: Row(
           children: [
             effectiveLeading,
-            SizedBox(width: AppSpacing.sm),
+            SizedBox(width: InhaleSpacing.sm),
             Expanded(
               child: TextField(
                 controller: _controller,
@@ -531,12 +531,12 @@ class _AppSearchFieldState extends State<AppSearchField> {
                   ),
                   border: InputBorder.none,
                   isDense: true,
-                  contentPadding: EdgeInsets.symmetric(vertical: AppSpacing.sm),
+                  contentPadding: EdgeInsets.symmetric(vertical: InhaleSpacing.sm),
                 ),
               ),
             ),
             if (_controller.text.isNotEmpty) ...[
-              SizedBox(width: AppSpacing.xs),
+              SizedBox(width: InhaleSpacing.xs),
               trailing,
             ],
           ],
@@ -596,7 +596,7 @@ class AppTextArea extends StatelessWidget {
       focusNode: focusNode,
       keyboardType: TextInputType.multiline,
       textInputAction: TextInputAction.newline,
-      contentPadding: padding ?? AppSpacing.inputPaddingInsets,
+      contentPadding: padding ?? InhaleSpacing.inputPaddingInsets,
     );
   }
 }

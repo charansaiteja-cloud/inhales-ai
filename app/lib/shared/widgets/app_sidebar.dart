@@ -38,8 +38,8 @@ class AppSidebar extends ConsumerStatefulWidget {
     this.onItemSelected,
     this.isCollapsed = false,
     this.onToggleCollapse,
-    this.width = AppSpacing.sidebarWidth,
-    this.collapsedWidth = AppSpacing.sidebarWidthCollapsed,
+    this.width = InhaleSpacing.sidebarWidth,
+    this.collapsedWidth = InhaleSpacing.sidebarWidthCollapsed,
     this.backgroundColor,
     this.dividerColor,
   });
@@ -147,8 +147,8 @@ class _AppSidebarState extends ConsumerState<AppSidebar>
     return Container(
       width: width,
       padding: EdgeInsets.symmetric(
-        horizontal: AppSpacing.md,
-        vertical: AppSpacing.lg,
+        horizontal: InhaleSpacing.md,
+        vertical: InhaleSpacing.lg,
       ),
       decoration: BoxDecoration(
         border: Border(bottom: BorderSide(color: cs.outlineVariant, width: 1)),
@@ -163,7 +163,7 @@ class _AppSidebarState extends ConsumerState<AppSidebar>
               gradient: isDark
                   ? AppColors.primaryGradientDark
                   : AppColors.primaryGradient,
-              borderRadius: BorderRadius.circular(AppRadius.buttonRadius),
+              borderRadius: BorderRadius.circular(InhaleRadius.buttonRadius),
             ),
             child: const Center(
               child: Icon(
@@ -174,7 +174,7 @@ class _AppSidebarState extends ConsumerState<AppSidebar>
             ),
           ),
           if (showLabels) ...[
-            SizedBox(width: AppSpacing.md),
+            SizedBox(width: InhaleSpacing.md),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -218,9 +218,9 @@ class _AppSidebarState extends ConsumerState<AppSidebar>
 
   Widget _buildNavigationItems(double width, bool showLabels, ColorScheme cs) {
     return ListView.separated(
-      padding: EdgeInsets.symmetric(vertical: AppSpacing.sm),
+      padding: EdgeInsets.symmetric(vertical: InhaleSpacing.sm),
       itemCount: widget.items.length,
-      separatorBuilder: (context, index) => SizedBox(height: AppSpacing.xs),
+      separatorBuilder: (context, index) => SizedBox(height: InhaleSpacing.xs),
       itemBuilder: (context, index) {
         final item = widget.items[index];
         final isSelected = widget.selectedIndex == index;
@@ -242,7 +242,7 @@ class _AppSidebarState extends ConsumerState<AppSidebar>
 
     return Container(
       width: width,
-      padding: EdgeInsets.all(AppSpacing.md),
+      padding: EdgeInsets.all(InhaleSpacing.md),
       decoration: BoxDecoration(
         border: Border(top: BorderSide(color: cs.outlineVariant, width: 1)),
       ),
@@ -252,12 +252,12 @@ class _AppSidebarState extends ConsumerState<AppSidebar>
           if (widget.onToggleCollapse != null)
             InkWell(
               onTap: widget.onToggleCollapse,
-              borderRadius: BorderRadius.circular(AppRadius.buttonRadius),
+              borderRadius: BorderRadius.circular(InhaleRadius.buttonRadius),
               child: Container(
                 width: double.infinity,
                 padding: EdgeInsets.symmetric(
-                  horizontal: AppSpacing.md,
-                  vertical: AppSpacing.sm,
+                  horizontal: InhaleSpacing.md,
+                  vertical: InhaleSpacing.sm,
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -270,7 +270,7 @@ class _AppSidebarState extends ConsumerState<AppSidebar>
                       color: cs.onSurfaceVariant,
                     ),
                     if (showLabels) ...[
-                      SizedBox(width: AppSpacing.md),
+                      SizedBox(width: InhaleSpacing.md),
                       Text(
                         widget.isCollapsed ? 'Expand' : 'Collapse',
                         style: AppTypography.bodyMedium.copyWith(
@@ -284,15 +284,15 @@ class _AppSidebarState extends ConsumerState<AppSidebar>
             ),
           // Settings link
           if (showLabels) ...[
-            SizedBox(height: AppSpacing.sm),
+            SizedBox(height: InhaleSpacing.sm),
             InkWell(
               onTap: () => context.go('/settings'),
-              borderRadius: BorderRadius.circular(AppRadius.buttonRadius),
+              borderRadius: BorderRadius.circular(InhaleRadius.buttonRadius),
               child: Container(
                 width: double.infinity,
                 padding: EdgeInsets.symmetric(
-                  horizontal: AppSpacing.md,
-                  vertical: AppSpacing.sm,
+                  horizontal: InhaleSpacing.md,
+                  vertical: InhaleSpacing.sm,
                 ),
                 child: Row(
                   children: [
@@ -301,7 +301,7 @@ class _AppSidebarState extends ConsumerState<AppSidebar>
                       size: 20,
                       color: cs.onSurfaceVariant,
                     ),
-                    SizedBox(width: AppSpacing.md),
+                    SizedBox(width: InhaleSpacing.md),
                     Text(
                       'Settings',
                       style: AppTypography.bodyMedium.copyWith(
@@ -341,21 +341,21 @@ class _SidebarItemTile extends StatelessWidget {
 
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(AppRadius.sidebarItemRadius),
+      borderRadius: BorderRadius.circular(InhaleRadius.sidebarItemRadius),
       splashColor: cs.primary.withValues(alpha: 0.08),
       highlightColor: cs.primary.withValues(alpha: 0.04),
       child: Container(
         width: double.infinity,
-        margin: EdgeInsets.symmetric(horizontal: AppSpacing.xs),
+        margin: EdgeInsets.symmetric(horizontal: InhaleSpacing.xs),
         padding: EdgeInsets.symmetric(
-          horizontal: AppSpacing.md,
-          vertical: AppSpacing.sm,
+          horizontal: InhaleSpacing.md,
+          vertical: InhaleSpacing.sm,
         ),
         decoration: BoxDecoration(
           color: isSelected
               ? cs.primaryContainer.withValues(alpha: 0.5)
               : Colors.transparent,
-          borderRadius: BorderRadius.circular(AppRadius.sidebarItemRadius),
+          borderRadius: BorderRadius.circular(InhaleRadius.sidebarItemRadius),
           border: isSelected
               ? Border.all(
                   color: cs.primary.withValues(alpha: 0.3),
@@ -373,7 +373,7 @@ class _SidebarItemTile extends StatelessWidget {
               child: item.icon,
             ),
             if (showLabel) ...[
-              SizedBox(width: AppSpacing.md),
+              SizedBox(width: InhaleSpacing.md),
               Expanded(
                 child: Text(
                   item.label,
@@ -387,12 +387,12 @@ class _SidebarItemTile extends StatelessWidget {
               if (item.badge != null)
                 Container(
                   padding: EdgeInsets.symmetric(
-                    horizontal: AppSpacing.xs,
+                    horizontal: InhaleSpacing.xs,
                     vertical: 2,
                   ),
                   decoration: BoxDecoration(
                     color: cs.primaryContainer,
-                    borderRadius: BorderRadius.circular(AppRadius.badgeRadius),
+                    borderRadius: BorderRadius.circular(InhaleRadius.badgeRadius),
                   ),
                   child: Text(
                     item.badge!,
@@ -500,7 +500,7 @@ class AppHeader extends ConsumerWidget implements PreferredSizeWidget {
             ),
           ),
         ),
-        SizedBox(width: AppSpacing.md),
+        SizedBox(width: InhaleSpacing.md),
       ],
       if (actions != null) ...actions!,
     ];
@@ -523,7 +523,7 @@ class AppHeader extends ConsumerWidget implements PreferredSizeWidget {
       surfaceTintColor: surfaceTintColor ?? Colors.transparent,
       elevation: elevation,
       centerTitle: centerTitle,
-      toolbarHeight: AppSpacing.headerHeight,
+      toolbarHeight: InhaleSpacing.headerHeight,
       scrolledUnderElevation: 1,
       shadowColor: isDark ? AppColors.darkShadow : AppColors.lightShadow,
     );
@@ -552,7 +552,7 @@ class AppBottomNavigationBar extends ConsumerWidget {
     this.backgroundColor,
     this.selectedItemColor,
     this.unselectedItemColor,
-    this.height = AppSpacing.bottomNavHeight,
+    this.height = InhaleSpacing.bottomNavHeight,
     this.elevation = 0,
   });
 
@@ -584,7 +584,7 @@ class AppBottomNavigationBar extends ConsumerWidget {
                 highlightColor: cs.primary.withValues(alpha: 0.04),
                 child: Container(
                   height: double.infinity,
-                  padding: EdgeInsets.symmetric(vertical: AppSpacing.xs),
+                  padding: EdgeInsets.symmetric(vertical: InhaleSpacing.xs),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -600,7 +600,7 @@ class AppBottomNavigationBar extends ConsumerWidget {
                             ? item.activeIcon ?? item.icon
                             : item.icon,
                       ),
-                      SizedBox(height: AppSpacing.xs),
+                      SizedBox(height: InhaleSpacing.xs),
                       Text(
                         item.label,
                         style: AppTypography.labelSmall.copyWith(
@@ -676,7 +676,7 @@ class AppNavigationDrawer extends ConsumerWidget {
             header ??
                 Container(
                   width: double.infinity,
-                  padding: EdgeInsets.all(AppSpacing.lg),
+                  padding: EdgeInsets.all(InhaleSpacing.lg),
                   decoration: BoxDecoration(
                     border: Border(
                       bottom: BorderSide(color: cs.outlineVariant, width: 1),
@@ -692,7 +692,7 @@ class AppNavigationDrawer extends ConsumerWidget {
                               ? AppColors.primaryGradientDark
                               : AppColors.primaryGradient,
                           borderRadius: BorderRadius.circular(
-                            AppRadius.buttonRadius,
+                            InhaleRadius.buttonRadius,
                           ),
                         ),
                         child: const Center(
@@ -703,7 +703,7 @@ class AppNavigationDrawer extends ConsumerWidget {
                           ),
                         ),
                       ),
-                      SizedBox(width: AppSpacing.md),
+                      SizedBox(width: InhaleSpacing.md),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -730,10 +730,10 @@ class AppNavigationDrawer extends ConsumerWidget {
             // Navigation items
             Expanded(
               child: ListView.separated(
-                padding: EdgeInsets.symmetric(vertical: AppSpacing.sm),
+                padding: EdgeInsets.symmetric(vertical: InhaleSpacing.sm),
                 itemCount: items.length,
                 separatorBuilder: (context, index) =>
-                    SizedBox(height: AppSpacing.xs),
+                    SizedBox(height: InhaleSpacing.xs),
                 itemBuilder: (context, index) {
                   final item = items[index];
                   final isSelected = selectedIndex == index;
@@ -756,13 +756,13 @@ class AppNavigationDrawer extends ConsumerWidget {
                     trailing: item.badge != null
                         ? Container(
                             padding: EdgeInsets.symmetric(
-                              horizontal: AppSpacing.sm,
+                              horizontal: InhaleSpacing.sm,
                               vertical: 2,
                             ),
                             decoration: BoxDecoration(
                               color: cs.primaryContainer,
                               borderRadius: BorderRadius.circular(
-                                AppRadius.badgeRadius,
+                                InhaleRadius.badgeRadius,
                               ),
                             ),
                             child: Text(
@@ -780,7 +780,7 @@ class AppNavigationDrawer extends ConsumerWidget {
                     ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(
-                        AppRadius.sidebarItemRadius,
+                        InhaleRadius.sidebarItemRadius,
                       ),
                     ),
                     onTap: () {
@@ -794,7 +794,7 @@ class AppNavigationDrawer extends ConsumerWidget {
             // Footer
             footer ??
                 Container(
-                  padding: EdgeInsets.all(AppSpacing.md),
+                  padding: EdgeInsets.all(InhaleSpacing.md),
                   decoration: BoxDecoration(
                     border: Border(
                       top: BorderSide(color: cs.outlineVariant, width: 1),

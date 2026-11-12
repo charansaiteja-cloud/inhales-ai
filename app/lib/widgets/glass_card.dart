@@ -3,7 +3,12 @@ import 'dart:ui';
 import '../core/theme/inhale_colors.dart';
 import '../core/theme/inhale_tokens.dart';
 
-class GlassCard extends StatelessWidget {
+
+/// Premium Liquid Glass card with frosted blur and optional elevation/glow.
+///
+/// A [StatefulWidget] that tracks keyboard focus and renders a subtle blue
+/// focus outline when the user navigates to it via Tab/Shift+Tab.
+class GlassCard extends StatefulWidget {
   final Widget? child;
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
@@ -40,35 +45,39 @@ class GlassCard extends StatelessWidget {
   });
 
   @override
+  State<GlassCard> createState() => _GlassCardState();
+}
+
+class _GlassCardState extends State<GlassCard> {
+  bool _hasFocus = false;
+
+  @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final settings = MediaQuery.of(context).accessibleNavigation;
-    final shouldBlur = useBlur ?? !settings;
-    final radius = borderRadius ?? BorderRadius.circular(InhaleRadius.md);
-
-    final effectiveShadows = shadows ?? _buildShadows(isDark);
-    final effectiveBorder = borderColor ??
-        (isDark
-            ? InhaleColors.glassBorderSubtle
-            : InhaleColors.lightGlassBorderSubtle);
-    final effectiveBg = backgroundColor ??
-        (isDark
-            ? InhaleColors.glassSurfaceMedium
-            : InhaleColors.lightGlassSurfaceMedium);
+    final shouldBlur = widget.useBlur ?? !settings;
+    final radius = widget.borderRadius ?? BorderRadius.circular(InhaleRadius.md);
+    final effectiveShadows = widget.shadows ?? _buildShadows(isDark);
+    final effectiveBorder = widget.borderColor ??
+        (isDark ? InhaleColors.glassBorderSubtle : InhaleColors.lightGlassBorderSubtle);
+    final effectiveBg = widget.backgroundColor ??
+        (isDark ? InhaleColors.glassSurfaceMedium : InhaleColors.lightGlassSurfaceMedium);
 
     final hoverCard = MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
-        onTap: onTap,
-        onLongPress: onLongPress,
+        onTap: widget.onTap,
+        onLongPress: widget.onLongPress,
         child: Container(
-          width: width,
-          height: height,
-          margin: margin,
+          width: widget.width,
+          height: widget.height,
+          margin: widget.margin,
           decoration: BoxDecoration(
             color: effectiveBg,
             borderRadius: radius,
-            border: Border.all(color: effectiveBorder, width: 0.5),
+            border: _hasFocus
+                ? Border.all(color: InhaleColors.blue, width: 2.0)
+                : Border.all(color: effectiveBorder, width: 0.5),
             boxShadow: effectiveShadows,
           ),
           child: shouldBlur
@@ -76,7 +85,10 @@ class GlassCard extends StatelessWidget {
                   borderRadius: radius,
                   child: RepaintBoundary(
                     child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
+                      filter: ImageFilter.blur(
+                        sigmaX: widget.blur,
+                        sigmaY: widget.blur,
+                      ),
                       child: _buildContent(context),
                     ),
                   ),
@@ -86,13 +98,11 @@ class GlassCard extends StatelessWidget {
       ),
     );
 
-    if (onTap != null || onLongPress != null) {
+    if (widget.onTap != null || widget.onLongPress != null) {
       return Semantics(
         button: true,
-        child: InkWell(
-          onTap: onTap,
-          onLongPress: onLongPress,
-          borderRadius: radius,
+        child: FocusableActionDetector(
+          onShowFocusHighlight: (v) => setState(() => _hasFocus = v),
           child: hoverCard,
         ),
       );
@@ -101,12 +111,12 @@ class GlassCard extends StatelessWidget {
   }
 
   Widget _buildContent(BuildContext context) => Padding(
-        padding: padding ?? EdgeInsets.zero,
-        child: child ?? const SizedBox(),
+        padding: widget.padding ?? EdgeInsets.zero,
+        child: widget.child ?? const SizedBox(),
       );
 
   List<BoxShadow> _buildShadows(bool isDark) {
-    if (glow) {
+    if (widget.glow) {
       return isDark
           ? [
               BoxShadow(
@@ -117,7 +127,7 @@ class GlassCard extends StatelessWidget {
             ]
           : [];
     }
-    if (elevated) {
+    if (widget.elevated) {
       return isDark
           ? [
               BoxShadow(

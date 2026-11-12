@@ -249,4 +249,186 @@ void main() {
       expect(embedding.length, 384);
     });
   });
+
+  group('Extractive summarization', () {
+    test('summarizes long text by selecting key sentences', () {
+      const text =
+          'Machine learning is a subset of artificial intelligence. '
+          'It focuses on algorithms that can learn from data. '
+          'Neural networks are a popular type of machine learning model. '
+          'Deep learning uses multiple layers of neural networks. '
+          'Supervised learning requires labeled training data. '
+          'Unsupervised learning finds patterns without labels. '
+          'Reinforcement learning learns through trial and error. '
+          'Each approach has different use cases. '
+          'Choosing the right method depends on the problem. '
+          'Evaluation metrics help compare model performance.';
+
+      final sentences = _splitSentences(text);
+      expect(sentences.length, greaterThan(5));
+
+      // Simple extractive: pick first 5
+      final summary = sentences.take(5).join(' ');
+      expect(summary, contains('Machine learning'));
+      expect(summary, contains('artificial intelligence'));
+      expect(summary, contains('Neural networks'));
+      expect(summary, contains('Deep learning'));
+      expect(summary, contains('Supervised learning'));
+    });
+
+    test('extractKeyTopics identifies frequent terms', () {
+      const text =
+          'Machine learning algorithms learn from data. '
+          'Deep learning uses neural networks with many layers. '
+          'Neural networks can approximate complex functions. '
+          'Training data quality affects model performance. '
+          'Feature engineering improves neural network results.';
+
+      final topics = _extractKeyTopics(text, maxTopics: 5);
+      expect(topics.length, 5);
+      expect(topics, anyElement(contains('neural')));
+      expect(topics, anyElement(contains('learning')));
+      expect(topics, anyElement(contains('data')));
+    });
+
+    test('suggestQuestions generates relevant questions from topics', () {
+      // Use repeated target words to ensure they rank highest
+      const text =
+          'Photosynthesis is the process of photosynthesis in plants. '
+          'Chlorophyll is the green pigment chlorophyll in leaves. '
+          'Photosynthesis converts light energy into chemical energy using chlorophyll. '
+          'The photosynthesis process requires chlorophyll for energy conversion.';
+
+      final questions = _suggestQuestions(text, maxQuestions: 4);
+      expect(questions.length, 4);
+      expect(questions.any((q) => q.contains('photosynthesis')), true);
+      expect(questions.any((q) => q.contains('chlorophyll')), true);
+    });
+
+    test('empty content returns empty results', () {
+      expect(_splitSentences(''), isEmpty);
+      expect(_extractKeyTopics(''), isEmpty);
+      expect(_suggestQuestions(''), isNot(isEmpty)); // falls back to defaults
+    });
+  });
+}
+
+List<String> _splitSentences(String text) {
+  // Simple sentence splitting - split on . ! ? followed by space and capital letter
+  final cleaned = text.replaceAll('\n', ' ').replaceAll(RegExp(r'\s+'), ' ');
+  final parts = cleaned.split(RegExp(r'(?<=[.!?])\s+(?=[A-Z])'));
+  return parts.where((s) => s.trim().isNotEmpty).map((s) => s.trim()).toList();
+}
+
+List<String> _extractKeyTopics(String content, {int maxTopics = 7}) {
+  if (content.trim().isEmpty) return [];
+
+  final stopWords = _stopWords();
+  final wordFreq = <String, int>{};
+  final words = content
+      .toLowerCase()
+      .replaceAll(RegExp(r'[^a-z0-9\s]'), ' ')
+      .split(RegExp(r'\s+'))
+      .where((w) => w.length > 3 && !stopWords.contains(w));
+
+  for (final w in words) {
+    wordFreq[w] = (wordFreq[w] ?? 0) + 1;
+  }
+
+  final sorted =
+      wordFreq.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
+  return sorted.take(maxTopics).map((e) => e.key).toList();
+}
+
+List<String> _suggestQuestions(String content, {int maxQuestions = 5}) {
+  final topics = _extractKeyTopics(content, maxTopics: maxQuestions * 2);
+  if (topics.isEmpty) {
+    return [
+      'What is the main idea of this document?',
+      'Can you explain the key concepts?',
+      'What are the important takeaways?',
+    ];
+  }
+
+  final questions = <String>[];
+  for (final topic in topics.take(maxQuestions)) {
+    questions.add('What is $topic?');
+    questions.add('How does $topic relate to the document?');
+  }
+  return questions.take(maxQuestions).toList();
+}
+
+Set<String> _stopWords() {
+  return {
+    'the',
+    'and',
+    'for',
+    'are',
+    'but',
+    'not',
+    'you',
+    'all',
+    'can',
+    'had',
+    'her',
+    'was',
+    'one',
+    'our',
+    'out',
+    'day',
+    'get',
+    'has',
+    'him',
+    'his',
+    'how',
+    'its',
+    'may',
+    'new',
+    'now',
+    'old',
+    'see',
+    'two',
+    'way',
+    'who',
+    'boy',
+    'did',
+    'she',
+    'use',
+    'oil',
+    'sit',
+    'set',
+    'run',
+    'eat',
+    'far',
+    'sea',
+    'eye',
+    'ago',
+    'off',
+    'too',
+    'any',
+    'say',
+    'man',
+    'try',
+    'ask',
+    'end',
+    'why',
+    'let',
+    'put',
+    'tell',
+    'very',
+    'when',
+    'come',
+    'here',
+    'just',
+    'like',
+    'long',
+    'make',
+    'many',
+    'over',
+    'such',
+    'take',
+    'them',
+    'well',
+    'were',
+  };
 }

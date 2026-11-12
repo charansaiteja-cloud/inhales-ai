@@ -93,6 +93,15 @@ class SearchResult {
   String get preview => chunk.getPreview();
 }
 
+/// Internal helper for extractive summarization.
+class _ScoredSentence {
+  final int index;
+  final String sentence;
+  final double score;
+
+  _ScoredSentence(this.index, this.sentence, this.score);
+}
+
 /// Citation reference for inline citations in responses.
 class CitationRef {
   final int index; // 1-based index for [1], [2] style
@@ -140,9 +149,199 @@ class RAGService {
   final List<DocumentChunk> _memoryIndex = [];
   bool _initialized = false;
 
-  static const int _embeddingDim = 384; // BGE-small-en / E5-small dimension
-  static const int _chunkSize = 512;
-  static const int _chunkOverlap = 64;
+  /// Generate a concise summary of a document without an AI engine.
+  /// Uses extractive summarization: picks the most representative sentences
+  /// based on keyword frequency and position (first sentences are weighted).
+  String extractiveSummary(String content, {int maxSentences = 5}) {
+    if (content.trim().isEmpty) return '';
+
+    final sentences = _splitSentences(content);
+    if (sentences.isEmpty) return '';
+
+    if (sentences.length <= maxSentences) {
+      return sentences.join(' ');
+    }
+
+    // Score sentences: first and last sentences get bonus, keyword frequency
+    final allWords = <String, int>{};
+    final stopWords = _stopWords();
+    for (final sentence in sentences) {
+      final words =
+          sentence
+              .toLowerCase()
+              .replaceAll(RegExp(r'[^a-z0-9\s]'), ' ')
+              .split(RegExp(r'\s+'))
+              .where((w) => w.length > 2 && !stopWords.contains(w))
+              .toSet();
+      for (final w in words) {
+        allWords[w] = (allWords[w] ?? 0) + 1;
+      }
+    }
+
+    final scored = <_ScoredSentence>[];
+    for (var i = 0; i < sentences.length; i++) {
+      final sentence = sentences[i];
+      final words =
+          sentence
+              .toLowerCase()
+              .replaceAll(RegExp(r'[^a-z0-9\s]'), ' ')
+              .split(RegExp(r'\s+'))
+              .where((w) => w.length > 2 && !stopWords.contains(w))
+              .toSet();
+      var score = 0.0;
+      for (final w in words) {
+        score += (allWords[w] ?? 0);
+      }
+      // Position bonus: first 2 and last 1 sentences weighted
+      if (i < 2) score *= 1.3;
+      if (i >= sentences.length - 1) score *= 1.15;
+      scored.add(_ScoredSentence(i, sentence, score));
+    }
+
+    scored.sort((a, b) => b.score.compareTo(a.score));
+    final selected =
+        scored.take(maxSentences).toList()
+          ..sort((a, b) => a.index.compareTo(b.index));
+
+    return selected.map((s) => s.sentence).join(' ');
+  }
+
+  /// Generate key topics from document content using frequency analysis.
+  List<String> extractKeyTopics(String content, {int maxTopics = 7}) {
+    if (content.trim().isEmpty) return [];
+
+    final stopWords = _stopWords();
+    final wordFreq = <String, int>{};
+    final words = content
+        .toLowerCase()
+        .replaceAll(RegExp(r'[^a-z0-9\s]'), ' ')
+        .split(RegExp(r'\s+'))
+        .where((w) => w.length > 3 && !stopWords.contains(w));
+
+    for (final w in words) {
+      wordFreq[w] = (wordFreq[w] ?? 0) + 1;
+    }
+
+    final sorted =
+        wordFreq.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
+    return sorted.take(maxTopics).map((e) => e.key).toList();
+  }
+
+  /// Suggest questions based on document content (heuristic).
+  List<String> suggestQuestions(String content, {int maxQuestions = 5}) {
+    final topics = extractKeyTopics(content, maxTopics: maxQuestions * 2);
+    if (topics.isEmpty) {
+      return [
+        'What is the main idea of this document?',
+        'Can you explain the key concepts?',
+        'What are the important takeaways?',
+      ];
+    }
+
+    final questions = <String>[];
+    for (final topic in topics.take(maxQuestions)) {
+      questions.add('What is $topic?');
+      questions.add('How does $topic relate to the document?');
+    }
+    return questions.take(maxQuestions).toList();
+  }
+
+  List<String> _splitSentences(String text) {
+    final cleaned = text.replaceAll('\n', ' ').replaceAll(RegExp(r'\s+'), ' ');
+    final sentences = <String>[];
+    var start = 0;
+    final regex = RegExp(r'([.!?])(\s+)([A-Z0-9])');
+    var match = regex.firstMatch(cleaned);
+    while (match != null && start < cleaned.length) {
+      final end = match.start + 1;
+      final sentence = cleaned.substring(start, end).trim();
+      if (sentence.isNotEmpty) sentences.add(sentence);
+      start = end + (match.group(2)?.length ?? 1);
+      match = regex.firstMatch(cleaned.substring(start));
+    }
+    final remaining = cleaned.substring(start).trim();
+    if (remaining.isNotEmpty) sentences.add(remaining);
+    return sentences;
+  }
+
+  static const _stopWordSet = {
+    'the',
+    'and',
+    'for',
+    'are',
+    'but',
+    'not',
+    'you',
+    'all',
+    'can',
+    'had',
+    'her',
+    'was',
+    'one',
+    'our',
+    'out',
+    'day',
+    'get',
+    'has',
+    'him',
+    'his',
+    'how',
+    'its',
+    'may',
+    'new',
+    'now',
+    'old',
+    'see',
+    'two',
+    'way',
+    'who',
+    'boy',
+    'did',
+    'she',
+    'use',
+    'oil',
+    'sit',
+    'set',
+    'run',
+    'eat',
+    'far',
+    'sea',
+    'eye',
+    'ago',
+    'off',
+    'too',
+    'any',
+    'say',
+    'man',
+    'try',
+    'ask',
+    'end',
+    'why',
+    'let',
+    'put',
+    'tell',
+    'very',
+    'when',
+    'come',
+    'here',
+    'just',
+    'like',
+    'long',
+    'make',
+    'many',
+    'over',
+    'such',
+    'take',
+    'them',
+    'well',
+    'were',
+  };
+
+  static Set<String> _stopWords() => _stopWordSet;
+
+  static const _embeddingDim = 384; // BGE-small-en / E5-small dimension
+  int chunkSize = 512;
+  int chunkOverlap = 64;
 
   RAGService(this._database, {AIEngine? embeddingEngine})
     : _embeddingEngine = embeddingEngine;
@@ -186,8 +385,18 @@ class RAGService {
     required String title,
     required String content,
     Map<String, dynamic>? metadata,
+    List<int>? pageBreaks,
   }) async {
-    final chunks = _chunkText(content, documentId, title, metadata);
+    final chunks =
+        pageBreaks != null
+            ? chunkTextWithCitations(
+              text: content,
+              documentId: documentId,
+              title: title,
+              metadata: metadata,
+              pageBreaks: pageBreaks,
+            )
+            : _chunkText(content, documentId, title, metadata);
     await _indexChunks(chunks);
   }
 
@@ -197,7 +406,7 @@ class RAGService {
     int limit = 5,
     double minScore = 0.3,
   }) async {
-    return hybridSearch(query, limit: limit);
+    return hybridSearch(query, limit: limit, minScore: minScore);
   }
 
   /// Search with hybrid approach (vector + keyword).
@@ -262,13 +471,82 @@ class RAGService {
     return matches / keywords.length;
   }
 
-  /// Delete a document from the index.
+  /// Delete a document from the index and clean up all chunks.
   Future<void> deleteDocument(String documentId) async {
-    await _database.customStatement(
-      'DELETE FROM document_chunks WHERE document_id = ?',
-      [documentId],
-    );
+    await _database.batch((b) {
+      b.customStatement('DELETE FROM document_chunks WHERE document_id = ?', [
+        documentId,
+      ]);
+    });
     _memoryIndex.removeWhere((c) => c.documentId == documentId);
+  }
+
+  /// Delete multiple documents atomically.
+  Future<void> deleteDocuments(Iterable<String> documentIds) async {
+    final idList = documentIds.toList();
+    if (idList.isEmpty) return;
+
+    await _database.batch((b) {
+      for (final id in idList) {
+        b.customStatement('DELETE FROM document_chunks WHERE document_id = ?', [
+          id,
+        ]);
+      }
+    });
+    _memoryIndex.removeWhere((c) => idList.contains(c.documentId));
+  }
+
+  /// Search across multiple documents, returning per-document result groups.
+  /// Useful for multi-document Q&A where you want to know which document
+  /// contributed what.
+  Future<List<({String documentId, List<SearchResult> results})>>
+  searchAcrossDocuments(
+    String query, {
+    Iterable<String>? documentIds,
+    int limitPerDocument = 3,
+    double minScore = 0.2,
+  }) async {
+    final targetIds =
+        documentIds != null
+            ? documentIds.toSet()
+            : (await getIndexedDocuments()).toSet();
+
+    final groups = <({String documentId, List<SearchResult> results})>[];
+    for (final docId in targetIds) {
+      final results = await searchInDocument(
+        query,
+        docId,
+        limit: limitPerDocument,
+        minScore: minScore,
+      );
+      if (results.isNotEmpty) {
+        groups.add((documentId: docId, results: results));
+      }
+    }
+
+    // Sort groups by best score descending
+    groups.sort(
+      (a, b) => b.results.first.score.compareTo(a.results.first.score),
+    );
+    return groups;
+  }
+
+  /// Search a collection of documents with cross-document ranking.
+  /// Returns flat results ranked across all documents in the collection.
+  Future<List<SearchResult>> searchInCollection(
+    String query, {
+    required Iterable<String> documentIds,
+    int limit = 10,
+    double minScore = 0.2,
+  }) async {
+    final results = <SearchResult>[];
+    for (final docId in documentIds) {
+      results.addAll(
+        await searchInDocument(query, docId, limit: limit, minScore: minScore),
+      );
+    }
+    results.sort((a, b) => b.score.compareTo(a.score));
+    return results.take(limit).toList();
   }
 
   /// Get all indexed document IDs.
@@ -296,10 +574,10 @@ class RAGService {
     Map<String, dynamic>? metadata,
   ) {
     final chunks = <DocumentChunk>[];
-    const overlap = _chunkOverlap;
+    final overlap = chunkOverlap;
 
-    for (var i = 0; i < text.length; i += _chunkSize - overlap) {
-      final end = math.min(i + _chunkSize, text.length);
+    for (var i = 0; i < text.length; i += chunkSize - overlap) {
+      final end = math.min(i + chunkSize, text.length);
       final chunkText = text.substring(i, end).trim();
       if (chunkText.isEmpty) continue;
 
@@ -336,6 +614,19 @@ class RAGService {
     // Batch insert into document_chunks table
     await _database.batch((b) {
       for (final chunk in chunksWithEmbeddings) {
+        final meta = Map<String, dynamic>.from(chunk.metadata);
+        if (chunk.pageNumber != null) {
+          meta['pageNumber'] = chunk.pageNumber;
+        }
+        if (chunk.charStart != null) {
+          meta['charStart'] = chunk.charStart;
+        }
+        if (chunk.charEnd != null) {
+          meta['charEnd'] = chunk.charEnd;
+        }
+        if (chunk.sectionTitle != null) {
+          meta['sectionTitle'] = chunk.sectionTitle;
+        }
         b.customStatement(
           '''
           INSERT OR REPLACE INTO document_chunks
@@ -347,7 +638,7 @@ class RAGService {
             chunk.documentId,
             chunk.chunkIndex,
             chunk.content,
-            jsonEncode(chunk.metadata),
+            jsonEncode(meta),
             jsonEncode(chunk.embedding!),
             DateTime.now().millisecondsSinceEpoch ~/ 1000,
           ],
@@ -393,6 +684,10 @@ class RAGService {
           chunkIndex: row.read<int>('chunk_index'),
           metadata: metadata,
           embedding: embedding,
+          pageNumber: metadata['pageNumber'] as int?,
+          charStart: metadata['charStart'] as int?,
+          charEnd: metadata['charEnd'] as int?,
+          sectionTitle: metadata['sectionTitle'] as String?,
         ),
       );
     }
@@ -402,8 +697,16 @@ class RAGService {
     if (_embeddingEngine == null) return _hashEmbedding(text);
 
     try {
-      // Use a small embedding model prompt
-      // For now, fall back to a simple hash-based embedding
+      final embedding = await _embeddingEngine.generateEmbedding(text);
+      if (embedding != null) {
+        // Normalize to unit vector
+        final norm = math.sqrt(
+          embedding.map((x) => x * x).reduce((a, b) => a + b),
+        );
+        if (norm > 1e-8) {
+          return embedding.map((x) => x / norm).toList();
+        }
+      }
       return _hashEmbedding(text);
     } catch (e) {
       return _hashEmbedding(text);
@@ -450,7 +753,7 @@ class RAGService {
     Map<int, String>? sectionTitles, // charIndex -> section title
   }) {
     final chunks = <DocumentChunk>[];
-    const overlap = _chunkOverlap;
+    final overlap = chunkOverlap;
 
     // Determine page number for a character position
     int getPageNumber(int pos) {
@@ -475,8 +778,8 @@ class RAGService {
       return currentSection;
     }
 
-    for (var i = 0; i < text.length; i += _chunkSize - overlap) {
-      final end = math.min(i + _chunkSize, text.length);
+    for (var i = 0; i < text.length; i += chunkSize - overlap) {
+      final end = math.min(i + chunkSize, text.length);
       final chunkText = text.substring(i, end).trim();
       if (chunkText.isEmpty) continue;
 
@@ -547,10 +850,10 @@ class RAGService {
           chunkIndex: row.read<int>('chunk_index'),
           metadata: metadata,
           embedding: embedding,
-          pageNumber: null,
-          charStart: null,
-          charEnd: null,
-          sectionTitle: null,
+          pageNumber: metadata['pageNumber'] as int?,
+          charStart: metadata['charStart'] as int?,
+          charEnd: metadata['charEnd'] as int?,
+          sectionTitle: metadata['sectionTitle'] as String?,
         ),
       );
     }
@@ -574,10 +877,10 @@ class RAGService {
             ? await searchInDocument(query, documentId, limit: limit)
             : await hybridSearch(query, limit: limit);
 
-    if (results.isEmpty) {
+    if (results.isEmpty || results.first.score < 0.15) {
       return (
         answer:
-            'I couldn\'t find relevant information in the uploaded documents.',
+            'I couldn\'t find sufficient relevant information in the uploaded documents to answer this question confidently. Try rephrasing or uploading more relevant material.',
         citations: <CitationRef>[],
       );
     }

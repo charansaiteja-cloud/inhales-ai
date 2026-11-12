@@ -36,6 +36,37 @@ typedef InhaleGetContext = int Function();
 typedef InhaleCancelNative = Void Function();
 typedef InhaleCancel = void Function();
 
+// Embedding function types
+typedef InhaleLoadEmbeddingModelNative =
+    Int32 Function(Pointer<Utf8> modelPath, Int32 threads, Int32 gpu);
+typedef InhaleLoadEmbeddingModel =
+    int Function(Pointer<Utf8> modelPath, int threads, int gpu);
+
+typedef InhaleGetEmbeddingDimNative = Int32 Function();
+typedef InhaleGetEmbeddingDim = int Function();
+
+typedef InhaleIsEmbeddingLoadedNative = Int32 Function();
+typedef InhaleIsEmbeddingLoaded = int Function();
+
+typedef InhaleUnloadEmbeddingModelNative = Void Function();
+typedef InhaleUnloadEmbeddingModel = void Function();
+
+typedef EmbeddingCallbackNative = Void Function(Pointer<Float>, Int32);
+typedef EmbeddingCallback = void Function(Pointer<Float>, int);
+
+typedef InhaleGenerateEmbeddingNative =
+    Int32 Function(
+      Pointer<Utf8> text,
+      Pointer<NativeFunction<EmbeddingCallbackNative>>,
+      Pointer<NativeFunction<ErrorCallbackNative>>,
+    );
+typedef InhaleGenerateEmbedding =
+    int Function(
+      Pointer<Utf8> text,
+      Pointer<NativeFunction<EmbeddingCallbackNative>>,
+      Pointer<NativeFunction<ErrorCallbackNative>>,
+    );
+
 /// Callback types matching native/inference/inhale_engine.cpp.
 ///   void (*token_cb)(const char*)
 ///   void (*done_cb)()
@@ -107,4 +138,27 @@ class InhaleFFI {
       .lookupFunction<InhaleCancelNative, InhaleCancel>('inhale_cancel');
   late final InhaleGenerate inhale_generate = _dylib
       .lookupFunction<InhaleGenerateNative, InhaleGenerate>('inhale_generate');
+
+  // Embedding functions
+  late final InhaleLoadEmbeddingModel inhale_load_embedding_model = _dylib
+      .lookupFunction<InhaleLoadEmbeddingModelNative, InhaleLoadEmbeddingModel>(
+        'inhale_load_embedding_model',
+      );
+  late final InhaleGetEmbeddingDim inhale_get_embedding_dim = _dylib
+      .lookupFunction<InhaleGetEmbeddingDimNative, InhaleGetEmbeddingDim>(
+        'inhale_get_embedding_dim',
+      );
+  late final InhaleIsEmbeddingLoaded inhale_is_embedding_loaded = _dylib
+      .lookupFunction<InhaleIsEmbeddingLoadedNative, InhaleIsEmbeddingLoaded>(
+        'inhale_is_embedding_loaded',
+      );
+  late final InhaleUnloadEmbeddingModel inhale_unload_embedding_model = _dylib
+      .lookupFunction<
+        InhaleUnloadEmbeddingModelNative,
+        InhaleUnloadEmbeddingModel
+      >('inhale_unload_embedding_model');
+  late final InhaleGenerateEmbedding inhale_generate_embedding = _dylib
+      .lookupFunction<InhaleGenerateEmbeddingNative, InhaleGenerateEmbedding>(
+        'inhale_generate_embedding',
+      );
 }

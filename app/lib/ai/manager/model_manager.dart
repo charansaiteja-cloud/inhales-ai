@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
+import '../engine/ai_engine.dart';
 import '../models/model_catalog_entry.dart';
 import '../models/hardware_profile.dart';
 import '../models/model_catalog.dart';
@@ -21,6 +22,28 @@ class ModelManager {
       StreamController<Map<String, DownloadProgress>>.broadcast();
   final Map<String, DownloadProgress> _downloads = {};
   VoidCallback? _onMemoryPressure;
+  String? _embeddingModelPath;
+
+  /// BGE-small-en-v1.5 embedding model catalog entry
+  static final bgeSmallEmbeddingModel = ModelCatalogEntry(
+    id: 'bge-small-en-v1.5-q4_k_m',
+    name: 'BGE Small EN v1.5 (Embedding)',
+    description:
+        'Lightweight embedding model for semantic search. 384-dim, Q4_K_M quantization.',
+    url:
+        'https://huggingface.co/BAAI/bge-small-en-v1.5-gguf/resolve/main/bge-small-en-v1.5-q4_k_m.gguf',
+    sizeBytes: 134217728,
+    quantization: 'Q4_K_M',
+    supportedTasks: ['embedding'],
+    minRamMb: 256,
+    recommendedRamMb: 512,
+    license: 'MIT',
+    architecture: 'bert',
+    family: 'bge',
+    sha256: '',
+  );
+
+  String? get embeddingModelPath => _embeddingModelPath;
 
   ModelManager._({
     required Directory modelsDir,
@@ -242,6 +265,28 @@ class ModelManager {
   /// Get compatible models for current hardware.
   List<ModelCatalogEntry> getCompatibleModels() {
     return ModelCatalog.compatibleWith(_hardware);
+  }
+
+  /// Download the embedding model.
+  Future<void> downloadEmbeddingModel({
+    void Function(double progress)? onProgress,
+  }) async {
+    await downloadModel(bgeSmallEmbeddingModel, onProgress: onProgress);
+    _embeddingModelPath = getModelPath(bgeSmallEmbeddingModel.id);
+  }
+
+  /// Check if embedding model is installed.
+  Future<bool> isEmbeddingModelInstalled() async {
+    return await isInstalled(bgeSmallEmbeddingModel.id);
+  }
+
+  /// Load embedding model into AI engine.
+  Future<bool> loadEmbeddingModelIntoEngine(AIEngine engine) async {
+    if (!await isEmbeddingModelInstalled()) {
+      return false;
+    }
+    final path = getModelPath(bgeSmallEmbeddingModel.id);
+    return await engine.loadEmbeddingModel(path);
   }
 
   void _notifyProgress() {

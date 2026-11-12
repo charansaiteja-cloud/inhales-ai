@@ -53,18 +53,45 @@ class FfiInferenceEngine implements InferenceEngine {
   }
 
   @override
+  Future<bool> loadEmbeddingModel(
+    String path, {
+    int threads = 4,
+    int gpuLayers = 0,
+  }) async {
+    if (_ffi == null) return false;
+    final pathPtr = path.toNativeUtf8();
+    try {
+      final rc = _ffi!.inhale_load_embedding_model(pathPtr, threads, gpuLayers);
+      return rc == 0;
+    } finally {
+      malloc.free(pathPtr);
+    }
+  }
+
+  @override
   void unloadModel() {
     _ffi?.inhale_unload_model();
+  }
+
+  @override
+  void unloadEmbeddingModel() {
+    _ffi?.inhale_unload_embedding_model();
   }
 
   @override
   bool get isLoaded => _ffi?.inhale_is_loaded() == 1;
 
   @override
+  bool get isEmbeddingLoaded => _ffi?.inhale_is_embedding_loaded() == 1;
+
+  @override
   int get memoryMb => _ffi?.inhale_get_memory_mb() ?? 0;
 
   @override
   int get contextLength => _ffi?.inhale_get_context() ?? 2048;
+
+  @override
+  int get embeddingDim => _ffi?.inhale_get_embedding_dim() ?? 0;
 
   @override
   void setContext(int ctx) {
@@ -152,6 +179,29 @@ class FfiInferenceEngine implements InferenceEngine {
     }
     _ffi?.inhale_cancel();
     _isGenerating = false;
+  }
+
+  @override
+  Future<List<double>?> generateEmbedding(String text) async {
+    if (_ffi == null || !_libraryAvailable || !isEmbeddingLoaded) {
+      return null;
+    }
+    final bridge = EmbeddingCallbackBridge();
+    final textPtr = text.toNativeUtf8();
+    try {
+      final rc = _ffi!.inhale_generate_embedding(
+        textPtr,
+        bridge.embeddingPtr,
+        bridge.errorPtr,
+      );
+      if (rc != 0) {
+        return null;
+      }
+      return await bridge.waitForEmbedding();
+    } finally {
+      malloc.free(textPtr);
+      bridge.dispose();
+    }
   }
 
   Stream<String> _simulateStream(String prompt, String? systemPrompt) async* {

@@ -17,11 +17,24 @@ abstract class AIEngine {
     int contextLength = 2048,
   });
 
+  /// Load an embedding model.
+  Future<bool> loadEmbeddingModel(
+    String path, {
+    int threads = 4,
+    int gpuLayers = 0,
+  });
+
   /// Unload current model.
   void unloadModel();
 
+  /// Unload embedding model.
+  void unloadEmbeddingModel();
+
   /// Check if a model is loaded.
   bool get isLoaded;
+
+  /// Check if embedding model is loaded.
+  bool get isEmbeddingLoaded;
 
   /// Current model memory usage in MB.
   int get memoryMb;
@@ -40,6 +53,12 @@ abstract class AIEngine {
     int topK = 40,
     Map<String, dynamic>? options,
   });
+
+  /// Generate embedding vector for text.
+  Future<List<double>?> generateEmbedding(String text);
+
+  /// Get embedding dimension for current model.
+  int get embeddingDim;
 
   /// Cancel ongoing generation.
   void cancel();

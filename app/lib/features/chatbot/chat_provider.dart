@@ -642,7 +642,9 @@ class ChatNotifier extends StateNotifier<ChatState> {
       final comma = i < session.messages.length - 1 ? ',' : '';
       buffer.writeln('    {');
       buffer.writeln('      "role": "${msg.isUser ? "user" : "assistant"}",');
-      buffer.writeln('      "content": "${msg.content.replaceAll('"', '\\"')}"');
+      buffer.writeln(
+        '      "content": "${msg.content.replaceAll('"', '\\"')}"',
+      );
       buffer.writeln('    }$comma');
     }
     buffer.writeln('  ]');
@@ -651,10 +653,14 @@ class ChatNotifier extends StateNotifier<ChatState> {
   }
 
   /// Share a conversation via the system share sheet.
-  Future<void> shareConversation(int sessionId, {String format = 'markdown'}) async {
-    final content = format == 'json'
-        ? await exportAsJson(sessionId)
-        : await exportAsMarkdown(sessionId);
+  Future<void> shareConversation(
+    int sessionId, {
+    String format = 'markdown',
+  }) async {
+    final content =
+        format == 'json'
+            ? await exportAsJson(sessionId)
+            : await exportAsMarkdown(sessionId);
     final tempDir = await getTemporaryDirectory();
     final ext = format == 'json' ? 'json' : 'md';
     final file = File('${tempDir.path}/conversation_$sessionId.$ext');

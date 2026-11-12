@@ -36,18 +36,42 @@ class FfiAIEngine implements AIEngine {
   }
 
   @override
+  Future<bool> loadEmbeddingModel(
+    String path, {
+    int threads = 4,
+    int gpuLayers = 0,
+  }) async {
+    return await _engine.loadEmbeddingModel(
+      path,
+      threads: threads,
+      gpuLayers: gpuLayers,
+    );
+  }
+
+  @override
   void unloadModel() {
     _engine.unloadModel();
+  }
+
+  @override
+  void unloadEmbeddingModel() {
+    _engine.unloadEmbeddingModel();
   }
 
   @override
   bool get isLoaded => _engine.isLoaded;
 
   @override
+  bool get isEmbeddingLoaded => _engine.isEmbeddingLoaded;
+
+  @override
   int get memoryMb => _engine.memoryMb;
 
   @override
   int get contextLength => _engine.contextLength;
+
+  @override
+  int get embeddingDim => _engine.embeddingDim;
 
   @override
   Stream<String> generate({
@@ -70,6 +94,11 @@ class FfiAIEngine implements AIEngine {
       topP: topP,
       topK: topK,
     );
+  }
+
+  @override
+  Future<List<double>?> generateEmbedding(String text) async {
+    return await _engine.generateEmbedding(text);
   }
 
   @override

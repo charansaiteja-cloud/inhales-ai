@@ -84,10 +84,7 @@ class GlassChatBubble extends StatelessWidget {
                   height: 1.5,
                 ),
                 code: TextStyle(
-                  color:
-                      isDark
-                          ? InhaleColors.blue
-                          : InhaleColors.deepNavy,
+                  color: isDark ? InhaleColors.blue : InhaleColors.deepNavy,
                   backgroundColor:
                       isDark
                           ? InhaleColors.blue.withValues(alpha: 0.15)

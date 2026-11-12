@@ -67,3 +67,55 @@ class CallbackBridge {
 
   String? get error => _error;
 }
+
+/// Bridge for embedding callbacks.
+class EmbeddingCallbackBridge {
+  static EmbeddingCallbackBridge? _active;
+
+  List<double>? _embedding;
+  final Completer<void> _done = Completer<void>();
+  String? _error;
+
+  /// Receive embedding vector from native callback.
+  static void _receiveEmbedding(Pointer<Float> ptr, int length) {
+    if (_active == null) return;
+    final embedding = <double>[];
+    for (var i = 0; i < length; i++) {
+      embedding.add((ptr + i).value);
+    }
+    _active!._embedding = embedding;
+    _active!._done.complete();
+  }
+
+  /// Signal error from the callback.
+  static void _addError(Pointer<Utf8> ptr) {
+    if (_active != null && !_active!._done.isCompleted) {
+      _active!._error = ptr.toDartString();
+      _active!._done.complete();
+    }
+  }
+
+  late final Pointer<NativeFunction<EmbeddingCallbackNative>> embeddingPtr;
+  late final Pointer<NativeFunction<ErrorCallbackNative>> errorPtr;
+
+  EmbeddingCallbackBridge() {
+    _active = this;
+    embeddingPtr = Pointer.fromFunction<EmbeddingCallbackNative>(
+      _receiveEmbedding,
+    );
+    errorPtr = Pointer.fromFunction<ErrorCallbackNative>(_addError);
+  }
+
+  void dispose() {
+    if (_active == this) _active = null;
+    if (!_done.isCompleted) _done.complete();
+  }
+
+  /// Wait for embedding to complete and return result.
+  Future<List<double>?> waitForEmbedding() async {
+    await _done.future;
+    return _embedding;
+  }
+
+  String? get error => _error;
+}

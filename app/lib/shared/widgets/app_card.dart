@@ -54,15 +54,12 @@ class AppCard extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
     final cs = theme.colorScheme;
 
-    final effectiveColor =
-        color ??
+    final effectiveColor = color ??
         (isSelected ? (selectedColor ?? cs.primaryContainer) : cs.surface);
-    final effectiveShadows =
-        isHoverable
-            ? (isDark ? AppShadows.darkCardHover : AppShadows.cardHover)
-            : (shadows ?? (isDark ? AppShadows.darkCard : AppShadows.card));
-    final effectiveBorder =
-        border ??
+    final effectiveShadows = isHoverable
+        ? (isDark ? AppShadows.darkCardHover : AppShadows.cardHover)
+        : (shadows ?? (isDark ? AppShadows.darkCard : AppShadows.card));
+    final effectiveBorder = border ??
         (isSelected
             ? Border.all(color: selectedBorderColor ?? cs.primary, width: 2)
             : Border.all(color: cs.outlineVariant, width: 1));
@@ -304,8 +301,7 @@ class _AppTextFieldState extends State<AppTextField> {
 
     final effectiveBorderRadius =
         widget.borderRadius ?? BorderRadius.circular(AppRadius.inputRadius);
-    final effectiveFillColor =
-        widget.fillColor ??
+    final effectiveFillColor = widget.fillColor ??
         (isDark ? AppColors.darkSurface : AppColors.lightSurface);
     final effectiveContentPadding =
         widget.contentPadding ?? AppSpacing.inputPaddingInsets;
@@ -332,10 +328,9 @@ class _AppTextFieldState extends State<AppTextField> {
         maxLines: widget.maxLines,
         minLines: widget.minLines,
         maxLength: widget.maxLength,
-        maxLengthEnforcement:
-            widget.maxLengthEnforcement != null
-                ? MaxLengthEnforcement.values[widget.maxLengthEnforcement!]
-                : null,
+        maxLengthEnforcement: widget.maxLengthEnforcement != null
+            ? MaxLengthEnforcement.values[widget.maxLengthEnforcement!]
+            : null,
         onChanged: widget.onChanged,
         onTap: widget.onTap,
         onSubmitted: widget.onSubmitted,
@@ -475,31 +470,28 @@ class _AppSearchFieldState extends State<AppSearchField> {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
 
-    final effectiveLeading =
-        widget.leadingIcon ??
+    final effectiveLeading = widget.leadingIcon ??
         Icon(
           Icons.search_rounded,
           size: 20,
-          color:
-              _hasFocus
-                  ? cs.primary
-                  : cs.onSurfaceVariant.withValues(alpha: 0.5),
+          color: _hasFocus
+              ? cs.primary
+              : cs.onSurfaceVariant.withValues(alpha: 0.5),
         );
 
-    Widget trailing =
-        widget.trailingIcon ??
+    Widget trailing = widget.trailingIcon ??
         (_controller.text.isNotEmpty
             ? IconButton(
-              icon: Icon(
-                Icons.clear_rounded,
-                size: 20,
-                color: cs.onSurfaceVariant.withValues(alpha: 0.5),
-              ),
-              onPressed: widget.enabled ? _clear : null,
-              tooltip: 'Clear',
-              padding: EdgeInsets.zero,
-              constraints: const BoxConstraints(),
-            )
+                icon: Icon(
+                  Icons.clear_rounded,
+                  size: 20,
+                  color: cs.onSurfaceVariant.withValues(alpha: 0.5),
+                ),
+                onPressed: widget.enabled ? _clear : null,
+                tooltip: 'Clear',
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+              )
             : const SizedBox.shrink());
 
     return Semantics(
@@ -509,10 +501,9 @@ class _AppSearchFieldState extends State<AppSearchField> {
         padding:
             widget.padding ?? EdgeInsets.symmetric(horizontal: AppSpacing.md),
         decoration: BoxDecoration(
-          color:
-              _hasFocus
-                  ? cs.surface
-                  : cs.surfaceContainerHighest.withValues(alpha: 0.5),
+          color: _hasFocus
+              ? cs.surface
+              : cs.surfaceContainerHighest.withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(AppRadius.inputRadius),
           border: Border.all(
             color: _hasFocus ? cs.primary : cs.outlineVariant,

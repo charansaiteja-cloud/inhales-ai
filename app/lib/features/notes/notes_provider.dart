@@ -31,17 +31,18 @@ class Note {
     String? classLevel,
     bool? isPinned,
     DateTime? updatedAt,
-  }) => Note(
-    id: id,
-    title: title ?? this.title,
-    content: content ?? this.content,
-    folder: folder ?? this.folder,
-    subject: subject ?? this.subject,
-    classLevel: classLevel ?? this.classLevel,
-    isPinned: isPinned ?? this.isPinned,
-    createdAt: createdAt,
-    updatedAt: updatedAt ?? DateTime.now(),
-  );
+  }) =>
+      Note(
+        id: id,
+        title: title ?? this.title,
+        content: content ?? this.content,
+        folder: folder ?? this.folder,
+        subject: subject ?? this.subject,
+        classLevel: classLevel ?? this.classLevel,
+        isPinned: isPinned ?? this.isPinned,
+        createdAt: createdAt,
+        updatedAt: updatedAt ?? DateTime.now(),
+      );
 }
 
 class NotesState {

@@ -37,10 +37,9 @@ class GeneralScreen extends ConsumerWidget {
       appBar: GlassAppBar(title: 'General Learning'),
       body: Container(
         decoration: BoxDecoration(
-          gradient:
-              isDark
-                  ? InhaleColors.gradientBackgroundDark
-                  : InhaleColors.gradientBackground,
+          gradient: isDark
+              ? InhaleColors.gradientBackgroundDark
+              : InhaleColors.gradientBackground,
         ),
         child: Padding(
           padding: const EdgeInsets.all(InhaleSpacing.md),
@@ -50,20 +49,18 @@ class GeneralScreen extends ConsumerWidget {
               Text(
                 'Explore Topics',
                 style: InhaleTypography.headlineMedium.copyWith(
-                  color:
-                      isDark
-                          ? InhaleColors.textPrimary
-                          : InhaleColors.lightNavyText,
+                  color: isDark
+                      ? InhaleColors.textPrimary
+                      : InhaleColors.lightNavyText,
                 ),
               ),
               const SizedBox(height: InhaleSpacing.xs),
               Text(
                 'Select a category to start learning with AI',
                 style: InhaleTypography.bodyMedium.copyWith(
-                  color:
-                      isDark
-                          ? InhaleColors.textSecondary
-                          : InhaleColors.lightTextSecondary,
+                  color: isDark
+                      ? InhaleColors.textSecondary
+                      : InhaleColors.lightTextSecondary,
                 ),
               ),
               const SizedBox(height: InhaleSpacing.lg),
@@ -98,26 +95,24 @@ class GeneralScreen extends ConsumerWidget {
                             width: 56,
                             height: 56,
                             decoration: BoxDecoration(
-                              color:
-                                  isDark
-                                      ? (selected
-                                          ? InhaleColors.electricBlue
-                                          : InhaleColors.electricBlue
-                                              .withValues(alpha: 0.15))
-                                      : (selected
-                                          ? InhaleColors.lightPrimaryBlue
-                                          : InhaleColors.lightPrimaryBlue
-                                              .withValues(alpha: 0.1)),
+                              color: isDark
+                                  ? (selected
+                                      ? InhaleColors.electricBlue
+                                      : InhaleColors.electricBlue
+                                          .withValues(alpha: 0.15))
+                                  : (selected
+                                      ? InhaleColors.lightPrimaryBlue
+                                      : InhaleColors.lightPrimaryBlue
+                                          .withValues(alpha: 0.1)),
                               shape: BoxShape.circle,
                             ),
                             child: Icon(
                               icon,
-                              color:
-                                  selected
-                                      ? Colors.white
-                                      : (isDark
-                                          ? InhaleColors.electricBlue
-                                          : InhaleColors.lightPrimaryBlue),
+                              color: selected
+                                  ? Colors.white
+                                  : (isDark
+                                      ? InhaleColors.electricBlue
+                                      : InhaleColors.lightPrimaryBlue),
                               size: 26,
                             ),
                           ),
@@ -125,10 +120,9 @@ class GeneralScreen extends ConsumerWidget {
                           Text(
                             category,
                             style: InhaleTypography.titleSmall.copyWith(
-                              color:
-                                  isDark
-                                      ? InhaleColors.textPrimary
-                                      : InhaleColors.lightNavyText,
+                              color: isDark
+                                  ? InhaleColors.textPrimary
+                                  : InhaleColors.lightNavyText,
                               fontWeight:
                                   selected ? FontWeight.w600 : FontWeight.w400,
                             ),

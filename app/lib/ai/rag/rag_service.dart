@@ -43,18 +43,19 @@ class DocumentChunk {
     int? charStart,
     int? charEnd,
     String? sectionTitle,
-  }) => DocumentChunk(
-    id: id,
-    documentId: documentId,
-    content: content,
-    chunkIndex: chunkIndex,
-    metadata: metadata,
-    embedding: embedding ?? this.embedding,
-    pageNumber: pageNumber ?? this.pageNumber,
-    charStart: charStart ?? this.charStart,
-    charEnd: charEnd ?? this.charEnd,
-    sectionTitle: sectionTitle ?? this.sectionTitle,
-  );
+  }) =>
+      DocumentChunk(
+        id: id,
+        documentId: documentId,
+        content: content,
+        chunkIndex: chunkIndex,
+        metadata: metadata,
+        embedding: embedding ?? this.embedding,
+        pageNumber: pageNumber ?? this.pageNumber,
+        charStart: charStart ?? this.charStart,
+        charEnd: charEnd ?? this.charEnd,
+        sectionTitle: sectionTitle ?? this.sectionTitle,
+      );
 
   /// Generate a citation string for this chunk.
   String getCitation() {
@@ -166,13 +167,12 @@ class RAGService {
     final allWords = <String, int>{};
     final stopWords = _stopWords();
     for (final sentence in sentences) {
-      final words =
-          sentence
-              .toLowerCase()
-              .replaceAll(RegExp(r'[^a-z0-9\s]'), ' ')
-              .split(RegExp(r'\s+'))
-              .where((w) => w.length > 2 && !stopWords.contains(w))
-              .toSet();
+      final words = sentence
+          .toLowerCase()
+          .replaceAll(RegExp(r'[^a-z0-9\s]'), ' ')
+          .split(RegExp(r'\s+'))
+          .where((w) => w.length > 2 && !stopWords.contains(w))
+          .toSet();
       for (final w in words) {
         allWords[w] = (allWords[w] ?? 0) + 1;
       }
@@ -181,13 +181,12 @@ class RAGService {
     final scored = <_ScoredSentence>[];
     for (var i = 0; i < sentences.length; i++) {
       final sentence = sentences[i];
-      final words =
-          sentence
-              .toLowerCase()
-              .replaceAll(RegExp(r'[^a-z0-9\s]'), ' ')
-              .split(RegExp(r'\s+'))
-              .where((w) => w.length > 2 && !stopWords.contains(w))
-              .toSet();
+      final words = sentence
+          .toLowerCase()
+          .replaceAll(RegExp(r'[^a-z0-9\s]'), ' ')
+          .split(RegExp(r'\s+'))
+          .where((w) => w.length > 2 && !stopWords.contains(w))
+          .toSet();
       var score = 0.0;
       for (final w in words) {
         score += (allWords[w] ?? 0);
@@ -199,9 +198,8 @@ class RAGService {
     }
 
     scored.sort((a, b) => b.score.compareTo(a.score));
-    final selected =
-        scored.take(maxSentences).toList()
-          ..sort((a, b) => a.index.compareTo(b.index));
+    final selected = scored.take(maxSentences).toList()
+      ..sort((a, b) => a.index.compareTo(b.index));
 
     return selected.map((s) => s.sentence).join(' ');
   }
@@ -222,8 +220,8 @@ class RAGService {
       wordFreq[w] = (wordFreq[w] ?? 0) + 1;
     }
 
-    final sorted =
-        wordFreq.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
+    final sorted = wordFreq.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
     return sorted.take(maxTopics).map((e) => e.key).toList();
   }
 
@@ -344,7 +342,7 @@ class RAGService {
   int chunkOverlap = 64;
 
   RAGService(this._database, {AIEngine? embeddingEngine})
-    : _embeddingEngine = embeddingEngine;
+      : _embeddingEngine = embeddingEngine;
 
   /// Initialize the RAG service.
   Future<void> initialize() async {
@@ -387,16 +385,15 @@ class RAGService {
     Map<String, dynamic>? metadata,
     List<int>? pageBreaks,
   }) async {
-    final chunks =
-        pageBreaks != null
-            ? chunkTextWithCitations(
-              text: content,
-              documentId: documentId,
-              title: title,
-              metadata: metadata,
-              pageBreaks: pageBreaks,
-            )
-            : _chunkText(content, documentId, title, metadata);
+    final chunks = pageBreaks != null
+        ? chunkTextWithCitations(
+            text: content,
+            documentId: documentId,
+            title: title,
+            metadata: metadata,
+            pageBreaks: pageBreaks,
+          )
+        : _chunkText(content, documentId, title, metadata);
     await _indexChunks(chunks);
   }
 
@@ -456,12 +453,11 @@ class RAGService {
 
   double _keywordScore(String content, String query) {
     final contentLower = content.toLowerCase();
-    final keywords =
-        query
-            .toLowerCase()
-            .split(RegExp(r'\s+'))
-            .where((w) => w.length > 1)
-            .toList();
+    final keywords = query
+        .toLowerCase()
+        .split(RegExp(r'\s+'))
+        .where((w) => w.length > 1)
+        .toList();
     if (keywords.isEmpty) return 0.0;
 
     var matches = 0;
@@ -500,16 +496,15 @@ class RAGService {
   /// Useful for multi-document Q&A where you want to know which document
   /// contributed what.
   Future<List<({String documentId, List<SearchResult> results})>>
-  searchAcrossDocuments(
+      searchAcrossDocuments(
     String query, {
     Iterable<String>? documentIds,
     int limitPerDocument = 3,
     double minScore = 0.2,
   }) async {
-    final targetIds =
-        documentIds != null
-            ? documentIds.toSet()
-            : (await getIndexedDocuments()).toSet();
+    final targetIds = documentIds != null
+        ? documentIds.toSet()
+        : (await getIndexedDocuments()).toSet();
 
     final groups = <({String documentId, List<SearchResult> results})>[];
     for (final docId in targetIds) {
@@ -551,10 +546,9 @@ class RAGService {
 
   /// Get all indexed document IDs.
   Future<List<String>> getIndexedDocuments() async {
-    final rows =
-        await _database
-            .customSelect('SELECT DISTINCT document_id FROM document_chunks')
-            .get();
+    final rows = await _database
+        .customSelect('SELECT DISTINCT document_id FROM document_chunks')
+        .get();
 
     return rows.map((r) => r.read<String>('document_id')).toList();
   }
@@ -651,8 +645,7 @@ class RAGService {
   }
 
   Future<void> _loadIndex() async {
-    final rows =
-        await _database.customSelect('''
+    final rows = await _database.customSelect('''
       SELECT id, document_id, chunk_index, content, metadata, embedding
       FROM document_chunks
     ''').get();
@@ -810,18 +803,15 @@ class RAGService {
 
   /// Get all chunks for a specific document (with citation info).
   Future<List<DocumentChunk>> getDocumentChunks(String documentId) async {
-    final rows =
-        await _database
-            .customSelect(
-              '''
+    final rows = await _database.customSelect(
+      '''
       SELECT id, document_id, chunk_index, content, metadata, embedding
       FROM document_chunks
       WHERE document_id = ?
       ORDER BY chunk_index
     ''',
-              variables: [Variable.withString(documentId)],
-            )
-            .get();
+      variables: [Variable.withString(documentId)],
+    ).get();
 
     final chunks = <DocumentChunk>[];
     for (final row in rows) {
@@ -872,10 +862,9 @@ class RAGService {
     AIEngine? generationEngine,
   }) async {
     // Search for relevant chunks
-    final results =
-        documentId != null
-            ? await searchInDocument(query, documentId, limit: limit)
-            : await hybridSearch(query, limit: limit);
+    final results = documentId != null
+        ? await searchInDocument(query, documentId, limit: limit)
+        : await hybridSearch(query, limit: limit);
 
     if (results.isEmpty || results.first.score < 0.15) {
       return (
@@ -892,19 +881,18 @@ class RAGService {
         .join('\n\n');
 
     // Create citation references
-    final citations =
-        contextChunks.asMap().entries.map((entry) {
-          final idx = entry.key + 1;
-          final result = entry.value;
-          return CitationRef(
-            index: idx,
-            documentId: result.chunk.documentId,
-            chunkId: result.chunk.id,
-            citation: result.citation,
-            preview: result.preview,
-            score: result.score,
-          );
-        }).toList();
+    final citations = contextChunks.asMap().entries.map((entry) {
+      final idx = entry.key + 1;
+      final result = entry.value;
+      return CitationRef(
+        index: idx,
+        documentId: result.chunk.documentId,
+        chunkId: result.chunk.id,
+        citation: result.citation,
+        preview: result.preview,
+        score: result.score,
+      );
+    }).toList();
 
     // Generate answer with citations
     String answer;
@@ -1048,7 +1036,7 @@ Format as JSON:
 
   /// Generate study materials from a document (flashcard-style Q&A).
   Future<List<({String question, String answer, String citation})>>
-  generateStudyQA(
+      generateStudyQA(
     String documentId, {
     int count = 10,
     AIEngine? generationEngine,

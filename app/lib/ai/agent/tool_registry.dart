@@ -28,7 +28,7 @@ class Tool {
   final Map<String, dynamic> parameters; // JSON schema
   final ToolPermission requiredPermission;
   final Future<String> Function(Map<String, dynamic> args, ToolContext context)
-  execute;
+      execute;
 
   const Tool({
     required this.name,
@@ -182,329 +182,332 @@ class ToolImplementations {
 
   /// Web search tool (requires internet permission).
   static Tool _webSearchTool() => Tool(
-    name: 'web_search',
-    description:
-        'Search the web for current information. Returns top results with snippets.',
-    requiredPermission: ToolPermission.read,
-    parameters: {
-      'type': 'object',
-      'properties': {
-        'query': {'type': 'string', 'description': 'Search query'},
-        'maxResults': {
-          'type': 'integer',
-          'description': 'Max results (default 5)',
-          'default': 5,
+        name: 'web_search',
+        description:
+            'Search the web for current information. Returns top results with snippets.',
+        requiredPermission: ToolPermission.read,
+        parameters: {
+          'type': 'object',
+          'properties': {
+            'query': {'type': 'string', 'description': 'Search query'},
+            'maxResults': {
+              'type': 'integer',
+              'description': 'Max results (default 5)',
+              'default': 5,
+            },
+          },
+          'required': ['query'],
         },
-      },
-      'required': ['query'],
-    },
-    execute: (args, context) async {
-      final query = args['query'] as String;
-      final maxResults = args['maxResults'] as int? ?? 5;
+        execute: (args, context) async {
+          final query = args['query'] as String;
+          final maxResults = args['maxResults'] as int? ?? 5;
 
-      // This would integrate with a search API
-      // For now, return a placeholder
-      return 'Web search for "$query" (max $maxResults results) - requires API integration';
-    },
-  );
+          // This would integrate with a search API
+          // For now, return a placeholder
+          return 'Web search for "$query" (max $maxResults results) - requires API integration';
+        },
+      );
 
   /// File read tool.
   static Tool _fileReadTool() => Tool(
-    name: 'file_read',
-    description: 'Read contents of a file from the app\'s documents directory.',
-    requiredPermission: ToolPermission.read,
-    parameters: {
-      'type': 'object',
-      'properties': {
-        'path': {'type': 'string', 'description': 'Relative path to file'},
-      },
-      'required': ['path'],
-    },
-    execute: (args, context) async {
-      final path = args['path'] as String;
-      final appDir = await getApplicationDocumentsDirectory();
-      final file = File(p.join(appDir.path, path));
+        name: 'file_read',
+        description:
+            'Read contents of a file from the app\'s documents directory.',
+        requiredPermission: ToolPermission.read,
+        parameters: {
+          'type': 'object',
+          'properties': {
+            'path': {'type': 'string', 'description': 'Relative path to file'},
+          },
+          'required': ['path'],
+        },
+        execute: (args, context) async {
+          final path = args['path'] as String;
+          final appDir = await getApplicationDocumentsDirectory();
+          final file = File(p.join(appDir.path, path));
 
-      if (!await file.exists()) {
-        throw FileSystemException('File not found: $path');
-      }
+          if (!await file.exists()) {
+            throw FileSystemException('File not found: $path');
+          }
 
-      final content = await file.readAsString();
-      return content.length > 10000
-          ? '${content.substring(0, 10000)}\n... (truncated)'
-          : content;
-    },
-  );
+          final content = await file.readAsString();
+          return content.length > 10000
+              ? '${content.substring(0, 10000)}\n... (truncated)'
+              : content;
+        },
+      );
 
   /// File write tool.
   static Tool _fileWriteTool() => Tool(
-    name: 'file_write',
-    description: 'Write content to a file in the app\'s documents directory.',
-    requiredPermission: ToolPermission.write,
-    parameters: {
-      'type': 'object',
-      'properties': {
-        'path': {'type': 'string', 'description': 'Relative path to file'},
-        'content': {'type': 'string', 'description': 'Content to write'},
-        'append': {
-          'type': 'boolean',
-          'description': 'Append to existing file',
-          'default': false,
+        name: 'file_write',
+        description:
+            'Write content to a file in the app\'s documents directory.',
+        requiredPermission: ToolPermission.write,
+        parameters: {
+          'type': 'object',
+          'properties': {
+            'path': {'type': 'string', 'description': 'Relative path to file'},
+            'content': {'type': 'string', 'description': 'Content to write'},
+            'append': {
+              'type': 'boolean',
+              'description': 'Append to existing file',
+              'default': false,
+            },
+          },
+          'required': ['path', 'content'],
         },
-      },
-      'required': ['path', 'content'],
-    },
-    execute: (args, context) async {
-      final path = args['path'] as String;
-      final content = args['content'] as String;
-      final append = args['append'] as bool? ?? false;
+        execute: (args, context) async {
+          final path = args['path'] as String;
+          final content = args['content'] as String;
+          final append = args['append'] as bool? ?? false;
 
-      final appDir = await getApplicationDocumentsDirectory();
-      final file = File(p.join(appDir.path, path));
+          final appDir = await getApplicationDocumentsDirectory();
+          final file = File(p.join(appDir.path, path));
 
-      // Create parent directories if needed
-      await file.parent.create(recursive: true);
+          // Create parent directories if needed
+          await file.parent.create(recursive: true);
 
-      await file.writeAsString(
-        content,
-        mode: append ? FileMode.append : FileMode.write,
+          await file.writeAsString(
+            content,
+            mode: append ? FileMode.append : FileMode.write,
+          );
+          return 'Written ${content.length} characters to $path';
+        },
       );
-      return 'Written ${content.length} characters to $path';
-    },
-  );
 
   /// File list tool.
   static Tool _fileListTool() => Tool(
-    name: 'file_list',
-    description: 'List files in a directory within the app\'s documents.',
-    requiredPermission: ToolPermission.read,
-    parameters: {
-      'type': 'object',
-      'properties': {
-        'path': {
-          'type': 'string',
-          'description': 'Directory path (default: root)',
-          'default': '',
+        name: 'file_list',
+        description: 'List files in a directory within the app\'s documents.',
+        requiredPermission: ToolPermission.read,
+        parameters: {
+          'type': 'object',
+          'properties': {
+            'path': {
+              'type': 'string',
+              'description': 'Directory path (default: root)',
+              'default': '',
+            },
+            'recursive': {
+              'type': 'boolean',
+              'description': 'List recursively',
+              'default': false,
+            },
+          },
         },
-        'recursive': {
-          'type': 'boolean',
-          'description': 'List recursively',
-          'default': false,
+        execute: (args, context) async {
+          final path = args['path'] as String? ?? '';
+          final recursive = args['recursive'] as bool? ?? false;
+
+          final appDir = await getApplicationDocumentsDirectory();
+          final dir = Directory(p.join(appDir.path, path));
+
+          if (!await dir.exists()) {
+            throw Exception('Directory not found: $path');
+          }
+
+          final entities = await dir.list(recursive: recursive).toList();
+          final buffer = StringBuffer();
+
+          for (final entity in entities) {
+            final stat = await entity.stat();
+            final relative = p.relative(entity.path, from: appDir.path);
+            final type = entity is Directory ? 'DIR' : 'FILE';
+            final size = entity is File ? ' (${stat.size} bytes)' : '';
+            buffer.writeln('$type $relative$size');
+          }
+
+          return buffer.toString().isEmpty
+              ? 'Directory is empty'
+              : buffer.toString();
         },
-      },
-    },
-    execute: (args, context) async {
-      final path = args['path'] as String? ?? '';
-      final recursive = args['recursive'] as bool? ?? false;
-
-      final appDir = await getApplicationDocumentsDirectory();
-      final dir = Directory(p.join(appDir.path, path));
-
-      if (!await dir.exists()) {
-        throw Exception('Directory not found: $path');
-      }
-
-      final entities = await dir.list(recursive: recursive).toList();
-      final buffer = StringBuffer();
-
-      for (final entity in entities) {
-        final stat = await entity.stat();
-        final relative = p.relative(entity.path, from: appDir.path);
-        final type = entity is Directory ? 'DIR' : 'FILE';
-        final size = entity is File ? ' (${stat.size} bytes)' : '';
-        buffer.writeln('$type $relative$size');
-      }
-
-      return buffer.toString().isEmpty
-          ? 'Directory is empty'
-          : buffer.toString();
-    },
-  );
+      );
 
   /// Code execution tool (sandboxed).
   static Tool _codeExecutionTool() => Tool(
-    name: 'code_exec',
-    description:
-        'Execute Dart/Python/JS code in a sandboxed environment. Returns stdout/stderr.',
-    requiredPermission: ToolPermission.execute,
-    parameters: {
-      'type': 'object',
-      'properties': {
-        'language': {
-          'type': 'string',
-          'description': 'Language: dart, python, javascript',
-          'enum': ['dart', 'python', 'javascript'],
+        name: 'code_exec',
+        description:
+            'Execute Dart/Python/JS code in a sandboxed environment. Returns stdout/stderr.',
+        requiredPermission: ToolPermission.execute,
+        parameters: {
+          'type': 'object',
+          'properties': {
+            'language': {
+              'type': 'string',
+              'description': 'Language: dart, python, javascript',
+              'enum': ['dart', 'python', 'javascript'],
+            },
+            'code': {'type': 'string', 'description': 'Code to execute'},
+            'timeout': {
+              'type': 'integer',
+              'description': 'Timeout in seconds',
+              'default': 10,
+            },
+          },
+          'required': ['language', 'code'],
         },
-        'code': {'type': 'string', 'description': 'Code to execute'},
-        'timeout': {
-          'type': 'integer',
-          'description': 'Timeout in seconds',
-          'default': 10,
-        },
-      },
-      'required': ['language', 'code'],
-    },
-    execute: (args, context) async {
-      final language = args['language'] as String;
-      final code = args['code'] as String;
-      args['timeout'] as int? ?? 10;
+        execute: (args, context) async {
+          final language = args['language'] as String;
+          final code = args['code'] as String;
+          args['timeout'] as int? ?? 10;
 
-      // This would run in a secure sandbox
-      // For now, return a placeholder
-      return 'Code execution ($language) - requires sandbox integration\nCode:\n$code';
-    },
-  );
+          // This would run in a secure sandbox
+          // For now, return a placeholder
+          return 'Code execution ($language) - requires sandbox integration\nCode:\n$code';
+        },
+      );
 
   /// Calculator tool.
   static Tool _calculatorTool() => Tool(
-    name: 'calculator',
-    description: 'Evaluate mathematical expressions safely.',
-    requiredPermission: ToolPermission.read,
-    parameters: {
-      'type': 'object',
-      'properties': {
-        'expression': {
-          'type': 'string',
-          'description': 'Mathematical expression to evaluate',
+        name: 'calculator',
+        description: 'Evaluate mathematical expressions safely.',
+        requiredPermission: ToolPermission.read,
+        parameters: {
+          'type': 'object',
+          'properties': {
+            'expression': {
+              'type': 'string',
+              'description': 'Mathematical expression to evaluate',
+            },
+          },
+          'required': ['expression'],
         },
-      },
-      'required': ['expression'],
-    },
-    execute: (args, context) async {
-      final expression = args['expression'] as String;
+        execute: (args, context) async {
+          final expression = args['expression'] as String;
 
-      try {
-        // Simple safe evaluation - in production use a proper math parser
-        final result = _safeEval(expression);
-        return 'Result: $result';
-      } catch (e) {
-        throw Exception('Invalid expression: $e');
-      }
-    },
-  );
+          try {
+            // Simple safe evaluation - in production use a proper math parser
+            final result = _safeEval(expression);
+            return 'Result: $result';
+          } catch (e) {
+            throw Exception('Invalid expression: $e');
+          }
+        },
+      );
 
   /// Document search tool (uses RAG).
   static Tool _documentSearchTool(ToolContext? context) => Tool(
-    name: 'document_search',
-    description: 'Search indexed documents for relevant information.',
-    requiredPermission: ToolPermission.read,
-    parameters: {
-      'type': 'object',
-      'properties': {
-        'query': {'type': 'string', 'description': 'Search query'},
-        'limit': {
-          'type': 'integer',
-          'description': 'Max results',
-          'default': 5,
+        name: 'document_search',
+        description: 'Search indexed documents for relevant information.',
+        requiredPermission: ToolPermission.read,
+        parameters: {
+          'type': 'object',
+          'properties': {
+            'query': {'type': 'string', 'description': 'Search query'},
+            'limit': {
+              'type': 'integer',
+              'description': 'Max results',
+              'default': 5,
+            },
+          },
+          'required': ['query'],
         },
-      },
-      'required': ['query'],
-    },
-    execute: (args, context) async {
-      final query = args['query'] as String;
-      final limit = args['limit'] as int? ?? 5;
+        execute: (args, context) async {
+          final query = args['query'] as String;
+          final limit = args['limit'] as int? ?? 5;
 
-      final ragService = context.ragService;
-      if (ragService == null) {
-        throw Exception('RAG service not available');
-      }
+          final ragService = context.ragService;
+          if (ragService == null) {
+            throw Exception('RAG service not available');
+          }
 
-      final results = await ragService.search(query, limit: limit);
+          final results = await ragService.search(query, limit: limit);
 
-      if (results.isEmpty) {
-        return 'No relevant documents found for: $query';
-      }
+          if (results.isEmpty) {
+            return 'No relevant documents found for: $query';
+          }
 
-      final buffer = StringBuffer();
-      buffer.writeln('Found ${results.length} relevant chunks:');
-      for (var i = 0; i < results.length; i++) {
-        final r = results[i];
-        buffer.writeln(
-          '\n${i + 1}. [Score: ${r.score.toStringAsFixed(2)}] ${r.chunk.content.substring(0, math.min(200, r.chunk.content.length))}...',
-        );
-      }
+          final buffer = StringBuffer();
+          buffer.writeln('Found ${results.length} relevant chunks:');
+          for (var i = 0; i < results.length; i++) {
+            final r = results[i];
+            buffer.writeln(
+              '\n${i + 1}. [Score: ${r.score.toStringAsFixed(2)}] ${r.chunk.content.substring(0, math.min(200, r.chunk.content.length))}...',
+            );
+          }
 
-      return buffer.toString();
-    },
-  );
+          return buffer.toString();
+        },
+      );
 
   /// System info tool.
   static Tool _systemInfoTool() => Tool(
-    name: 'system_info',
-    description: 'Get system information (device, app version, memory, etc.).',
-    requiredPermission: ToolPermission.read,
-    parameters: {
-      'type': 'object',
-      'properties': {
-        'category': {
-          'type': 'string',
-          'description': 'Info category: device, app, memory, storage',
-          'enum': ['device', 'app', 'memory', 'storage', 'all'],
+        name: 'system_info',
+        description:
+            'Get system information (device, app version, memory, etc.).',
+        requiredPermission: ToolPermission.read,
+        parameters: {
+          'type': 'object',
+          'properties': {
+            'category': {
+              'type': 'string',
+              'description': 'Info category: device, app, memory, storage',
+              'enum': ['device', 'app', 'memory', 'storage', 'all'],
+            },
+          },
         },
-      },
-    },
-    execute: (args, context) async {
-      final category = args['category'] as String? ?? 'all';
+        execute: (args, context) async {
+          final category = args['category'] as String? ?? 'all';
 
-      final buffer = StringBuffer();
-      buffer.writeln('System Information:');
+          final buffer = StringBuffer();
+          buffer.writeln('System Information:');
 
-      if (category == 'all' || category == 'device') {
-        buffer.writeln(
-          'Platform: ${Platform.operatingSystem} ${Platform.operatingSystemVersion}',
-        );
-        buffer.writeln('Architecture: ${Platform.localHostname}');
-      }
+          if (category == 'all' || category == 'device') {
+            buffer.writeln(
+              'Platform: ${Platform.operatingSystem} ${Platform.operatingSystemVersion}',
+            );
+            buffer.writeln('Architecture: ${Platform.localHostname}');
+          }
 
-      if (category == 'all' || category == 'app') {
-        buffer.writeln('App: InhaleSkill AI');
-      }
+          if (category == 'all' || category == 'app') {
+            buffer.writeln('App: InhaleSkill AI');
+          }
 
-      if (category == 'all' || category == 'memory') {
-        final memInfo = ProcessInfo.currentRss;
-        buffer.writeln(
-          'Memory RSS: ${(memInfo / 1024 / 1024).toStringAsFixed(1)} MB',
-        );
-      }
+          if (category == 'all' || category == 'memory') {
+            final memInfo = ProcessInfo.currentRss;
+            buffer.writeln(
+              'Memory RSS: ${(memInfo / 1024 / 1024).toStringAsFixed(1)} MB',
+            );
+          }
 
-      return buffer.toString();
-    },
-  );
+          return buffer.toString();
+        },
+      );
 
   /// Current time tool.
   static Tool _currentTimeTool() => Tool(
-    name: 'current_time',
-    description: 'Get current date and time.',
-    requiredPermission: ToolPermission.read,
-    parameters: {
-      'type': 'object',
-      'properties': {
-        'format': {
-          'type': 'string',
-          'description': 'Format: iso, readable, timestamp',
-          'default': 'readable',
+        name: 'current_time',
+        description: 'Get current date and time.',
+        requiredPermission: ToolPermission.read,
+        parameters: {
+          'type': 'object',
+          'properties': {
+            'format': {
+              'type': 'string',
+              'description': 'Format: iso, readable, timestamp',
+              'default': 'readable',
+            },
+            'timezone': {
+              'type': 'string',
+              'description': 'Timezone (e.g., UTC, America/New_York)',
+              'default': 'local',
+            },
+          },
         },
-        'timezone': {
-          'type': 'string',
-          'description': 'Timezone (e.g., UTC, America/New_York)',
-          'default': 'local',
-        },
-      },
-    },
-    execute: (args, context) async {
-      final format = args['format'] as String? ?? 'readable';
-      final now = DateTime.now();
+        execute: (args, context) async {
+          final format = args['format'] as String? ?? 'readable';
+          final now = DateTime.now();
 
-      switch (format) {
-        case 'iso':
-          return now.toIso8601String();
-        case 'timestamp':
-          return now.millisecondsSinceEpoch.toString();
-        default:
-          return now.toString().substring(0, 19); // YYYY-MM-DD HH:MM:SS
-      }
-    },
-  );
+          switch (format) {
+            case 'iso':
+              return now.toIso8601String();
+            case 'timestamp':
+              return now.millisecondsSinceEpoch.toString();
+            default:
+              return now.toString().substring(0, 19); // YYYY-MM-DD HH:MM:SS
+          }
+        },
+      );
 
   /// Safe math expression evaluation (basic).
   static double _safeEval(String expression) {

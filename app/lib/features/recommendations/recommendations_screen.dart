@@ -36,32 +36,28 @@ class RecommendationsScreen extends ConsumerWidget {
         isDark: isDark,
         isMobile: isMobile,
       ),
-      floatingActionButton:
-          !isMobile
-              ? null
-              : FloatingActionButton.extended(
-                onPressed:
-                    () =>
-                        ref
-                            .read(recommendationsProvider.notifier)
-                            .generateRecommendations(),
-                icon:
-                    state.isGenerating
-                        ? const SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              Colors.white,
-                            ),
-                          ),
-                        )
-                        : const Icon(Icons.auto_awesome_rounded),
-                label: Text(state.isGenerating ? 'Generating...' : 'Generate'),
-                backgroundColor: InhaleColors.blue,
-                foregroundColor: Colors.white,
-              ),
+      floatingActionButton: !isMobile
+          ? null
+          : FloatingActionButton.extended(
+              onPressed: () => ref
+                  .read(recommendationsProvider.notifier)
+                  .generateRecommendations(),
+              icon: state.isGenerating
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          Colors.white,
+                        ),
+                      ),
+                    )
+                  : const Icon(Icons.auto_awesome_rounded),
+              label: Text(state.isGenerating ? 'Generating...' : 'Generate'),
+              backgroundColor: InhaleColors.blue,
+              foregroundColor: Colors.white,
+            ),
     );
   }
 }
@@ -91,10 +87,9 @@ class _RecommendationsBody extends ConsumerWidget {
 
     return Container(
       decoration: BoxDecoration(
-        gradient:
-            isDark
-                ? InhaleColors.gradientBackgroundDark
-                : InhaleColors.gradientBackground,
+        gradient: isDark
+            ? InhaleColors.gradientBackgroundDark
+            : InhaleColors.gradientBackground,
       ),
       child: CustomScrollView(
         slivers: [
@@ -142,10 +137,9 @@ class _RecommendationsBody extends ConsumerWidget {
                       if (!isMobile)
                         GlassButton(
                           onTap: () => notifier.generateRecommendations(),
-                          label:
-                              state.isGenerating
-                                  ? 'Generating...'
-                                  : 'Generate New',
+                          label: state.isGenerating
+                              ? 'Generating...'
+                              : 'Generate New',
                         ),
                       if (isMobile)
                         IconButton(
@@ -184,12 +178,11 @@ class _RecommendationsBody extends ConsumerWidget {
                         label: Text(
                           'All',
                           style: InhaleTypography.labelSmall.copyWith(
-                            color:
-                                state.filterType == null
-                                    ? Colors.white
-                                    : (isDark
-                                        ? InhaleColors.textPrimary
-                                        : InhaleColors.lightNavyText),
+                            color: state.filterType == null
+                                ? Colors.white
+                                : (isDark
+                                    ? InhaleColors.textPrimary
+                                    : InhaleColors.lightNavyText),
                           ),
                         ),
                         selected: state.filterType == null,
@@ -197,10 +190,9 @@ class _RecommendationsBody extends ConsumerWidget {
                         selectedColor: InhaleColors.blue,
                         backgroundColor: InhaleColors.glassSurface,
                         side: BorderSide(
-                          color:
-                              isDark
-                                  ? InhaleColors.glassBorder
-                                  : InhaleColors.lightGlassBorder,
+                          color: isDark
+                              ? InhaleColors.glassBorder
+                              : InhaleColors.lightGlassBorder,
                         ),
                       ),
                       const SizedBox(width: InhaleSpacing.xs),
@@ -213,12 +205,11 @@ class _RecommendationsBody extends ConsumerWidget {
                             label: Text(
                               _typeLabel(type),
                               style: InhaleTypography.labelSmall.copyWith(
-                                color:
-                                    state.filterType == type
-                                        ? Colors.white
-                                        : (isDark
-                                            ? InhaleColors.textPrimary
-                                            : InhaleColors.lightNavyText),
+                                color: state.filterType == type
+                                    ? Colors.white
+                                    : (isDark
+                                        ? InhaleColors.textPrimary
+                                        : InhaleColors.lightNavyText),
                               ),
                             ),
                             selected: state.filterType == type,
@@ -226,10 +217,9 @@ class _RecommendationsBody extends ConsumerWidget {
                             selectedColor: InhaleColors.blue,
                             backgroundColor: InhaleColors.glassSurface,
                             side: BorderSide(
-                              color:
-                                  isDark
-                                      ? InhaleColors.glassBorder
-                                      : InhaleColors.lightGlassBorder,
+                              color: isDark
+                                  ? InhaleColors.glassBorder
+                                  : InhaleColors.lightGlassBorder,
                             ),
                           ),
                         ),
@@ -329,51 +319,47 @@ class _RecommendationsBody extends ConsumerWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     showDialog<void>(
       context: context,
-      builder:
-          (ctx) => AlertDialog(
-            backgroundColor: isDark ? InhaleColors.glassSurface : Colors.white,
-            title: Text(
-              'Dismiss All',
-              style: InhaleTypography.titleMedium.copyWith(
-                color:
-                    isDark
-                        ? InhaleColors.textPrimary
-                        : InhaleColors.lightNavyText,
-              ),
-            ),
-            content: Text(
-              'Are you sure you want to dismiss all recommendations?',
-              style: InhaleTypography.bodyMedium.copyWith(
-                color:
-                    isDark
-                        ? InhaleColors.textSecondary
-                        : InhaleColors.lightTextSecondary,
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(ctx),
-                child: Text(
-                  'Cancel',
-                  style: InhaleTypography.labelSmall.copyWith(
-                    color: InhaleColors.blue,
-                  ),
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  ref.read(recommendationsProvider.notifier).dismissAll();
-                  Navigator.pop(ctx);
-                },
-                child: Text(
-                  'Dismiss All',
-                  style: InhaleTypography.labelSmall.copyWith(
-                    color: InhaleColors.error,
-                  ),
-                ),
-              ),
-            ],
+      builder: (ctx) => AlertDialog(
+        backgroundColor: isDark ? InhaleColors.glassSurface : Colors.white,
+        title: Text(
+          'Dismiss All',
+          style: InhaleTypography.titleMedium.copyWith(
+            color:
+                isDark ? InhaleColors.textPrimary : InhaleColors.lightNavyText,
           ),
+        ),
+        content: Text(
+          'Are you sure you want to dismiss all recommendations?',
+          style: InhaleTypography.bodyMedium.copyWith(
+            color: isDark
+                ? InhaleColors.textSecondary
+                : InhaleColors.lightTextSecondary,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(
+              'Cancel',
+              style: InhaleTypography.labelSmall.copyWith(
+                color: InhaleColors.blue,
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              ref.read(recommendationsProvider.notifier).dismissAll();
+              Navigator.pop(ctx);
+            },
+            child: Text(
+              'Dismiss All',
+              style: InhaleTypography.labelSmall.copyWith(
+                color: InhaleColors.error,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -525,10 +511,9 @@ class _RecommendationCard extends ConsumerWidget {
           Container(
             padding: const EdgeInsets.all(InhaleSpacing.sm),
             decoration: BoxDecoration(
-              color:
-                  isDark
-                      ? InhaleColors.glassSurface
-                      : InhaleColors.blue.withValues(alpha: 0.05),
+              color: isDark
+                  ? InhaleColors.glassSurface
+                  : InhaleColors.blue.withValues(alpha: 0.05),
               borderRadius: BorderRadius.circular(InhaleRadius.xs),
             ),
             child: Row(
@@ -544,10 +529,9 @@ class _RecommendationCard extends ConsumerWidget {
                   child: Text(
                     recommendation.reason,
                     style: InhaleTypography.bodySmall.copyWith(
-                      color:
-                          isDark
-                              ? InhaleColors.textSecondary
-                              : InhaleColors.lightTextSecondary,
+                      color: isDark
+                          ? InhaleColors.textSecondary
+                          : InhaleColors.lightTextSecondary,
                     ),
                   ),
                 ),

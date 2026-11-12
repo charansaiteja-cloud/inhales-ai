@@ -13,26 +13,26 @@ final generalProvider = StateNotifierProvider<GeneralNotifier, GeneralState>(
 
 class GeneralNotifier extends StateNotifier<GeneralState> {
   GeneralNotifier()
-    : super(
-        const GeneralState(
-          categories: [
-            'General Knowledge',
-            'History',
-            'Geography',
-            'Science',
-            'Technology',
-            'Space',
-            'Astronomy',
-            'Environment',
-            'Languages',
-            'Career Guidance',
-            'Interview Preparation',
-            'Productivity',
-            'Skill Development',
-            'Problem Solving',
-          ],
-        ),
-      );
+      : super(
+          const GeneralState(
+            categories: [
+              'General Knowledge',
+              'History',
+              'Geography',
+              'Science',
+              'Technology',
+              'Space',
+              'Astronomy',
+              'Environment',
+              'Languages',
+              'Career Guidance',
+              'Interview Preparation',
+              'Productivity',
+              'Skill Development',
+              'Problem Solving',
+            ],
+          ),
+        );
 
   Future<void> selectCategory(String category) async {
     state = GeneralState(

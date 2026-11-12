@@ -108,10 +108,8 @@ class MathNotifier extends StateNotifier<MathState> {
 
   double? _tryEvaluate(String expr) {
     try {
-      final clean = expr
-          .replaceAll(' ', '')
-          .replaceAll('x', '*')
-          .replaceAll('X', '*');
+      final clean =
+          expr.replaceAll(' ', '').replaceAll('x', '*').replaceAll('X', '*');
       if (RegExp(r'^[\d\+\-\*\/\.\(\)\%\s]+$').hasMatch(clean)) {
         final tokens = _tokenize(clean);
         return _parseExpression(tokens);
@@ -182,8 +180,8 @@ class MathNotifier extends StateNotifier<MathState> {
 
     parseExpr = () {
       double result = parseTerm();
-      while (pos < tokens.length &&
-          (tokens[pos] == '+' || tokens[pos] == '-')) {
+      while (
+          pos < tokens.length && (tokens[pos] == '+' || tokens[pos] == '-')) {
         final op = tokens[pos++];
         final right = parseTerm();
         result = op == '+' ? result + right : result - right;
@@ -217,12 +215,13 @@ extension on MathState {
     bool? isComputing,
     List<MathResult>? history,
     String? error,
-  }) => MathState(
-    input: input ?? this.input,
-    output: output ?? this.output,
-    steps: steps ?? this.steps,
-    isComputing: isComputing ?? this.isComputing,
-    history: history ?? this.history,
-    error: error ?? this.error,
-  );
+  }) =>
+      MathState(
+        input: input ?? this.input,
+        output: output ?? this.output,
+        steps: steps ?? this.steps,
+        isComputing: isComputing ?? this.isComputing,
+        history: history ?? this.history,
+        error: error ?? this.error,
+      );
 }

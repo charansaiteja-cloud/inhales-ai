@@ -81,12 +81,13 @@ extension on CodingState {
     bool? isExecuting,
     List<String>? suggestions,
     String? error,
-  }) => CodingState(
-    code: code ?? this.code,
-    language: language ?? this.language,
-    output: output ?? this.output,
-    isExecuting: isExecuting ?? this.isExecuting,
-    suggestions: suggestions ?? this.suggestions,
-    error: error ?? this.error,
-  );
+  }) =>
+      CodingState(
+        code: code ?? this.code,
+        language: language ?? this.language,
+        output: output ?? this.output,
+        isExecuting: isExecuting ?? this.isExecuting,
+        suggestions: suggestions ?? this.suggestions,
+        error: error ?? this.error,
+      );
 }

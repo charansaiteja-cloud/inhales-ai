@@ -131,10 +131,9 @@ class _RagChatScreenState extends ConsumerState<RagChatScreen> {
 
   Widget _buildWelcomeCard(bool isDark) {
     return Card(
-      color:
-          isDark
-              ? InhaleColors.glassGrey
-              : InhaleColors.frostWhite.withValues(alpha: 0.8),
+      color: isDark
+          ? InhaleColors.glassGrey
+          : InhaleColors.frostWhite.withValues(alpha: 0.8),
       child: const Padding(
         padding: EdgeInsets.all(24),
         child: Column(
@@ -165,10 +164,9 @@ class _RagChatScreenState extends ConsumerState<RagChatScreen> {
 
   Widget _buildCitations(bool isDark) {
     return Card(
-      color:
-          isDark
-              ? InhaleColors.deepNavy.withValues(alpha: 0.3)
-              : InhaleColors.blue.withValues(alpha: 0.08),
+      color: isDark
+          ? InhaleColors.deepNavy.withValues(alpha: 0.3)
+          : InhaleColors.blue.withValues(alpha: 0.08),
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -279,73 +277,72 @@ class _RagChatScreenState extends ConsumerState<RagChatScreen> {
     showModalBottomSheet(
       context: context,
       backgroundColor: isDark ? InhaleColors.darkCharcoal : Colors.white,
-      builder:
-          (ctx) => Padding(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Citations',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 16),
-                if (_citations.isEmpty)
-                  const Text('No citations yet. Ask a question first.')
-                else
-                  ..._citations.map(
-                    (cite) => Padding(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+      builder: (ctx) => Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Citations',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+            if (_citations.isEmpty)
+              const Text('No citations yet. Ask a question first.')
+            else
+              ..._citations.map(
+                (cite) => Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
                         children: [
-                          Row(
-                            children: [
-                              Container(
-                                width: 28,
-                                height: 28,
-                                decoration: const BoxDecoration(
-                                  color: InhaleColors.blue,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    '${cite.index}',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
+                          Container(
+                            width: 28,
+                            height: 28,
+                            decoration: const BoxDecoration(
+                              color: InhaleColors.blue,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Center(
+                              child: Text(
+                                '${cite.index}',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Text(
-                                  cite.citation,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
-                          const SizedBox(height: 8),
-                          Text(
-                            cite.preview,
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: Colors.grey[600],
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Text(
+                              cite.citation,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                              ),
                             ),
                           ),
                         ],
                       ),
-                    ),
+                      const SizedBox(height: 8),
+                      Text(
+                        cite.preview,
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                    ],
                   ),
-              ],
-            ),
-          ),
+                ),
+              ),
+          ],
+        ),
+      ),
     );
   }
 }

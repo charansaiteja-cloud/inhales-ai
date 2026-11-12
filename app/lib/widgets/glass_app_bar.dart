@@ -25,10 +25,9 @@ class GlassAppBar extends StatelessWidget implements PreferredSizeWidget {
           color: Colors.transparent,
           border: Border(
             bottom: BorderSide(
-              color:
-                  isDark
-                      ? InhaleColors.glassBorderSubtle
-                      : InhaleColors.lightGlassBorderSubtle,
+              color: isDark
+                  ? InhaleColors.glassBorderSubtle
+                  : InhaleColors.lightGlassBorderSubtle,
               width: 0.5,
             ),
           ),
@@ -42,20 +41,18 @@ class GlassAppBar extends StatelessWidget implements PreferredSizeWidget {
               IconButton(
                 icon: Icon(
                   Icons.arrow_back_rounded,
-                  color:
-                      isDark
-                          ? InhaleColors.textPrimary
-                          : InhaleColors.lightNavyText,
+                  color: isDark
+                      ? InhaleColors.textPrimary
+                      : InhaleColors.lightNavyText,
                 ),
                 onPressed: () => Navigator.of(context).pop(),
               ),
             Text(
               title,
               style: TextStyle(
-                color:
-                    isDark
-                        ? InhaleColors.textPrimary
-                        : InhaleColors.lightNavyText,
+                color: isDark
+                    ? InhaleColors.textPrimary
+                    : InhaleColors.lightNavyText,
                 fontWeight: FontWeight.w600,
                 fontSize: 20,
               ),

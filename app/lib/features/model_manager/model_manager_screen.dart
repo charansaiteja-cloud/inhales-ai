@@ -32,19 +32,17 @@ class ModelManagerScreen extends ConsumerWidget {
           GlassIconButton(
             onTap: () => ref.read(modelManagerProvider.notifier).refresh(),
             icon: Icons.refresh_rounded,
-            color:
-                isDark
-                    ? InhaleColors.textSecondary
-                    : InhaleColors.lightTextSecondary,
+            color: isDark
+                ? InhaleColors.textSecondary
+                : InhaleColors.lightTextSecondary,
           ),
         ],
       ),
       body: Container(
         decoration: BoxDecoration(
-          gradient:
-              isDark
-                  ? InhaleColors.gradientBackgroundDark
-                  : InhaleColors.gradientBackground,
+          gradient: isDark
+              ? InhaleColors.gradientBackgroundDark
+              : InhaleColors.gradientBackground,
         ),
         child: Column(
           children: [
@@ -82,19 +80,17 @@ class ModelManagerScreen extends ConsumerWidget {
                               Text(
                                 'Device Capability',
                                 style: InhaleTypography.titleMedium.copyWith(
-                                  color:
-                                      isDark
-                                          ? InhaleColors.textPrimary
-                                          : InhaleColors.lightNavyText,
+                                  color: isDark
+                                      ? InhaleColors.textPrimary
+                                      : InhaleColors.lightNavyText,
                                 ),
                               ),
                               Text(
                                 '${ramGB}GB RAM • ${canRunModels ? 'Ready' : 'Limited'}',
                                 style: InhaleTypography.bodySmall.copyWith(
-                                  color:
-                                      isDark
-                                          ? InhaleColors.textSecondary
-                                          : InhaleColors.lightTextSecondary,
+                                  color: isDark
+                                      ? InhaleColors.textSecondary
+                                      : InhaleColors.lightTextSecondary,
                                 ),
                               ),
                             ],
@@ -106,10 +102,9 @@ class ModelManagerScreen extends ConsumerWidget {
                             vertical: 6,
                           ),
                           decoration: BoxDecoration(
-                            color:
-                                canRunModels
-                                    ? InhaleColors.successSoft
-                                    : InhaleColors.warningSoft,
+                            color: canRunModels
+                                ? InhaleColors.successSoft
+                                : InhaleColors.warningSoft,
                             borderRadius: BorderRadius.circular(
                               InhaleRadius.pill,
                             ),
@@ -117,10 +112,9 @@ class ModelManagerScreen extends ConsumerWidget {
                           child: Text(
                             canRunModels ? 'Optimal' : 'Low RAM',
                             style: InhaleTypography.labelSmall.copyWith(
-                              color:
-                                  canRunModels
-                                      ? InhaleColors.success
-                                      : InhaleColors.warning,
+                              color: canRunModels
+                                  ? InhaleColors.success
+                                  : InhaleColors.warning,
                             ),
                           ),
                         ),
@@ -160,10 +154,9 @@ class ModelManagerScreen extends ConsumerWidget {
                 hintText: 'Search models...',
                 prefixIcon: Icon(
                   Icons.search_rounded,
-                  color:
-                      isDark
-                          ? InhaleColors.textMuted
-                          : InhaleColors.lightTextMuted,
+                  color: isDark
+                      ? InhaleColors.textMuted
+                      : InhaleColors.lightTextMuted,
                 ),
                 onChanged: (value) {
                   // TODO: implement search filter
@@ -184,10 +177,9 @@ class ModelManagerScreen extends ConsumerWidget {
                     Text(
                       'Installed',
                       style: InhaleTypography.titleMedium.copyWith(
-                        color:
-                            isDark
-                                ? InhaleColors.textPrimary
-                                : InhaleColors.lightNavyText,
+                        color: isDark
+                            ? InhaleColors.textPrimary
+                            : InhaleColors.lightNavyText,
                       ),
                     ),
                     const SizedBox(width: InhaleSpacing.sm),
@@ -197,23 +189,21 @@ class ModelManagerScreen extends ConsumerWidget {
                         vertical: 2,
                       ),
                       decoration: BoxDecoration(
-                        color:
-                            isDark
-                                ? InhaleColors.electricBlue.withValues(
-                                  alpha: 0.2,
-                                )
-                                : InhaleColors.lightPrimaryBlue.withValues(
-                                  alpha: 0.15,
-                                ),
+                        color: isDark
+                            ? InhaleColors.electricBlue.withValues(
+                                alpha: 0.2,
+                              )
+                            : InhaleColors.lightPrimaryBlue.withValues(
+                                alpha: 0.15,
+                              ),
                         borderRadius: BorderRadius.circular(InhaleRadius.pill),
                       ),
                       child: Text(
                         '${modelState.installedModels.length}',
                         style: InhaleTypography.labelSmall.copyWith(
-                          color:
-                              isDark
-                                  ? InhaleColors.electricBlue
-                                  : InhaleColors.lightPrimaryBlue,
+                          color: isDark
+                              ? InhaleColors.electricBlue
+                              : InhaleColors.lightPrimaryBlue,
                         ),
                       ),
                     ),
@@ -229,9 +219,8 @@ class ModelManagerScreen extends ConsumerWidget {
                   ),
                   scrollDirection: Axis.horizontal,
                   itemCount: modelState.installedModels.length,
-                  separatorBuilder:
-                      (context, index) =>
-                          const SizedBox(width: InhaleSpacing.md),
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(width: InhaleSpacing.md),
                   itemBuilder: (context, index) {
                     final model = modelState.installedModels[index];
                     final isLoaded = modelState.activeModel?.id == model.id;
@@ -239,23 +228,20 @@ class ModelManagerScreen extends ConsumerWidget {
                     return _InstalledModelCard(
                       model: model,
                       isLoaded: isLoaded,
-                      onLoad:
-                          () => ref
-                              .read(modelManagerProvider.notifier)
-                              .setActiveModel(model),
-                      onUnload:
-                          () => ref
-                              .read(modelManagerProvider.notifier)
-                              .setActiveModel(
-                                modelState.installedModels.firstWhere(
-                                  (m) => m.id != model.id,
-                                  orElse: () => model,
-                                ),
-                              ),
-                      onDelete:
-                          () => ref
-                              .read(modelManagerProvider.notifier)
-                              .deleteModel(model.id),
+                      onLoad: () => ref
+                          .read(modelManagerProvider.notifier)
+                          .setActiveModel(model),
+                      onUnload: () => ref
+                          .read(modelManagerProvider.notifier)
+                          .setActiveModel(
+                            modelState.installedModels.firstWhere(
+                              (m) => m.id != model.id,
+                              orElse: () => model,
+                            ),
+                          ),
+                      onDelete: () => ref
+                          .read(modelManagerProvider.notifier)
+                          .deleteModel(model.id),
                     );
                   },
                 ),
@@ -271,10 +257,9 @@ class ModelManagerScreen extends ConsumerWidget {
                   Text(
                     'Available Models',
                     style: InhaleTypography.titleMedium.copyWith(
-                      color:
-                          isDark
-                              ? InhaleColors.textPrimary
-                              : InhaleColors.lightNavyText,
+                      color: isDark
+                          ? InhaleColors.textPrimary
+                          : InhaleColors.lightNavyText,
                     ),
                   ),
                 ],
@@ -304,14 +289,12 @@ class ModelManagerScreen extends ConsumerWidget {
                       isLoaded: isLoaded,
                       isDownloading: isDownloading,
                       downloadProgress: downloadProgress,
-                      onDownload:
-                          () => ref
-                              .read(modelManagerProvider.notifier)
-                              .installModel(model),
-                      onLoad:
-                          () => ref
-                              .read(modelManagerProvider.notifier)
-                              .setActiveModel(model),
+                      onDownload: () => ref
+                          .read(modelManagerProvider.notifier)
+                          .installModel(model),
+                      onLoad: () => ref
+                          .read(modelManagerProvider.notifier)
+                          .setActiveModel(model),
                     ),
                   );
                 },
@@ -341,16 +324,14 @@ class _InfoChip extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
-          color:
-              isDark
-                  ? InhaleColors.glassSurface
-                  : InhaleColors.lightGlassSurface,
+          color: isDark
+              ? InhaleColors.glassSurface
+              : InhaleColors.lightGlassSurface,
           borderRadius: BorderRadius.circular(InhaleRadius.sm),
           border: Border.all(
-            color:
-                isDark
-                    ? InhaleColors.glassBorderSubtle
-                    : InhaleColors.lightGlassBorderSubtle,
+            color: isDark
+                ? InhaleColors.glassBorderSubtle
+                : InhaleColors.lightGlassBorderSubtle,
           ),
         ),
         child: Column(
@@ -358,20 +339,18 @@ class _InfoChip extends StatelessWidget {
             Text(
               label,
               style: InhaleTypography.labelSmall.copyWith(
-                color:
-                    isDark
-                        ? InhaleColors.textMuted
-                        : InhaleColors.lightTextMuted,
+                color: isDark
+                    ? InhaleColors.textMuted
+                    : InhaleColors.lightTextMuted,
               ),
             ),
             const SizedBox(height: 2),
             Text(
               value,
               style: InhaleTypography.bodySmall.copyWith(
-                color:
-                    isDark
-                        ? InhaleColors.textPrimary
-                        : InhaleColors.lightNavyText,
+                color: isDark
+                    ? InhaleColors.textPrimary
+                    : InhaleColors.lightNavyText,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -415,10 +394,9 @@ class _InstalledModelCard extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    gradient:
-                        isLoaded
-                            ? InhaleColors.gradientPrimary
-                            : InhaleColors.gradientAccent,
+                    gradient: isLoaded
+                        ? InhaleColors.gradientPrimary
+                        : InhaleColors.gradientAccent,
                     borderRadius: BorderRadius.circular(InhaleRadius.xs),
                   ),
                   child: Icon(
@@ -435,10 +413,9 @@ class _InstalledModelCard extends StatelessWidget {
                       Text(
                         model.name,
                         style: InhaleTypography.titleSmall.copyWith(
-                          color:
-                              isDark
-                                  ? InhaleColors.textPrimary
-                                  : InhaleColors.lightNavyText,
+                          color: isDark
+                              ? InhaleColors.textPrimary
+                              : InhaleColors.lightNavyText,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -446,10 +423,9 @@ class _InstalledModelCard extends StatelessWidget {
                       Text(
                         '${model.sizeLabel} • ${model.provider}',
                         style: InhaleTypography.labelSmall.copyWith(
-                          color:
-                              isDark
-                                  ? InhaleColors.textMuted
-                                  : InhaleColors.lightTextMuted,
+                          color: isDark
+                              ? InhaleColors.textMuted
+                              : InhaleColors.lightTextMuted,
                         ),
                       ),
                     ],
@@ -466,21 +442,19 @@ class _InstalledModelCard extends StatelessWidget {
                     vertical: 2,
                   ),
                   decoration: BoxDecoration(
-                    color:
-                        isDark
-                            ? InhaleColors.electricBlue.withValues(alpha: 0.2)
-                            : InhaleColors.lightPrimaryBlue.withValues(
-                              alpha: 0.15,
-                            ),
+                    color: isDark
+                        ? InhaleColors.electricBlue.withValues(alpha: 0.2)
+                        : InhaleColors.lightPrimaryBlue.withValues(
+                            alpha: 0.15,
+                          ),
                     borderRadius: BorderRadius.circular(InhaleRadius.xs),
                   ),
                   child: Text(
                     model.ramTier,
                     style: InhaleTypography.labelSmall.copyWith(
-                      color:
-                          isDark
-                              ? InhaleColors.electricBlue
-                              : InhaleColors.lightPrimaryBlue,
+                      color: isDark
+                          ? InhaleColors.electricBlue
+                          : InhaleColors.lightPrimaryBlue,
                       fontSize: 9,
                     ),
                   ),
@@ -624,10 +598,9 @@ class _AvailableModelCard extends StatelessWidget {
                       child: Text(
                         model.name,
                         style: InhaleTypography.titleSmall.copyWith(
-                          color:
-                              isDark
-                                  ? InhaleColors.textPrimary
-                                  : InhaleColors.lightNavyText,
+                          color: isDark
+                              ? InhaleColors.textPrimary
+                              : InhaleColors.lightNavyText,
                         ),
                       ),
                     ),
@@ -637,23 +610,21 @@ class _AvailableModelCard extends StatelessWidget {
                         vertical: 2,
                       ),
                       decoration: BoxDecoration(
-                        color:
-                            isDark
-                                ? InhaleColors.electricBlue.withValues(
-                                  alpha: 0.2,
-                                )
-                                : InhaleColors.lightPrimaryBlue.withValues(
-                                  alpha: 0.15,
-                                ),
+                        color: isDark
+                            ? InhaleColors.electricBlue.withValues(
+                                alpha: 0.2,
+                              )
+                            : InhaleColors.lightPrimaryBlue.withValues(
+                                alpha: 0.15,
+                              ),
                         borderRadius: BorderRadius.circular(InhaleRadius.xs),
                       ),
                       child: Text(
                         model.ramTier,
                         style: InhaleTypography.labelSmall.copyWith(
-                          color:
-                              isDark
-                                  ? InhaleColors.electricBlue
-                                  : InhaleColors.lightPrimaryBlue,
+                          color: isDark
+                              ? InhaleColors.electricBlue
+                              : InhaleColors.lightPrimaryBlue,
                           fontSize: 9,
                         ),
                       ),
@@ -664,10 +635,9 @@ class _AvailableModelCard extends StatelessWidget {
                 Text(
                   '${model.sizeLabel}  ·  ${model.provider}',
                   style: InhaleTypography.bodySmall.copyWith(
-                    color:
-                        isDark
-                            ? InhaleColors.textSecondary
-                            : InhaleColors.lightTextSecondary,
+                    color: isDark
+                        ? InhaleColors.textSecondary
+                        : InhaleColors.lightTextSecondary,
                   ),
                 ),
                 if (isDownloading) ...[
@@ -677,10 +647,9 @@ class _AvailableModelCard extends StatelessWidget {
                     child: LinearProgressIndicator(
                       value: downloadProgress,
                       minHeight: 4,
-                      backgroundColor:
-                          isDark
-                              ? InhaleColors.glassSurface
-                              : InhaleColors.lightGlassSurface,
+                      backgroundColor: isDark
+                          ? InhaleColors.glassSurface
+                          : InhaleColors.lightGlassSurface,
                       valueColor: AlwaysStoppedAnimation<Color>(
                         isDark
                             ? InhaleColors.electricBlue
@@ -692,10 +661,9 @@ class _AvailableModelCard extends StatelessWidget {
                   Text(
                     'Downloading... ${(downloadProgress * 100).toInt()}%',
                     style: InhaleTypography.labelSmall.copyWith(
-                      color:
-                          isDark
-                              ? InhaleColors.textMuted
-                              : InhaleColors.lightTextMuted,
+                      color: isDark
+                          ? InhaleColors.textMuted
+                          : InhaleColors.lightTextMuted,
                     ),
                   ),
                 ],

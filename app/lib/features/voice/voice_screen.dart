@@ -23,10 +23,9 @@ class VoiceScreen extends ConsumerWidget {
       appBar: GlassAppBar(title: 'Voice AI'),
       body: Container(
         decoration: BoxDecoration(
-          gradient:
-              isDark
-                  ? InhaleColors.gradientBackgroundDark
-                  : InhaleColors.gradientBackground,
+          gradient: isDark
+              ? InhaleColors.gradientBackgroundDark
+              : InhaleColors.gradientBackground,
         ),
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(InhaleSpacing.md),
@@ -46,20 +45,18 @@ class VoiceScreen extends ConsumerWidget {
               Text(
                 'Speech to Text',
                 style: InhaleTypography.headlineMedium.copyWith(
-                  color:
-                      isDark
-                          ? InhaleColors.textPrimary
-                          : InhaleColors.lightNavyText,
+                  color: isDark
+                      ? InhaleColors.textPrimary
+                      : InhaleColors.lightNavyText,
                 ),
               ),
               const SizedBox(height: InhaleSpacing.xs),
               Text(
                 'Record your voice and transcribe to text',
                 style: InhaleTypography.bodyMedium.copyWith(
-                  color:
-                      isDark
-                          ? InhaleColors.textSecondary
-                          : InhaleColors.lightTextSecondary,
+                  color: isDark
+                      ? InhaleColors.textSecondary
+                      : InhaleColors.lightTextSecondary,
                 ),
               ),
               const SizedBox(height: InhaleSpacing.md),
@@ -73,16 +70,14 @@ class VoiceScreen extends ConsumerWidget {
                       width: double.infinity,
                       padding: const EdgeInsets.all(InhaleSpacing.md),
                       decoration: BoxDecoration(
-                        color:
-                            isDark
-                                ? InhaleColors.glassSurface
-                                : InhaleColors.lightGlassSurface,
+                        color: isDark
+                            ? InhaleColors.glassSurface
+                            : InhaleColors.lightGlassSurface,
                         borderRadius: BorderRadius.circular(InhaleRadius.md),
                         border: Border.all(
-                          color:
-                              isDark
-                                  ? InhaleColors.glassBorderSubtle
-                                  : InhaleColors.lightGlassBorderSubtle,
+                          color: isDark
+                              ? InhaleColors.glassBorderSubtle
+                              : InhaleColors.lightGlassBorderSubtle,
                         ),
                       ),
                       child: Text(
@@ -90,14 +85,13 @@ class VoiceScreen extends ConsumerWidget {
                             ? 'Tap the microphone to start speaking...'
                             : state.transcribedText,
                         style: InhaleTypography.bodyLarge.copyWith(
-                          color:
-                              state.transcribedText.isEmpty
-                                  ? (isDark
-                                      ? InhaleColors.textMuted
-                                      : InhaleColors.lightTextMuted)
-                                  : (isDark
-                                      ? InhaleColors.textPrimary
-                                      : InhaleColors.lightNavyText),
+                          color: state.transcribedText.isEmpty
+                              ? (isDark
+                                  ? InhaleColors.textMuted
+                                  : InhaleColors.lightTextMuted)
+                              : (isDark
+                                  ? InhaleColors.textPrimary
+                                  : InhaleColors.lightNavyText),
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -112,20 +106,17 @@ class VoiceScreen extends ConsumerWidget {
                       ),
                     const SizedBox(height: InhaleSpacing.lg),
                     GlassIconButton(
-                      onTap:
-                          state.isAvailable
-                              ? () => notifier.toggleRecording()
-                              : null,
-                      icon:
-                          state.isRecording
-                              ? Icons.stop_rounded
-                              : Icons.mic_rounded,
-                      color:
-                          state.isRecording
-                              ? InhaleColors.error
-                              : (isDark
-                                  ? InhaleColors.electricBlue
-                                  : InhaleColors.lightPrimaryBlue),
+                      onTap: state.isAvailable
+                          ? () => notifier.toggleRecording()
+                          : null,
+                      icon: state.isRecording
+                          ? Icons.stop_rounded
+                          : Icons.mic_rounded,
+                      color: state.isRecording
+                          ? InhaleColors.error
+                          : (isDark
+                              ? InhaleColors.electricBlue
+                              : InhaleColors.lightPrimaryBlue),
                       size: 80,
                     ),
                   ],
@@ -135,20 +126,18 @@ class VoiceScreen extends ConsumerWidget {
               Text(
                 'Text to Speech',
                 style: InhaleTypography.headlineMedium.copyWith(
-                  color:
-                      isDark
-                          ? InhaleColors.textPrimary
-                          : InhaleColors.lightNavyText,
+                  color: isDark
+                      ? InhaleColors.textPrimary
+                      : InhaleColors.lightNavyText,
                 ),
               ),
               const SizedBox(height: InhaleSpacing.xs),
               Text(
                 'Convert text to natural speech',
                 style: InhaleTypography.bodyMedium.copyWith(
-                  color:
-                      isDark
-                          ? InhaleColors.textSecondary
-                          : InhaleColors.lightTextSecondary,
+                  color: isDark
+                      ? InhaleColors.textSecondary
+                      : InhaleColors.lightTextSecondary,
                 ),
               ),
               const SizedBox(height: InhaleSpacing.md),
@@ -170,10 +159,9 @@ class VoiceScreen extends ConsumerWidget {
                         Expanded(
                           child: GlassButton(
                             label: state.isSpeaking ? 'Speaking...' : 'Speak',
-                            onTap:
-                                state.isSpeaking
-                                    ? null
-                                    : () => notifier.speak(),
+                            onTap: state.isSpeaking
+                                ? null
+                                : () => notifier.speak(),
                             glow: !state.isSpeaking,
                           ),
                         ),
@@ -181,10 +169,9 @@ class VoiceScreen extends ConsumerWidget {
                         Expanded(
                           child: GlassButton(
                             label: 'Stop',
-                            onTap:
-                                state.isSpeaking
-                                    ? () => notifier.stopSpeaking()
-                                    : null,
+                            onTap: state.isSpeaking
+                                ? () => notifier.stopSpeaking()
+                                : null,
                             outlined: true,
                           ),
                         ),

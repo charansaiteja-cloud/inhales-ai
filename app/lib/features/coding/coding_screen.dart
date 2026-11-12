@@ -44,10 +44,9 @@ class CodingScreen extends ConsumerWidget {
       ),
       body: Container(
         decoration: BoxDecoration(
-          gradient:
-              isDark
-                  ? InhaleColors.gradientBackgroundDark
-                  : InhaleColors.gradientBackground,
+          gradient: isDark
+              ? InhaleColors.gradientBackgroundDark
+              : InhaleColors.gradientBackground,
         ),
         child: Column(
           children: [
@@ -60,33 +59,31 @@ class CodingScreen extends ConsumerWidget {
               child: Wrap(
                 spacing: InhaleSpacing.sm,
                 runSpacing: InhaleSpacing.sm,
-                children:
-                    languages.map((lang) {
-                      final selected = lang.toLowerCase() == state.language;
-                      return GlassCard(
-                        onTap: () => notifier.setLanguage(lang.toLowerCase()),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
-                        ),
-                        elevated: selected,
-                        glow: selected,
-                        child: Text(
-                          lang,
-                          style: TextStyle(
-                            color:
-                                selected
-                                    ? Colors.white
-                                    : (isDark
-                                        ? InhaleColors.electricBlue
-                                        : InhaleColors.lightPrimaryBlue),
-                            fontWeight:
-                                selected ? FontWeight.w600 : FontWeight.w400,
-                            fontSize: 13,
-                          ),
-                        ),
-                      );
-                    }).toList(),
+                children: languages.map((lang) {
+                  final selected = lang.toLowerCase() == state.language;
+                  return GlassCard(
+                    onTap: () => notifier.setLanguage(lang.toLowerCase()),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    elevated: selected,
+                    glow: selected,
+                    child: Text(
+                      lang,
+                      style: TextStyle(
+                        color: selected
+                            ? Colors.white
+                            : (isDark
+                                ? InhaleColors.electricBlue
+                                : InhaleColors.lightPrimaryBlue),
+                        fontWeight:
+                            selected ? FontWeight.w600 : FontWeight.w400,
+                        fontSize: 13,
+                      ),
+                    ),
+                  );
+                }).toList(),
               ),
             ),
 
@@ -115,10 +112,9 @@ class CodingScreen extends ConsumerWidget {
                   Expanded(
                     child: GlassButton(
                       label: 'Ask AI to Explain',
-                      onTap:
-                          state.code.isNotEmpty
-                              ? () => notifier.askAI(state.code)
-                              : null,
+                      onTap: state.code.isNotEmpty
+                          ? () => notifier.askAI(state.code)
+                          : null,
                       glow: true,
                     ),
                   ),
@@ -126,10 +122,9 @@ class CodingScreen extends ConsumerWidget {
                   Expanded(
                     child: GlassButton(
                       label: 'Fix Bugs',
-                      onTap:
-                          state.code.isNotEmpty
-                              ? () => notifier.askAI('Fix bugs: ${state.code}')
-                              : null,
+                      onTap: state.code.isNotEmpty
+                          ? () => notifier.askAI('Fix bugs: ${state.code}')
+                          : null,
                       outlined: true,
                     ),
                   ),
@@ -137,10 +132,9 @@ class CodingScreen extends ConsumerWidget {
                   Expanded(
                     child: GlassButton(
                       label: 'Optimize',
-                      onTap:
-                          state.code.isNotEmpty
-                              ? () => notifier.askAI('Optimize: ${state.code}')
-                              : null,
+                      onTap: state.code.isNotEmpty
+                          ? () => notifier.askAI('Optimize: ${state.code}')
+                          : null,
                       outlined: true,
                     ),
                   ),

@@ -32,10 +32,9 @@ class FlashcardScreen extends ConsumerWidget {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-          gradient:
-              isDark
-                  ? InhaleColors.gradientBackgroundDark
-                  : InhaleColors.gradientBackground,
+          gradient: isDark
+              ? InhaleColors.gradientBackgroundDark
+              : InhaleColors.gradientBackground,
         ),
         child: CustomScrollView(
           slivers: [
@@ -80,19 +79,17 @@ class FlashcardScreen extends ConsumerWidget {
                           Text(
                             'Flashcards',
                             style: InhaleTypography.headlineMedium.copyWith(
-                              color:
-                                  isDark
-                                      ? InhaleColors.textPrimary
-                                      : InhaleColors.lightNavyText,
+                              color: isDark
+                                  ? InhaleColors.textPrimary
+                                  : InhaleColors.lightNavyText,
                             ),
                           ),
                           Text(
                             'AI-powered spaced repetition',
                             style: InhaleTypography.bodySmall.copyWith(
-                              color:
-                                  isDark
-                                      ? InhaleColors.textMuted
-                                      : InhaleColors.lightTextSecondary,
+                              color: isDark
+                                  ? InhaleColors.textMuted
+                                  : InhaleColors.lightTextSecondary,
                             ),
                           ),
                         ],
@@ -132,10 +129,9 @@ class FlashcardScreen extends ConsumerWidget {
                     Expanded(
                       child: GlassButton(
                         label: 'Start Review',
-                        onTap:
-                            state.dueCards.isNotEmpty
-                                ? () => context.push('/flashcards/study')
-                                : null,
+                        onTap: state.dueCards.isNotEmpty
+                            ? () => context.push('/flashcards/study')
+                            : null,
                       ),
                     ),
                     const SizedBox(width: InhaleSpacing.sm),
@@ -159,10 +155,9 @@ class FlashcardScreen extends ConsumerWidget {
                 child: Text(
                   'Your Decks',
                   style: InhaleTypography.titleLarge.copyWith(
-                    color:
-                        isDark
-                            ? InhaleColors.textPrimary
-                            : InhaleColors.lightNavyText,
+                    color: isDark
+                        ? InhaleColors.textPrimary
+                        : InhaleColors.lightNavyText,
                   ),
                 ),
               ),
@@ -197,10 +192,10 @@ class FlashcardScreen extends ConsumerWidget {
                         deck: deck,
                         dueCount: dueCount,
                         totalCards: deckCards.length,
-                        onTap:
-                            () => context.push('/flashcards/deck/${deck.id}'),
-                        onDelete:
-                            () => _confirmDeleteDeck(context, ref, deck.id),
+                        onTap: () =>
+                            context.push('/flashcards/deck/${deck.id}'),
+                        onDelete: () =>
+                            _confirmDeleteDeck(context, ref, deck.id),
                       ),
                     );
                   }, childCount: state.decks.length),
@@ -232,10 +227,9 @@ class FlashcardScreen extends ConsumerWidget {
               Text(
                 'Today\'s Progress',
                 style: InhaleTypography.titleMedium.copyWith(
-                  color:
-                      isDark
-                          ? InhaleColors.textPrimary
-                          : InhaleColors.lightNavyText,
+                  color: isDark
+                      ? InhaleColors.textPrimary
+                      : InhaleColors.lightNavyText,
                 ),
               ),
               Text(
@@ -263,10 +257,9 @@ class FlashcardScreen extends ConsumerWidget {
                 ? '${state.totalDue} cards due for review'
                 : 'All caught up! 🎉',
             style: InhaleTypography.bodySmall.copyWith(
-              color:
-                  isDark
-                      ? InhaleColors.textMuted
-                      : InhaleColors.lightTextSecondary,
+              color: isDark
+                  ? InhaleColors.textMuted
+                  : InhaleColors.lightTextSecondary,
             ),
           ),
         ],
@@ -360,10 +353,9 @@ class _DeckCard extends StatelessWidget {
                 Text(
                   deck.name,
                   style: InhaleTypography.titleMedium.copyWith(
-                    color:
-                        isDark
-                            ? InhaleColors.textPrimary
-                            : InhaleColors.lightNavyText,
+                    color: isDark
+                        ? InhaleColors.textPrimary
+                        : InhaleColors.lightNavyText,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -372,12 +364,11 @@ class _DeckCard extends StatelessWidget {
                 Text(
                   '$totalCards cards${dueCount > 0 ? ' • $dueCount due' : ''}',
                   style: InhaleTypography.bodySmall.copyWith(
-                    color:
-                        dueCount > 0
-                            ? InhaleColors.warning
-                            : (isDark
-                                ? InhaleColors.textMuted
-                                : InhaleColors.lightTextSecondary),
+                    color: dueCount > 0
+                        ? InhaleColors.warning
+                        : (isDark
+                            ? InhaleColors.textMuted
+                            : InhaleColors.lightTextSecondary),
                   ),
                 ),
               ],
@@ -512,10 +503,9 @@ class _StudyScreenState extends ConsumerState<StudyScreen>
       ),
       body: Container(
         decoration: BoxDecoration(
-          gradient:
-              isDark
-                  ? InhaleColors.gradientBackgroundDark
-                  : InhaleColors.gradientBackground,
+          gradient: isDark
+              ? InhaleColors.gradientBackgroundDark
+              : InhaleColors.gradientBackground,
         ),
         child: Column(
           children: [
@@ -566,10 +556,9 @@ class _StudyScreenState extends ConsumerState<StudyScreen>
                           final halfTurn = math.pi / 2;
                           final frontOpacity =
                               turn < halfTurn ? 1 - (turn / halfTurn) : 0;
-                          final backOpacity =
-                              turn >= halfTurn
-                                  ? (turn - halfTurn) / halfTurn
-                                  : 0;
+                          final backOpacity = turn >= halfTurn
+                              ? (turn - halfTurn) / halfTurn
+                              : 0;
 
                           return Stack(
                             children: [
@@ -707,10 +696,9 @@ class _StudyScreenState extends ConsumerState<StudyScreen>
             text,
             textAlign: TextAlign.center,
             style: InhaleTypography.titleLarge.copyWith(
-              color:
-                  isDark
-                      ? InhaleColors.textPrimary
-                      : InhaleColors.lightNavyText,
+              color: isDark
+                  ? InhaleColors.textPrimary
+                  : InhaleColors.lightNavyText,
               height: 1.5,
             ),
           ),
@@ -718,10 +706,9 @@ class _StudyScreenState extends ConsumerState<StudyScreen>
           Text(
             isFront ? 'Tap to reveal answer' : 'Tap to see question',
             style: InhaleTypography.bodySmall.copyWith(
-              color:
-                  isDark
-                      ? InhaleColors.textMuted
-                      : InhaleColors.lightTextSecondary,
+              color: isDark
+                  ? InhaleColors.textMuted
+                  : InhaleColors.lightTextSecondary,
             ),
           ),
         ],
@@ -756,20 +743,18 @@ class _StudyScreenState extends ConsumerState<StudyScreen>
               Text(
                 'Session Complete!',
                 style: InhaleTypography.headlineMedium.copyWith(
-                  color:
-                      isDark
-                          ? InhaleColors.textPrimary
-                          : InhaleColors.lightNavyText,
+                  color: isDark
+                      ? InhaleColors.textPrimary
+                      : InhaleColors.lightNavyText,
                 ),
               ),
               const SizedBox(height: InhaleSpacing.sm),
               Text(
                 'All caught up for today',
                 style: InhaleTypography.bodyMedium.copyWith(
-                  color:
-                      isDark
-                          ? InhaleColors.textSecondary
-                          : InhaleColors.lightTextSecondary,
+                  color: isDark
+                      ? InhaleColors.textSecondary
+                      : InhaleColors.lightTextSecondary,
                 ),
               ),
               const SizedBox(height: InhaleSpacing.md),
@@ -866,9 +851,9 @@ class _DeckDetailScreenState extends ConsumerState<DeckDetailScreen> {
     final state = ref.watch(flashcardProvider);
     final cards = state.deckCards[widget.deckId] ?? [];
     final deck = state.decks.cast<FlashcardDeck?>().firstWhere(
-      (d) => d != null && d.id == widget.deckId,
-      orElse: () => null,
-    );
+          (d) => d != null && d.id == widget.deckId,
+          orElse: () => null,
+        );
 
     return Scaffold(
       appBar: AppBar(
@@ -882,55 +867,53 @@ class _DeckDetailScreenState extends ConsumerState<DeckDetailScreen> {
       ),
       body: Container(
         decoration: BoxDecoration(
-          gradient:
-              isDark
-                  ? InhaleColors.gradientBackgroundDark
-                  : InhaleColors.gradientBackground,
+          gradient: isDark
+              ? InhaleColors.gradientBackgroundDark
+              : InhaleColors.gradientBackground,
         ),
-        child:
-            cards.isEmpty
-                ? Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.auto_awesome_rounded,
-                        size: 48,
+        child: cards.isEmpty
+            ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.auto_awesome_rounded,
+                      size: 48,
+                      color: InhaleColors.textMuted,
+                    ),
+                    const SizedBox(height: InhaleSpacing.md),
+                    Text(
+                      'No cards in this deck',
+                      style: InhaleTypography.titleMedium.copyWith(
                         color: InhaleColors.textMuted,
                       ),
-                      const SizedBox(height: InhaleSpacing.md),
-                      Text(
-                        'No cards in this deck',
-                        style: InhaleTypography.titleMedium.copyWith(
-                          color: InhaleColors.textMuted,
-                        ),
-                      ),
-                      const SizedBox(height: InhaleSpacing.sm),
-                      GlassButton(
-                        label: 'Add Cards',
-                        onTap: () => _showCreateCardDialog(context, ref),
-                      ),
-                    ],
-                  ),
-                )
-                : ListView.builder(
-                  padding: EdgeInsets.all(InhaleSpacing.lg),
-                  itemCount: cards.length,
-                  itemBuilder: (context, index) {
-                    final card = cards[index];
-                    return Padding(
-                      padding: EdgeInsets.only(bottom: InhaleSpacing.sm),
-                      child: _CardItem(
-                        card: card,
-                        onDelete: () {
-                          ref
-                              .read(flashcardProvider.notifier)
-                              .deleteCard(card.id);
-                        },
-                      ),
-                    );
-                  },
+                    ),
+                    const SizedBox(height: InhaleSpacing.sm),
+                    GlassButton(
+                      label: 'Add Cards',
+                      onTap: () => _showCreateCardDialog(context, ref),
+                    ),
+                  ],
                 ),
+              )
+            : ListView.builder(
+                padding: EdgeInsets.all(InhaleSpacing.lg),
+                itemCount: cards.length,
+                itemBuilder: (context, index) {
+                  final card = cards[index];
+                  return Padding(
+                    padding: EdgeInsets.only(bottom: InhaleSpacing.sm),
+                    child: _CardItem(
+                      card: card,
+                      onDelete: () {
+                        ref
+                            .read(flashcardProvider.notifier)
+                            .deleteCard(card.id);
+                      },
+                    ),
+                  );
+                },
+              ),
       ),
     );
   }
@@ -959,10 +942,9 @@ class _CardItem extends StatelessWidget {
                 child: Text(
                   card.front,
                   style: InhaleTypography.titleSmall.copyWith(
-                    color:
-                        isDark
-                            ? InhaleColors.textPrimary
-                            : InhaleColors.lightNavyText,
+                    color: isDark
+                        ? InhaleColors.textPrimary
+                        : InhaleColors.lightNavyText,
                   ),
                 ),
               ),
@@ -1011,10 +993,9 @@ class _CardItem extends StatelessWidget {
           Text(
             card.back,
             style: InhaleTypography.bodySmall.copyWith(
-              color:
-                  isDark
-                      ? InhaleColors.textSecondary
-                      : InhaleColors.lightTextSecondary,
+              color: isDark
+                  ? InhaleColors.textSecondary
+                  : InhaleColors.lightTextSecondary,
             ),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
@@ -1057,9 +1038,7 @@ Future<void> _showCreateDeckDialog(BuildContext context, WidgetRef ref) {
         onTap: () async {
           final name = nameCtrl.text.trim();
           if (name.isEmpty) return;
-          await ref
-              .read(flashcardProvider.notifier)
-              .createDeck(
+          await ref.read(flashcardProvider.notifier).createDeck(
                 name: name,
                 description:
                     descCtrl.text.trim().isEmpty ? null : descCtrl.text.trim(),
@@ -1111,9 +1090,7 @@ Future<void> _showCreateCardDialog(BuildContext context, WidgetRef ref) {
           final front = frontCtrl.text.trim();
           final back = backCtrl.text.trim();
           if (front.isEmpty || back.isEmpty) return;
-          await ref
-              .read(flashcardProvider.notifier)
-              .createCard(
+          await ref.read(flashcardProvider.notifier).createCard(
                 deckId: deck.id,
                 front: front,
                 back: back,

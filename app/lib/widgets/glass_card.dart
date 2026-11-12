@@ -47,13 +47,11 @@ class GlassCard extends StatelessWidget {
     final radius = borderRadius ?? BorderRadius.circular(InhaleRadius.md);
 
     final effectiveShadows = shadows ?? _buildShadows(isDark);
-    final effectiveBorder =
-        borderColor ??
+    final effectiveBorder = borderColor ??
         (isDark
             ? InhaleColors.glassBorderSubtle
             : InhaleColors.lightGlassBorderSubtle);
-    final effectiveBg =
-        backgroundColor ??
+    final effectiveBg = backgroundColor ??
         (isDark
             ? InhaleColors.glassSurfaceMedium
             : InhaleColors.lightGlassSurfaceMedium);
@@ -73,18 +71,17 @@ class GlassCard extends StatelessWidget {
             border: Border.all(color: effectiveBorder, width: 0.5),
             boxShadow: effectiveShadows,
           ),
-          child:
-              shouldBlur
-                  ? ClipRRect(
-                    borderRadius: radius,
-                    child: RepaintBoundary(
-                      child: BackdropFilter(
-                        filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
-                        child: _buildContent(context),
-                      ),
+          child: shouldBlur
+              ? ClipRRect(
+                  borderRadius: radius,
+                  child: RepaintBoundary(
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
+                      child: _buildContent(context),
                     ),
-                  )
-                  : _buildContent(context),
+                  ),
+                )
+              : _buildContent(context),
         ),
       ),
     );
@@ -104,37 +101,37 @@ class GlassCard extends StatelessWidget {
   }
 
   Widget _buildContent(BuildContext context) => Padding(
-    padding: padding ?? EdgeInsets.zero,
-    child: child ?? const SizedBox(),
-  );
+        padding: padding ?? EdgeInsets.zero,
+        child: child ?? const SizedBox(),
+      );
 
   List<BoxShadow> _buildShadows(bool isDark) {
     if (glow) {
       return isDark
           ? [
-            BoxShadow(
-              color: InhaleColors.blue.withValues(alpha: 0.3),
-              blurRadius: 20,
-              spreadRadius: 5,
-            ),
-          ]
+              BoxShadow(
+                color: InhaleColors.blue.withValues(alpha: 0.3),
+                blurRadius: 20,
+                spreadRadius: 5,
+              ),
+            ]
           : [];
     }
     if (elevated) {
       return isDark
           ? [
-            BoxShadow(
-              color: InhaleColors.black.withValues(alpha: 0.3),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ]
+              BoxShadow(
+                color: InhaleColors.black.withValues(alpha: 0.3),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ]
           : [
-            BoxShadow(
-              color: InhaleColors.blue.withValues(alpha: 0.15),
-              blurRadius: 10,
-            ),
-          ];
+              BoxShadow(
+                color: InhaleColors.blue.withValues(alpha: 0.15),
+                blurRadius: 10,
+              ),
+            ];
     }
     return [];
   }

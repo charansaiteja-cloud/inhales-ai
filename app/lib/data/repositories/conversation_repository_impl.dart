@@ -84,31 +84,33 @@ class ConversationRepositoryImpl implements ConversationRepository {
   @override
   Future<void> delete(int id) async {
     await (_database.delete(_database.conversations)
-      ..where((c) => c.id.equals(id))).go();
+          ..where((c) => c.id.equals(id)))
+        .go();
   }
 
   @override
   Future<void> setPinned(int id, bool pinned) async {
-    await (_database.update(_database.conversations)..where(
-      (c) => c.id.equals(id),
-    )).write(db.ConversationsCompanion(isPinned: Value(pinned)));
+    await (_database.update(_database.conversations)
+          ..where(
+            (c) => c.id.equals(id),
+          ))
+        .write(db.ConversationsCompanion(isPinned: Value(pinned)));
   }
 
   @override
   Future<List<domain.Conversation>> getPinned() async {
-    final query =
-        _database.select(_database.conversations)
-          ..where((c) => c.isPinned.equals(true))
-          ..orderBy([(c) => OrderingTerm.desc(c.updatedAt)]);
+    final query = _database.select(_database.conversations)
+      ..where((c) => c.isPinned.equals(true))
+      ..orderBy([(c) => OrderingTerm.desc(c.updatedAt)]);
     final results = await query.get();
     return results.map(_mapToEntity).toList();
   }
 
   @override
   Future<List<domain.Conversation>> search(String query) async {
-    final results =
-        await (_database.select(_database.conversations)
-          ..where((c) => c.title.like('%$query%'))).get();
+    final results = await (_database.select(_database.conversations)
+          ..where((c) => c.title.like('%$query%')))
+        .get();
     return results.map(_mapToEntity).toList();
   }
 }

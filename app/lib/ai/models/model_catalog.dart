@@ -103,20 +103,20 @@ class ModelCatalog {
   }
 
   static Map<String, dynamic> toJson(ModelCatalogEntry m) => {
-    'id': m.id,
-    'name': m.name,
-    'description': m.description,
-    'url': m.url,
-    'sizeBytes': m.sizeBytes,
-    'quantization': m.quantization,
-    'supportedTasks': m.supportedTasks,
-    'minRamMb': m.minRamMb,
-    'recommendedRamMb': m.recommendedRamMb,
-    'license': m.license,
-    'architecture': m.architecture,
-    'vision': m.vision,
-    'family': m.family,
-  };
+        'id': m.id,
+        'name': m.name,
+        'description': m.description,
+        'url': m.url,
+        'sizeBytes': m.sizeBytes,
+        'quantization': m.quantization,
+        'supportedTasks': m.supportedTasks,
+        'minRamMb': m.minRamMb,
+        'recommendedRamMb': m.recommendedRamMb,
+        'license': m.license,
+        'architecture': m.architecture,
+        'vision': m.vision,
+        'family': m.family,
+      };
 
   static String encodeCatalogue() =>
       jsonEncode(defaultModels.map(toJson).toList());

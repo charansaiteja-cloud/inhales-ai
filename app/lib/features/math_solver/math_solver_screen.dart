@@ -23,10 +23,9 @@ class MathSolverScreen extends ConsumerWidget {
       appBar: GlassAppBar(title: 'Math Solver AI'),
       body: Container(
         decoration: BoxDecoration(
-          gradient:
-              isDark
-                  ? InhaleColors.gradientBackgroundDark
-                  : InhaleColors.gradientBackground,
+          gradient: isDark
+              ? InhaleColors.gradientBackgroundDark
+              : InhaleColors.gradientBackground,
         ),
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(InhaleSpacing.md),
@@ -37,10 +36,9 @@ class MathSolverScreen extends ConsumerWidget {
               Text(
                 'Upload Image of Problem',
                 style: InhaleTypography.headlineMedium.copyWith(
-                  color:
-                      isDark
-                          ? InhaleColors.textPrimary
-                          : InhaleColors.lightNavyText,
+                  color: isDark
+                      ? InhaleColors.textPrimary
+                      : InhaleColors.lightNavyText,
                 ),
               ),
               const SizedBox(height: InhaleSpacing.sm),
@@ -64,14 +62,12 @@ class MathSolverScreen extends ConsumerWidget {
                           const SizedBox(height: InhaleSpacing.sm),
                           GlassButton(
                             width: double.infinity,
-                            label:
-                                state.isProcessing
-                                    ? 'Analyzing...'
-                                    : 'Analyze Image',
-                            onTap:
-                                state.isProcessing
-                                    ? null
-                                    : () => notifier.analyzeImage(),
+                            label: state.isProcessing
+                                ? 'Analyzing...'
+                                : 'Analyze Image',
+                            onTap: state.isProcessing
+                                ? null
+                                : () => notifier.analyzeImage(),
                             glow: !state.isProcessing,
                           ),
                         ],
@@ -92,10 +88,9 @@ class MathSolverScreen extends ConsumerWidget {
                 Text(
                   'Recognized Expression',
                   style: InhaleTypography.headlineMedium.copyWith(
-                    color:
-                        isDark
-                            ? InhaleColors.textPrimary
-                            : InhaleColors.lightNavyText,
+                    color: isDark
+                        ? InhaleColors.textPrimary
+                        : InhaleColors.lightNavyText,
                   ),
                 ),
                 const SizedBox(height: InhaleSpacing.sm),
@@ -104,10 +99,9 @@ class MathSolverScreen extends ConsumerWidget {
                   child: Text(
                     state.recognizedExpression!,
                     style: InhaleTypography.displaySmall.copyWith(
-                      color:
-                          isDark
-                              ? InhaleColors.textPrimary
-                              : InhaleColors.lightNavyText,
+                      color: isDark
+                          ? InhaleColors.textPrimary
+                          : InhaleColors.lightNavyText,
                     ),
                   ),
                 ),
@@ -126,10 +120,9 @@ class MathSolverScreen extends ConsumerWidget {
                 Text(
                   'Answer',
                   style: InhaleTypography.headlineMedium.copyWith(
-                    color:
-                        isDark
-                            ? InhaleColors.textPrimary
-                            : InhaleColors.lightNavyText,
+                    color: isDark
+                        ? InhaleColors.textPrimary
+                        : InhaleColors.lightNavyText,
                   ),
                 ),
                 const SizedBox(height: InhaleSpacing.sm),
@@ -138,10 +131,9 @@ class MathSolverScreen extends ConsumerWidget {
                   child: Text(
                     state.answer!,
                     style: InhaleTypography.displaySmall.copyWith(
-                      color:
-                          isDark
-                              ? InhaleColors.textPrimary
-                              : InhaleColors.lightNavyText,
+                      color: isDark
+                          ? InhaleColors.textPrimary
+                          : InhaleColors.lightNavyText,
                     ),
                   ),
                 ),
@@ -150,10 +142,9 @@ class MathSolverScreen extends ConsumerWidget {
                   Text(
                     'Step‑by‑Step Solution',
                     style: InhaleTypography.headlineMedium.copyWith(
-                      color:
-                          isDark
-                              ? InhaleColors.textPrimary
-                              : InhaleColors.lightNavyText,
+                      color: isDark
+                          ? InhaleColors.textPrimary
+                          : InhaleColors.lightNavyText,
                     ),
                   ),
                   const SizedBox(height: InhaleSpacing.sm),
@@ -161,27 +152,25 @@ class MathSolverScreen extends ConsumerWidget {
                     padding: const EdgeInsets.all(InhaleSpacing.md),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children:
-                          state.steps
-                              .asMap()
-                              .entries
-                              .map(
-                                (e) => Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: InhaleSpacing.xs,
-                                  ),
-                                  child: Text(
-                                    '${e.key + 1}. ${e.value}',
-                                    style: InhaleTypography.bodySmall.copyWith(
-                                      color:
-                                          isDark
-                                              ? InhaleColors.textSecondary
-                                              : InhaleColors.lightTextSecondary,
-                                    ),
-                                  ),
+                      children: state.steps
+                          .asMap()
+                          .entries
+                          .map(
+                            (e) => Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: InhaleSpacing.xs,
+                              ),
+                              child: Text(
+                                '${e.key + 1}. ${e.value}',
+                                style: InhaleTypography.bodySmall.copyWith(
+                                  color: isDark
+                                      ? InhaleColors.textSecondary
+                                      : InhaleColors.lightTextSecondary,
                                 ),
-                              )
-                              .toList(),
+                              ),
+                            ),
+                          )
+                          .toList(),
                     ),
                   ),
                   const SizedBox(height: InhaleSpacing.md),
@@ -192,114 +181,100 @@ class MathSolverScreen extends ConsumerWidget {
                 Text(
                   'History',
                   style: InhaleTypography.titleMedium.copyWith(
-                    color:
-                        isDark
-                            ? InhaleColors.textPrimary
-                            : InhaleColors.lightNavyText,
+                    color: isDark
+                        ? InhaleColors.textPrimary
+                        : InhaleColors.lightNavyText,
                   ),
                 ),
                 const SizedBox(height: InhaleSpacing.sm),
                 GlassCard(
                   padding: const EdgeInsets.all(InhaleSpacing.sm),
                   child: Column(
-                    children:
-                        state.history.take(10).map((entry) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: InhaleSpacing.xs,
-                            ),
-                            child: Row(
-                              children: [
-                                if (entry.originalImage != null)
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(
-                                      InhaleRadius.sm,
+                    children: state.history.take(10).map((entry) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: InhaleSpacing.xs,
+                        ),
+                        child: Row(
+                          children: [
+                            if (entry.originalImage != null)
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(
+                                  InhaleRadius.sm,
+                                ),
+                                child: Image.file(
+                                  entry.originalImage!,
+                                  height: 36,
+                                  width: 36,
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                            else
+                              Icon(
+                                Icons.calculate_rounded,
+                                size: 24,
+                                color: isDark
+                                    ? InhaleColors.electricBlue
+                                    : InhaleColors.lightPrimaryBlue,
+                              ),
+                            const SizedBox(width: InhaleSpacing.sm),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    entry.expression,
+                                    style: InhaleTypography.bodySmall.copyWith(
+                                      color: isDark
+                                          ? InhaleColors.textSecondary
+                                          : InhaleColors.lightTextSecondary,
                                     ),
-                                    child: Image.file(
-                                      entry.originalImage!,
-                                      height: 36,
-                                      width: 36,
-                                      fit: BoxFit.cover,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  Text(
+                                    entry.answer,
+                                    style: InhaleTypography.bodySmall.copyWith(
+                                      color: isDark
+                                          ? InhaleColors.textPrimary
+                                          : InhaleColors.lightNavyText,
+                                      fontWeight: FontWeight.w500,
                                     ),
-                                  )
-                                else
-                                  Icon(
-                                    Icons.calculate_rounded,
-                                    size: 24,
-                                    color:
-                                        isDark
-                                            ? InhaleColors.electricBlue
-                                            : InhaleColors.lightPrimaryBlue,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                const SizedBox(width: InhaleSpacing.sm),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        entry.expression,
-                                        style: InhaleTypography.bodySmall
-                                            .copyWith(
-                                              color:
-                                                  isDark
-                                                      ? InhaleColors
-                                                          .textSecondary
-                                                      : InhaleColors
-                                                          .lightTextSecondary,
-                                            ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      Text(
-                                        entry.answer,
-                                        style: InhaleTypography.bodySmall
-                                            .copyWith(
-                                              color:
-                                                  isDark
-                                                      ? InhaleColors.textPrimary
-                                                      : InhaleColors
-                                                          .lightNavyText,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                IconButton(
-                                  icon: Icon(
-                                    Icons.refresh,
-                                    size: 20,
-                                    color:
-                                        isDark
-                                            ? InhaleColors.electricBlue
-                                            : InhaleColors.lightPrimaryBlue,
-                                  ),
-                                  tooltip: 'Load',
-                                  onPressed:
-                                      () => notifier.loadFromHistory(entry),
-                                ),
-                                IconButton(
-                                  icon: Icon(
-                                    Icons.delete,
-                                    size: 20,
-                                    color:
-                                        isDark
-                                            ? InhaleColors.error
-                                            : InhaleColors.pink,
-                                  ),
-                                  tooltip: 'Delete',
-                                  onPressed: () async {
-                                    final idx = state.history.indexOf(entry);
-                                    await notifier.removeFromHistory(idx);
-                                  },
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          );
-                        }).toList(),
+                            IconButton(
+                              icon: Icon(
+                                Icons.refresh,
+                                size: 20,
+                                color: isDark
+                                    ? InhaleColors.electricBlue
+                                    : InhaleColors.lightPrimaryBlue,
+                              ),
+                              tooltip: 'Load',
+                              onPressed: () => notifier.loadFromHistory(entry),
+                            ),
+                            IconButton(
+                              icon: Icon(
+                                Icons.delete,
+                                size: 20,
+                                color: isDark
+                                    ? InhaleColors.error
+                                    : InhaleColors.pink,
+                              ),
+                              tooltip: 'Delete',
+                              onPressed: () async {
+                                final idx = state.history.indexOf(entry);
+                                await notifier.removeFromHistory(idx);
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
                   ),
                 ),
                 const SizedBox(height: InhaleSpacing.md),

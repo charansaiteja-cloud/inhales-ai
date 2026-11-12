@@ -18,9 +18,8 @@ class GlassDialog extends StatelessWidget {
   }) {
     return showDialog<T>(
       context: context,
-      builder:
-          (context) =>
-              GlassDialog(title: title, content: content, actions: actions),
+      builder: (context) =>
+          GlassDialog(title: title, content: content, actions: actions),
     );
   }
 
@@ -36,15 +35,13 @@ class GlassDialog extends StatelessWidget {
           filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
           child: Container(
             decoration: BoxDecoration(
-              color:
-                  isDark
-                      ? InhaleColors.glassSurfaceHeavy
-                      : InhaleColors.lightGlassSurfaceMedium,
+              color: isDark
+                  ? InhaleColors.glassSurfaceHeavy
+                  : InhaleColors.lightGlassSurfaceMedium,
               border: Border.all(
-                color:
-                    isDark
-                        ? InhaleColors.glassBorder
-                        : InhaleColors.lightGlassBorder,
+                color: isDark
+                    ? InhaleColors.glassBorder
+                    : InhaleColors.lightGlassBorder,
                 width: 0.5,
               ),
             ),
@@ -58,10 +55,9 @@ class GlassDialog extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w600,
-                      color:
-                          isDark
-                              ? InhaleColors.textPrimary
-                              : InhaleColors.lightNavyText,
+                      color: isDark
+                          ? InhaleColors.textPrimary
+                          : InhaleColors.lightNavyText,
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -71,16 +67,15 @@ class GlassDialog extends StatelessWidget {
                   const SizedBox(height: 24),
                   Row(
                     mainAxisSize: MainAxisSize.min,
-                    children:
-                        actions!
-                            .toList()
-                            .map(
-                              (e) => Padding(
-                                padding: const EdgeInsets.only(right: 12),
-                                child: e,
-                              ),
-                            )
-                            .toList(),
+                    children: actions!
+                        .toList()
+                        .map(
+                          (e) => Padding(
+                            padding: const EdgeInsets.only(right: 12),
+                            child: e,
+                          ),
+                        )
+                        .toList(),
                   ),
                 ],
               ],

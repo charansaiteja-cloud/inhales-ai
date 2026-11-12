@@ -3,8 +3,8 @@ import '../../ai/engine/ffi_inference_engine.dart';
 
 final examSchedulesProvider =
     StateNotifierProvider<ExamSchedulesNotifier, List<ExamSchedule>>((ref) {
-      return ExamSchedulesNotifier();
-    });
+  return ExamSchedulesNotifier();
+});
 
 class ExamSchedulesNotifier extends StateNotifier<List<ExamSchedule>> {
   ExamSchedulesNotifier() : super([]);

@@ -73,78 +73,78 @@ sealed class ResponseMode {
 
 class _Balanced extends ResponseMode {
   const _Balanced()
-    : super(
-        id: 'balanced',
-        label: 'Balanced',
-        description: 'Clear, comprehensive answer with examples',
-        promptModifier: '',
-      );
+      : super(
+          id: 'balanced',
+          label: 'Balanced',
+          description: 'Clear, comprehensive answer with examples',
+          promptModifier: '',
+        );
 }
 
 class _ExplainSimply extends ResponseMode {
   const _ExplainSimply()
-    : super(
-        id: 'explain_simply',
-        label: 'Explain Simply',
-        description: 'Break down complex concepts with analogies',
-        promptModifier:
-            '\n\nExplain this as if teaching a curious 12-year-old. Use simple language, analogies, and avoid jargon.',
-      );
+      : super(
+          id: 'explain_simply',
+          label: 'Explain Simply',
+          description: 'Break down complex concepts with analogies',
+          promptModifier:
+              '\n\nExplain this as if teaching a curious 12-year-old. Use simple language, analogies, and avoid jargon.',
+        );
 }
 
 class _StepByStep extends ResponseMode {
   const _StepByStep()
-    : super(
-        id: 'step_by_step',
-        label: 'Step-by-Step',
-        description: 'Guided solution with numbered steps and checkpoints',
-        promptModifier:
-            '\n\nProvide a clear step-by-step solution. Number each step. Include checkpoints where the learner can verify understanding.',
-      );
+      : super(
+          id: 'step_by_step',
+          label: 'Step-by-Step',
+          description: 'Guided solution with numbered steps and checkpoints',
+          promptModifier:
+              '\n\nProvide a clear step-by-step solution. Number each step. Include checkpoints where the learner can verify understanding.',
+        );
 }
 
 class _Socratic extends ResponseMode {
   const _Socratic()
-    : super(
-        id: 'socratic',
-        label: 'Socratic Method',
-        description: 'Guide with questions instead of direct answers',
-        promptModifier:
-            '\n\nDo NOT give the direct answer. Instead, ask guiding questions that help the learner discover the answer themselves. Start with simpler questions and progress.',
-      );
+      : super(
+          id: 'socratic',
+          label: 'Socratic Method',
+          description: 'Guide with questions instead of direct answers',
+          promptModifier:
+              '\n\nDo NOT give the direct answer. Instead, ask guiding questions that help the learner discover the answer themselves. Start with simpler questions and progress.',
+        );
 }
 
 class _PracticeProblems extends ResponseMode {
   const _PracticeProblems()
-    : super(
-        id: 'practice_problems',
-        label: 'Practice Problems',
-        description: 'Generate similar problems for practice',
-        promptModifier:
-            '\n\nAfter explaining, generate 3 similar practice problems with increasing difficulty. Provide hints but not full solutions.',
-      );
+      : super(
+          id: 'practice_problems',
+          label: 'Practice Problems',
+          description: 'Generate similar problems for practice',
+          promptModifier:
+              '\n\nAfter explaining, generate 3 similar practice problems with increasing difficulty. Provide hints but not full solutions.',
+        );
 }
 
 class _ExamPrep extends ResponseMode {
   const _ExamPrep()
-    : super(
-        id: 'exam_prep',
-        label: 'Exam Prep',
-        description: 'Concise, high-yield format for exam review',
-        promptModifier:
-            '\n\nFormat as exam review notes: key concepts, formulas, common pitfalls, and 1-2 example questions with solutions.',
-      );
+      : super(
+          id: 'exam_prep',
+          label: 'Exam Prep',
+          description: 'Concise, high-yield format for exam review',
+          promptModifier:
+              '\n\nFormat as exam review notes: key concepts, formulas, common pitfalls, and 1-2 example questions with solutions.',
+        );
 }
 
 class _CodeTutor extends ResponseMode {
   const _CodeTutor()
-    : super(
-        id: 'code_tutor',
-        label: 'Code Tutor',
-        description: 'Explain code line-by-line with best practices',
-        promptModifier:
-            '\n\nExplain the code line-by-line. Highlight best practices, potential bugs, time/space complexity, and alternative approaches.',
-      );
+      : super(
+          id: 'code_tutor',
+          label: 'Code Tutor',
+          description: 'Explain code line-by-line with best practices',
+          promptModifier:
+              '\n\nExplain the code line-by-line. Highlight best practices, potential bugs, time/space complexity, and alternative approaches.',
+        );
 }
 
 /// Tutor personalities mapped to app modes.
@@ -176,7 +176,6 @@ RESPONSE STYLE:
       'Can you suggest a practice exercise?',
     ],
   ),
-
   'school': TutorPersonality(
     id: 'school_tutor',
     name: 'School Tutor (Grades 1-10)',
@@ -212,7 +211,6 @@ SAFETY:
       'Can we practice a similar problem?',
     ],
   ),
-
   'college': TutorPersonality(
     id: 'college_tutor',
     name: 'College Tutor (Undergrad)',
@@ -249,7 +247,6 @@ FOR ESSAYS/WRITING:
       'Can you suggest a textbook reference?',
     ],
   ),
-
   'coding': TutorPersonality(
     id: 'coding_tutor',
     name: 'Code Mentor',
@@ -290,7 +287,6 @@ DEBUGGING:
       'What design pattern applies here?',
     ],
   ),
-
   'math': TutorPersonality(
     id: 'math_tutor',
     name: 'Math Tutor',
@@ -327,7 +323,6 @@ COMMON PITFALLS TO ADDRESS:
       'Can you give a similar practice problem?',
     ],
   ),
-
   'writing': TutorPersonality(
     id: 'writing_tutor',
     name: 'Writing Coach',
@@ -364,7 +359,6 @@ PROFESSIONAL:
       'Can you critique my draft?',
     ],
   ),
-
   'translation': TutorPersonality(
     id: 'translation_tutor',
     name: 'Language Tutor',
@@ -401,7 +395,6 @@ CONVERSATION:
       'Practice a dialogue with me?',
     ],
   ),
-
   'vision': TutorPersonality(
     id: 'vision_tutor',
     name: 'Visual Learning Tutor',

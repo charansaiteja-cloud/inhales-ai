@@ -24,10 +24,9 @@ class TranslationScreen extends ConsumerWidget {
       appBar: GlassAppBar(title: 'Translation'),
       body: Container(
         decoration: BoxDecoration(
-          gradient:
-              isDark
-                  ? InhaleColors.gradientBackgroundDark
-                  : InhaleColors.gradientBackground,
+          gradient: isDark
+              ? InhaleColors.gradientBackgroundDark
+              : InhaleColors.gradientBackground,
         ),
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(InhaleSpacing.md),
@@ -45,30 +44,27 @@ class TranslationScreen extends ConsumerWidget {
                         underline: const SizedBox(),
                         icon: const Icon(Icons.keyboard_arrow_down_rounded),
                         style: InhaleTypography.titleMedium.copyWith(
-                          color:
-                              isDark
-                                  ? InhaleColors.textPrimary
-                                  : InhaleColors.lightNavyText,
+                          color: isDark
+                              ? InhaleColors.textPrimary
+                              : InhaleColors.lightNavyText,
                         ),
-                        dropdownColor:
-                            isDark
-                                ? InhaleColors.glassSurface
-                                : InhaleColors.lightGlassSurface,
-                        items:
-                            languages.entries
-                                .map(
-                                  (e) => DropdownMenuItem(
-                                    value: e.key,
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: InhaleSpacing.sm,
-                                        horizontal: InhaleSpacing.md,
-                                      ),
-                                      child: Text(e.value),
-                                    ),
+                        dropdownColor: isDark
+                            ? InhaleColors.glassSurface
+                            : InhaleColors.lightGlassSurface,
+                        items: languages.entries
+                            .map(
+                              (e) => DropdownMenuItem(
+                                value: e.key,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: InhaleSpacing.sm,
+                                    horizontal: InhaleSpacing.md,
                                   ),
-                                )
-                                .toList(),
+                                  child: Text(e.value),
+                                ),
+                              ),
+                            )
+                            .toList(),
                         onChanged: (v) {
                           if (v != null) {
                             notifier.setLanguages(v, state.targetLang);
@@ -81,10 +77,9 @@ class TranslationScreen extends ConsumerWidget {
                   GlassIconButton(
                     onTap: () => notifier.swapLanguages(),
                     icon: Icons.swap_horiz_rounded,
-                    color:
-                        isDark
-                            ? InhaleColors.electricBlue
-                            : InhaleColors.lightPrimaryBlue,
+                    color: isDark
+                        ? InhaleColors.electricBlue
+                        : InhaleColors.lightPrimaryBlue,
                   ),
                   const SizedBox(width: InhaleSpacing.sm),
                   Expanded(
@@ -96,30 +91,27 @@ class TranslationScreen extends ConsumerWidget {
                         underline: const SizedBox(),
                         icon: const Icon(Icons.keyboard_arrow_down_rounded),
                         style: InhaleTypography.titleMedium.copyWith(
-                          color:
-                              isDark
-                                  ? InhaleColors.textPrimary
-                                  : InhaleColors.lightNavyText,
+                          color: isDark
+                              ? InhaleColors.textPrimary
+                              : InhaleColors.lightNavyText,
                         ),
-                        dropdownColor:
-                            isDark
-                                ? InhaleColors.glassSurface
-                                : InhaleColors.lightGlassSurface,
-                        items:
-                            languages.entries
-                                .map(
-                                  (e) => DropdownMenuItem(
-                                    value: e.key,
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: InhaleSpacing.sm,
-                                        horizontal: InhaleSpacing.md,
-                                      ),
-                                      child: Text(e.value),
-                                    ),
+                        dropdownColor: isDark
+                            ? InhaleColors.glassSurface
+                            : InhaleColors.lightGlassSurface,
+                        items: languages.entries
+                            .map(
+                              (e) => DropdownMenuItem(
+                                value: e.key,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: InhaleSpacing.sm,
+                                    horizontal: InhaleSpacing.md,
                                   ),
-                                )
-                                .toList(),
+                                  child: Text(e.value),
+                                ),
+                              ),
+                            )
+                            .toList(),
                         onChanged: (v) {
                           if (v != null) {
                             notifier.setLanguages(state.sourceLang, v);
@@ -136,10 +128,9 @@ class TranslationScreen extends ConsumerWidget {
               Text(
                 'Source Text',
                 style: InhaleTypography.titleMedium.copyWith(
-                  color:
-                      isDark
-                          ? InhaleColors.textPrimary
-                          : InhaleColors.lightNavyText,
+                  color: isDark
+                      ? InhaleColors.textPrimary
+                      : InhaleColors.lightNavyText,
                 ),
               ),
               const SizedBox(height: InhaleSpacing.sm),
@@ -158,10 +149,9 @@ class TranslationScreen extends ConsumerWidget {
               GlassButton(
                 width: double.infinity,
                 label: state.isTranslating ? 'Translating...' : 'Translate',
-                onTap:
-                    state.inputText.isNotEmpty
-                        ? () => notifier.translate(state.inputText)
-                        : null,
+                onTap: state.inputText.isNotEmpty
+                    ? () => notifier.translate(state.inputText)
+                    : null,
                 glow: state.inputText.isNotEmpty,
               ),
               const SizedBox(height: InhaleSpacing.lg),
@@ -170,10 +160,9 @@ class TranslationScreen extends ConsumerWidget {
               Text(
                 'Translation',
                 style: InhaleTypography.titleMedium.copyWith(
-                  color:
-                      isDark
-                          ? InhaleColors.textPrimary
-                          : InhaleColors.lightNavyText,
+                  color: isDark
+                      ? InhaleColors.textPrimary
+                      : InhaleColors.lightNavyText,
                 ),
               ),
               const SizedBox(height: InhaleSpacing.sm),
@@ -184,20 +173,17 @@ class TranslationScreen extends ConsumerWidget {
                   state.translatedText.isNotEmpty
                       ? state.translatedText
                       : 'Translation will appear here.',
-                  style:
-                      state.translatedText.isNotEmpty
-                          ? InhaleTypography.bodyLarge.copyWith(
-                            color:
-                                isDark
-                                    ? InhaleColors.textPrimary
-                                    : InhaleColors.lightNavyText,
-                          )
-                          : InhaleTypography.bodyMedium.copyWith(
-                            color:
-                                isDark
-                                    ? InhaleColors.textMuted
-                                    : InhaleColors.lightTextMuted,
-                          ),
+                  style: state.translatedText.isNotEmpty
+                      ? InhaleTypography.bodyLarge.copyWith(
+                          color: isDark
+                              ? InhaleColors.textPrimary
+                              : InhaleColors.lightNavyText,
+                        )
+                      : InhaleTypography.bodyMedium.copyWith(
+                          color: isDark
+                              ? InhaleColors.textMuted
+                              : InhaleColors.lightTextMuted,
+                        ),
                 ),
               ),
 
@@ -207,96 +193,83 @@ class TranslationScreen extends ConsumerWidget {
                 Text(
                   'History',
                   style: InhaleTypography.titleMedium.copyWith(
-                    color:
-                        isDark
-                            ? InhaleColors.textPrimary
-                            : InhaleColors.lightNavyText,
+                    color: isDark
+                        ? InhaleColors.textPrimary
+                        : InhaleColors.lightNavyText,
                   ),
                 ),
                 const SizedBox(height: InhaleSpacing.sm),
                 GlassCard(
                   padding: const EdgeInsets.all(InhaleSpacing.sm),
                   child: Column(
-                    children:
-                        state.history.take(5).map((entry) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: InhaleSpacing.xs,
+                    children: state.history.take(5).map((entry) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: InhaleSpacing.xs,
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: isDark
+                                    ? InhaleColors.electricBlue
+                                        .withValues(alpha: 0.15)
+                                    : InhaleColors.lightPrimaryBlue
+                                        .withValues(alpha: 0.1),
+                                borderRadius: BorderRadius.circular(
+                                  InhaleRadius.sm,
+                                ),
+                              ),
+                              child: Icon(
+                                Icons.translate_rounded,
+                                size: 16,
+                                color: isDark
+                                    ? InhaleColors.electricBlue
+                                    : InhaleColors.lightPrimaryBlue,
+                              ),
                             ),
-                            child: Row(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                    color:
-                                        isDark
-                                            ? InhaleColors.electricBlue
-                                                .withValues(alpha: 0.15)
-                                            : InhaleColors.lightPrimaryBlue
-                                                .withValues(alpha: 0.1),
-                                    borderRadius: BorderRadius.circular(
-                                      InhaleRadius.sm,
+                            const SizedBox(width: InhaleSpacing.sm),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    entry.source,
+                                    style: InhaleTypography.bodySmall.copyWith(
+                                      color: isDark
+                                          ? InhaleColors.textSecondary
+                                          : InhaleColors.lightTextSecondary,
                                     ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                  child: Icon(
-                                    Icons.translate_rounded,
-                                    size: 16,
-                                    color:
-                                        isDark
-                                            ? InhaleColors.electricBlue
-                                            : InhaleColors.lightPrimaryBlue,
+                                  Text(
+                                    entry.translated,
+                                    style: InhaleTypography.bodySmall.copyWith(
+                                      color: isDark
+                                          ? InhaleColors.textPrimary
+                                          : InhaleColors.lightNavyText,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                ),
-                                const SizedBox(width: InhaleSpacing.sm),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        entry.source,
-                                        style: InhaleTypography.bodySmall
-                                            .copyWith(
-                                              color:
-                                                  isDark
-                                                      ? InhaleColors
-                                                          .textSecondary
-                                                      : InhaleColors
-                                                          .lightTextSecondary,
-                                            ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      Text(
-                                        entry.translated,
-                                        style: InhaleTypography.bodySmall
-                                            .copyWith(
-                                              color:
-                                                  isDark
-                                                      ? InhaleColors.textPrimary
-                                                      : InhaleColors
-                                                          .lightNavyText,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Text(
-                                  '${entry.sourceLang} → ${entry.targetLang}',
-                                  style: InhaleTypography.labelSmall.copyWith(
-                                    color:
-                                        isDark
-                                            ? InhaleColors.textMuted
-                                            : InhaleColors.lightTextMuted,
-                                  ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          );
-                        }).toList(),
+                            Text(
+                              '${entry.sourceLang} → ${entry.targetLang}',
+                              style: InhaleTypography.labelSmall.copyWith(
+                                color: isDark
+                                    ? InhaleColors.textMuted
+                                    : InhaleColors.lightTextMuted,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
                   ),
                 ),
               ],

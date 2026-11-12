@@ -34,16 +34,15 @@ class StudyPlanScreen extends ConsumerWidget {
 
     return Scaffold(
       body: _StudyPlanBody(state: state, isDark: isDark, isMobile: isMobile),
-      floatingActionButton:
-          !isMobile
-              ? null
-              : FloatingActionButton.extended(
-                onPressed: () => _showCreatePlanDialog(context, ref),
-                icon: const Icon(Icons.add_rounded),
-                label: const Text('New Plan'),
-                backgroundColor: InhaleColors.blue,
-                foregroundColor: Colors.white,
-              ),
+      floatingActionButton: !isMobile
+          ? null
+          : FloatingActionButton.extended(
+              onPressed: () => _showCreatePlanDialog(context, ref),
+              icon: const Icon(Icons.add_rounded),
+              label: const Text('New Plan'),
+              backgroundColor: InhaleColors.blue,
+              foregroundColor: Colors.white,
+            ),
     );
   }
 
@@ -79,10 +78,9 @@ class _StudyPlanBody extends ConsumerWidget {
 
     return Container(
       decoration: BoxDecoration(
-        gradient:
-            isDark
-                ? InhaleColors.gradientBackgroundDark
-                : InhaleColors.gradientBackground,
+        gradient: isDark
+            ? InhaleColors.gradientBackgroundDark
+            : InhaleColors.gradientBackground,
       ),
       child: CustomScrollView(
         slivers: [
@@ -126,20 +124,18 @@ class _StudyPlanBody extends ConsumerWidget {
                   const Spacer(),
                   if (!isMobile)
                     GlassButton(
-                      onTap:
-                          () => StudyPlanScreen()._showCreatePlanDialog(
-                            context,
-                            ref,
-                          ),
+                      onTap: () => StudyPlanScreen()._showCreatePlanDialog(
+                        context,
+                        ref,
+                      ),
                       label: 'New Plan',
                     ),
                   if (isMobile)
                     IconButton(
-                      onPressed:
-                          () => StudyPlanScreen()._showCreatePlanDialog(
-                            context,
-                            ref,
-                          ),
+                      onPressed: () => StudyPlanScreen()._showCreatePlanDialog(
+                        context,
+                        ref,
+                      ),
                       icon: Icon(Icons.add_rounded, color: primaryText),
                     ),
                 ],
@@ -393,10 +389,9 @@ class _TodayAgenda extends ConsumerWidget {
               child: Text(
                 'Nothing scheduled for today',
                 style: InhaleTypography.bodyMedium.copyWith(
-                  color:
-                      isDark
-                          ? InhaleColors.textMuted
-                          : InhaleColors.lightTextMuted,
+                  color: isDark
+                      ? InhaleColors.textMuted
+                      : InhaleColors.lightTextMuted,
                 ),
               ),
             )
@@ -456,12 +451,11 @@ class _AgendaItem extends ConsumerWidget {
                 Text(
                   item.title,
                   style: InhaleTypography.bodyMedium.copyWith(
-                    color:
-                        item.isCompleted
-                            ? (isDark
-                                ? InhaleColors.textMuted
-                                : InhaleColors.lightTextMuted)
-                            : primaryText,
+                    color: item.isCompleted
+                        ? (isDark
+                            ? InhaleColors.textMuted
+                            : InhaleColors.lightTextMuted)
+                        : primaryText,
                     decoration:
                         item.isCompleted ? TextDecoration.lineThrough : null,
                   ),
@@ -508,122 +502,115 @@ class _AgendaItem extends ConsumerWidget {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder:
-          (ctx) => GlassDialog(
-            title: 'Log Study Session',
-            content: StatefulBuilder(
-              builder:
-                  (ctx2, setModalState) => Padding(
-                    padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom,
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        GlassTextField(
-                          labelText: 'Duration (minutes)',
-                          hintText: item.estimatedMinutes.toString(),
-                          controller: durationCtrl,
-                          keyboardType: TextInputType.number,
-                        ),
-                        const SizedBox(height: InhaleSpacing.sm),
-                        GlassTextField(
-                          labelText: 'Notes (optional)',
-                          hintText: 'What did you learn?',
-                          controller: notesCtrl,
-                          maxLines: 3,
-                        ),
-                        const SizedBox(height: InhaleSpacing.sm),
-                        Text(
-                          'Focus Score',
-                          style: InhaleTypography.bodyMedium.copyWith(
-                            color:
-                                isDark
-                                    ? InhaleColors.textPrimary
-                                    : InhaleColors.lightNavyText,
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: List.generate(10, (i) {
-                            final score = i + 1;
-                            final isSelected = focusScore.value == score;
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 2,
-                              ),
-                              child: ChoiceChip(
-                                label: Text(score.toString()),
-                                selected: isSelected,
-                                onSelected:
-                                    (v) => focusScore.value = v ? score : null,
-                                selectedColor: InhaleColors.blue,
-                                labelStyle: TextStyle(
-                                  color:
-                                      isSelected
-                                          ? Colors.white
-                                          : (isDark
-                                              ? InhaleColors.textPrimary
-                                              : InhaleColors.lightNavyText),
-                                  fontSize: 12,
-                                ),
-                                visualDensity: VisualDensity.compact,
-                              ),
-                            );
-                          }),
-                        ),
-                        const SizedBox(height: InhaleSpacing.md),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: GlassButton(
-                                onTap: () {
-                                  Navigator.pop(ctx2);
-                                  Navigator.pop(context);
-                                },
-                                label: 'Cancel',
-                                outlined: true,
-                              ),
-                            ),
-                            const SizedBox(width: InhaleSpacing.sm),
-                            Expanded(
-                              child: GlassButton(
-                                onTap: () async {
-                                  final duration =
-                                      int.tryParse(durationCtrl.text) ??
-                                      item.estimatedMinutes;
-
-                                  // Start and immediately stop a session to log it
-                                  final sessionId = await notifier.startSession(
-                                    planItemId: item.id,
-                                    activityType: item.type,
-                                  );
-                                  if (sessionId > 0) {
-                                    await notifier.stopSession(
-                                      sessionId: sessionId,
-                                      durationMinutes: duration,
-                                      focusScore: focusScore.value,
-                                      notes:
-                                          notesCtrl.text.isEmpty
-                                              ? null
-                                              : notesCtrl.text,
-                                    );
-                                  }
-                                  // Also mark the item as completed
-                                  await notifier.completeItem(item.id);
-                                  if (context.mounted) Navigator.pop(context);
-                                },
-                                label: 'Complete',
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: InhaleSpacing.sm),
-                      ],
-                    ),
+      builder: (ctx) => GlassDialog(
+        title: 'Log Study Session',
+        content: StatefulBuilder(
+          builder: (ctx2, setModalState) => Padding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                GlassTextField(
+                  labelText: 'Duration (minutes)',
+                  hintText: item.estimatedMinutes.toString(),
+                  controller: durationCtrl,
+                  keyboardType: TextInputType.number,
+                ),
+                const SizedBox(height: InhaleSpacing.sm),
+                GlassTextField(
+                  labelText: 'Notes (optional)',
+                  hintText: 'What did you learn?',
+                  controller: notesCtrl,
+                  maxLines: 3,
+                ),
+                const SizedBox(height: InhaleSpacing.sm),
+                Text(
+                  'Focus Score',
+                  style: InhaleTypography.bodyMedium.copyWith(
+                    color: isDark
+                        ? InhaleColors.textPrimary
+                        : InhaleColors.lightNavyText,
                   ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(10, (i) {
+                    final score = i + 1;
+                    final isSelected = focusScore.value == score;
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 2,
+                      ),
+                      child: ChoiceChip(
+                        label: Text(score.toString()),
+                        selected: isSelected,
+                        onSelected: (v) => focusScore.value = v ? score : null,
+                        selectedColor: InhaleColors.blue,
+                        labelStyle: TextStyle(
+                          color: isSelected
+                              ? Colors.white
+                              : (isDark
+                                  ? InhaleColors.textPrimary
+                                  : InhaleColors.lightNavyText),
+                          fontSize: 12,
+                        ),
+                        visualDensity: VisualDensity.compact,
+                      ),
+                    );
+                  }),
+                ),
+                const SizedBox(height: InhaleSpacing.md),
+                Row(
+                  children: [
+                    Expanded(
+                      child: GlassButton(
+                        onTap: () {
+                          Navigator.pop(ctx2);
+                          Navigator.pop(context);
+                        },
+                        label: 'Cancel',
+                        outlined: true,
+                      ),
+                    ),
+                    const SizedBox(width: InhaleSpacing.sm),
+                    Expanded(
+                      child: GlassButton(
+                        onTap: () async {
+                          final duration = int.tryParse(durationCtrl.text) ??
+                              item.estimatedMinutes;
+
+                          // Start and immediately stop a session to log it
+                          final sessionId = await notifier.startSession(
+                            planItemId: item.id,
+                            activityType: item.type,
+                          );
+                          if (sessionId > 0) {
+                            await notifier.stopSession(
+                              sessionId: sessionId,
+                              durationMinutes: duration,
+                              focusScore: focusScore.value,
+                              notes: notesCtrl.text.isEmpty
+                                  ? null
+                                  : notesCtrl.text,
+                            );
+                          }
+                          // Also mark the item as completed
+                          await notifier.completeItem(item.id);
+                          if (context.mounted) Navigator.pop(context);
+                        },
+                        label: 'Complete',
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: InhaleSpacing.sm),
+              ],
             ),
           ),
+        ),
+      ),
     );
   }
 
@@ -773,10 +760,9 @@ class _PlanCardState extends ConsumerState<_PlanCard> {
                   _expanded
                       ? Icons.expand_less_rounded
                       : Icons.expand_more_rounded,
-                  color:
-                      widget.isDark
-                          ? InhaleColors.textSecondary
-                          : InhaleColors.lightTextSecondary,
+                  color: widget.isDark
+                      ? InhaleColors.textSecondary
+                      : InhaleColors.lightTextSecondary,
                 ),
               ),
               IconButton(
@@ -810,32 +796,31 @@ class _PlanCardState extends ConsumerState<_PlanCard> {
             Wrap(
               spacing: InhaleSpacing.xs,
               runSpacing: InhaleSpacing.xs,
-              children:
-                  widget.plan.goals
-                      .take(3)
-                      .map(
-                        (g) => Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 3,
-                          ),
-                          decoration: BoxDecoration(
-                            color: InhaleColors.blue.withValues(alpha: 0.12),
-                            borderRadius: BorderRadius.circular(
-                              InhaleRadius.xs,
-                            ),
-                          ),
-                          child: Text(
-                            g,
-                            style: InhaleTypography.labelSmall.copyWith(
-                              color: InhaleColors.blue,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+              children: widget.plan.goals
+                  .take(3)
+                  .map(
+                    (g) => Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 3,
+                      ),
+                      decoration: BoxDecoration(
+                        color: InhaleColors.blue.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(
+                          InhaleRadius.xs,
                         ),
-                      )
-                      .toList(),
+                      ),
+                      child: Text(
+                        g,
+                        style: InhaleTypography.labelSmall.copyWith(
+                          color: InhaleColors.blue,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  )
+                  .toList(),
             ),
           ],
 
@@ -843,9 +828,7 @@ class _PlanCardState extends ConsumerState<_PlanCard> {
           if (_expanded && widget.items.isNotEmpty) ...[
             const SizedBox(height: InhaleSpacing.md),
             Divider(color: mutedText.withValues(alpha: 0.3)),
-            ...widget.items
-                .take(20)
-                .map(
+            ...widget.items.take(20).map(
                   (item) => Padding(
                     padding: const EdgeInsets.only(top: InhaleSpacing.xs),
                     child: _PlanItemRow(item: item, isDark: widget.isDark),
@@ -872,48 +855,46 @@ class _PlanCardState extends ConsumerState<_PlanCard> {
   void _confirmDelete(BuildContext context) {
     showDialog<void>(
       context: context,
-      builder:
-          (ctx) => GlassDialog(
-            title: 'Delete Plan',
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
+      builder: (ctx) => GlassDialog(
+        title: 'Delete Plan',
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Are you sure you want to delete "${widget.plan.name}"?',
+              style: InhaleTypography.bodyMedium.copyWith(
+                color: widget.isDark
+                    ? InhaleColors.textSecondary
+                    : InhaleColors.lightTextSecondary,
+              ),
+            ),
+            const SizedBox(height: InhaleSpacing.md),
+            Row(
               children: [
-                Text(
-                  'Are you sure you want to delete "${widget.plan.name}"?',
-                  style: InhaleTypography.bodyMedium.copyWith(
-                    color:
-                        widget.isDark
-                            ? InhaleColors.textSecondary
-                            : InhaleColors.lightTextSecondary,
+                Expanded(
+                  child: GlassButton(
+                    onTap: () => Navigator.pop(ctx),
+                    label: 'Cancel',
+                    outlined: true,
                   ),
                 ),
-                const SizedBox(height: InhaleSpacing.md),
-                Row(
-                  children: [
-                    Expanded(
-                      child: GlassButton(
-                        onTap: () => Navigator.pop(ctx),
-                        label: 'Cancel',
-                        outlined: true,
-                      ),
-                    ),
-                    const SizedBox(width: InhaleSpacing.sm),
-                    Expanded(
-                      child: GlassButton(
-                        onTap: () {
-                          ref
-                              .read(studyPlanProvider.notifier)
-                              .deletePlan(widget.plan.id);
-                          Navigator.pop(ctx);
-                        },
-                        label: 'Delete',
-                      ),
-                    ),
-                  ],
+                const SizedBox(width: InhaleSpacing.sm),
+                Expanded(
+                  child: GlassButton(
+                    onTap: () {
+                      ref
+                          .read(studyPlanProvider.notifier)
+                          .deletePlan(widget.plan.id);
+                      Navigator.pop(ctx);
+                    },
+                    label: 'Delete',
+                  ),
                 ),
               ],
             ),
-          ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -1280,20 +1261,17 @@ class _CreatePlanDialogState extends ConsumerState<_CreatePlanDialog> {
   void _submit() {
     if (_nameCtrl.text.trim().isEmpty) return;
 
-    final goals =
-        _goalsCtrl.text
-            .split(',')
-            .map((s) => s.trim())
-            .where((s) => s.isNotEmpty)
-            .toList();
+    final goals = _goalsCtrl.text
+        .split(',')
+        .map((s) => s.trim())
+        .where((s) => s.isNotEmpty)
+        .toList();
 
     if (goals.isEmpty) goals.add('Learn new topics');
 
     final hours = int.tryParse(_hoursCtrl.text) ?? 10;
 
-    ref
-        .read(studyPlanProvider.notifier)
-        .createPlan(
+    ref.read(studyPlanProvider.notifier).createPlan(
           name: _nameCtrl.text.trim(),
           goals: goals,
           startDate: _startDate,

@@ -154,18 +154,16 @@ class _DesktopLayoutState extends ConsumerState<DesktopLayout> {
             AnimatedContainer(
               duration: const Duration(milliseconds: 250),
               curve: Curves.easeInOutCubic,
-              width:
-                  _sidebarCollapsed
-                      ? AppSpacing.sidebarWidthCollapsed
-                      : AppSpacing.sidebarWidth,
+              width: _sidebarCollapsed
+                  ? AppSpacing.sidebarWidthCollapsed
+                  : AppSpacing.sidebarWidth,
               child: AppSidebar(
                 items: widget.sidebarItems!,
                 selectedIndex: widget.selectedIndex,
                 onItemSelected: widget.onSidebarItemSelected,
                 isCollapsed: _sidebarCollapsed,
-                onToggleCollapse:
-                    () =>
-                        setState(() => _sidebarCollapsed = !_sidebarCollapsed),
+                onToggleCollapse: () =>
+                    setState(() => _sidebarCollapsed = !_sidebarCollapsed),
                 header: widget.header,
                 footer: widget.footer,
               ),
@@ -200,10 +198,9 @@ class _DesktopLayoutState extends ConsumerState<DesktopLayout> {
       surfaceTintColor: Colors.transparent,
       elevation: 0,
       scrolledUnderElevation: 1,
-      shadowColor:
-          Theme.of(context).brightness == Brightness.dark
-              ? AppColors.lightShadow
-              : AppColors.lightShadow,
+      shadowColor: Theme.of(context).brightness == Brightness.dark
+          ? AppColors.lightShadow
+          : AppColors.lightShadow,
       toolbarHeight: AppSpacing.headerHeight,
       title: widget.header,
       actions: [
@@ -326,19 +323,17 @@ class _TabletLayoutState extends ConsumerState<TabletLayout> {
       surfaceTintColor: Colors.transparent,
       elevation: 0,
       scrolledUnderElevation: 1,
-      shadowColor:
-          Theme.of(context).brightness == Brightness.dark
-              ? AppColors.lightShadow
-              : AppColors.lightShadow,
+      shadowColor: Theme.of(context).brightness == Brightness.dark
+          ? AppColors.lightShadow
+          : AppColors.lightShadow,
       toolbarHeight: AppSpacing.headerHeight,
-      leading:
-          hasSidebar
-              ? IconButton(
-                icon: Icon(Icons.menu_rounded, color: cs.onSurface),
-                onPressed: () => setState(() => _showSidebar = true),
-                tooltip: 'Open menu',
-              )
-              : null,
+      leading: hasSidebar
+          ? IconButton(
+              icon: Icon(Icons.menu_rounded, color: cs.onSurface),
+              onPressed: () => setState(() => _showSidebar = true),
+              tooltip: 'Open menu',
+            )
+          : null,
       title: widget.header,
       actions: [
         if (widget.onSidebarToggle != null)
@@ -405,40 +400,35 @@ class _MobileLayoutState extends ConsumerState<MobileLayout> {
     final cs = theme.colorScheme;
     final hasDrawer =
         widget.drawerItems != null && widget.drawerItems!.isNotEmpty;
-    final hasBottomNav =
-        widget.showBottomNav &&
+    final hasBottomNav = widget.showBottomNav &&
         widget.bottomNavItems != null &&
         widget.bottomNavItems!.isNotEmpty;
 
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: widget.backgroundColor ?? cs.surface,
-      appBar:
-          widget.showAppBar
-              ? (widget.appBar ??
-                  _buildDefaultAppBar(context, cs, hasDrawer, widget.header))
-              : null,
-      drawer:
-          hasDrawer
-              ? AppNavigationDrawer(
-                selectedIndex: widget.selectedIndex,
-                onItemSelected: widget.onItemSelected ?? (_) {},
-                items: widget.drawerItems!,
-                header: widget.header,
-              )
-              : null,
+      appBar: widget.showAppBar
+          ? (widget.appBar ??
+              _buildDefaultAppBar(context, cs, hasDrawer, widget.header))
+          : null,
+      drawer: hasDrawer
+          ? AppNavigationDrawer(
+              selectedIndex: widget.selectedIndex,
+              onItemSelected: widget.onItemSelected ?? (_) {},
+              items: widget.drawerItems!,
+              header: widget.header,
+            )
+          : null,
       body: Container(color: cs.surface, child: widget.child),
-      bottomNavigationBar:
-          hasBottomNav
-              ? AppBottomNavigationBar(
-                currentIndex: widget.bottomNavIndex,
-                onTap: widget.onBottomNavTap ?? (_) {},
-                items: widget.bottomNavItems!,
-              )
-              : null,
+      bottomNavigationBar: hasBottomNav
+          ? AppBottomNavigationBar(
+              currentIndex: widget.bottomNavIndex,
+              onTap: widget.onBottomNavTap ?? (_) {},
+              items: widget.bottomNavItems!,
+            )
+          : null,
       floatingActionButton: widget.floatingActionButton,
-      floatingActionButtonLocation:
-          widget.floatingActionButtonLocation ??
+      floatingActionButtonLocation: widget.floatingActionButtonLocation ??
           FloatingActionButtonLocation.endFloat,
     );
   }
@@ -454,19 +444,17 @@ class _MobileLayoutState extends ConsumerState<MobileLayout> {
       surfaceTintColor: Colors.transparent,
       elevation: 0,
       scrolledUnderElevation: 1,
-      shadowColor:
-          Theme.of(context).brightness == Brightness.dark
-              ? AppColors.lightShadow
-              : AppColors.lightShadow,
+      shadowColor: Theme.of(context).brightness == Brightness.dark
+          ? AppColors.lightShadow
+          : AppColors.lightShadow,
       toolbarHeight: AppSpacing.mobileTopBarHeight,
-      leading:
-          hasDrawer
-              ? IconButton(
-                icon: Icon(Icons.menu_rounded, color: cs.onSurface),
-                onPressed: () => _scaffoldKey.currentState?.openDrawer(),
-                tooltip: 'Open menu',
-              )
-              : null,
+      leading: hasDrawer
+          ? IconButton(
+              icon: Icon(Icons.menu_rounded, color: cs.onSurface),
+              onPressed: () => _scaffoldKey.currentState?.openDrawer(),
+              tooltip: 'Open menu',
+            )
+          : null,
       title: header,
       centerTitle: false,
     );
@@ -658,19 +646,18 @@ class ResponsiveRow extends StatelessWidget {
       alignment: wrapAlignment,
       textDirection: textDirection,
       verticalDirection: verticalDirection,
-      children:
-          children.map((child) {
-            if (minWidth != null || maxWidth != null) {
-              return ConstrainedBox(
-                constraints: BoxConstraints(
-                  minWidth: minWidth ?? 0,
-                  maxWidth: maxWidth ?? double.infinity,
-                ),
-                child: child,
-              );
-            }
-            return child;
-          }).toList(),
+      children: children.map((child) {
+        if (minWidth != null || maxWidth != null) {
+          return ConstrainedBox(
+            constraints: BoxConstraints(
+              minWidth: minWidth ?? 0,
+              maxWidth: maxWidth ?? double.infinity,
+            ),
+            child: child,
+          );
+        }
+        return child;
+      }).toList(),
     );
   }
 }

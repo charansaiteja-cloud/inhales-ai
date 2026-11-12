@@ -161,8 +161,7 @@ class Chapters extends Table {
   DateTimeColumn get createdAt => dateTime()();
   DateTimeColumn get updatedAt => dateTime()();
 
-  List<Index> get indexes =>
-      {
+  List<Index> get indexes => {
         Index(
           'idx_chapters_subject',
           'CREATE INDEX idx_chapters_subject ON chapters(subject_id)',
@@ -188,8 +187,7 @@ class Topics extends Table {
   DateTimeColumn get createdAt => dateTime()();
   DateTimeColumn get updatedAt => dateTime()();
 
-  List<Index> get indexes =>
-      {
+  List<Index> get indexes => {
         Index(
           'idx_topics_chapter',
           'CREATE INDEX idx_topics_chapter ON topics(chapter_id)',
@@ -202,14 +200,12 @@ class LearningResources extends Table {
   @override
   String get tableName => 'learning_resources';
   IntColumn get id => integer().autoIncrement()();
-  IntColumn get topicId =>
-      integer()
-          .references(Topics, #id, onDelete: KeyAction.cascade)
-          .nullable()();
-  IntColumn get subjectId =>
-      integer()
-          .references(Subjects, #id, onDelete: KeyAction.cascade)
-          .nullable()();
+  IntColumn get topicId => integer()
+      .references(Topics, #id, onDelete: KeyAction.cascade)
+      .nullable()();
+  IntColumn get subjectId => integer()
+      .references(Subjects, #id, onDelete: KeyAction.cascade)
+      .nullable()();
   TextColumn get title => text()();
   TextColumn get type =>
       text()(); // 'document', 'video', 'link', 'note', 'quiz', 'flashcard_set'
@@ -222,8 +218,7 @@ class LearningResources extends Table {
   BoolColumn get isFavorite => boolean().withDefault(const Constant(false))();
   DateTimeColumn get createdAt => dateTime()();
   DateTimeColumn get updatedAt => dateTime()();
-  List<Index> get indexes =>
-      {
+  List<Index> get indexes => {
         Index(
           'idx_learning_resources_topic',
           'CREATE INDEX idx_learning_resources_topic ON learning_resources(topic_id)',
@@ -238,14 +233,12 @@ class FlashcardDecks extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get name => text()();
   TextColumn get description => text().nullable()();
-  IntColumn get subjectId =>
-      integer()
-          .references(Subjects, #id, onDelete: KeyAction.setNull)
-          .nullable()();
-  IntColumn get topicId =>
-      integer()
-          .references(Topics, #id, onDelete: KeyAction.setNull)
-          .nullable()();
+  IntColumn get subjectId => integer()
+      .references(Subjects, #id, onDelete: KeyAction.setNull)
+      .nullable()();
+  IntColumn get topicId => integer()
+      .references(Topics, #id, onDelete: KeyAction.setNull)
+      .nullable()();
   TextColumn get sourceDocumentId =>
       text().nullable()(); // Link to Documents table
   IntColumn get cardCount => integer().withDefault(const Constant(0))();
@@ -280,8 +273,7 @@ class Flashcards extends Table {
   DateTimeColumn get createdAt => dateTime()();
   DateTimeColumn get updatedAt => dateTime()();
 
-  List<Index> get indexes =>
-      {
+  List<Index> get indexes => {
         Index(
           'idx_flashcards_deck_due',
           'CREATE INDEX idx_flashcards_deck_due ON flashcards(deck_id, due_date)',
@@ -335,14 +327,12 @@ class StudyPlanItems extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get planId =>
       integer().references(StudyPlans, #id, onDelete: KeyAction.cascade)();
-  IntColumn get topicId =>
-      integer()
-          .references(Topics, #id, onDelete: KeyAction.cascade)
-          .nullable()();
-  IntColumn get resourceId =>
-      integer()
-          .references(LearningResources, #id, onDelete: KeyAction.setNull)
-          .nullable()();
+  IntColumn get topicId => integer()
+      .references(Topics, #id, onDelete: KeyAction.cascade)
+      .nullable()();
+  IntColumn get resourceId => integer()
+      .references(LearningResources, #id, onDelete: KeyAction.setNull)
+      .nullable()();
   TextColumn get title => text()();
   TextColumn get type =>
       text()(); // 'read', 'video', 'quiz', 'flashcard', 'practice', 'review'
@@ -353,8 +343,7 @@ class StudyPlanItems extends Table {
   DateTimeColumn get completedAt => dateTime().nullable()();
   DateTimeColumn get createdAt => dateTime()();
 
-  List<Index> get indexes =>
-      {
+  List<Index> get indexes => {
         Index(
           'idx_study_plan_items_plan',
           'CREATE INDEX idx_study_plan_items_plan ON study_plan_items(plan_id)',
@@ -367,18 +356,15 @@ class StudySessions extends Table {
   @override
   String get tableName => 'study_sessions';
   IntColumn get id => integer().autoIncrement()();
-  IntColumn get planId =>
-      integer()
-          .references(StudyPlans, #id, onDelete: KeyAction.setNull)
-          .nullable()();
-  IntColumn get planItemId =>
-      integer()
-          .references(StudyPlanItems, #id, onDelete: KeyAction.setNull)
-          .nullable()();
-  IntColumn get topicId =>
-      integer()
-          .references(Topics, #id, onDelete: KeyAction.setNull)
-          .nullable()();
+  IntColumn get planId => integer()
+      .references(StudyPlans, #id, onDelete: KeyAction.setNull)
+      .nullable()();
+  IntColumn get planItemId => integer()
+      .references(StudyPlanItems, #id, onDelete: KeyAction.setNull)
+      .nullable()();
+  IntColumn get topicId => integer()
+      .references(Topics, #id, onDelete: KeyAction.setNull)
+      .nullable()();
   TextColumn get activityType =>
       text()(); // 'reading', 'video', 'quiz', 'flashcard', 'practice', 'review'
   IntColumn get durationMinutes => integer()();
@@ -387,8 +373,7 @@ class StudySessions extends Table {
   DateTimeColumn get startedAt => dateTime()();
   DateTimeColumn get endedAt => dateTime()();
 
-  List<Index> get indexes =>
-      {
+  List<Index> get indexes => {
         Index(
           'idx_study_sessions_date',
           'CREATE INDEX idx_study_sessions_date ON study_sessions(started_at)',
@@ -403,9 +388,8 @@ class ExamSchedules extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get name => text()();
   TextColumn get subject => text().nullable()();
-  TextColumn get examType =>
-      text()
-          .nullable()(); // 'midterm', 'final', 'quiz', 'certification', 'custom'
+  TextColumn get examType => text()
+      .nullable()(); // 'midterm', 'final', 'quiz', 'certification', 'custom'
   DateTimeColumn get examDate => dateTime()();
   IntColumn get durationMinutes => integer().nullable()();
   TextColumn get topicsCovered =>
@@ -431,8 +415,7 @@ class Achievements extends Table {
   TextColumn get icon => text().nullable()();
   TextColumn get category =>
       text()(); // 'streak', 'quiz', 'flashcard', 'study_time', 'completion', 'social'
-  IntColumn get tier =>
-      integer().withDefault(
+  IntColumn get tier => integer().withDefault(
         const Constant(1),
       )(); // 1=bronze, 2=silver, 3=gold, 4=platinum
   IntColumn get xpReward => integer().withDefault(const Constant(0))();
@@ -457,8 +440,7 @@ class UserAchievements extends Table {
   DateTimeColumn get createdAt => dateTime()();
   DateTimeColumn get updatedAt => dateTime()();
 
-  List<Index> get indexes =>
-      {
+  List<Index> get indexes => {
         Index(
           'idx_user_achievements_unlocked',
           'CREATE INDEX idx_user_achievements_unlocked ON user_achievements(is_unlocked)',
@@ -482,8 +464,7 @@ class Notifications extends Table {
   DateTimeColumn get readAt => dateTime().nullable()();
   DateTimeColumn get createdAt => dateTime()();
 
-  List<Index> get indexes =>
-      {
+  List<Index> get indexes => {
         Index(
           'idx_notifications_scheduled',
           'CREATE INDEX idx_notifications_scheduled ON notifications(scheduled_for)',
@@ -503,21 +484,18 @@ class Recommendations extends Table {
   TextColumn get reason => text()(); // Why this was recommended
   IntColumn get priority =>
       integer().withDefault(const Constant(1))(); // 1=high, 2=medium, 3=low
-  IntColumn get topicId =>
-      integer()
-          .references(Topics, #id, onDelete: KeyAction.setNull)
-          .nullable()();
-  IntColumn get resourceId =>
-      integer()
-          .references(LearningResources, #id, onDelete: KeyAction.setNull)
-          .nullable()();
+  IntColumn get topicId => integer()
+      .references(Topics, #id, onDelete: KeyAction.setNull)
+      .nullable()();
+  IntColumn get resourceId => integer()
+      .references(LearningResources, #id, onDelete: KeyAction.setNull)
+      .nullable()();
   BoolColumn get isDismissed => boolean().withDefault(const Constant(false))();
   BoolColumn get isAccepted => boolean().withDefault(const Constant(false))();
   DateTimeColumn get expiresAt => dateTime().nullable()();
   DateTimeColumn get createdAt => dateTime()();
 
-  List<Index> get indexes =>
-      {
+  List<Index> get indexes => {
         Index(
           'idx_recommendations_topic',
           'CREATE INDEX idx_recommendations_topic ON recommendations(topic_id)',
@@ -532,14 +510,12 @@ class MindMaps extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get title => text()();
   TextColumn get description => text().nullable()();
-  IntColumn get topicId =>
-      integer()
-          .references(Topics, #id, onDelete: KeyAction.setNull)
-          .nullable()();
-  IntColumn get subjectId =>
-      integer()
-          .references(Subjects, #id, onDelete: KeyAction.setNull)
-          .nullable()();
+  IntColumn get topicId => integer()
+      .references(Topics, #id, onDelete: KeyAction.setNull)
+      .nullable()();
+  IntColumn get subjectId => integer()
+      .references(Subjects, #id, onDelete: KeyAction.setNull)
+      .nullable()();
   TextColumn get data =>
       text()(); // JSON: nodes and edges for graph visualization
   TextColumn get layout =>
@@ -555,8 +531,7 @@ class VideoTranscripts extends Table {
   @override
   String get tableName => 'video_transcripts';
   IntColumn get id => integer().autoIncrement()();
-  IntColumn get resourceId =>
-      integer().references(
+  IntColumn get resourceId => integer().references(
         LearningResources,
         #id,
         onDelete: KeyAction.cascade,

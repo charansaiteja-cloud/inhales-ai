@@ -53,19 +53,17 @@ class DocumentsScreen extends ConsumerWidget {
           GlassIconButton(
             onTap: () => notifier.importDocument(),
             icon: Icons.add_rounded,
-            color:
-                isDark
-                    ? InhaleColors.electricBlue
-                    : InhaleColors.lightPrimaryBlue,
+            color: isDark
+                ? InhaleColors.electricBlue
+                : InhaleColors.lightPrimaryBlue,
           ),
         ],
       ),
       body: Container(
         decoration: BoxDecoration(
-          gradient:
-              isDark
-                  ? InhaleColors.gradientBackgroundDark
-                  : InhaleColors.gradientBackground,
+          gradient: isDark
+              ? InhaleColors.gradientBackgroundDark
+              : InhaleColors.gradientBackground,
         ),
         child: Column(
           children: [
@@ -75,198 +73,188 @@ class DocumentsScreen extends ConsumerWidget {
                 hintText: 'Search documents...',
                 prefixIcon: Icon(
                   Icons.search_rounded,
-                  color:
-                      isDark
-                          ? InhaleColors.textMuted
-                          : InhaleColors.lightTextMuted,
+                  color: isDark
+                      ? InhaleColors.textMuted
+                      : InhaleColors.lightTextMuted,
                 ),
                 onChanged: (v) => notifier.search(v),
               ),
             ),
             Expanded(
-              child:
-                  state.isLoading
-                      ? const Center(child: GlassLoadingIndicator())
-                      : state.documents.isEmpty
+              child: state.isLoading
+                  ? const Center(child: GlassLoadingIndicator())
+                  : state.documents.isEmpty
                       ? Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(InhaleSpacing.xl),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Container(
-                                width: 100,
-                                height: 100,
-                                decoration: BoxDecoration(
-                                  gradient: InhaleColors.gradientPrimary,
-                                  borderRadius: BorderRadius.circular(
-                                    InhaleRadius.md,
+                          child: Padding(
+                            padding: const EdgeInsets.all(InhaleSpacing.xl),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Container(
+                                  width: 100,
+                                  height: 100,
+                                  decoration: BoxDecoration(
+                                    gradient: InhaleColors.gradientPrimary,
+                                    borderRadius: BorderRadius.circular(
+                                      InhaleRadius.md,
+                                    ),
+                                  ),
+                                  child: Icon(
+                                    Icons.description_outlined,
+                                    size: 48,
+                                    color: Colors.white.withValues(alpha: 0.8),
                                   ),
                                 ),
-                                child: Icon(
-                                  Icons.description_outlined,
-                                  size: 48,
-                                  color: Colors.white.withValues(alpha: 0.8),
+                                const SizedBox(height: InhaleSpacing.lg),
+                                Text(
+                                  'No Documents Yet',
+                                  style:
+                                      InhaleTypography.headlineSmall.copyWith(
+                                    color: isDark
+                                        ? InhaleColors.textPrimary
+                                        : InhaleColors.lightNavyText,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(height: InhaleSpacing.lg),
-                              Text(
-                                'No Documents Yet',
-                                style: InhaleTypography.headlineSmall.copyWith(
-                                  color:
-                                      isDark
-                                          ? InhaleColors.textPrimary
-                                          : InhaleColors.lightNavyText,
+                                const SizedBox(height: InhaleSpacing.sm),
+                                Text(
+                                  'Add a PDF, Markdown, or text document to start chatting with your files.',
+                                  style: InhaleTypography.bodyMedium.copyWith(
+                                    color: isDark
+                                        ? InhaleColors.textSecondary
+                                        : InhaleColors.lightTextSecondary,
+                                  ),
+                                  textAlign: TextAlign.center,
                                 ),
-                              ),
-                              const SizedBox(height: InhaleSpacing.sm),
-                              Text(
-                                'Add a PDF, Markdown, or text document to start chatting with your files.',
-                                style: InhaleTypography.bodyMedium.copyWith(
-                                  color:
-                                      isDark
-                                          ? InhaleColors.textSecondary
-                                          : InhaleColors.lightTextSecondary,
+                                const SizedBox(height: InhaleSpacing.lg),
+                                GlassButton(
+                                  label: 'Add Document',
+                                  onTap: () => notifier.importDocument(),
+                                  width: 200,
                                 ),
-                                textAlign: TextAlign.center,
-                              ),
-                              const SizedBox(height: InhaleSpacing.lg),
-                              GlassButton(
-                                label: 'Add Document',
-                                onTap: () => notifier.importDocument(),
-                                width: 200,
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
-                      : ListView.builder(
-                        padding: const EdgeInsets.all(InhaleSpacing.md),
-                        itemCount: state.documents.length,
-                        itemBuilder: (context, index) {
-                          final doc = state.documents[index];
-                          return Padding(
-                            padding: const EdgeInsets.only(
-                              bottom: InhaleSpacing.sm,
+                              ],
                             ),
-                            child: GlassCard(
-                              onTap: () {
-                                // Show document details
-                                _showDocDetails(context, doc, notifier);
-                              },
-                              padding: const EdgeInsets.all(InhaleSpacing.md),
-                              elevated: true,
-                              child: Row(
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.all(12),
-                                    decoration: BoxDecoration(
-                                      gradient: InhaleColors.gradientPrimary,
-                                      borderRadius: BorderRadius.circular(
-                                        InhaleRadius.sm,
+                          ),
+                        )
+                      : ListView.builder(
+                          padding: const EdgeInsets.all(InhaleSpacing.md),
+                          itemCount: state.documents.length,
+                          itemBuilder: (context, index) {
+                            final doc = state.documents[index];
+                            return Padding(
+                              padding: const EdgeInsets.only(
+                                bottom: InhaleSpacing.sm,
+                              ),
+                              child: GlassCard(
+                                onTap: () {
+                                  // Show document details
+                                  _showDocDetails(context, doc, notifier);
+                                },
+                                padding: const EdgeInsets.all(InhaleSpacing.md),
+                                elevated: true,
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(12),
+                                      decoration: BoxDecoration(
+                                        gradient: InhaleColors.gradientPrimary,
+                                        borderRadius: BorderRadius.circular(
+                                          InhaleRadius.sm,
+                                        ),
+                                      ),
+                                      child: Icon(
+                                        _getIcon(doc.fileType),
+                                        color: Colors.white,
+                                        size: 24,
                                       ),
                                     ),
-                                    child: Icon(
-                                      _getIcon(doc.fileType),
-                                      color: Colors.white,
-                                      size: 24,
-                                    ),
-                                  ),
-                                  const SizedBox(width: InhaleSpacing.md),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          doc.title,
-                                          style: InhaleTypography.titleSmall
-                                              .copyWith(
-                                                color:
-                                                    isDark
-                                                        ? InhaleColors
-                                                            .textPrimary
-                                                        : InhaleColors
-                                                            .lightNavyText,
-                                              ),
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Row(
-                                          children: [
-                                            Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                    horizontal: 8,
-                                                    vertical: 2,
+                                    const SizedBox(width: InhaleSpacing.md),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            doc.title,
+                                            style: InhaleTypography.titleSmall
+                                                .copyWith(
+                                              color: isDark
+                                                  ? InhaleColors.textPrimary
+                                                  : InhaleColors.lightNavyText,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Row(
+                                            children: [
+                                              Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                  horizontal: 8,
+                                                  vertical: 2,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  color: isDark
+                                                      ? InhaleColors
+                                                          .electricBlue
+                                                          .withValues(
+                                                          alpha: 0.2,
+                                                        )
+                                                      : InhaleColors
+                                                          .lightPrimaryBlue
+                                                          .withValues(
+                                                          alpha: 0.15,
+                                                        ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                    InhaleRadius.xs,
                                                   ),
-                                              decoration: BoxDecoration(
-                                                color:
-                                                    isDark
+                                                ),
+                                                child: Text(
+                                                  doc.fileType.toUpperCase(),
+                                                  style: InhaleTypography
+                                                      .labelSmall
+                                                      .copyWith(
+                                                    color: isDark
                                                         ? InhaleColors
                                                             .electricBlue
-                                                            .withValues(
-                                                              alpha: 0.2,
-                                                            )
                                                         : InhaleColors
-                                                            .lightPrimaryBlue
-                                                            .withValues(
-                                                              alpha: 0.15,
-                                                            ),
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                      InhaleRadius.xs,
-                                                    ),
-                                              ),
-                                              child: Text(
-                                                doc.fileType.toUpperCase(),
-                                                style: InhaleTypography
-                                                    .labelSmall
-                                                    .copyWith(
-                                                      color:
-                                                          isDark
-                                                              ? InhaleColors
-                                                                  .electricBlue
-                                                              : InhaleColors
-                                                                  .lightPrimaryBlue,
-                                                    ),
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              width: InhaleSpacing.sm,
-                                            ),
-                                            Text(
-                                              _formatSize(doc.sizeBytes),
-                                              style: InhaleTypography.bodySmall
-                                                  .copyWith(
-                                                    color:
-                                                        isDark
-                                                            ? InhaleColors
-                                                                .textMuted
-                                                            : InhaleColors
-                                                                .lightTextMuted,
+                                                            .lightPrimaryBlue,
                                                   ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                width: InhaleSpacing.sm,
+                                              ),
+                                              Text(
+                                                _formatSize(doc.sizeBytes),
+                                                style: InhaleTypography
+                                                    .bodySmall
+                                                    .copyWith(
+                                                  color: isDark
+                                                      ? InhaleColors.textMuted
+                                                      : InhaleColors
+                                                          .lightTextMuted,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  GlassIconButton(
-                                    onTap: () {
-                                      notifier.deleteDocument(doc.id);
-                                    },
-                                    icon: Icons.delete_outline_rounded,
-                                    color:
-                                        isDark
-                                            ? InhaleColors.textMuted
-                                            : InhaleColors.lightTextMuted,
-                                  ),
-                                ],
+                                    GlassIconButton(
+                                      onTap: () {
+                                        notifier.deleteDocument(doc.id);
+                                      },
+                                      icon: Icons.delete_outline_rounded,
+                                      color: isDark
+                                          ? InhaleColors.textMuted
+                                          : InhaleColors.lightTextMuted,
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                      ),
+                            );
+                          },
+                        ),
             ),
           ],
         ),
@@ -283,70 +271,64 @@ class DocumentsScreen extends ConsumerWidget {
 
     showDialog(
       context: context,
-      builder:
-          (ctx) => AlertDialog(
-            backgroundColor:
-                isDark ? InhaleColors.darkCharcoal : InhaleColors.lightSurface,
-            title: Text(
-              doc.title,
-              style: TextStyle(
-                color:
-                    isDark
-                        ? InhaleColors.textPrimary
-                        : InhaleColors.lightNavyText,
-              ),
-            ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Type: ${doc.fileType.toUpperCase()}',
-                  style: TextStyle(
-                    color:
-                        isDark
-                            ? InhaleColors.textSecondary
-                            : InhaleColors.lightTextSecondary,
-                  ),
-                ),
-                Text(
-                  'Size: ${_formatSize(doc.sizeBytes)}',
-                  style: TextStyle(
-                    color:
-                        isDark
-                            ? InhaleColors.textSecondary
-                            : InhaleColors.lightTextSecondary,
-                  ),
-                ),
-                Text(
-                  'Imported: ${doc.importedAt.toString().split('.').first}',
-                  style: TextStyle(
-                    color:
-                        isDark
-                            ? InhaleColors.textSecondary
-                            : InhaleColors.lightTextSecondary,
-                  ),
-                ),
-                if (doc.summary != null) ...[
-                  const SizedBox(height: 8),
-                  Text(
-                    'Summary:',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  Text(doc.summary!),
-                ],
-              ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(ctx),
-                child: Text(
-                  'Close',
-                  style: TextStyle(color: InhaleColors.blue),
-                ),
-              ),
-            ],
+      builder: (ctx) => AlertDialog(
+        backgroundColor:
+            isDark ? InhaleColors.darkCharcoal : InhaleColors.lightSurface,
+        title: Text(
+          doc.title,
+          style: TextStyle(
+            color:
+                isDark ? InhaleColors.textPrimary : InhaleColors.lightNavyText,
           ),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Type: ${doc.fileType.toUpperCase()}',
+              style: TextStyle(
+                color: isDark
+                    ? InhaleColors.textSecondary
+                    : InhaleColors.lightTextSecondary,
+              ),
+            ),
+            Text(
+              'Size: ${_formatSize(doc.sizeBytes)}',
+              style: TextStyle(
+                color: isDark
+                    ? InhaleColors.textSecondary
+                    : InhaleColors.lightTextSecondary,
+              ),
+            ),
+            Text(
+              'Imported: ${doc.importedAt.toString().split('.').first}',
+              style: TextStyle(
+                color: isDark
+                    ? InhaleColors.textSecondary
+                    : InhaleColors.lightTextSecondary,
+              ),
+            ),
+            if (doc.summary != null) ...[
+              const SizedBox(height: 8),
+              Text(
+                'Summary:',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              Text(doc.summary!),
+            ],
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(
+              'Close',
+              style: TextStyle(color: InhaleColors.blue),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

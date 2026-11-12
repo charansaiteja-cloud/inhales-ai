@@ -27,22 +27,22 @@ class MemoryEntry {
   });
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'conversationId': conversationId,
-    'type': type,
-    'content': content,
-    'createdAt': createdAt.toIso8601String(),
-    'importance': importance,
-  };
+        'id': id,
+        'conversationId': conversationId,
+        'type': type,
+        'content': content,
+        'createdAt': createdAt.toIso8601String(),
+        'importance': importance,
+      };
 
   factory MemoryEntry.fromJson(Map<String, dynamic> json) => MemoryEntry(
-    id: json['id'] as int,
-    conversationId: json['conversationId'] as int,
-    type: json['type'] as String,
-    content: json['content'] as String,
-    createdAt: DateTime.parse(json['createdAt'] as String),
-    importance: (json['importance'] as num?)?.toDouble() ?? 0.5,
-  );
+        id: json['id'] as int,
+        conversationId: json['conversationId'] as int,
+        type: json['type'] as String,
+        content: json['content'] as String,
+        createdAt: DateTime.parse(json['createdAt'] as String),
+        importance: (json['importance'] as num?)?.toDouble() ?? 0.5,
+      );
 }
 
 /// Memory Manager for long-term conversation memory.
@@ -170,8 +170,7 @@ class MemoryManager {
     if (messages.isEmpty) return;
 
     // Simple summary: first and last few messages + length
-    final summary =
-        'Conversation with ${messages.length} messages. '
+    final summary = 'Conversation with ${messages.length} messages. '
         'Started: "${messages.first.substring(0, math.min(50, messages.first.length))}..." '
         'Ended: "${messages.last.substring(0, math.min(50, messages.last.length))}..."';
 
@@ -186,7 +185,8 @@ class MemoryManager {
   /// Delete a specific memory.
   Future<void> deleteMemory(int memoryId) async {
     await (_database.delete(_database.memories)
-      ..where((m) => m.id.equals(memoryId))).go();
+          ..where((m) => m.id.equals(memoryId)))
+        .go();
 
     // Clear cache to force reload
     for (final convId in _cache.keys) {
@@ -197,7 +197,8 @@ class MemoryManager {
   /// Delete all memories for a conversation.
   Future<void> deleteConversationMemories(int conversationId) async {
     await (_database.delete(_database.memories)
-      ..where((m) => m.conversationId.equals(conversationId))).go();
+          ..where((m) => m.conversationId.equals(conversationId)))
+        .go();
 
     _cache.remove(conversationId);
   }
@@ -213,27 +214,25 @@ class MemoryManager {
   }
 
   Future<void> _loadMemories(int conversationId) async {
-    final query =
-        _database.select(_database.memories)
-          ..where((m) => m.conversationId.equals(conversationId))
-          ..orderBy([(m) => OrderingTerm.desc(m.createdAt)])
-          ..limit(_maxMemoriesPerConversation);
+    final query = _database.select(_database.memories)
+      ..where((m) => m.conversationId.equals(conversationId))
+      ..orderBy([(m) => OrderingTerm.desc(m.createdAt)])
+      ..limit(_maxMemoriesPerConversation);
 
     final rows = await query.get();
 
-    _cache[conversationId] =
-        rows
-            .map(
-              (row) => MemoryEntry(
-                id: row.id,
-                conversationId: row.conversationId,
-                type: row.type,
-                content: row.content,
-                createdAt: row.createdAt,
-                importance: row.importance,
-              ),
-            )
-            .toList();
+    _cache[conversationId] = rows
+        .map(
+          (row) => MemoryEntry(
+            id: row.id,
+            conversationId: row.conversationId,
+            type: row.type,
+            content: row.content,
+            createdAt: row.createdAt,
+            importance: row.importance,
+          ),
+        )
+        .toList();
   }
 
   List<String> _tokenize(String text) {

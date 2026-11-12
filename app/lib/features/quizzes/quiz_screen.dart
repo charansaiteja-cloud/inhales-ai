@@ -22,15 +22,13 @@ class QuizScreen extends ConsumerWidget {
       appBar: GlassAppBar(title: 'Quizzes'),
       body: Container(
         decoration: BoxDecoration(
-          gradient:
-              isDark
-                  ? InhaleColors.gradientBackgroundDark
-                  : InhaleColors.gradientBackground,
+          gradient: isDark
+              ? InhaleColors.gradientBackgroundDark
+              : InhaleColors.gradientBackground,
         ),
-        child:
-            state.isInProgress
-                ? _buildActiveQuiz(context, ref, state, notifier, isDark)
-                : _buildQuizLibrary(context, ref, state, notifier, isDark),
+        child: state.isInProgress
+            ? _buildActiveQuiz(context, ref, state, notifier, isDark)
+            : _buildQuizLibrary(context, ref, state, notifier, isDark),
       ),
     );
   }
@@ -59,20 +57,18 @@ class QuizScreen extends ConsumerWidget {
           Text(
             'Create Custom Quiz',
             style: InhaleTypography.headlineMedium.copyWith(
-              color:
-                  isDark
-                      ? InhaleColors.textPrimary
-                      : InhaleColors.lightNavyText,
+              color: isDark
+                  ? InhaleColors.textPrimary
+                  : InhaleColors.lightNavyText,
             ),
           ),
           const SizedBox(height: InhaleSpacing.sm),
           Text(
             'Enter a topic and generate AI-powered quizzes',
             style: InhaleTypography.bodyMedium.copyWith(
-              color:
-                  isDark
-                      ? InhaleColors.textSecondary
-                      : InhaleColors.lightTextSecondary,
+              color: isDark
+                  ? InhaleColors.textSecondary
+                  : InhaleColors.lightTextSecondary,
             ),
           ),
           const SizedBox(height: InhaleSpacing.md),
@@ -94,10 +90,9 @@ class QuizScreen extends ConsumerWidget {
           Text(
             'Quick Topics',
             style: InhaleTypography.headlineMedium.copyWith(
-              color:
-                  isDark
-                      ? InhaleColors.textPrimary
-                      : InhaleColors.lightNavyText,
+              color: isDark
+                  ? InhaleColors.textPrimary
+                  : InhaleColors.lightNavyText,
             ),
           ),
           const SizedBox(height: InhaleSpacing.sm),
@@ -114,8 +109,8 @@ class QuizScreen extends ConsumerWidget {
             itemBuilder: (context, index) {
               final cat = categories[index];
               return GlassCard(
-                onTap:
-                    () => notifier.generateQuiz(topic: cat['name'] as String),
+                onTap: () =>
+                    notifier.generateQuiz(topic: cat['name'] as String),
                 padding: const EdgeInsets.all(InhaleSpacing.md),
                 elevated: true,
                 child: Column(
@@ -124,22 +119,20 @@ class QuizScreen extends ConsumerWidget {
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color:
-                            isDark
-                                ? InhaleColors.electricBlue.withValues(
-                                  alpha: 0.2,
-                                )
-                                : InhaleColors.lightPrimaryBlue.withValues(
-                                  alpha: 0.15,
-                                ),
+                        color: isDark
+                            ? InhaleColors.electricBlue.withValues(
+                                alpha: 0.2,
+                              )
+                            : InhaleColors.lightPrimaryBlue.withValues(
+                                alpha: 0.15,
+                              ),
                         borderRadius: BorderRadius.circular(InhaleRadius.md),
                       ),
                       child: Icon(
                         cat['icon'] as IconData,
-                        color:
-                            isDark
-                                ? InhaleColors.electricBlue
-                                : InhaleColors.lightPrimaryBlue,
+                        color: isDark
+                            ? InhaleColors.electricBlue
+                            : InhaleColors.lightPrimaryBlue,
                         size: 28,
                       ),
                     ),
@@ -147,10 +140,9 @@ class QuizScreen extends ConsumerWidget {
                     Text(
                       cat['name'] as String,
                       style: InhaleTypography.titleSmall.copyWith(
-                        color:
-                            isDark
-                                ? InhaleColors.textPrimary
-                                : InhaleColors.lightNavyText,
+                        color: isDark
+                            ? InhaleColors.textPrimary
+                            : InhaleColors.lightNavyText,
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -186,10 +178,9 @@ class QuizScreen extends ConsumerWidget {
                   Text(
                     'Question ${state.currentIndex + 1} of ${state.questions.length}',
                     style: InhaleTypography.titleSmall.copyWith(
-                      color:
-                          isDark
-                              ? InhaleColors.textSecondary
-                              : InhaleColors.lightTextSecondary,
+                      color: isDark
+                          ? InhaleColors.textSecondary
+                          : InhaleColors.lightTextSecondary,
                     ),
                   ),
                 ],
@@ -197,10 +188,9 @@ class QuizScreen extends ConsumerWidget {
               const SizedBox(height: InhaleSpacing.sm),
               LinearProgressIndicator(
                 value: (state.currentIndex + 1) / state.questions.length,
-                backgroundColor:
-                    isDark
-                        ? InhaleColors.glassBorderSubtle
-                        : InhaleColors.lightGlassBorderSubtle,
+                backgroundColor: isDark
+                    ? InhaleColors.glassBorderSubtle
+                    : InhaleColors.lightGlassBorderSubtle,
                 valueColor: AlwaysStoppedAnimation<Color>(
                   isDark
                       ? InhaleColors.electricBlue
@@ -225,10 +215,9 @@ class QuizScreen extends ConsumerWidget {
                   child: Text(
                     question.question,
                     style: InhaleTypography.titleMedium.copyWith(
-                      color:
-                          isDark
-                              ? InhaleColors.textPrimary
-                              : InhaleColors.lightNavyText,
+                      color: isDark
+                          ? InhaleColors.textPrimary
+                          : InhaleColors.lightNavyText,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -249,9 +238,8 @@ class QuizScreen extends ConsumerWidget {
                   itemBuilder: (context, index) {
                     final label = String.fromCharCode(65 + index);
                     return GlassCard(
-                      onTap:
-                          () =>
-                              notifier.submitAnswer(state.currentIndex, label),
+                      onTap: () =>
+                          notifier.submitAnswer(state.currentIndex, label),
                       padding: const EdgeInsets.all(InhaleSpacing.md),
                       elevated: true,
                       child: Row(
@@ -260,23 +248,21 @@ class QuizScreen extends ConsumerWidget {
                             width: 32,
                             height: 32,
                             decoration: BoxDecoration(
-                              color:
-                                  isDark
-                                      ? InhaleColors.electricBlue.withValues(
-                                        alpha: 0.2,
-                                      )
-                                      : InhaleColors.lightPrimaryBlue
-                                          .withValues(alpha: 0.15),
+                              color: isDark
+                                  ? InhaleColors.electricBlue.withValues(
+                                      alpha: 0.2,
+                                    )
+                                  : InhaleColors.lightPrimaryBlue
+                                      .withValues(alpha: 0.15),
                               shape: BoxShape.circle,
                             ),
                             child: Center(
                               child: Text(
                                 label,
                                 style: TextStyle(
-                                  color:
-                                      isDark
-                                          ? InhaleColors.electricBlue
-                                          : InhaleColors.lightPrimaryBlue,
+                                  color: isDark
+                                      ? InhaleColors.electricBlue
+                                      : InhaleColors.lightPrimaryBlue,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14,
                                 ),
@@ -288,10 +274,9 @@ class QuizScreen extends ConsumerWidget {
                             child: Text(
                               'Option $label',
                               style: InhaleTypography.bodyMedium.copyWith(
-                                color:
-                                    isDark
-                                        ? InhaleColors.textPrimary
-                                        : InhaleColors.lightNavyText,
+                                color: isDark
+                                    ? InhaleColors.textPrimary
+                                    : InhaleColors.lightNavyText,
                               ),
                             ),
                           ),

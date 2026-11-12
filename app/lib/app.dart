@@ -15,27 +15,24 @@ class InhaleSkillApp extends ConsumerWidget {
     final settingsState = ref.watch(settingsProvider);
 
     return settingsState.when(
-      data:
-          (settings) => MaterialApp.router(
-            title: AppConstants.appName,
-            debugShowCheckedModeBanner: false,
-            theme:
-                settings.themeMode == ThemeMode.dark
-                    ? InhaleTheme.darkTheme
-                    : InhaleTheme.lightTheme,
-            darkTheme: InhaleTheme.darkTheme,
-            themeMode: settings.themeMode,
-            routerConfig: router,
-          ),
+      data: (settings) => MaterialApp.router(
+        title: AppConstants.appName,
+        debugShowCheckedModeBanner: false,
+        theme: settings.themeMode == ThemeMode.dark
+            ? InhaleTheme.darkTheme
+            : InhaleTheme.lightTheme,
+        darkTheme: InhaleTheme.darkTheme,
+        themeMode: settings.themeMode,
+        routerConfig: router,
+      ),
       loading: () => const Center(child: CircularProgressIndicator()),
-      error:
-          (error, stackTrace) => MaterialApp.router(
-            title: AppConstants.appName,
-            debugShowCheckedModeBanner: false,
-            theme: InhaleTheme.lightTheme,
-            darkTheme: InhaleTheme.darkTheme,
-            routerConfig: router,
-          ),
+      error: (error, stackTrace) => MaterialApp.router(
+        title: AppConstants.appName,
+        debugShowCheckedModeBanner: false,
+        theme: InhaleTheme.lightTheme,
+        darkTheme: InhaleTheme.darkTheme,
+        routerConfig: router,
+      ),
     );
   }
 }

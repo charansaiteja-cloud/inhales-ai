@@ -42,8 +42,8 @@ class TranslationHistory {
 
 final translationProvider =
     StateNotifierProvider<TranslationNotifier, TranslationState>(
-      (ref) => TranslationNotifier(ref.watch(aiEngineProvider)),
-    );
+  (ref) => TranslationNotifier(ref.watch(aiEngineProvider)),
+);
 
 class TranslationNotifier extends StateNotifier<TranslationState> {
   final AIEngine _aiEngine;
@@ -147,14 +147,15 @@ extension on TranslationState {
     bool? isTranslating,
     List<TranslationHistory>? history,
     String? error,
-  }) => TranslationState(
-    sourceText: sourceText ?? this.sourceText,
-    translatedText: translatedText ?? this.translatedText,
-    inputText: inputText ?? this.inputText,
-    sourceLang: sourceLang ?? this.sourceLang,
-    targetLang: targetLang ?? this.targetLang,
-    isTranslating: isTranslating ?? this.isTranslating,
-    history: history ?? this.history,
-    error: error ?? this.error,
-  );
+  }) =>
+      TranslationState(
+        sourceText: sourceText ?? this.sourceText,
+        translatedText: translatedText ?? this.translatedText,
+        inputText: inputText ?? this.inputText,
+        sourceLang: sourceLang ?? this.sourceLang,
+        targetLang: targetLang ?? this.targetLang,
+        isTranslating: isTranslating ?? this.isTranslating,
+        history: history ?? this.history,
+        error: error ?? this.error,
+      );
 }

@@ -27,16 +27,14 @@ class GlassSidebar extends StatelessWidget {
         child: Container(
           width: 260,
           decoration: BoxDecoration(
-            color:
-                isDark
-                    ? InhaleColors.glassSurfaceHeavy
-                    : InhaleColors.lightGlassSurfaceMedium,
+            color: isDark
+                ? InhaleColors.glassSurfaceHeavy
+                : InhaleColors.lightGlassSurfaceMedium,
             border: Border(
               right: BorderSide(
-                color:
-                    isDark
-                        ? InhaleColors.glassBorder
-                        : InhaleColors.lightGlassBorder,
+                color: isDark
+                    ? InhaleColors.glassBorder
+                    : InhaleColors.lightGlassBorder,
                 width: 0.5,
               ),
             ),
@@ -50,10 +48,9 @@ class GlassSidebar extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.w700,
-                    color:
-                        isDark
-                            ? InhaleColors.blue
-                            : InhaleColors.lightPrimaryBlue,
+                    color: isDark
+                        ? InhaleColors.blue
+                        : InhaleColors.lightPrimaryBlue,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -73,12 +70,11 @@ class GlassSidebar extends StatelessWidget {
                         vertical: 12,
                       ),
                       decoration: BoxDecoration(
-                        color:
-                            isActive
-                                ? (isDark
-                                    ? InhaleColors.blue.withValues(alpha: 0.15)
-                                    : InhaleColors.blue.withValues(alpha: 0.1))
-                                : Colors.transparent,
+                        color: isActive
+                            ? (isDark
+                                ? InhaleColors.blue.withValues(alpha: 0.15)
+                                : InhaleColors.blue.withValues(alpha: 0.1))
+                            : Colors.transparent,
                         borderRadius: const BorderRadius.all(
                           Radius.circular(InhaleRadius.md),
                         ),
@@ -87,28 +83,26 @@ class GlassSidebar extends StatelessWidget {
                         children: [
                           Icon(
                             item.icon,
-                            color:
-                                isActive
-                                    ? (isDark
-                                        ? InhaleColors.blue
-                                        : InhaleColors.lightPrimaryBlue)
-                                    : (isDark
-                                        ? InhaleColors.textSecondary
-                                        : InhaleColors.lightTextSecondary),
+                            color: isActive
+                                ? (isDark
+                                    ? InhaleColors.blue
+                                    : InhaleColors.lightPrimaryBlue)
+                                : (isDark
+                                    ? InhaleColors.textSecondary
+                                    : InhaleColors.lightTextSecondary),
                             size: 22,
                           ),
                           const SizedBox(width: 14),
                           Text(
                             item.label,
                             style: TextStyle(
-                              color:
-                                  isActive
-                                      ? (isDark
-                                          ? InhaleColors.blue
-                                          : InhaleColors.lightPrimaryBlue)
-                                      : (isDark
-                                          ? InhaleColors.textPrimary
-                                          : InhaleColors.lightNavyText),
+                              color: isActive
+                                  ? (isDark
+                                      ? InhaleColors.blue
+                                      : InhaleColors.lightPrimaryBlue)
+                                  : (isDark
+                                      ? InhaleColors.textPrimary
+                                      : InhaleColors.lightNavyText),
                               fontWeight:
                                   isActive ? FontWeight.w600 : FontWeight.w400,
                               fontSize: 15,

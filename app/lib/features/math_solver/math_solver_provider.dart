@@ -39,17 +39,18 @@ class MathSolverState {
     bool? isProcessing,
     String? error,
     List<MathSolverHistoryEntry>? history,
-  }) => MathSolverState(
-    image: image ?? this.image,
-    imageBytes: imageBytes ?? this.imageBytes,
-    recognizedExpression: recognizedExpression ?? this.recognizedExpression,
-    solution: solution ?? this.solution,
-    steps: steps ?? this.steps,
-    answer: answer ?? this.answer,
-    isProcessing: isProcessing ?? this.isProcessing,
-    error: error ?? this.error,
-    history: history ?? this.history,
-  );
+  }) =>
+      MathSolverState(
+        image: image ?? this.image,
+        imageBytes: imageBytes ?? this.imageBytes,
+        recognizedExpression: recognizedExpression ?? this.recognizedExpression,
+        solution: solution ?? this.solution,
+        steps: steps ?? this.steps,
+        answer: answer ?? this.answer,
+        isProcessing: isProcessing ?? this.isProcessing,
+        error: error ?? this.error,
+        history: history ?? this.history,
+      );
 }
 
 class MathSolverHistoryEntry {
@@ -70,8 +71,8 @@ class MathSolverHistoryEntry {
 
 final mathSolverProvider =
     StateNotifierProvider<MathSolverNotifier, MathSolverState>(
-      (ref) => MathSolverNotifier(ref.watch(aiEngineProvider)),
-    );
+  (ref) => MathSolverNotifier(ref.watch(aiEngineProvider)),
+);
 
 class MathSolverNotifier extends StateNotifier<MathSolverState> {
   final AIEngine _aiEngine;

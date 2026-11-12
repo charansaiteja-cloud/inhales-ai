@@ -27,20 +27,21 @@ class VideoLearningState {
     String? summary,
     List<String>? keyTopics,
     String? error,
-  }) => VideoLearningState(
-    isLoading: isLoading ?? this.isLoading,
-    videoUrl: videoUrl ?? this.videoUrl,
-    transcript: transcript ?? this.transcript,
-    summary: summary ?? this.summary,
-    keyTopics: keyTopics ?? this.keyTopics,
-    error: error ?? this.error,
-  );
+  }) =>
+      VideoLearningState(
+        isLoading: isLoading ?? this.isLoading,
+        videoUrl: videoUrl ?? this.videoUrl,
+        transcript: transcript ?? this.transcript,
+        summary: summary ?? this.summary,
+        keyTopics: keyTopics ?? this.keyTopics,
+        error: error ?? this.error,
+      );
 }
 
 final videoLearningProvider =
     StateNotifierProvider<VideoLearningNotifier, VideoLearningState>((ref) {
-      return VideoLearningNotifier(ref);
-    });
+  return VideoLearningNotifier(ref);
+});
 
 class VideoLearningNotifier extends StateNotifier<VideoLearningState> {
   final Ref ref;
@@ -124,8 +125,7 @@ TOPICS: <topic1>, <topic2>, <topic3>
 
     return (
       summary: summaryMatch?.group(1)?.trim() ?? 'Summary not available',
-      keyTopics:
-          topicsMatch
+      keyTopics: topicsMatch
               ?.group(1)
               ?.split(',')
               .map((t) => t.trim())

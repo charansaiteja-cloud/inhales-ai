@@ -160,10 +160,9 @@ class _AppSidebarState extends ConsumerState<AppSidebar>
             width: 36,
             height: 36,
             decoration: BoxDecoration(
-              gradient:
-                  isDark
-                      ? AppColors.primaryGradientDark
-                      : AppColors.primaryGradient,
+              gradient: isDark
+                  ? AppColors.primaryGradientDark
+                  : AppColors.primaryGradient,
               borderRadius: BorderRadius.circular(AppRadius.buttonRadius),
             ),
             child: const Center(
@@ -353,18 +352,16 @@ class _SidebarItemTile extends StatelessWidget {
           vertical: AppSpacing.sm,
         ),
         decoration: BoxDecoration(
-          color:
-              isSelected
-                  ? cs.primaryContainer.withValues(alpha: 0.5)
-                  : Colors.transparent,
+          color: isSelected
+              ? cs.primaryContainer.withValues(alpha: 0.5)
+              : Colors.transparent,
           borderRadius: BorderRadius.circular(AppRadius.sidebarItemRadius),
-          border:
-              isSelected
-                  ? Border.all(
-                    color: cs.primary.withValues(alpha: 0.3),
-                    width: 1,
-                  )
-                  : null,
+          border: isSelected
+              ? Border.all(
+                  color: cs.primary.withValues(alpha: 0.3),
+                  width: 1,
+                )
+              : null,
         ),
         child: Row(
           children: [
@@ -477,14 +474,13 @@ class AppHeader extends ConsumerWidget implements PreferredSizeWidget {
     final isDark = theme.brightness == Brightness.dark;
     final cs = theme.colorScheme;
     final router = ref.watch(appRouterProvider);
-    final effectiveLeading =
-        leading ??
+    final effectiveLeading = leading ??
         (automaticallyImplyLeading && router.canPop()
             ? IconButton(
-              icon: Icon(Icons.arrow_back_rounded, color: cs.onSurface),
-              onPressed: () => router.pop(),
-              tooltip: 'Back',
-            )
+                icon: Icon(Icons.arrow_back_rounded, color: cs.onSurface),
+                onPressed: () => router.pop(),
+                tooltip: 'Back',
+              )
             : null);
 
     final effectiveActions = <Widget>[
@@ -510,16 +506,15 @@ class AppHeader extends ConsumerWidget implements PreferredSizeWidget {
     ];
 
     return AppBar(
-      title:
-          title != null
-              ? Text(
-                title!,
-                style: AppTypography.titleLarge.copyWith(
-                  color: cs.onSurface,
-                  fontWeight: FontWeight.w600,
-                ),
-              )
-              : null,
+      title: title != null
+          ? Text(
+              title!,
+              style: AppTypography.titleLarge.copyWith(
+                color: cs.onSurface,
+                fontWeight: FontWeight.w600,
+              ),
+            )
+          : null,
       leading: effectiveLeading,
       actions: effectiveActions,
       flexibleSpace: flexibleSpace,
@@ -577,60 +572,52 @@ class AppBottomNavigationBar extends ConsumerWidget {
       child: SafeArea(
         top: false,
         child: Row(
-          children:
-              items.asMap().entries.map((entry) {
-                final index = entry.key;
-                final item = entry.value;
-                final isSelected = currentIndex == index;
+          children: items.asMap().entries.map((entry) {
+            final index = entry.key;
+            final item = entry.value;
+            final isSelected = currentIndex == index;
 
-                return Expanded(
-                  child: InkWell(
-                    onTap: () => onTap(index),
-                    splashColor: cs.primary.withValues(alpha: 0.08),
-                    highlightColor: cs.primary.withValues(alpha: 0.04),
-                    child: Container(
-                      height: double.infinity,
-                      padding: EdgeInsets.symmetric(vertical: AppSpacing.xs),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          IconTheme(
-                            data: IconThemeData(
-                              color:
-                                  isSelected
-                                      ? (selectedItemColor ?? cs.primary)
-                                      : (unselectedItemColor ??
-                                          cs.onSurfaceVariant),
-                              size: 24,
-                            ),
-                            child:
-                                isSelected
-                                    ? item.activeIcon ?? item.icon
-                                    : item.icon,
-                          ),
-                          SizedBox(height: AppSpacing.xs),
-                          Text(
-                            item.label,
-                            style: AppTypography.labelSmall.copyWith(
-                              color:
-                                  isSelected
-                                      ? (selectedItemColor ?? cs.primary)
-                                      : (unselectedItemColor ??
-                                          cs.onSurfaceVariant),
-                              fontWeight:
-                                  isSelected
-                                      ? FontWeight.w600
-                                      : FontWeight.w400,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
+            return Expanded(
+              child: InkWell(
+                onTap: () => onTap(index),
+                splashColor: cs.primary.withValues(alpha: 0.08),
+                highlightColor: cs.primary.withValues(alpha: 0.04),
+                child: Container(
+                  height: double.infinity,
+                  padding: EdgeInsets.symmetric(vertical: AppSpacing.xs),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconTheme(
+                        data: IconThemeData(
+                          color: isSelected
+                              ? (selectedItemColor ?? cs.primary)
+                              : (unselectedItemColor ?? cs.onSurfaceVariant),
+                          size: 24,
+                        ),
+                        child: isSelected
+                            ? item.activeIcon ?? item.icon
+                            : item.icon,
                       ),
-                    ),
+                      SizedBox(height: AppSpacing.xs),
+                      Text(
+                        item.label,
+                        style: AppTypography.labelSmall.copyWith(
+                          color: isSelected
+                              ? (selectedItemColor ?? cs.primary)
+                              : (unselectedItemColor ?? cs.onSurfaceVariant),
+                          fontWeight:
+                              isSelected ? FontWeight.w600 : FontWeight.w400,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
                   ),
-                );
-              }).toList(),
+                ),
+              ),
+            );
+          }).toList(),
         ),
       ),
     );
@@ -701,10 +688,9 @@ class AppNavigationDrawer extends ConsumerWidget {
                         width: 40,
                         height: 40,
                         decoration: BoxDecoration(
-                          gradient:
-                              isDark
-                                  ? AppColors.primaryGradientDark
-                                  : AppColors.primaryGradient,
+                          gradient: isDark
+                              ? AppColors.primaryGradientDark
+                              : AppColors.primaryGradient,
                           borderRadius: BorderRadius.circular(
                             AppRadius.buttonRadius,
                           ),
@@ -746,8 +732,8 @@ class AppNavigationDrawer extends ConsumerWidget {
               child: ListView.separated(
                 padding: EdgeInsets.symmetric(vertical: AppSpacing.sm),
                 itemCount: items.length,
-                separatorBuilder:
-                    (context, index) => SizedBox(height: AppSpacing.xs),
+                separatorBuilder: (context, index) =>
+                    SizedBox(height: AppSpacing.xs),
                 itemBuilder: (context, index) {
                   final item = items[index];
                   final isSelected = selectedIndex == index;
@@ -767,28 +753,27 @@ class AppNavigationDrawer extends ConsumerWidget {
                             isSelected ? FontWeight.w600 : FontWeight.w400,
                       ),
                     ),
-                    trailing:
-                        item.badge != null
-                            ? Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: AppSpacing.sm,
-                                vertical: 2,
+                    trailing: item.badge != null
+                        ? Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: AppSpacing.sm,
+                              vertical: 2,
+                            ),
+                            decoration: BoxDecoration(
+                              color: cs.primaryContainer,
+                              borderRadius: BorderRadius.circular(
+                                AppRadius.badgeRadius,
                               ),
-                              decoration: BoxDecoration(
-                                color: cs.primaryContainer,
-                                borderRadius: BorderRadius.circular(
-                                  AppRadius.badgeRadius,
-                                ),
+                            ),
+                            child: Text(
+                              item.badge!,
+                              style: AppTypography.labelSmall.copyWith(
+                                color: cs.onPrimaryContainer,
+                                fontWeight: FontWeight.w600,
                               ),
-                              child: Text(
-                                item.badge!,
-                                style: AppTypography.labelSmall.copyWith(
-                                  color: cs.onPrimaryContainer,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            )
-                            : null,
+                            ),
+                          )
+                        : null,
                     selected: isSelected,
                     selectedTileColor: cs.primaryContainer.withValues(
                       alpha: 0.5,

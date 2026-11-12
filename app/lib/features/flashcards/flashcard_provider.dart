@@ -225,15 +225,15 @@ class FlashcardState {
 
 final flashcardProvider =
     StateNotifierProvider<FlashcardNotifier, FlashcardState>((ref) {
-      final database = ref.watch(databaseProvider);
-      final aiEngine = ref.watch(aiEngineProvider);
-      final ragService = ref.watch(ragServiceProvider);
-      return FlashcardNotifier(
-        database: database,
-        aiEngine: aiEngine,
-        ragService: ragService,
-      );
-    });
+  final database = ref.watch(databaseProvider);
+  final aiEngine = ref.watch(aiEngineProvider);
+  final ragService = ref.watch(ragServiceProvider);
+  return FlashcardNotifier(
+    database: database,
+    aiEngine: aiEngine,
+    ragService: ragService,
+  );
+});
 
 final flashcardDecksProvider = Provider<List<FlashcardDeck>>((ref) {
   return ref.watch(flashcardProvider).decks;
@@ -265,11 +265,11 @@ class FlashcardNotifier extends StateNotifier<FlashcardState> {
     required db.AppDatabase database,
     required ai_engine.AIEngine aiEngine,
     required RAGService ragService,
-  }) : _database = database,
-       _aiEngine = aiEngine,
-       _ragService = ragService,
-       _fsrsParams = const FSRSParameters(),
-       super(const FlashcardState()) {
+  })  : _database = database,
+        _aiEngine = aiEngine,
+        _ragService = ragService,
+        _fsrsParams = const FSRSParameters(),
+        super(const FlashcardState()) {
     _loadAll();
   }
 
@@ -308,9 +308,9 @@ class FlashcardNotifier extends StateNotifier<FlashcardState> {
 
   Future<void> loadCardsForDeck(int deckId) async {
     try {
-      final raw =
-          await (_database.select(_database.flashcards)
-            ..where((t) => t.deckId.equals(deckId))).get();
+      final raw = await (_database.select(_database.flashcards)
+            ..where((t) => t.deckId.equals(deckId)))
+          .get();
       final cards = raw.map(Flashcard.fromDb).toList();
       final updated = Map<int, List<Flashcard>>.from(state.deckCards);
       updated[deckId] = cards;
@@ -331,9 +331,7 @@ class FlashcardNotifier extends StateNotifier<FlashcardState> {
   }) async {
     try {
       final now = DateTime.now();
-      final id = await _database
-          .into(_database.flashcardDecks)
-          .insert(
+      final id = await _database.into(_database.flashcardDecks).insert(
             db.FlashcardDecksCompanion(
               name: drift.Value(name),
               description: drift.Value(description),
@@ -361,7 +359,8 @@ class FlashcardNotifier extends StateNotifier<FlashcardState> {
   }) async {
     try {
       await (_database.update(_database.flashcardDecks)
-        ..where((t) => t.id.equals(id))).write(
+            ..where((t) => t.id.equals(id)))
+          .write(
         db.FlashcardDecksCompanion(
           name: drift.Value(name ?? _getDeckName(id)),
           description: drift.Value(description),
@@ -387,7 +386,8 @@ class FlashcardNotifier extends StateNotifier<FlashcardState> {
   Future<void> deleteDeck(int id) async {
     try {
       await (_database.delete(_database.flashcardDecks)
-        ..where((t) => t.id.equals(id))).go();
+            ..where((t) => t.id.equals(id)))
+          .go();
       final updated = Map<int, List<Flashcard>>.from(state.deckCards);
       updated.remove(id);
       state = state.copyWith(
@@ -413,9 +413,7 @@ class FlashcardNotifier extends StateNotifier<FlashcardState> {
   }) async {
     try {
       final now = DateTime.now();
-      final id = await _database
-          .into(_database.flashcards)
-          .insert(
+      final id = await _database.into(_database.flashcards).insert(
             db.FlashcardsCompanion(
               deckId: drift.Value(deckId),
               front: drift.Value(front),
@@ -438,7 +436,8 @@ class FlashcardNotifier extends StateNotifier<FlashcardState> {
 
       // Update deck card count
       await (_database.update(_database.flashcardDecks)
-        ..where((t) => t.id.equals(deckId))).write(
+            ..where((t) => t.id.equals(deckId)))
+          .write(
         db.FlashcardDecksCompanion(updatedAt: drift.Value(DateTime.now())),
       );
 
@@ -469,7 +468,8 @@ class FlashcardNotifier extends StateNotifier<FlashcardState> {
         updatedAt: drift.Value(DateTime.now()),
       );
       await (_database.update(_database.flashcards)
-        ..where((t) => t.id.equals(id))).write(companion);
+            ..where((t) => t.id.equals(id)))
+          .write(companion);
       await loadCardsForDeck(card.deckId);
     } catch (e) {
       state = state.copyWith(error: 'Failed to update card: $e');
@@ -481,7 +481,8 @@ class FlashcardNotifier extends StateNotifier<FlashcardState> {
     try {
       final card = _findCardById(id);
       await (_database.delete(_database.flashcards)
-        ..where((t) => t.id.equals(id))).go();
+            ..where((t) => t.id.equals(id)))
+          .go();
       await loadCardsForDeck(card.deckId);
       await _loadDueCards();
     } catch (e) {
@@ -493,9 +494,9 @@ class FlashcardNotifier extends StateNotifier<FlashcardState> {
   Flashcard _findCardById(int id) {
     for (final cards in state.deckCards.values) {
       final found = cards.cast<Flashcard?>().firstWhere(
-        (c) => c != null && c.id == id,
-        orElse: () => null,
-      );
+            (c) => c != null && c.id == id,
+            orElse: () => null,
+          );
       if (found != null) return found;
     }
     // Fall back to due cards
@@ -523,9 +524,7 @@ class FlashcardNotifier extends StateNotifier<FlashcardState> {
       final result = fsrsNext(fsrsState, rating, _fsrsParams);
 
       // Record the review
-      await _database
-          .into(_database.flashcardReviews)
-          .insert(
+      await _database.into(_database.flashcardReviews).insert(
             db.FlashcardReviewsCompanion(
               flashcardId: drift.Value(cardId),
               rating: drift.Value(rating.value),
@@ -542,7 +541,8 @@ class FlashcardNotifier extends StateNotifier<FlashcardState> {
       // Update the card with new FSRS state
       final now = DateTime.now();
       await (_database.update(_database.flashcards)
-        ..where((t) => t.id.equals(cardId))).write(
+            ..where((t) => t.id.equals(cardId)))
+          .write(
         db.FlashcardsCompanion(
           stability: drift.Value(result.stability),
           difficulty: drift.Value(result.difficulty),

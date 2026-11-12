@@ -34,19 +34,17 @@ class GlassBottomSheet extends StatelessWidget {
         filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
         child: Container(
           decoration: BoxDecoration(
-            color:
-                isDark
-                    ? InhaleColors.glassSurfaceHeavy
-                    : InhaleColors.lightGlassSurfaceMedium,
+            color: isDark
+                ? InhaleColors.glassSurfaceHeavy
+                : InhaleColors.lightGlassSurfaceMedium,
             borderRadius: BorderRadius.vertical(
               top: Radius.circular(InhaleRadius.lg),
             ),
             border: Border(
               top: BorderSide(
-                color:
-                    isDark
-                        ? InhaleColors.glassBorder
-                        : InhaleColors.lightGlassBorder,
+                color: isDark
+                    ? InhaleColors.glassBorder
+                    : InhaleColors.lightGlassBorder,
                 width: 0.5,
               ),
             ),
@@ -63,10 +61,9 @@ class GlassBottomSheet extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
-                        color:
-                            isDark
-                                ? InhaleColors.textPrimary
-                                : InhaleColors.lightNavyText,
+                        color: isDark
+                            ? InhaleColors.textPrimary
+                            : InhaleColors.lightNavyText,
                       ),
                     ),
                     const SizedBox(height: 16),

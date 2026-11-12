@@ -4,10 +4,10 @@ import '../../ai/engine/ai_engine.dart' show AIEngine, ChatMessage;
 
 final languageLearningProvider =
     StateNotifierProvider<LanguageLearningNotifier, LanguageLearningState>((
-      ref,
-    ) {
-      return LanguageLearningNotifier(ref.watch(aiEngineProvider));
-    });
+  ref,
+) {
+  return LanguageLearningNotifier(ref.watch(aiEngineProvider));
+});
 
 class LanguageLearningState {
   final TranslationState translation;
@@ -27,12 +27,13 @@ class LanguageLearningState {
     ConversationState? conversation,
     GrammarState? grammar,
     VocabularyState? vocabulary,
-  }) => LanguageLearningState(
-    translation: translation ?? this.translation,
-    conversation: conversation ?? this.conversation,
-    grammar: grammar ?? this.grammar,
-    vocabulary: vocabulary ?? this.vocabulary,
-  );
+  }) =>
+      LanguageLearningState(
+        translation: translation ?? this.translation,
+        conversation: conversation ?? this.conversation,
+        grammar: grammar ?? this.grammar,
+        vocabulary: vocabulary ?? this.vocabulary,
+      );
 }
 
 class TranslationState {
@@ -59,14 +60,15 @@ class TranslationState {
     String? targetLang,
     bool? isTranslating,
     String? error,
-  }) => TranslationState(
-    sourceText: sourceText ?? this.sourceText,
-    translatedText: translatedText ?? this.translatedText,
-    sourceLang: sourceLang ?? this.sourceLang,
-    targetLang: targetLang ?? this.targetLang,
-    isTranslating: isTranslating ?? this.isTranslating,
-    error: error ?? this.error,
-  );
+  }) =>
+      TranslationState(
+        sourceText: sourceText ?? this.sourceText,
+        translatedText: translatedText ?? this.translatedText,
+        sourceLang: sourceLang ?? this.sourceLang,
+        targetLang: targetLang ?? this.targetLang,
+        isTranslating: isTranslating ?? this.isTranslating,
+        error: error ?? this.error,
+      );
 }
 
 class ConversationState {
@@ -90,13 +92,14 @@ class ConversationState {
     String? targetLanguage,
     bool? isGenerating,
     String? error,
-  }) => ConversationState(
-    messages: messages ?? this.messages,
-    currentInput: currentInput ?? this.currentInput,
-    targetLanguage: targetLanguage ?? this.targetLanguage,
-    isGenerating: isGenerating ?? this.isGenerating,
-    error: error ?? this.error,
-  );
+  }) =>
+      ConversationState(
+        messages: messages ?? this.messages,
+        currentInput: currentInput ?? this.currentInput,
+        targetLanguage: targetLanguage ?? this.targetLanguage,
+        isGenerating: isGenerating ?? this.isGenerating,
+        error: error ?? this.error,
+      );
 }
 
 class ConversationMessage {
@@ -132,13 +135,14 @@ class GrammarState {
     String? language,
     bool? isLoading,
     String? error,
-  }) => GrammarState(
-    query: query ?? this.query,
-    explanation: explanation ?? this.explanation,
-    language: language ?? this.language,
-    isLoading: isLoading ?? this.isLoading,
-    error: error ?? this.error,
-  );
+  }) =>
+      GrammarState(
+        query: query ?? this.query,
+        explanation: explanation ?? this.explanation,
+        language: language ?? this.language,
+        isLoading: isLoading ?? this.isLoading,
+        error: error ?? this.error,
+      );
 }
 
 class VocabularyItem {
@@ -176,20 +180,21 @@ class VocabularyState {
     List<VocabularyItem>? items,
     bool? isLoading,
     String? error,
-  }) => VocabularyState(
-    topics: topics ?? this.topics,
-    language: language ?? this.language,
-    items: items ?? this.items,
-    isLoading: isLoading ?? this.isLoading,
-    error: error ?? this.error,
-  );
+  }) =>
+      VocabularyState(
+        topics: topics ?? this.topics,
+        language: language ?? this.language,
+        items: items ?? this.items,
+        isLoading: isLoading ?? this.isLoading,
+        error: error ?? this.error,
+      );
 }
 
 class LanguageLearningNotifier extends StateNotifier<LanguageLearningState> {
   final AIEngine _aiEngine;
 
   LanguageLearningNotifier(this._aiEngine)
-    : super(const LanguageLearningState());
+      : super(const LanguageLearningState());
 
   // ==================== Translation ====================
   Future<void> translate({
@@ -280,16 +285,15 @@ class LanguageLearningNotifier extends StateNotifier<LanguageLearningState> {
     );
 
     try {
-      final history =
-          state.conversation.messages
-              .map(
-                (m) => ChatMessage(
-                  role: m.isUser ? 'user' : 'assistant',
-                  content: m.content,
-                  timestamp: m.timestamp,
-                ),
-              )
-              .toList();
+      final history = state.conversation.messages
+          .map(
+            (m) => ChatMessage(
+              role: m.isUser ? 'user' : 'assistant',
+              content: m.content,
+              timestamp: m.timestamp,
+            ),
+          )
+          .toList();
 
       final prompt = _buildConversationPrompt(message, language);
       final buffer = StringBuffer();

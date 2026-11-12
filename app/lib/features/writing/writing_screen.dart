@@ -47,10 +47,9 @@ class WritingScreen extends ConsumerWidget {
       appBar: GlassAppBar(title: 'Writing Assistant'),
       body: Container(
         decoration: BoxDecoration(
-          gradient:
-              isDark
-                  ? InhaleColors.gradientBackgroundDark
-                  : InhaleColors.gradientBackground,
+          gradient: isDark
+              ? InhaleColors.gradientBackgroundDark
+              : InhaleColors.gradientBackground,
         ),
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(InhaleSpacing.md),
@@ -60,51 +59,47 @@ class WritingScreen extends ConsumerWidget {
               Text(
                 'Writing Mode',
                 style: InhaleTypography.headlineMedium.copyWith(
-                  color:
-                      isDark
-                          ? InhaleColors.textPrimary
-                          : InhaleColors.lightNavyText,
+                  color: isDark
+                      ? InhaleColors.textPrimary
+                      : InhaleColors.lightNavyText,
                 ),
               ),
               const SizedBox(height: InhaleSpacing.sm),
               Wrap(
                 spacing: InhaleSpacing.sm,
                 runSpacing: InhaleSpacing.sm,
-                children:
-                    modes.map((m) {
-                      final selected = m == state.mode;
-                      return GlassCard(
-                        onTap: () => notifier.setMode(m),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
-                        ),
-                        elevated: selected,
-                        glow: selected,
-                        child: Text(
-                          modeLabels[m]!,
-                          style: InhaleTypography.labelMedium.copyWith(
-                            color:
-                                selected
-                                    ? Colors.white
-                                    : (isDark
-                                        ? InhaleColors.electricBlue
-                                        : InhaleColors.lightPrimaryBlue),
-                            fontWeight:
-                                selected ? FontWeight.w600 : FontWeight.w400,
-                          ),
-                        ),
-                      );
-                    }).toList(),
+                children: modes.map((m) {
+                  final selected = m == state.mode;
+                  return GlassCard(
+                    onTap: () => notifier.setMode(m),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    elevated: selected,
+                    glow: selected,
+                    child: Text(
+                      modeLabels[m]!,
+                      style: InhaleTypography.labelMedium.copyWith(
+                        color: selected
+                            ? Colors.white
+                            : (isDark
+                                ? InhaleColors.electricBlue
+                                : InhaleColors.lightPrimaryBlue),
+                        fontWeight:
+                            selected ? FontWeight.w600 : FontWeight.w400,
+                      ),
+                    ),
+                  );
+                }).toList(),
               ),
               const SizedBox(height: InhaleSpacing.lg),
               Text(
                 'Instructions',
                 style: InhaleTypography.titleMedium.copyWith(
-                  color:
-                      isDark
-                          ? InhaleColors.textPrimary
-                          : InhaleColors.lightNavyText,
+                  color: isDark
+                      ? InhaleColors.textPrimary
+                      : InhaleColors.lightNavyText,
                 ),
               ),
               const SizedBox(height: InhaleSpacing.sm),
@@ -120,10 +115,9 @@ class WritingScreen extends ConsumerWidget {
               Text(
                 'Content',
                 style: InhaleTypography.titleMedium.copyWith(
-                  color:
-                      isDark
-                          ? InhaleColors.textPrimary
-                          : InhaleColors.lightNavyText,
+                  color: isDark
+                      ? InhaleColors.textPrimary
+                      : InhaleColors.lightNavyText,
                 ),
               ),
               const SizedBox(height: InhaleSpacing.sm),
@@ -141,10 +135,9 @@ class WritingScreen extends ConsumerWidget {
                 width: double.infinity,
                 label:
                     state.isGenerating ? 'Generating...' : 'Generate Content',
-                onTap:
-                    state.isGenerating
-                        ? null
-                        : () => notifier.generateContent(),
+                onTap: state.isGenerating
+                    ? null
+                    : () => notifier.generateContent(),
                 glow: !state.isGenerating,
               ),
             ],

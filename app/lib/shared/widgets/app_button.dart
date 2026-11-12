@@ -55,9 +55,9 @@ class AppButton extends StatelessWidget {
     this.overlayColor,
     this.animationDuration = const Duration(milliseconds: 150),
   }) : assert(
-         label != null || icon != null || leadingIcon != null,
-         'Button must have at least a label, icon, or leadingIcon',
-       );
+          label != null || icon != null || leadingIcon != null,
+          'Button must have at least a label, icon, or leadingIcon',
+        );
 
   @override
   Widget build(BuildContext context) {
@@ -270,14 +270,12 @@ class AppButton extends StatelessWidget {
           style: ElevatedButton.styleFrom(
             backgroundColor: backgroundColor,
             foregroundColor: foregroundColor,
-            disabledBackgroundColor:
-                isDark
-                    ? AppColors.darkOutlineVariant
-                    : AppColors.lightOutlineVariant,
-            disabledForegroundColor:
-                isDark
-                    ? AppColors.darkTextTertiary
-                    : AppColors.lightTextTertiary,
+            disabledBackgroundColor: isDark
+                ? AppColors.darkOutlineVariant
+                : AppColors.lightOutlineVariant,
+            disabledForegroundColor: isDark
+                ? AppColors.darkTextTertiary
+                : AppColors.lightTextTertiary,
             elevation: 0,
             shadowColor: Colors.transparent,
             padding: padding,
@@ -289,8 +287,7 @@ class AppButton extends StatelessWidget {
             textStyle: textStyle,
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ).copyWith(
-            overlayColor:
-                overlayColor ??
+            overlayColor: overlayColor ??
                 WidgetStateProperty.resolveWith<Color?>((states) {
                   if (states.contains(WidgetState.pressed)) {
                     return (isDark
@@ -317,14 +314,12 @@ class AppButton extends StatelessWidget {
           style: FilledButton.styleFrom(
             backgroundColor: backgroundColor,
             foregroundColor: foregroundColor,
-            disabledBackgroundColor:
-                isDark
-                    ? AppColors.darkOutlineVariant
-                    : AppColors.lightOutlineVariant,
-            disabledForegroundColor:
-                isDark
-                    ? AppColors.darkTextTertiary
-                    : AppColors.lightTextTertiary,
+            disabledBackgroundColor: isDark
+                ? AppColors.darkOutlineVariant
+                : AppColors.lightOutlineVariant,
+            disabledForegroundColor: isDark
+                ? AppColors.darkTextTertiary
+                : AppColors.lightTextTertiary,
             elevation: 0,
             padding: padding,
             minimumSize: minSize,
@@ -344,10 +339,9 @@ class AppButton extends StatelessWidget {
           onPressed: isLoading ? null : onPressed,
           style: OutlinedButton.styleFrom(
             foregroundColor: foregroundColor,
-            disabledForegroundColor:
-                isDark
-                    ? AppColors.darkTextTertiary
-                    : AppColors.lightTextTertiary,
+            disabledForegroundColor: isDark
+                ? AppColors.darkTextTertiary
+                : AppColors.lightTextTertiary,
             side: borderSide,
             padding: padding,
             minimumSize: minSize,
@@ -355,8 +349,7 @@ class AppButton extends StatelessWidget {
             textStyle: textStyle,
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ).copyWith(
-            overlayColor:
-                overlayColor ??
+            overlayColor: overlayColor ??
                 WidgetStateProperty.resolveWith<Color?>((states) {
                   if (states.contains(WidgetState.pressed)) {
                     return (isDark
@@ -382,18 +375,16 @@ class AppButton extends StatelessWidget {
           onPressed: isLoading ? null : onPressed,
           style: TextButton.styleFrom(
             foregroundColor: foregroundColor,
-            disabledForegroundColor:
-                isDark
-                    ? AppColors.darkTextTertiary
-                    : AppColors.lightTextTertiary,
+            disabledForegroundColor: isDark
+                ? AppColors.darkTextTertiary
+                : AppColors.lightTextTertiary,
             padding: padding,
             minimumSize: minSize,
             shape: RoundedRectangleBorder(borderRadius: borderRadius),
             textStyle: textStyle,
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ).copyWith(
-            overlayColor:
-                overlayColor ??
+            overlayColor: overlayColor ??
                 WidgetStateProperty.resolveWith<Color?>((states) {
                   if (states.contains(WidgetState.pressed)) {
                     return (isDark
@@ -420,14 +411,12 @@ class AppButton extends StatelessWidget {
           style: FilledButton.styleFrom(
             backgroundColor: backgroundColor,
             foregroundColor: foregroundColor,
-            disabledBackgroundColor:
-                isDark
-                    ? AppColors.darkOutlineVariant
-                    : AppColors.lightOutlineVariant,
-            disabledForegroundColor:
-                isDark
-                    ? AppColors.darkTextTertiary
-                    : AppColors.lightTextTertiary,
+            disabledBackgroundColor: isDark
+                ? AppColors.darkOutlineVariant
+                : AppColors.lightOutlineVariant,
+            disabledForegroundColor: isDark
+                ? AppColors.darkTextTertiary
+                : AppColors.lightTextTertiary,
             elevation: 0,
             padding: padding,
             minimumSize: minSize,
@@ -496,13 +485,11 @@ class AppIconButton extends StatelessWidget {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
 
-    final effectiveColor =
-        color ??
+    final effectiveColor = color ??
         (isSelected ? (selectedColor ?? cs.primary) : cs.onSurfaceVariant);
     final effectiveDisabledColor =
         disabledColor ?? cs.onSurfaceVariant.withValues(alpha: 0.38);
-    final effectiveBackgroundColor =
-        backgroundColor ??
+    final effectiveBackgroundColor = backgroundColor ??
         (isSelected
             ? (selectedBackgroundColor ?? cs.primaryContainer)
             : Colors.transparent);
@@ -605,8 +592,7 @@ class AppFAB extends StatelessWidget {
         hoverElevation: elevation,
         highlightElevation: elevation,
         shape: RoundedRectangleBorder(borderRadius: effectiveBorderRadius),
-        extendedPadding:
-            extendedPadding ??
+        extendedPadding: extendedPadding ??
             EdgeInsets.symmetric(
               horizontal: AppSpacing.xl,
               vertical: AppSpacing.md,

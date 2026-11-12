@@ -20,25 +20,25 @@ final collegeProvider = StateNotifierProvider<CollegeNotifier, CollegeState>(
 
 class CollegeNotifier extends StateNotifier<CollegeState> {
   CollegeNotifier()
-    : super(
-        const CollegeState(
-          subjects: [
-            'Engineering',
-            'Computer Science',
-            'Programming',
-            'Mathematics',
-            'Physics',
-            'Chemistry',
-            'Biology',
-            'Commerce',
-            'Accounting',
-            'Economics',
-            'Business Management',
-            'Statistics',
-            'Humanities',
-          ],
-        ),
-      );
+      : super(
+          const CollegeState(
+            subjects: [
+              'Engineering',
+              'Computer Science',
+              'Programming',
+              'Mathematics',
+              'Physics',
+              'Chemistry',
+              'Biology',
+              'Commerce',
+              'Accounting',
+              'Economics',
+              'Business Management',
+              'Statistics',
+              'Humanities',
+            ],
+          ),
+        );
 
   Future<void> selectSubject(String subject) async {
     state = CollegeState(

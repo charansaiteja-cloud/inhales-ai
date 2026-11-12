@@ -22,8 +22,7 @@ class GlassIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final effectiveColor =
-        color ??
+    final effectiveColor = color ??
         (isDark ? InhaleColors.textPrimary : InhaleColors.lightNavyText);
 
     return Semantics(
@@ -36,40 +35,37 @@ class GlassIconButton extends StatelessWidget {
           width: size,
           height: size,
           decoration: BoxDecoration(
-            color:
-                isDark
-                    ? InhaleColors.glassSurface
-                    : InhaleColors.lightGlassSurface,
+            color: isDark
+                ? InhaleColors.glassSurface
+                : InhaleColors.lightGlassSurface,
             shape: BoxShape.circle,
             border: Border.all(
-              color:
-                  isDark
-                      ? InhaleColors.glassBorderSubtle
-                      : InhaleColors.lightGlassBorderSubtle,
+              color: isDark
+                  ? InhaleColors.glassBorderSubtle
+                  : InhaleColors.lightGlassBorderSubtle,
               width: 0.5,
             ),
           ),
           child: ClipOval(
-            child:
-                useBlur
-                    ? RepaintBoundary(
-                      child: BackdropFilter(
-                        filter: ImageFilter.blur(
-                          sigmaX: InhaleBlur.light,
-                          sigmaY: InhaleBlur.light,
-                        ),
-                        child: IconButton(
-                          icon: Icon(icon, color: effectiveColor),
-                          onPressed: onTap,
-                          iconSize: size * 0.6,
-                        ),
+            child: useBlur
+                ? RepaintBoundary(
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(
+                        sigmaX: InhaleBlur.light,
+                        sigmaY: InhaleBlur.light,
                       ),
-                    )
-                    : IconButton(
-                      icon: Icon(icon, color: effectiveColor),
-                      onPressed: onTap,
-                      iconSize: size * 0.6,
+                      child: IconButton(
+                        icon: Icon(icon, color: effectiveColor),
+                        onPressed: onTap,
+                        iconSize: size * 0.6,
+                      ),
                     ),
+                  )
+                : IconButton(
+                    icon: Icon(icon, color: effectiveColor),
+                    onPressed: onTap,
+                    iconSize: size * 0.6,
+                  ),
           ),
         ),
       ),

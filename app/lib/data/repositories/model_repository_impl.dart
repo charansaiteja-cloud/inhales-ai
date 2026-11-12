@@ -74,22 +74,26 @@ class ModelRepositoryImpl implements ModelRepository {
 
   @override
   Future<void> delete(int id) async {
-    await (_database.delete(_database.appModels)
-      ..where((m) => m.id.equals(id))).go();
+    await (_database.delete(_database.appModels)..where((m) => m.id.equals(id)))
+        .go();
   }
 
   @override
   Future<void> setActive(int? modelId) async {
     // Deactivate all
-    await (_database.update(_database.appModels)..where(
-      (m) => m.id.isNotNull(),
-    )).write(const db.AppModelsCompanion(isActive: Value(false)));
+    await (_database.update(_database.appModels)
+          ..where(
+            (m) => m.id.isNotNull(),
+          ))
+        .write(const db.AppModelsCompanion(isActive: Value(false)));
 
     // Activate the selected one
     if (modelId != null) {
-      await (_database.update(_database.appModels)..where(
-        (m) => m.id.equals(modelId),
-      )).write(const db.AppModelsCompanion(isActive: Value(true)));
+      await (_database.update(_database.appModels)
+            ..where(
+              (m) => m.id.equals(modelId),
+            ))
+          .write(const db.AppModelsCompanion(isActive: Value(true)));
     }
   }
 }

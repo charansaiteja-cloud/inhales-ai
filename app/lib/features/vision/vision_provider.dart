@@ -26,13 +26,14 @@ class VisionState {
     bool? isProcessing,
     String? prompt,
     String? error,
-  }) => VisionState(
-    image: image ?? this.image,
-    result: result ?? this.result,
-    isProcessing: isProcessing ?? this.isProcessing,
-    prompt: prompt ?? this.prompt,
-    error: error ?? this.error,
-  );
+  }) =>
+      VisionState(
+        image: image ?? this.image,
+        result: result ?? this.result,
+        isProcessing: isProcessing ?? this.isProcessing,
+        prompt: prompt ?? this.prompt,
+        error: error ?? this.error,
+      );
 }
 
 final visionProvider = StateNotifierProvider<VisionNotifier, VisionState>(

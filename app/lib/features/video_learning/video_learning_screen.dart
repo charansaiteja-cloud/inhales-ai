@@ -22,10 +22,9 @@ class VideoLearningScreen extends ConsumerWidget {
       appBar: GlassAppBar(title: 'Video Learning'),
       body: Container(
         decoration: BoxDecoration(
-          gradient:
-              isDark
-                  ? InhaleColors.gradientBackgroundDark
-                  : InhaleColors.gradientBackground,
+          gradient: isDark
+              ? InhaleColors.gradientBackgroundDark
+              : InhaleColors.gradientBackground,
         ),
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(InhaleSpacing.md),
@@ -35,20 +34,18 @@ class VideoLearningScreen extends ConsumerWidget {
               Text(
                 'AI Video Learning',
                 style: InhaleTypography.headlineMedium.copyWith(
-                  color:
-                      isDark
-                          ? InhaleColors.textPrimary
-                          : InhaleColors.lightNavyText,
+                  color: isDark
+                      ? InhaleColors.textPrimary
+                      : InhaleColors.lightNavyText,
                 ),
               ),
               const SizedBox(height: InhaleSpacing.xs),
               Text(
                 'Upload a video to get transcripts, summaries, and Q&A',
                 style: InhaleTypography.bodyMedium.copyWith(
-                  color:
-                      isDark
-                          ? InhaleColors.textSecondary
-                          : InhaleColors.lightTextSecondary,
+                  color: isDark
+                      ? InhaleColors.textSecondary
+                      : InhaleColors.lightTextSecondary,
                 ),
               ),
               const SizedBox(height: InhaleSpacing.lg),
@@ -94,10 +91,9 @@ class VideoLearningScreen extends ConsumerWidget {
                 Text(
                   'Summary',
                   style: InhaleTypography.headlineSmall.copyWith(
-                    color:
-                        isDark
-                            ? InhaleColors.textPrimary
-                            : InhaleColors.lightNavyText,
+                    color: isDark
+                        ? InhaleColors.textPrimary
+                        : InhaleColors.lightNavyText,
                   ),
                 ),
                 const SizedBox(height: InhaleSpacing.xs),
@@ -105,10 +101,9 @@ class VideoLearningScreen extends ConsumerWidget {
                   child: Text(
                     state.summary!,
                     style: InhaleTypography.bodyMedium.copyWith(
-                      color:
-                          isDark
-                              ? InhaleColors.textPrimary
-                              : InhaleColors.lightNavyText,
+                      color: isDark
+                          ? InhaleColors.textPrimary
+                          : InhaleColors.lightNavyText,
                     ),
                   ),
                 ),
@@ -117,49 +112,44 @@ class VideoLearningScreen extends ConsumerWidget {
                   Text(
                     'Key Topics',
                     style: InhaleTypography.headlineSmall.copyWith(
-                      color:
-                          isDark
-                              ? InhaleColors.textPrimary
-                              : InhaleColors.lightNavyText,
+                      color: isDark
+                          ? InhaleColors.textPrimary
+                          : InhaleColors.lightNavyText,
                     ),
                   ),
                   const SizedBox(height: InhaleSpacing.xs),
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
-                    children:
-                        state.keyTopics.map((topic) {
-                          return Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 6,
-                            ),
-                            decoration: BoxDecoration(
-                              color:
-                                  isDark
-                                      ? InhaleColors.glassSurface
-                                      : InhaleColors.lightGlassSurface,
-                              borderRadius: BorderRadius.circular(
-                                InhaleRadius.pill,
-                              ),
-                              border: Border.all(
-                                color:
-                                    isDark
-                                        ? InhaleColors.glassBorderSubtle
-                                        : InhaleColors.lightGlassBorderSubtle,
-                              ),
-                            ),
-                            child: Text(
-                              topic,
-                              style: InhaleTypography.labelMedium.copyWith(
-                                color:
-                                    isDark
-                                        ? InhaleColors.blue
-                                        : InhaleColors.lightPrimaryBlue,
-                              ),
-                            ),
-                          );
-                        }).toList(),
+                    children: state.keyTopics.map((topic) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: isDark
+                              ? InhaleColors.glassSurface
+                              : InhaleColors.lightGlassSurface,
+                          borderRadius: BorderRadius.circular(
+                            InhaleRadius.pill,
+                          ),
+                          border: Border.all(
+                            color: isDark
+                                ? InhaleColors.glassBorderSubtle
+                                : InhaleColors.lightGlassBorderSubtle,
+                          ),
+                        ),
+                        child: Text(
+                          topic,
+                          style: InhaleTypography.labelMedium.copyWith(
+                            color: isDark
+                                ? InhaleColors.blue
+                                : InhaleColors.lightPrimaryBlue,
+                          ),
+                        ),
+                      );
+                    }).toList(),
                   ),
                 ],
               ],

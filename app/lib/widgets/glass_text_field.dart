@@ -66,24 +66,21 @@ class _GlassTextFieldState extends State<GlassTextField> {
       duration: const Duration(milliseconds: 200),
       curve: Curves.easeInOut,
       decoration: BoxDecoration(
-        color:
-            isDark
-                ? InhaleColors.glassSurfaceLight
-                : InhaleColors.lightGlassSurface,
+        color: isDark
+            ? InhaleColors.glassSurfaceLight
+            : InhaleColors.lightGlassSurface,
         borderRadius: BorderRadius.circular(InhaleRadius.sm),
         border: Border.all(
-          color:
-              _focusNode.hasFocus
-                  ? (isDark ? InhaleColors.blue : InhaleColors.lightPrimaryBlue)
-                  : (isDark
-                      ? InhaleColors.glassBorderSubtle
-                      : InhaleColors.lightGlassBorderSubtle),
+          color: _focusNode.hasFocus
+              ? (isDark ? InhaleColors.blue : InhaleColors.lightPrimaryBlue)
+              : (isDark
+                  ? InhaleColors.glassBorderSubtle
+                  : InhaleColors.lightGlassBorderSubtle),
           width: _focusNode.hasFocus ? 1.5 : 0.5,
         ),
-        boxShadow:
-            _focusNode.hasFocus
-                ? (isDark ? InhaleShadows.glassBlue : InhaleShadows.subtle)
-                : (isDark ? InhaleShadows.subtle : null),
+        boxShadow: _focusNode.hasFocus
+            ? (isDark ? InhaleShadows.glassBlue : InhaleShadows.subtle)
+            : (isDark ? InhaleShadows.subtle : null),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(InhaleRadius.sm),
@@ -104,10 +101,9 @@ class _GlassTextFieldState extends State<GlassTextField> {
             enabled: widget.enabled,
             autofocus: widget.autofocus,
             style: TextStyle(
-              color:
-                  isDark
-                      ? InhaleColors.textPrimary
-                      : InhaleColors.lightNavyText,
+              color: isDark
+                  ? InhaleColors.textPrimary
+                  : InhaleColors.lightNavyText,
               fontSize: 15,
             ),
             decoration: InputDecoration(
@@ -116,10 +112,9 @@ class _GlassTextFieldState extends State<GlassTextField> {
               prefixIcon: widget.prefixIcon,
               suffixIcon: widget.suffixIcon,
               hintStyle: TextStyle(
-                color:
-                    isDark
-                        ? InhaleColors.textMuted
-                        : InhaleColors.lightTextSecondary,
+                color: isDark
+                    ? InhaleColors.textMuted
+                    : InhaleColors.lightTextSecondary,
                 fontSize: 14,
               ),
               border: InputBorder.none,

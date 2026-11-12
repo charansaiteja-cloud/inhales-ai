@@ -20,16 +20,14 @@ class GlassBackground extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        gradient:
-            useGradient
-                ? (isDark
-                    ? InhaleColors.gradientBackgroundDark
-                    : InhaleColors.gradientBackground)
-                : null,
-        color:
-            useGradient
-                ? null
-                : (isDark ? InhaleColors.black : InhaleColors.lightBackground),
+        gradient: useGradient
+            ? (isDark
+                ? InhaleColors.gradientBackgroundDark
+                : InhaleColors.gradientBackground)
+            : null,
+        color: useGradient
+            ? null
+            : (isDark ? InhaleColors.black : InhaleColors.lightBackground),
       ),
       child: Stack(
         children: [

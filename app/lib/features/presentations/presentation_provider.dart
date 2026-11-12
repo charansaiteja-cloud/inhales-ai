@@ -46,8 +46,8 @@ class PresentationMeta {
 
 final presentationProvider =
     StateNotifierProvider<PresentationNotifier, PresentationState>(
-      (ref) => PresentationNotifier(ref.watch(aiEngineProvider)),
-    );
+  (ref) => PresentationNotifier(ref.watch(aiEngineProvider)),
+);
 
 class PresentationNotifier extends StateNotifier<PresentationState> {
   final AIEngine _aiEngine;
@@ -125,11 +125,9 @@ Slides: $slideCount
     final slides = <Slide>[];
     final slideBlocks = response.split(RegExp(r'Slide \d+:'));
 
-    for (
-      int i = 1;
-      i < slideBlocks.length && slides.length < expectedCount;
-      i++
-    ) {
+    for (int i = 1;
+        i < slideBlocks.length && slides.length < expectedCount;
+        i++) {
       final block = slideBlocks[i].trim();
       final lines = block.split('\n');
       if (lines.isEmpty) continue;
@@ -179,10 +177,11 @@ extension on PresentationState {
     List<Slide>? currentPresentation,
     bool? isGenerating,
     String? error,
-  }) => PresentationState(
-    presentations: presentations ?? this.presentations,
-    currentPresentation: currentPresentation ?? this.currentPresentation,
-    isGenerating: isGenerating ?? this.isGenerating,
-    error: error ?? this.error,
-  );
+  }) =>
+      PresentationState(
+        presentations: presentations ?? this.presentations,
+        currentPresentation: currentPresentation ?? this.currentPresentation,
+        isGenerating: isGenerating ?? this.isGenerating,
+        error: error ?? this.error,
+      );
 }

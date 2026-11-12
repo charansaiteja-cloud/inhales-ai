@@ -24,10 +24,9 @@ class MessageRepositoryImpl implements MessageRepository {
 
   @override
   Future<List<domain.Message>> getByConversation(int conversationId) async {
-    final query =
-        _database.select(_database.messages)
-          ..where((m) => m.conversationId.equals(conversationId))
-          ..orderBy([(m) => OrderingTerm.asc(m.createdAt)]);
+    final query = _database.select(_database.messages)
+      ..where((m) => m.conversationId.equals(conversationId))
+      ..orderBy([(m) => OrderingTerm.asc(m.createdAt)]);
     final results = await query.get();
     return results.map(_mapToEntity).toList();
   }
@@ -67,18 +66,19 @@ class MessageRepositoryImpl implements MessageRepository {
 
   @override
   Future<void> delete(int id) async {
-    await (_database.delete(_database.messages)
-      ..where((m) => m.id.equals(id))).go();
+    await (_database.delete(_database.messages)..where((m) => m.id.equals(id)))
+        .go();
   }
 
   @override
   Future<void> toggleBookmark(int id) async {
-    final message =
-        await (_database.select(_database.messages)
-          ..where((m) => m.id.equals(id))).getSingleOrNull();
+    final message = await (_database.select(_database.messages)
+          ..where((m) => m.id.equals(id)))
+        .getSingleOrNull();
     if (message != null) {
       await (_database.update(_database.messages)
-        ..where((m) => m.id.equals(id))).write(
+            ..where((m) => m.id.equals(id)))
+          .write(
         db.MessagesCompanion(isBookmarked: Value(!message.isBookmarked)),
       );
     }
@@ -86,14 +86,13 @@ class MessageRepositoryImpl implements MessageRepository {
 
   @override
   Future<List<domain.Message>> getBookmarked(int conversationId) async {
-    final query =
-        _database.select(_database.messages)
-          ..where(
-            (m) =>
-                m.conversationId.equals(conversationId) &
-                m.isBookmarked.equals(true),
-          )
-          ..orderBy([(m) => OrderingTerm.desc(m.createdAt)]);
+    final query = _database.select(_database.messages)
+      ..where(
+        (m) =>
+            m.conversationId.equals(conversationId) &
+            m.isBookmarked.equals(true),
+      )
+      ..orderBy([(m) => OrderingTerm.desc(m.createdAt)]);
     final results = await query.get();
     return results.map(_mapToEntity).toList();
   }

@@ -46,30 +46,30 @@ class ModelManagerState {
 
 final modelManagerProvider =
     StateNotifierProvider<ModelManagerNotifier, ModelManagerState>(
-      (ref) => ModelManagerNotifier(),
-    );
+  (ref) => ModelManagerNotifier(),
+);
 
 class ModelManagerNotifier extends StateNotifier<ModelManagerState> {
   ModelManager? _manager;
   StreamSubscription<Map<String, DownloadProgress>>? _downloadSub;
 
   ModelManagerNotifier()
-    : super(
-        const ModelManagerState(
-          hardware: HardwareProfile(
-            totalRamMb: 4096,
-            availableRamMb: 2048,
-            storageFreeMb: 10000,
-            cpuArchitecture: 'x86_64',
-            cpuCores: 4,
-            gpuAvailable: false,
-            gpuName: 'none',
-            os: 'linux',
-            osVersion: 1,
+      : super(
+          const ModelManagerState(
+            hardware: HardwareProfile(
+              totalRamMb: 4096,
+              availableRamMb: 2048,
+              storageFreeMb: 10000,
+              cpuArchitecture: 'x86_64',
+              cpuCores: 4,
+              gpuAvailable: false,
+              gpuName: 'none',
+              os: 'linux',
+              osVersion: 1,
+            ),
+            installedModels: [],
           ),
-          installedModels: [],
-        ),
-      ) {
+        ) {
     _init();
   }
 
@@ -169,10 +169,9 @@ class ModelManagerNotifier extends StateNotifier<ModelManagerState> {
       await _refreshInstalled();
       if (state.activeModel?.id == modelId) {
         state = state.copyWith(
-          activeModel:
-              state.installedModels.isNotEmpty
-                  ? state.installedModels.first
-                  : null,
+          activeModel: state.installedModels.isNotEmpty
+              ? state.installedModels.first
+              : null,
         );
       }
     } catch (e) {

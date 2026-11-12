@@ -13,7 +13,7 @@ class FfiAIEngine implements AIEngine {
   final InferenceEngine _engine;
 
   FfiAIEngine({InferenceEngine? engine})
-    : _engine = engine ?? FfiInferenceEngine();
+      : _engine = engine ?? FfiInferenceEngine();
 
   @override
   Future<void> initialize() async {

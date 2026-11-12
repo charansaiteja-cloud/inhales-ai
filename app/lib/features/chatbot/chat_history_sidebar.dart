@@ -41,16 +41,14 @@ class ChatHistorySidebar extends ConsumerWidget {
         child: FocusableActionDetector(
           child: Container(
             decoration: BoxDecoration(
-              gradient:
-                  isDark
-                      ? InhaleColors.gradientBackgroundDark
-                      : InhaleColors.gradientBackground,
+              gradient: isDark
+                  ? InhaleColors.gradientBackgroundDark
+                  : InhaleColors.gradientBackground,
               border: Border(
                 right: BorderSide(
-                  color:
-                      isDark
-                          ? InhaleColors.glassBorderSubtle
-                          : InhaleColors.lightGlassBorderSubtle,
+                  color: isDark
+                      ? InhaleColors.glassBorderSubtle
+                      : InhaleColors.lightGlassBorderSubtle,
                   width: 0.5,
                 ),
               ),
@@ -59,10 +57,9 @@ class ChatHistorySidebar extends ConsumerWidget {
               children: [
                 _buildHeader(context, isDark),
                 Expanded(
-                  child:
-                      chatState.sessions.isEmpty
-                          ? _buildEmptyState(context, isDark, ref)
-                          : _buildSessionList(context, chatState, isDark, ref),
+                  child: chatState.sessions.isEmpty
+                      ? _buildEmptyState(context, isDark, ref)
+                      : _buildSessionList(context, chatState, isDark, ref),
                 ),
                 _buildFooter(context, isDark, ref),
               ],
@@ -98,10 +95,9 @@ class ChatHistorySidebar extends ConsumerWidget {
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            color:
-                isDark
-                    ? InhaleColors.glassBorderSubtle
-                    : InhaleColors.lightGlassBorderSubtle,
+            color: isDark
+                ? InhaleColors.glassBorderSubtle
+                : InhaleColors.lightGlassBorderSubtle,
             width: 0.5,
           ),
         ),
@@ -112,10 +108,9 @@ class ChatHistorySidebar extends ConsumerWidget {
             child: Text(
               'Conversations',
               style: InhaleTypography.titleLarge.copyWith(
-                color:
-                    isDark
-                        ? InhaleColors.textPrimary
-                        : InhaleColors.lightNavyText,
+                color: isDark
+                    ? InhaleColors.textPrimary
+                    : InhaleColors.lightNavyText,
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -147,10 +142,9 @@ class ChatHistorySidebar extends ConsumerWidget {
             Text(
               'No conversations yet',
               style: InhaleTypography.titleMedium.copyWith(
-                color:
-                    isDark
-                        ? InhaleColors.textPrimary
-                        : InhaleColors.lightNavyText,
+                color: isDark
+                    ? InhaleColors.textPrimary
+                    : InhaleColors.lightNavyText,
               ),
               textAlign: TextAlign.center,
             ),
@@ -158,10 +152,9 @@ class ChatHistorySidebar extends ConsumerWidget {
             Text(
               'Start your first chat to see it here.',
               style: InhaleTypography.bodyMedium.copyWith(
-                color:
-                    isDark
-                        ? InhaleColors.textSecondary
-                        : InhaleColors.lightTextSecondary,
+                color: isDark
+                    ? InhaleColors.textSecondary
+                    : InhaleColors.lightTextSecondary,
               ),
               textAlign: TextAlign.center,
             ),
@@ -210,10 +203,9 @@ class ChatHistorySidebar extends ConsumerWidget {
       decoration: BoxDecoration(
         border: Border(
           top: BorderSide(
-            color:
-                isDark
-                    ? InhaleColors.glassBorderSubtle
-                    : InhaleColors.lightGlassBorderSubtle,
+            color: isDark
+                ? InhaleColors.glassBorderSubtle
+                : InhaleColors.lightGlassBorderSubtle,
             width: 0.5,
           ),
         ),
@@ -234,33 +226,32 @@ class ChatHistorySidebar extends ConsumerWidget {
     final controller = TextEditingController(text: session.title);
     showDialog(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            title: const Text('Rename Conversation'),
-            content: TextField(
-              controller: controller,
-              autofocus: true,
-              decoration: const InputDecoration(hintText: 'Enter new title'),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Cancel'),
-              ),
-              TextButton(
-                onPressed: () {
-                  final newTitle = controller.text.trim();
-                  if (newTitle.isNotEmpty) {
-                    ref
-                        .read(chatProvider.notifier)
-                        .renameSession(session.id, newTitle);
-                  }
-                  Navigator.pop(context);
-                },
-                child: const Text('Rename'),
-              ),
-            ],
+      builder: (context) => AlertDialog(
+        title: const Text('Rename Conversation'),
+        content: TextField(
+          controller: controller,
+          autofocus: true,
+          decoration: const InputDecoration(hintText: 'Enter new title'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
           ),
+          TextButton(
+            onPressed: () {
+              final newTitle = controller.text.trim();
+              if (newTitle.isNotEmpty) {
+                ref
+                    .read(chatProvider.notifier)
+                    .renameSession(session.id, newTitle);
+              }
+              Navigator.pop(context);
+            },
+            child: const Text('Rename'),
+          ),
+        ],
+      ),
     );
   }
 
@@ -271,25 +262,24 @@ class ChatHistorySidebar extends ConsumerWidget {
   ) {
     showDialog(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            title: const Text('Delete Conversation'),
-            content: Text('Delete "${session.title}"? This cannot be undone.'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Cancel'),
-              ),
-              TextButton(
-                onPressed: () {
-                  ref.read(chatProvider.notifier).deleteSession(session.id);
-                  Navigator.pop(context);
-                },
-                style: TextButton.styleFrom(foregroundColor: Colors.red),
-                child: const Text('Delete'),
-              ),
-            ],
+      builder: (context) => AlertDialog(
+        title: const Text('Delete Conversation'),
+        content: Text('Delete "${session.title}"? This cannot be undone.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
           ),
+          TextButton(
+            onPressed: () {
+              ref.read(chatProvider.notifier).deleteSession(session.id);
+              Navigator.pop(context);
+            },
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -342,10 +332,9 @@ class _SessionTile extends ConsumerWidget {
                     child: Icon(
                       Icons.push_pin_rounded,
                       size: 18,
-                      color:
-                          isDark
-                              ? InhaleColors.electricBlue
-                              : InhaleColors.lightPrimaryBlue,
+                      color: isDark
+                          ? InhaleColors.electricBlue
+                          : InhaleColors.lightPrimaryBlue,
                     ),
                   ),
                 Expanded(
@@ -355,10 +344,9 @@ class _SessionTile extends ConsumerWidget {
                       Text(
                         session.title,
                         style: InhaleTypography.labelMedium.copyWith(
-                          color:
-                              isDark
-                                  ? InhaleColors.textPrimary
-                                  : InhaleColors.lightNavyText,
+                          color: isDark
+                              ? InhaleColors.textPrimary
+                              : InhaleColors.lightNavyText,
                           fontWeight:
                               isActive ? FontWeight.w600 : FontWeight.w400,
                         ),
@@ -370,10 +358,9 @@ class _SessionTile extends ConsumerWidget {
                         Text(
                           _getLastMessagePreview(session),
                           style: InhaleTypography.labelSmall.copyWith(
-                            color:
-                                isDark
-                                    ? InhaleColors.textMuted
-                                    : InhaleColors.lightTextSecondary,
+                            color: isDark
+                                ? InhaleColors.textMuted
+                                : InhaleColors.lightTextSecondary,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -387,10 +374,9 @@ class _SessionTile extends ConsumerWidget {
                     width: 8,
                     height: 8,
                     decoration: BoxDecoration(
-                      color:
-                          isDark
-                              ? InhaleColors.electricBlue
-                              : InhaleColors.lightPrimaryBlue,
+                      color: isDark
+                          ? InhaleColors.electricBlue
+                          : InhaleColors.lightPrimaryBlue,
                       shape: BoxShape.circle,
                     ),
                   ),
@@ -412,13 +398,12 @@ class _SessionTile extends ConsumerWidget {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
-      builder:
-          (context) => _SessionContextMenu(
-            session: session,
-            onRename: onRename,
-            onDelete: onDelete,
-            onPin: onPin,
-          ),
+      builder: (context) => _SessionContextMenu(
+        session: session,
+        onRename: onRename,
+        onDelete: onDelete,
+        onPin: onPin,
+      ),
     );
   }
 }
@@ -450,18 +435,16 @@ class _SessionContextMenu extends StatelessWidget {
               session.isPinned
                   ? Icons.push_pin_outlined
                   : Icons.push_pin_rounded,
-              color:
-                  isDark
-                      ? InhaleColors.textPrimary
-                      : InhaleColors.lightNavyText,
+              color: isDark
+                  ? InhaleColors.textPrimary
+                  : InhaleColors.lightNavyText,
             ),
             title: Text(
               session.isPinned ? 'Unpin' : 'Pin',
               style: TextStyle(
-                color:
-                    isDark
-                        ? InhaleColors.textPrimary
-                        : InhaleColors.lightNavyText,
+                color: isDark
+                    ? InhaleColors.textPrimary
+                    : InhaleColors.lightNavyText,
               ),
             ),
             onTap: () {
@@ -472,18 +455,16 @@ class _SessionContextMenu extends StatelessWidget {
           ListTile(
             leading: Icon(
               Icons.edit_rounded,
-              color:
-                  isDark
-                      ? InhaleColors.textPrimary
-                      : InhaleColors.lightNavyText,
+              color: isDark
+                  ? InhaleColors.textPrimary
+                  : InhaleColors.lightNavyText,
             ),
             title: Text(
               'Rename',
               style: TextStyle(
-                color:
-                    isDark
-                        ? InhaleColors.textPrimary
-                        : InhaleColors.lightNavyText,
+                color: isDark
+                    ? InhaleColors.textPrimary
+                    : InhaleColors.lightNavyText,
               ),
             ),
             onTap: () {

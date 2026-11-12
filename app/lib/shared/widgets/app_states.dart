@@ -55,8 +55,7 @@ class AppEmptyState extends StatelessWidget {
               borderRadius: BorderRadius.circular(AppRadius.avatarRadius),
             ),
             child: Center(
-              child:
-                  icon ??
+              child: icon ??
                   Icon(Icons.inbox_rounded, size: 40, color: cs.primary),
             ),
           ),
@@ -141,13 +140,11 @@ class _AppSkeletonState extends State<AppSkeleton>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final baseColor =
-        widget.baseColor ??
+    final baseColor = widget.baseColor ??
         (isDark
             ? AppColors.darkSurfaceContainer
             : AppColors.lightSurfaceContainer);
-    final highlightColor =
-        widget.highlightColor ??
+    final highlightColor = widget.highlightColor ??
         (isDark ? AppColors.darkSurfaceVariant : AppColors.lightSurfaceVariant);
 
     return AnimatedBuilder(
@@ -158,8 +155,7 @@ class _AppSkeletonState extends State<AppSkeleton>
           height: widget.height,
           decoration: BoxDecoration(
             color: Color.lerp(baseColor, highlightColor, _animation.value),
-            borderRadius:
-                widget.borderRadius ??
+            borderRadius: widget.borderRadius ??
                 BorderRadius.circular(AppRadius.cardRadius),
           ),
         );
@@ -345,9 +341,8 @@ class AppSkeletonList extends StatelessWidget {
       padding: EdgeInsets.zero,
       itemCount: itemCount,
       separatorBuilder: (context, index) => SizedBox(height: AppSpacing.sm),
-      itemBuilder:
-          (context, index) =>
-              AppSkeletonCard(showAvatar: showAvatar, textLines: textLines),
+      itemBuilder: (context, index) =>
+          AppSkeletonCard(showAvatar: showAvatar, textLines: textLines),
     );
   }
 }
@@ -484,8 +479,7 @@ class AppErrorState extends StatelessWidget {
     final cs = theme.colorScheme;
 
     return AppEmptyState(
-      icon:
-          icon ??
+      icon: icon ??
           Container(
             width: 80,
             height: 80,
@@ -497,15 +491,14 @@ class AppErrorState extends StatelessWidget {
           ),
       title: title,
       message: message,
-      action:
-          onRetry != null
-              ? AppButton(
-                label: retryLabel,
-                variant: AppButtonVariant.primary,
-                onPressed: onRetry,
-                icon: const Icon(Icons.refresh_rounded, size: 18),
-              )
-              : null,
+      action: onRetry != null
+          ? AppButton(
+              label: retryLabel,
+              variant: AppButtonVariant.primary,
+              onPressed: onRetry,
+              icon: const Icon(Icons.refresh_rounded, size: 18),
+            )
+          : null,
       padding: padding,
     );
   }
@@ -537,8 +530,7 @@ class AppSuccessState extends StatelessWidget {
     final cs = theme.colorScheme;
 
     return AppEmptyState(
-      icon:
-          icon ??
+      icon: icon ??
           Container(
             width: 80,
             height: 80,
@@ -587,18 +579,16 @@ class AppOfflineState extends StatelessWidget {
         child: Icon(Icons.wifi_off_rounded, size: 40, color: cs.secondary),
       ),
       title: 'You\'re Offline',
-      message:
-          message ??
+      message: message ??
           'No internet connection. Some features may be unavailable.',
-      action:
-          onRetry != null
-              ? AppButton(
-                label: 'Retry Connection',
-                variant: AppButtonVariant.primary,
-                onPressed: onRetry,
-                icon: const Icon(Icons.wifi_rounded, size: 18),
-              )
-              : null,
+      action: onRetry != null
+          ? AppButton(
+              label: 'Retry Connection',
+              variant: AppButtonVariant.primary,
+              onPressed: onRetry,
+              icon: const Icon(Icons.wifi_rounded, size: 18),
+            )
+          : null,
       padding: padding,
     );
   }

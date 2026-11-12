@@ -35,21 +35,16 @@ class GlassButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final effectiveRadius =
-        borderRadius ??
+    final effectiveRadius = borderRadius ??
         const BorderRadius.all(Radius.circular(InhaleRadius.pill));
 
-    final content =
-        child ??
+    final content = child ??
         Text(
           label ?? '',
           style: TextStyle(
-            color:
-                outlined
-                    ? (isDark
-                        ? InhaleColors.blue
-                        : InhaleColors.lightPrimaryBlue)
-                    : (isDark ? InhaleColors.textPrimary : Colors.white),
+            color: outlined
+                ? (isDark ? InhaleColors.blue : InhaleColors.lightPrimaryBlue)
+                : (isDark ? InhaleColors.textPrimary : Colors.white),
             fontWeight: FontWeight.w600,
             fontSize: 15,
           ),
@@ -73,38 +68,35 @@ class GlassButton extends StatelessWidget {
               width: width,
               height: height ?? (iconOnly ? 44 : 48),
               decoration: BoxDecoration(
-                color:
-                    enabled
-                        ? (outlined
-                            ? InhaleColors.glassSurface
-                            : (isDark
-                                ? InhaleColors.blue
-                                : InhaleColors.lightPrimaryBlue))
+                color: enabled
+                    ? (outlined
+                        ? InhaleColors.glassSurface
                         : (isDark
-                            ? InhaleColors.glassSurface
-                            : InhaleColors.lightGlassSurface),
+                            ? InhaleColors.blue
+                            : InhaleColors.lightPrimaryBlue))
+                    : (isDark
+                        ? InhaleColors.glassSurface
+                        : InhaleColors.lightGlassSurface),
                 gradient:
                     enabled && !outlined ? InhaleColors.gradientPrimary : null,
                 borderRadius: effectiveRadius,
                 border: Border.all(
-                  color:
-                      outlined
-                          ? (isDark
-                              ? InhaleColors.glassBorder
-                              : InhaleColors.lightGlassBorder)
-                          : (isDark
-                              ? InhaleColors.glassBorderSubtle
-                              : InhaleColors.lightGlassBorderSubtle),
+                  color: outlined
+                      ? (isDark
+                          ? InhaleColors.glassBorder
+                          : InhaleColors.lightGlassBorder)
+                      : (isDark
+                          ? InhaleColors.glassBorderSubtle
+                          : InhaleColors.lightGlassBorderSubtle),
                   width: outlined ? 1.5 : 0.5,
                 ),
-                boxShadow:
-                    enabled
-                        ? (glow
-                            ? InhaleShadows.glowBlue
-                            : (outlined
-                                ? InhaleShadows.soft
-                                : InhaleShadows.floating))
-                        : null,
+                boxShadow: enabled
+                    ? (glow
+                        ? InhaleShadows.glowBlue
+                        : (outlined
+                            ? InhaleShadows.soft
+                            : InhaleShadows.floating))
+                    : null,
               ),
               child: ClipRRect(
                 borderRadius: effectiveRadius,

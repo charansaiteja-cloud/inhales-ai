@@ -24,55 +24,47 @@ class GlassStatusBadge extends StatelessWidget {
 
     switch (variant) {
       case BadgeVariant.primary:
-        bgColor =
-            isDark
-                ? InhaleColors.blue.withValues(alpha: 0.2)
-                : InhaleColors.blue.withValues(alpha: 0.15);
+        bgColor = isDark
+            ? InhaleColors.blue.withValues(alpha: 0.2)
+            : InhaleColors.blue.withValues(alpha: 0.15);
         txtColor = isDark ? InhaleColors.blue : InhaleColors.lightPrimaryBlue;
         break;
       case BadgeVariant.success:
-        bgColor =
-            isDark
-                ? InhaleColors.success.withValues(alpha: 0.2)
-                : InhaleColors.success.withValues(alpha: 0.15);
+        bgColor = isDark
+            ? InhaleColors.success.withValues(alpha: 0.2)
+            : InhaleColors.success.withValues(alpha: 0.15);
         txtColor = InhaleColors.success;
         break;
       case BadgeVariant.warning:
-        bgColor =
-            isDark
-                ? InhaleColors.warning.withValues(alpha: 0.2)
-                : InhaleColors.warning.withValues(alpha: 0.15);
+        bgColor = isDark
+            ? InhaleColors.warning.withValues(alpha: 0.2)
+            : InhaleColors.warning.withValues(alpha: 0.15);
         txtColor = InhaleColors.warning;
         break;
       case BadgeVariant.error:
-        bgColor =
-            isDark
-                ? InhaleColors.error.withValues(alpha: 0.2)
-                : InhaleColors.error.withValues(alpha: 0.15);
+        bgColor = isDark
+            ? InhaleColors.error.withValues(alpha: 0.2)
+            : InhaleColors.error.withValues(alpha: 0.15);
         txtColor = InhaleColors.error;
         break;
       case BadgeVariant.pink:
-        bgColor =
-            isDark
-                ? InhaleColors.pink.withValues(alpha: 0.2)
-                : InhaleColors.pink.withValues(alpha: 0.15);
+        bgColor = isDark
+            ? InhaleColors.pink.withValues(alpha: 0.2)
+            : InhaleColors.pink.withValues(alpha: 0.15);
         txtColor = isDark ? InhaleColors.pink : InhaleColors.pink;
         break;
       case BadgeVariant.skyBlue:
-        bgColor =
-            isDark
-                ? InhaleColors.skyBlue.withValues(alpha: 0.2)
-                : InhaleColors.skyBlue.withValues(alpha: 0.15);
+        bgColor = isDark
+            ? InhaleColors.skyBlue.withValues(alpha: 0.2)
+            : InhaleColors.skyBlue.withValues(alpha: 0.15);
         txtColor = isDark ? InhaleColors.skyBlue : InhaleColors.skyBlue;
         break;
       case BadgeVariant.custom:
-        bgColor =
-            backgroundColor ??
+        bgColor = backgroundColor ??
             (isDark
                 ? InhaleColors.glassSurface
                 : InhaleColors.lightGlassSurface);
-        txtColor =
-            textColor ??
+        txtColor = textColor ??
             (isDark ? InhaleColors.textPrimary : InhaleColors.lightNavyText);
         break;
     }

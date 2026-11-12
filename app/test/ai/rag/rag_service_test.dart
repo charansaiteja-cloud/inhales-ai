@@ -101,12 +101,11 @@ void main() {
     test('keyword score calculates correctly', () {
       double keywordScore(String content, String query) {
         final contentLower = content.toLowerCase();
-        final keywords =
-            query
-                .toLowerCase()
-                .split(RegExp(r'\s+'))
-                .where((w) => w.length > 1)
-                .toList();
+        final keywords = query
+            .toLowerCase()
+            .split(RegExp(r'\s+'))
+            .where((w) => w.length > 1)
+            .toList();
         if (keywords.isEmpty) return 0.0;
 
         var matches = 0;
@@ -161,12 +160,11 @@ void main() {
     test('empty query returns empty keyword score', () {
       double keywordScore(String content, String query) {
         final contentLower = content.toLowerCase();
-        final keywords =
-            query
-                .toLowerCase()
-                .split(RegExp(r'\s+'))
-                .where((w) => w.length > 1)
-                .toList();
+        final keywords = query
+            .toLowerCase()
+            .split(RegExp(r'\s+'))
+            .where((w) => w.length > 1)
+            .toList();
         if (keywords.isEmpty) return 0.0;
 
         var matches = 0;
@@ -252,8 +250,7 @@ void main() {
 
   group('Extractive summarization', () {
     test('summarizes long text by selecting key sentences', () {
-      const text =
-          'Machine learning is a subset of artificial intelligence. '
+      const text = 'Machine learning is a subset of artificial intelligence. '
           'It focuses on algorithms that can learn from data. '
           'Neural networks are a popular type of machine learning model. '
           'Deep learning uses multiple layers of neural networks. '
@@ -277,8 +274,7 @@ void main() {
     });
 
     test('extractKeyTopics identifies frequent terms', () {
-      const text =
-          'Machine learning algorithms learn from data. '
+      const text = 'Machine learning algorithms learn from data. '
           'Deep learning uses neural networks with many layers. '
           'Neural networks can approximate complex functions. '
           'Training data quality affects model performance. '
@@ -293,8 +289,7 @@ void main() {
 
     test('suggestQuestions generates relevant questions from topics', () {
       // Use repeated target words to ensure they rank highest
-      const text =
-          'Photosynthesis is the process of photosynthesis in plants. '
+      const text = 'Photosynthesis is the process of photosynthesis in plants. '
           'Chlorophyll is the green pigment chlorophyll in leaves. '
           'Photosynthesis converts light energy into chemical energy using chlorophyll. '
           'The photosynthesis process requires chlorophyll for energy conversion.';
@@ -335,8 +330,8 @@ List<String> _extractKeyTopics(String content, {int maxTopics = 7}) {
     wordFreq[w] = (wordFreq[w] ?? 0) + 1;
   }
 
-  final sorted =
-      wordFreq.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
+  final sorted = wordFreq.entries.toList()
+    ..sort((a, b) => b.value.compareTo(a.value));
   return sorted.take(maxTopics).map((e) => e.key).toList();
 }
 

@@ -49,8 +49,7 @@ class _AIOrbState extends State<AIOrb> with SingleTickerProviderStateMixin {
   @override
   void didUpdateWidget(AIOrb oldWidget) {
     super.didUpdateWidget(oldWidget);
-    final isAnimating =
-        widget.isActive ||
+    final isAnimating = widget.isActive ||
         widget.isListening ||
         widget.isProcessing ||
         widget.isSpeaking;

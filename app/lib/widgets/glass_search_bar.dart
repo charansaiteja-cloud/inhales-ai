@@ -49,16 +49,14 @@ class _GlassSearchBarState extends State<GlassSearchBar> {
                 filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                 child: Container(
                   decoration: BoxDecoration(
-                    color:
-                        isDark
-                            ? InhaleColors.glassSurface
-                            : InhaleColors.lightGlassSurface,
+                    color: isDark
+                        ? InhaleColors.glassSurface
+                        : InhaleColors.lightGlassSurface,
                     borderRadius: BorderRadius.circular(InhaleRadius.pill),
                     border: Border.all(
-                      color:
-                          isDark
-                              ? InhaleColors.glassBorderSubtle
-                              : InhaleColors.lightGlassBorderSubtle,
+                      color: isDark
+                          ? InhaleColors.glassBorderSubtle
+                          : InhaleColors.lightGlassBorderSubtle,
                       width: 0.5,
                     ),
                   ),
@@ -68,10 +66,9 @@ class _GlassSearchBarState extends State<GlassSearchBar> {
                     onTap: () {},
                     onChanged: widget.onChanged,
                     style: TextStyle(
-                      color:
-                          isDark
-                              ? InhaleColors.textPrimary
-                              : InhaleColors.lightNavyText,
+                      color: isDark
+                          ? InhaleColors.textPrimary
+                          : InhaleColors.lightNavyText,
                       fontSize: 15,
                     ),
                     decoration: InputDecoration(
@@ -82,10 +79,9 @@ class _GlassSearchBarState extends State<GlassSearchBar> {
                         vertical: 12,
                       ),
                       hintStyle: TextStyle(
-                        color:
-                            isDark
-                                ? InhaleColors.textMuted
-                                : InhaleColors.lightTextSecondary,
+                        color: isDark
+                            ? InhaleColors.textMuted
+                            : InhaleColors.lightTextSecondary,
                         fontSize: 15,
                       ),
                     ),

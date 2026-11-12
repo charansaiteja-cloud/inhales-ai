@@ -11,7 +11,7 @@ class StudyPlanItemData {
   final int? resourceId;
   final String title;
   final String
-  type; // 'read', 'video', 'quiz', 'flashcard', 'practice', 'review'
+      type; // 'read', 'video', 'quiz', 'flashcard', 'practice', 'review'
   final int estimatedMinutes;
   final int orderIndex;
   final DateTime scheduledDate;
@@ -34,15 +34,16 @@ class StudyPlanItemData {
     int? estimatedMinutes,
     int? orderIndex,
     DateTime? scheduledDate,
-  }) => StudyPlanItemData(
-    topicId: topicId ?? this.topicId,
-    resourceId: resourceId ?? this.resourceId,
-    title: title ?? this.title,
-    type: type ?? this.type,
-    estimatedMinutes: estimatedMinutes ?? this.estimatedMinutes,
-    orderIndex: orderIndex ?? this.orderIndex,
-    scheduledDate: scheduledDate ?? this.scheduledDate,
-  );
+  }) =>
+      StudyPlanItemData(
+        topicId: topicId ?? this.topicId,
+        resourceId: resourceId ?? this.resourceId,
+        title: title ?? this.title,
+        type: type ?? this.type,
+        estimatedMinutes: estimatedMinutes ?? this.estimatedMinutes,
+        orderIndex: orderIndex ?? this.orderIndex,
+        scheduledDate: scheduledDate ?? this.scheduledDate,
+      );
 }
 
 /// Represents a complete study plan with items.
@@ -76,16 +77,17 @@ class StudyPlanData {
     int? targetHoursPerWeek,
     Map<String, dynamic>? scheduleConfig,
     List<StudyPlanItemData>? items,
-  }) => StudyPlanData(
-    name: name ?? this.name,
-    description: description ?? this.description,
-    startDate: startDate ?? this.startDate,
-    endDate: endDate ?? this.endDate,
-    goals: goals ?? this.goals,
-    targetHoursPerWeek: targetHoursPerWeek ?? this.targetHoursPerWeek,
-    scheduleConfig: scheduleConfig ?? this.scheduleConfig,
-    items: items ?? this.items,
-  );
+  }) =>
+      StudyPlanData(
+        name: name ?? this.name,
+        description: description ?? this.description,
+        startDate: startDate ?? this.startDate,
+        endDate: endDate ?? this.endDate,
+        goals: goals ?? this.goals,
+        targetHoursPerWeek: targetHoursPerWeek ?? this.targetHoursPerWeek,
+        scheduleConfig: scheduleConfig ?? this.scheduleConfig,
+        items: items ?? this.items,
+      );
 }
 
 /// Topic data for planning.
@@ -188,10 +190,9 @@ class SchedulingEngine {
   }) {
     final now = DateTime.now();
     final effectiveStart = startDate.isAfter(now) ? startDate : now;
-    final effectiveEnd =
-        endDate.isBefore(effectiveStart)
-            ? effectiveStart.add(const Duration(days: 7))
-            : endDate;
+    final effectiveEnd = endDate.isBefore(effectiveStart)
+        ? effectiveStart.add(const Duration(days: 7))
+        : endDate;
 
     final totalDays = effectiveEnd.difference(effectiveStart).inDays + 1;
     final totalHours = (hoursPerWeek * totalDays) / 7.0;
@@ -315,14 +316,13 @@ class SchedulingEngine {
     final items = List<StudyPlanItemData>.from(plan.items);
 
     // Find items that need rescheduling
-    final missedItems =
-        items.where((item) {
-          if (missedItemIds.contains(item.orderIndex)) return true;
-          if (item.scheduledDate.isBefore(now) && item.type != 'review') {
-            return true;
-          }
-          return false;
-        }).toList();
+    final missedItems = items.where((item) {
+      if (missedItemIds.contains(item.orderIndex)) return true;
+      if (item.scheduledDate.isBefore(now) && item.type != 'review') {
+        return true;
+      }
+      return false;
+    }).toList();
 
     if (missedItems.isEmpty) return plan;
 
@@ -379,10 +379,9 @@ class SchedulingEngine {
     }
 
     // Filter topics relevant to the exam
-    final relevantTopics =
-        exam.topicIds != null && exam.topicIds!.isNotEmpty
-            ? topics.where((t) => exam.topicIds!.contains(t.id)).toList()
-            : topics;
+    final relevantTopics = exam.topicIds != null && exam.topicIds!.isNotEmpty
+        ? topics.where((t) => exam.topicIds!.contains(t.id)).toList()
+        : topics;
 
     if (relevantTopics.isEmpty) {
       // No specific topics - create general review plan
@@ -502,10 +501,9 @@ class SchedulingEngine {
       items.add(
         StudyPlanItemData(
           title: 'General Study Session ${day + 1}',
-          type:
-              day % 3 == 0
-                  ? 'read'
-                  : day % 3 == 1
+          type: day % 3 == 0
+              ? 'read'
+              : day % 3 == 1
                   ? 'practice'
                   : 'review',
           estimatedMinutes: 60,
@@ -533,13 +531,13 @@ class SchedulingEngine {
   ) {
     final targetDate = DateTime(date.year, date.month, date.day);
     return plan.items.where((item) {
-        final itemDate = DateTime(
-          item.scheduledDate.year,
-          item.scheduledDate.month,
-          item.scheduledDate.day,
-        );
-        return itemDate == targetDate;
-      }).toList()
+      final itemDate = DateTime(
+        item.scheduledDate.year,
+        item.scheduledDate.month,
+        item.scheduledDate.day,
+      );
+      return itemDate == targetDate;
+    }).toList()
       ..sort((a, b) => a.orderIndex.compareTo(b.orderIndex));
   }
 

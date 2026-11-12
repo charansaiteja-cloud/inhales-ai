@@ -27,19 +27,17 @@ class VisionScreen extends ConsumerWidget {
           GlassIconButton(
             onTap: () => _pickImage(notifier),
             icon: Icons.add_photo_alternate_rounded,
-            color:
-                isDark
-                    ? InhaleColors.electricBlue
-                    : InhaleColors.lightPrimaryBlue,
+            color: isDark
+                ? InhaleColors.electricBlue
+                : InhaleColors.lightPrimaryBlue,
           ),
         ],
       ),
       body: Container(
         decoration: BoxDecoration(
-          gradient:
-              isDark
-                  ? InhaleColors.gradientBackgroundDark
-                  : InhaleColors.gradientBackground,
+          gradient: isDark
+              ? InhaleColors.gradientBackgroundDark
+              : InhaleColors.gradientBackground,
         ),
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(InhaleSpacing.md),
@@ -49,20 +47,18 @@ class VisionScreen extends ConsumerWidget {
               Text(
                 'Image Analysis',
                 style: InhaleTypography.headlineMedium.copyWith(
-                  color:
-                      isDark
-                          ? InhaleColors.textPrimary
-                          : InhaleColors.lightNavyText,
+                  color: isDark
+                      ? InhaleColors.textPrimary
+                      : InhaleColors.lightNavyText,
                 ),
               ),
               const SizedBox(height: InhaleSpacing.xs),
               Text(
                 'Upload an image and ask AI to analyze it',
                 style: InhaleTypography.bodyMedium.copyWith(
-                  color:
-                      isDark
-                          ? InhaleColors.textSecondary
-                          : InhaleColors.lightTextSecondary,
+                  color: isDark
+                      ? InhaleColors.textSecondary
+                      : InhaleColors.lightTextSecondary,
                 ),
               ),
               const SizedBox(height: InhaleSpacing.md),
@@ -74,56 +70,52 @@ class VisionScreen extends ConsumerWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(InhaleRadius.lg),
                   ),
-                  child:
-                      state.image != null
-                          ? ClipRRect(
-                            borderRadius: BorderRadius.circular(
-                              InhaleRadius.lg,
-                            ),
-                            child: Image.file(
-                              state.image!,
-                              width: double.infinity,
-                              height: double.infinity,
-                              fit: BoxFit.cover,
-                            ),
-                          )
-                          : Center(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  Icons.add_photo_alternate_rounded,
-                                  size: 56,
-                                  color:
-                                      isDark
-                                          ? InhaleColors.electricBlue
-                                              .withValues(alpha: 0.5)
-                                          : InhaleColors.lightPrimaryBlue
-                                              .withValues(alpha: 0.5),
-                                ),
-                                const SizedBox(height: InhaleSpacing.sm),
-                                Text(
-                                  'Tap to upload or paste an image',
-                                  style: InhaleTypography.bodyMedium.copyWith(
-                                    color:
-                                        isDark
-                                            ? InhaleColors.textSecondary
-                                            : InhaleColors.lightTextSecondary,
-                                  ),
-                                ),
-                              ],
-                            ),
+                  child: state.image != null
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(
+                            InhaleRadius.lg,
                           ),
+                          child: Image.file(
+                            state.image!,
+                            width: double.infinity,
+                            height: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
+                        )
+                      : Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.add_photo_alternate_rounded,
+                                size: 56,
+                                color: isDark
+                                    ? InhaleColors.electricBlue
+                                        .withValues(alpha: 0.5)
+                                    : InhaleColors.lightPrimaryBlue
+                                        .withValues(alpha: 0.5),
+                              ),
+                              const SizedBox(height: InhaleSpacing.sm),
+                              Text(
+                                'Tap to upload or paste an image',
+                                style: InhaleTypography.bodyMedium.copyWith(
+                                  color: isDark
+                                      ? InhaleColors.textSecondary
+                                      : InhaleColors.lightTextSecondary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                 ),
               ),
               const SizedBox(height: InhaleSpacing.lg),
               Text(
                 'Describe What You Need',
                 style: InhaleTypography.titleMedium.copyWith(
-                  color:
-                      isDark
-                          ? InhaleColors.textPrimary
-                          : InhaleColors.lightNavyText,
+                  color: isDark
+                      ? InhaleColors.textPrimary
+                      : InhaleColors.lightNavyText,
                 ),
               ),
               const SizedBox(height: InhaleSpacing.sm),
@@ -137,10 +129,9 @@ class VisionScreen extends ConsumerWidget {
               GlassButton(
                 width: double.infinity,
                 label: state.isProcessing ? 'Analyzing...' : 'Analyze Image',
-                onTap:
-                    state.isProcessing || state.image == null
-                        ? null
-                        : () => notifier.analyzeImage(),
+                onTap: state.isProcessing || state.image == null
+                    ? null
+                    : () => notifier.analyzeImage(),
                 glow: !state.isProcessing && state.image != null,
               ),
               if (state.result != null && state.result!.isNotEmpty) ...[
@@ -148,10 +139,9 @@ class VisionScreen extends ConsumerWidget {
                 Text(
                   'Analysis Result',
                   style: InhaleTypography.titleMedium.copyWith(
-                    color:
-                        isDark
-                            ? InhaleColors.textPrimary
-                            : InhaleColors.lightNavyText,
+                    color: isDark
+                        ? InhaleColors.textPrimary
+                        : InhaleColors.lightNavyText,
                   ),
                 ),
                 const SizedBox(height: InhaleSpacing.sm),
@@ -161,10 +151,9 @@ class VisionScreen extends ConsumerWidget {
                   child: Text(
                     state.result!,
                     style: InhaleTypography.bodyLarge.copyWith(
-                      color:
-                          isDark
-                              ? InhaleColors.textPrimary
-                              : InhaleColors.lightNavyText,
+                      color: isDark
+                          ? InhaleColors.textPrimary
+                          : InhaleColors.lightNavyText,
                     ),
                   ),
                 ),

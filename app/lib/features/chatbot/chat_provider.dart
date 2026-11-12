@@ -100,15 +100,16 @@ class ChatState {
     TutorPersonality? activeTutor,
     ResponseMode? activeResponseMode,
     List<FollowUpSuggestion>? followUpSuggestions,
-  }) => ChatState(
-    sessions: sessions ?? this.sessions,
-    activeSession: activeSession ?? this.activeSession,
-    isGenerating: isGenerating ?? this.isGenerating,
-    generationError: generationError ?? this.generationError,
-    activeTutor: activeTutor ?? this.activeTutor,
-    activeResponseMode: activeResponseMode ?? this.activeResponseMode,
-    followUpSuggestions: followUpSuggestions ?? this.followUpSuggestions,
-  );
+  }) =>
+      ChatState(
+        sessions: sessions ?? this.sessions,
+        activeSession: activeSession ?? this.activeSession,
+        isGenerating: isGenerating ?? this.isGenerating,
+        generationError: generationError ?? this.generationError,
+        activeTutor: activeTutor ?? this.activeTutor,
+        activeResponseMode: activeResponseMode ?? this.activeResponseMode,
+        followUpSuggestions: followUpSuggestions ?? this.followUpSuggestions,
+      );
 }
 
 final chatProvider = StateNotifierProvider<ChatNotifier, ChatState>((ref) {
@@ -140,11 +141,11 @@ class ChatNotifier extends StateNotifier<ChatState> {
     required MessageRepository messageRepository,
     required AIEngine aiEngine,
     required MemoryManager memoryManager,
-  }) : _conversationRepository = conversationRepository,
-       _messageRepository = messageRepository,
-       _aiEngine = aiEngine,
-       _memoryManager = memoryManager,
-       super(const ChatState()) {
+  })  : _conversationRepository = conversationRepository,
+        _messageRepository = messageRepository,
+        _aiEngine = aiEngine,
+        _memoryManager = memoryManager,
+        super(const ChatState()) {
     _loadSessions();
   }
 
@@ -194,8 +195,7 @@ class ChatNotifier extends StateNotifier<ChatState> {
 
       state = state.copyWith(
         sessions: refresh ? sessions : [...state.sessions, ...sessions],
-        activeSession:
-            state.activeSession ??
+        activeSession: state.activeSession ??
             (sessions.isNotEmpty ? sessions.first : null),
       );
     } catch (e) {
@@ -274,10 +274,9 @@ class ChatNotifier extends StateNotifier<ChatState> {
     );
 
     state = ChatState(
-      sessions:
-          state.sessions
-              .map((s) => s.id == session.id ? updatedSession : s)
-              .toList(),
+      sessions: state.sessions
+          .map((s) => s.id == session.id ? updatedSession : s)
+          .toList(),
       activeSession: updatedSession,
       isGenerating: true,
       activeTutor: tutor,
@@ -312,10 +311,9 @@ class ChatNotifier extends StateNotifier<ChatState> {
     );
 
     state = ChatState(
-      sessions:
-          state.sessions
-              .map((s) => s.id == session.id ? withThinking : s)
-              .toList(),
+      sessions: state.sessions
+          .map((s) => s.id == session.id ? withThinking : s)
+          .toList(),
       activeSession: withThinking,
       isGenerating: true,
       activeTutor: tutor,
@@ -324,16 +322,15 @@ class ChatNotifier extends StateNotifier<ChatState> {
 
     try {
       // Build chat history from previous messages
-      final history =
-          session.messages
-              .map(
-                (m) => ai_engine.ChatMessage(
-                  role: m.isUser ? 'user' : 'assistant',
-                  content: m.content,
-                  timestamp: m.timestamp,
-                ),
-              )
-              .toList();
+      final history = session.messages
+          .map(
+            (m) => ai_engine.ChatMessage(
+              role: m.isUser ? 'user' : 'assistant',
+              content: m.content,
+              timestamp: m.timestamp,
+            ),
+          )
+          .toList();
 
       // Build system prompt with tutor personality and response mode
       final systemPrompt = tutor.systemPrompt + responseMode.promptModifier;
@@ -405,15 +402,13 @@ class ChatNotifier extends StateNotifier<ChatState> {
       );
 
       // Extract facts for long-term memory (fire-and-forget)
-      _memoryManager
-          .extractFacts(session.id, [userQuery, responseText])
-          .catchError((_) {});
+      _memoryManager.extractFacts(
+          session.id, [userQuery, responseText]).catchError((_) {});
 
       state = ChatState(
-        sessions:
-            state.sessions
-                .map((s) => s.id == session.id ? finalSession : s)
-                .toList(),
+        sessions: state.sessions
+            .map((s) => s.id == session.id ? finalSession : s)
+            .toList(),
         activeSession: finalSession,
         isGenerating: false,
         activeTutor: tutor,
@@ -422,10 +417,9 @@ class ChatNotifier extends StateNotifier<ChatState> {
       );
     } catch (e) {
       state = ChatState(
-        sessions:
-            state.sessions
-                .map((s) => s.id == session.id ? withThinking : s)
-                .toList(),
+        sessions: state.sessions
+            .map((s) => s.id == session.id ? withThinking : s)
+            .toList(),
         activeSession: withThinking,
         isGenerating: false,
         generationError: 'Generation failed: $e',
@@ -505,34 +499,31 @@ class ChatNotifier extends StateNotifier<ChatState> {
     final newPinned = !session.isPinned;
     await _conversationRepository.setPinned(sessionId, newPinned);
 
-    final updated =
-        state.sessions
-            .map(
-              (s) =>
-                  s.id == sessionId
-                      ? ChatSession(
-                        id: s.id,
-                        title: s.title,
-                        messages: s.messages,
-                        mode: s.mode,
-                        isPinned: newPinned,
-                        lastMessageTime: s.lastMessageTime,
-                      )
-                      : s,
-            )
-            .toList();
+    final updated = state.sessions
+        .map(
+          (s) => s.id == sessionId
+              ? ChatSession(
+                  id: s.id,
+                  title: s.title,
+                  messages: s.messages,
+                  mode: s.mode,
+                  isPinned: newPinned,
+                  lastMessageTime: s.lastMessageTime,
+                )
+              : s,
+        )
+        .toList();
 
-    final active =
-        state.activeSession?.id == sessionId
-            ? ChatSession(
-              id: state.activeSession!.id,
-              title: state.activeSession!.title,
-              messages: state.activeSession!.messages,
-              mode: state.activeSession!.mode,
-              isPinned: newPinned,
-              lastMessageTime: state.activeSession!.lastMessageTime,
-            )
-            : state.activeSession;
+    final active = state.activeSession?.id == sessionId
+        ? ChatSession(
+            id: state.activeSession!.id,
+            title: state.activeSession!.title,
+            messages: state.activeSession!.messages,
+            mode: state.activeSession!.mode,
+            isPinned: newPinned,
+            lastMessageTime: state.activeSession!.lastMessageTime,
+          )
+        : state.activeSession;
 
     state = ChatState(sessions: updated, activeSession: active);
   }
@@ -542,10 +533,9 @@ class ChatNotifier extends StateNotifier<ChatState> {
     final filtered = state.sessions.where((s) => s.id != sessionId).toList();
     state = ChatState(
       sessions: filtered,
-      activeSession:
-          state.activeSession?.id == sessionId
-              ? (filtered.isEmpty ? null : filtered.first)
-              : state.activeSession,
+      activeSession: state.activeSession?.id == sessionId
+          ? (filtered.isEmpty ? null : filtered.first)
+          : state.activeSession,
     );
   }
 
@@ -557,40 +547,36 @@ class ChatNotifier extends StateNotifier<ChatState> {
         title: newTitle,
         mode: session.mode,
         context: '',
-        createdAt:
-            session.messages.isNotEmpty
-                ? session.messages.first.timestamp
-                : session.lastMessageTime,
+        createdAt: session.messages.isNotEmpty
+            ? session.messages.first.timestamp
+            : session.lastMessageTime,
         updatedAt: DateTime.now(),
       ),
     );
 
-    final updated =
-        state.sessions
-            .map(
-              (s) =>
-                  s.id == sessionId
-                      ? ChatSession(
-                        id: s.id,
-                        title: newTitle,
-                        messages: s.messages,
-                        mode: s.mode,
-                        lastMessageTime: s.lastMessageTime,
-                      )
-                      : s,
-            )
-            .toList();
+    final updated = state.sessions
+        .map(
+          (s) => s.id == sessionId
+              ? ChatSession(
+                  id: s.id,
+                  title: newTitle,
+                  messages: s.messages,
+                  mode: s.mode,
+                  lastMessageTime: s.lastMessageTime,
+                )
+              : s,
+        )
+        .toList();
 
-    final active =
-        state.activeSession?.id == sessionId
-            ? ChatSession(
-              id: state.activeSession!.id,
-              title: newTitle,
-              messages: state.activeSession!.messages,
-              mode: state.activeSession!.mode,
-              lastMessageTime: state.activeSession!.lastMessageTime,
-            )
-            : state.activeSession;
+    final active = state.activeSession?.id == sessionId
+        ? ChatSession(
+            id: state.activeSession!.id,
+            title: newTitle,
+            messages: state.activeSession!.messages,
+            mode: state.activeSession!.mode,
+            lastMessageTime: state.activeSession!.lastMessageTime,
+          )
+        : state.activeSession;
 
     state = ChatState(sessions: updated, activeSession: active);
   }
@@ -657,10 +643,9 @@ class ChatNotifier extends StateNotifier<ChatState> {
     int sessionId, {
     String format = 'markdown',
   }) async {
-    final content =
-        format == 'json'
-            ? await exportAsJson(sessionId)
-            : await exportAsMarkdown(sessionId);
+    final content = format == 'json'
+        ? await exportAsJson(sessionId)
+        : await exportAsMarkdown(sessionId);
     final tempDir = await getTemporaryDirectory();
     final ext = format == 'json' ? 'json' : 'md';
     final file = File('${tempDir.path}/conversation_$sessionId.$ext');

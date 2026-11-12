@@ -48,8 +48,8 @@ class ModelManager {
   ModelManager._({
     required Directory modelsDir,
     required HardwareProfile hardware,
-  }) : _modelsDir = modelsDir,
-       _hardware = hardware {
+  })  : _modelsDir = modelsDir,
+        _hardware = hardware {
     _setupMemoryPressureListener();
   }
 

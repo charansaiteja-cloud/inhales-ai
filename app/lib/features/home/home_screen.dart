@@ -190,27 +190,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       orElse: () => false,
     );
 
-    final layout =
-        Responsive.isDesktop(context)
-            ? _buildDesktop(context, reducedBlur)
-            : _buildMobile(context, reducedBlur);
+    final layout = Responsive.isDesktop(context)
+        ? _buildDesktop(context, reducedBlur)
+        : _buildMobile(context, reducedBlur);
 
     return Scaffold(
       body: SafeArea(child: layout),
-      bottomNavigationBar:
-          Responsive.isDesktop(context)
-              ? null
-              : GlassBottomNavigationBar(
-                currentIndex: _selectedIndex,
-                onTap: _onNavItemTap,
-                items:
-                    _navDestinations
-                        .map(
-                          (d) =>
-                              GlassBottomNavItem(label: d.label, icon: d.icon),
-                        )
-                        .toList(),
-              ),
+      bottomNavigationBar: Responsive.isDesktop(context)
+          ? null
+          : GlassBottomNavigationBar(
+              currentIndex: _selectedIndex,
+              onTap: _onNavItemTap,
+              items: _navDestinations
+                  .map(
+                    (d) => GlassBottomNavItem(label: d.label, icon: d.icon),
+                  )
+                  .toList(),
+            ),
     );
   }
 
@@ -265,20 +261,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     return Container(
       decoration: BoxDecoration(
-        gradient:
-            isDark
-                ? InhaleColors.gradientBackgroundDark
-                : InhaleColors.gradientBackground,
+        gradient: isDark
+            ? InhaleColors.gradientBackgroundDark
+            : InhaleColors.gradientBackground,
       ),
       child: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.only(
-                top:
-                    Responsive.isMobile(context)
-                        ? InhaleSpacing.md
-                        : InhaleSpacing.xl,
+                top: Responsive.isMobile(context)
+                    ? InhaleSpacing.md
+                    : InhaleSpacing.xl,
                 bottom: InhaleSpacing.md,
                 left: InhaleSpacing.lg,
                 right: InhaleSpacing.lg,
@@ -323,19 +317,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             Text(
                               'Good evening',
                               style: InhaleTypography.bodyMedium.copyWith(
-                                color:
-                                    isDark
-                                        ? InhaleColors.textSecondary
-                                        : InhaleColors.lightTextSecondary,
+                                color: isDark
+                                    ? InhaleColors.textSecondary
+                                    : InhaleColors.lightTextSecondary,
                               ),
                             ),
                             Text(
                               'InhaleSkill AI',
                               style: InhaleTypography.displaySmall.copyWith(
-                                color:
-                                    isDark
-                                        ? InhaleColors.textPrimary
-                                        : InhaleColors.lightNavyText,
+                                color: isDark
+                                    ? InhaleColors.textPrimary
+                                    : InhaleColors.lightNavyText,
                               ),
                             ),
                           ],
@@ -354,7 +346,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
             ),
           ),
-
           SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: InhaleSpacing.lg),
@@ -368,7 +359,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
             ),
           ),
-
           SliverPadding(
             padding: EdgeInsets.all(InhaleSpacing.lg),
             sliver: SliverGrid(
@@ -416,19 +406,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       Text(
                         tile.label,
                         style: InhaleTypography.titleMedium.copyWith(
-                          color:
-                              isDark
-                                  ? InhaleColors.textPrimary
-                                  : InhaleColors.lightNavyText,
+                          color: isDark
+                              ? InhaleColors.textPrimary
+                              : InhaleColors.lightNavyText,
                         ),
                       ),
                       Text(
                         tile.description,
                         style: InhaleTypography.bodySmall.copyWith(
-                          color:
-                              isDark
-                                  ? InhaleColors.textMuted
-                                  : InhaleColors.lightTextSecondary,
+                          color: isDark
+                              ? InhaleColors.textMuted
+                              : InhaleColors.lightTextSecondary,
                         ),
                       ),
                     ],
@@ -437,7 +425,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               }, childCount: _dashboardTiles.length),
             ),
           ),
-
           SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.all(InhaleSpacing.lg),
@@ -494,20 +481,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 Text(
                   'Your Intelligence Hub',
                   style: InhaleTypography.headlineLarge.copyWith(
-                    color:
-                        isDark
-                            ? InhaleColors.textPrimary
-                            : InhaleColors.lightNavyText,
+                    color: isDark
+                        ? InhaleColors.textPrimary
+                        : InhaleColors.lightNavyText,
                   ),
                 ),
                 const SizedBox(height: InhaleSpacing.xs),
                 Text(
                   'Your personal AI, ready whenever you are.',
                   style: InhaleTypography.bodyMedium.copyWith(
-                    color:
-                        isDark
-                            ? InhaleColors.textSecondary
-                            : InhaleColors.lightTextSecondary,
+                    color: isDark
+                        ? InhaleColors.textSecondary
+                        : InhaleColors.lightTextSecondary,
                   ),
                 ),
                 const SizedBox(height: InhaleSpacing.md),
@@ -546,10 +531,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     Text(
                       'Offline',
                       style: InhaleTypography.labelSmall.copyWith(
-                        color:
-                            isDark
-                                ? InhaleColors.textMuted
-                                : InhaleColors.lightTextMuted,
+                        color: isDark
+                            ? InhaleColors.textMuted
+                            : InhaleColors.lightTextMuted,
                       ),
                     ),
                   ],
@@ -609,20 +593,18 @@ class _StatusItem extends StatelessWidget {
       children: [
         Icon(
           icon,
-          color:
-              isDark
-                  ? InhaleColors.electricBlue
-                  : InhaleColors.lightPrimaryBlue,
+          color: isDark
+              ? InhaleColors.electricBlue
+              : InhaleColors.lightPrimaryBlue,
           size: 24,
         ),
         const SizedBox(height: 4),
         Text(
           label,
           style: InhaleTypography.labelSmall.copyWith(
-            color:
-                isDark
-                    ? InhaleColors.textMuted
-                    : InhaleColors.lightTextSecondary,
+            color: isDark
+                ? InhaleColors.textMuted
+                : InhaleColors.lightTextSecondary,
           ),
         ),
         Text(

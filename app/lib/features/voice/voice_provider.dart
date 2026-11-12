@@ -28,14 +28,15 @@ class VoiceState {
     String? textToSpeak,
     bool? isAvailable,
     String? error,
-  }) => VoiceState(
-    isRecording: isRecording ?? this.isRecording,
-    transcribedText: transcribedText ?? this.transcribedText,
-    isSpeaking: isSpeaking ?? this.isSpeaking,
-    textToSpeak: textToSpeak ?? this.textToSpeak,
-    isAvailable: isAvailable ?? this.isAvailable,
-    error: error ?? this.error,
-  );
+  }) =>
+      VoiceState(
+        isRecording: isRecording ?? this.isRecording,
+        transcribedText: transcribedText ?? this.transcribedText,
+        isSpeaking: isSpeaking ?? this.isSpeaking,
+        textToSpeak: textToSpeak ?? this.textToSpeak,
+        isAvailable: isAvailable ?? this.isAvailable,
+        error: error ?? this.error,
+      );
 }
 
 final voiceProvider = StateNotifierProvider<VoiceNotifier, VoiceState>((ref) {

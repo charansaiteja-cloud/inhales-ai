@@ -75,26 +75,25 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-          gradient:
-              isDark
-                  ? LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      AppColors.darkBackground,
-                      AppColors.darkSurface,
-                      AppColors.darkBackground,
-                    ],
-                  )
-                  : LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      AppColors.lightBackground,
-                      AppColors.lightSurface,
-                      AppColors.lightBackground,
-                    ],
-                  ),
+          gradient: isDark
+              ? LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    AppColors.darkBackground,
+                    AppColors.darkSurface,
+                    AppColors.darkBackground,
+                  ],
+                )
+              : LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    AppColors.lightBackground,
+                    AppColors.lightSurface,
+                    AppColors.lightBackground,
+                  ],
+                ),
         ),
         child: SafeArea(
           child: Column(
@@ -115,8 +114,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               Expanded(
                 child: PageView.builder(
                   controller: _pageController,
-                  onPageChanged:
-                      (index) => setState(() => _currentPage = index),
+                  onPageChanged: (index) =>
+                      setState(() => _currentPage = index),
                   itemCount: _pages.length,
                   itemBuilder: (context, index) {
                     final page = _pages[index];
@@ -129,17 +128,15 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                             width: 120,
                             height: 120,
                             decoration: BoxDecoration(
-                              gradient:
-                                  isDark
-                                      ? AppColors.primaryGradientDark
-                                      : AppColors.primaryGradient,
+                              gradient: isDark
+                                  ? AppColors.primaryGradientDark
+                                  : AppColors.primaryGradient,
                               borderRadius: BorderRadius.circular(
                                 AppRadius.xxxl,
                               ),
-                              boxShadow:
-                                  isDark
-                                      ? AppShadows.darkPrimaryGlow
-                                      : AppShadows.primaryGlow,
+                              boxShadow: isDark
+                                  ? AppShadows.darkPrimaryGlow
+                                  : AppShadows.primaryGlow,
                             ),
                             child: Icon(
                               page.icon,
@@ -181,10 +178,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     width: _currentPage == index ? 32 : 8,
                     height: 8,
                     decoration: BoxDecoration(
-                      color:
-                          _currentPage == index
-                              ? cs.primary
-                              : cs.outlineVariant,
+                      color: _currentPage == index
+                          ? cs.primary
+                          : cs.outlineVariant,
                       borderRadius: BorderRadius.circular(AppRadius.full),
                     ),
                   ),
@@ -195,10 +191,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               Padding(
                 padding: EdgeInsets.all(AppSpacing.xl),
                 child: AppButton(
-                  label:
-                      _currentPage == _pages.length - 1
-                          ? 'Get Started'
-                          : 'Next',
+                  label: _currentPage == _pages.length - 1
+                      ? 'Get Started'
+                      : 'Next',
                   variant: AppButtonVariant.primary,
                   size: AppButtonSize.large,
                   isFullWidth: true,

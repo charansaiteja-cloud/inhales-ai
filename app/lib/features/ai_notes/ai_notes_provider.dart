@@ -48,18 +48,19 @@ class Note {
     bool? isPinned,
     DateTime? updatedAt,
     List<String>? tags,
-  }) => Note(
-    id: id,
-    title: title ?? this.title,
-    content: content ?? this.content,
-    folder: folder ?? this.folder,
-    subject: subject ?? this.subject,
-    classLevel: classLevel ?? this.classLevel,
-    isPinned: isPinned ?? this.isPinned,
-    createdAt: createdAt,
-    updatedAt: updatedAt ?? DateTime.now(),
-    tags: tags ?? this.tags,
-  );
+  }) =>
+      Note(
+        id: id,
+        title: title ?? this.title,
+        content: content ?? this.content,
+        folder: folder ?? this.folder,
+        subject: subject ?? this.subject,
+        classLevel: classLevel ?? this.classLevel,
+        isPinned: isPinned ?? this.isPinned,
+        createdAt: createdAt,
+        updatedAt: updatedAt ?? DateTime.now(),
+        tags: tags ?? this.tags,
+      );
 
   /// Get word count from content.
   int get wordCount {
@@ -81,20 +82,18 @@ class Note {
           tags = decoded.map((e) => e.toString()).toList();
         } else {
           // Fall back to comma-separated
-          tags =
-              row.tags!
-                  .split(',')
-                  .map((t) => t.trim())
-                  .where((t) => t.isNotEmpty)
-                  .toList();
+          tags = row.tags!
+              .split(',')
+              .map((t) => t.trim())
+              .where((t) => t.isNotEmpty)
+              .toList();
         }
       } catch (_) {
-        tags =
-            row.tags!
-                .split(',')
-                .map((t) => t.trim())
-                .where((t) => t.isNotEmpty)
-                .toList();
+        tags = row.tags!
+            .split(',')
+            .map((t) => t.trim())
+            .where((t) => t.isNotEmpty)
+            .toList();
       }
     }
     return Note(
@@ -177,7 +176,7 @@ class AINotesNotifier extends StateNotifier<AINotesState> {
   final AIEngine _aiEngine;
 
   AINotesNotifier(this._database, this._ragService, this._aiEngine)
-    : super(const AINotesState());
+      : super(const AINotesState());
 
   /// Load all notes from database.
   Future<void> loadNotes() async {
@@ -202,9 +201,9 @@ class AINotesNotifier extends StateNotifier<AINotesState> {
   /// Load a single note by ID.
   Future<Note?> loadNote(int id) async {
     try {
-      final rows =
-          await (_database.select(_database.notes)
-            ..where((n) => n.id.equals(id))).get();
+      final rows = await (_database.select(_database.notes)
+            ..where((n) => n.id.equals(id)))
+          .get();
       if (rows.isEmpty) return null;
       return Note.fromDbRow(rows.first);
     } catch (e) {
@@ -231,15 +230,13 @@ class AINotesNotifier extends StateNotifier<AINotesState> {
             folder != null ? drift.Value(folder) : const drift.Value.absent(),
         subject:
             subject != null ? drift.Value(subject) : const drift.Value.absent(),
-        classLevel:
-            classLevel != null
-                ? drift.Value(classLevel)
-                : const drift.Value.absent(),
+        classLevel: classLevel != null
+            ? drift.Value(classLevel)
+            : const drift.Value.absent(),
         isPinned: const drift.Value(false),
-        tags:
-            tags != null
-                ? drift.Value(tags.join(','))
-                : const drift.Value.absent(),
+        tags: tags != null
+            ? drift.Value(tags.join(','))
+            : const drift.Value.absent(),
         createdAt: drift.Value(now),
         updatedAt: drift.Value(now),
       );
@@ -273,23 +270,20 @@ class AINotesNotifier extends StateNotifier<AINotesState> {
             folder != null ? drift.Value(folder) : const drift.Value.absent(),
         subject:
             subject != null ? drift.Value(subject) : const drift.Value.absent(),
-        classLevel:
-            classLevel != null
-                ? drift.Value(classLevel)
-                : const drift.Value.absent(),
-        isPinned:
-            isPinned != null
-                ? drift.Value(isPinned)
-                : const drift.Value.absent(),
-        tags:
-            tags != null
-                ? drift.Value(tags.join(','))
-                : const drift.Value.absent(),
+        classLevel: classLevel != null
+            ? drift.Value(classLevel)
+            : const drift.Value.absent(),
+        isPinned: isPinned != null
+            ? drift.Value(isPinned)
+            : const drift.Value.absent(),
+        tags: tags != null
+            ? drift.Value(tags.join(','))
+            : const drift.Value.absent(),
         updatedAt: drift.Value(DateTime.now()),
       );
 
-      await (_database.update(_database.notes)
-        ..where((n) => n.id.equals(id))).write(companion);
+      await (_database.update(_database.notes)..where((n) => n.id.equals(id)))
+          .write(companion);
       await loadNotes();
 
       // Update current note if it's the one being edited
@@ -309,8 +303,8 @@ class AINotesNotifier extends StateNotifier<AINotesState> {
   /// Delete a note by ID.
   Future<bool> deleteNote(int id) async {
     try {
-      await (_database.delete(_database.notes)
-        ..where((n) => n.id.equals(id))).go();
+      await (_database.delete(_database.notes)..where((n) => n.id.equals(id)))
+          .go();
       if (state.currentNote?.id == id) {
         state = state.copyWith(currentNote: null);
       }
@@ -354,12 +348,11 @@ class AINotesNotifier extends StateNotifier<AINotesState> {
     }
 
     final lowerQuery = query.toLowerCase();
-    final filtered =
-        state.notes.where((note) {
-          return note.title.toLowerCase().contains(lowerQuery) ||
-              note.content.toLowerCase().contains(lowerQuery) ||
-              note.tags.any((tag) => tag.toLowerCase().contains(lowerQuery));
-        }).toList();
+    final filtered = state.notes.where((note) {
+      return note.title.toLowerCase().contains(lowerQuery) ||
+          note.content.toLowerCase().contains(lowerQuery) ||
+          note.tags.any((tag) => tag.toLowerCase().contains(lowerQuery));
+    }).toList();
 
     state = state.copyWith(notes: filtered);
   }
@@ -390,13 +383,12 @@ class AINotesNotifier extends StateNotifier<AINotesState> {
 
   /// Get all unique folders from notes.
   List<String> getFolders() {
-    final folders =
-        state.notes
-            .map((n) => n.folder)
-            .where((f) => f != null && f.isNotEmpty)
-            .cast<String>()
-            .toSet()
-            .toList();
+    final folders = state.notes
+        .map((n) => n.folder)
+        .where((f) => f != null && f.isNotEmpty)
+        .cast<String>()
+        .toSet()
+        .toList();
     folders.sort();
     return folders;
   }
@@ -483,9 +475,9 @@ class AINotesNotifier extends StateNotifier<AINotesState> {
     state = state.copyWith(isGenerating: true, error: null);
     try {
       // Get document info
-      final docRows =
-          await (_database.select(_database.documents)
-            ..where((d) => d.id.equals(documentId))).get();
+      final docRows = await (_database.select(_database.documents)
+            ..where((d) => d.id.equals(documentId)))
+          .get();
 
       if (docRows.isEmpty) {
         state = state.copyWith(
@@ -610,9 +602,9 @@ Generate comprehensive notes based on this content:''';
     state = state.copyWith(isGenerating: true, error: null);
     try {
       // Get video transcript
-      final transcriptRows =
-          await (_database.select(_database.videoTranscripts)
-            ..where((vt) => vt.resourceId.equals(resourceId))).get();
+      final transcriptRows = await (_database.select(_database.videoTranscripts)
+            ..where((vt) => vt.resourceId.equals(resourceId)))
+          .get();
 
       if (transcriptRows.isEmpty) {
         state = state.copyWith(
@@ -628,7 +620,8 @@ Generate comprehensive notes based on this content:''';
       try {
         final resourceRows =
             await (_database.select(_database.learningResources)
-              ..where((lr) => lr.id.equals(resourceId))).get();
+                  ..where((lr) => lr.id.equals(resourceId)))
+                .get();
         if (resourceRows.isNotEmpty) {
           videoTitle = resourceRows.first.title;
         }

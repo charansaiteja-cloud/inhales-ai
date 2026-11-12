@@ -68,53 +68,48 @@ class GlassChatBubble extends StatelessWidget {
   }
 
   Widget _bubble(BuildContext context, bool isDark) {
-    final effectiveContent =
-        message.isEmpty && isStreaming
-            ? _buildStreamingIndicator()
-            : MarkdownBody(
-              data: message,
-              selectable: true,
-              styleSheet: MarkdownStyleSheet(
-                p: TextStyle(
-                  color:
-                      isDark
-                          ? InhaleColors.textPrimary
-                          : InhaleColors.lightTextPrimary,
-                  fontSize: 15,
-                  height: 1.5,
-                ),
-                code: TextStyle(
-                  color: isDark ? InhaleColors.blue : InhaleColors.deepNavy,
-                  backgroundColor:
-                      isDark
-                          ? InhaleColors.blue.withValues(alpha: 0.15)
-                          : InhaleColors.blue.withValues(alpha: 0.08),
-                  fontFamily: 'monospace',
-                  fontSize: 14,
-                ),
-                codeblockPadding: EdgeInsets.all(12),
-                codeblockDecoration: BoxDecoration(
-                  color:
-                      isDark
-                          ? InhaleColors.blue.withValues(alpha: 0.12)
-                          : InhaleColors.blue.withValues(alpha: 0.06),
-                  borderRadius: BorderRadius.circular(8),
-                ),
+    final effectiveContent = message.isEmpty && isStreaming
+        ? _buildStreamingIndicator()
+        : MarkdownBody(
+            data: message,
+            selectable: true,
+            styleSheet: MarkdownStyleSheet(
+              p: TextStyle(
+                color: isDark
+                    ? InhaleColors.textPrimary
+                    : InhaleColors.lightTextPrimary,
+                fontSize: 15,
+                height: 1.5,
               ),
-            );
+              code: TextStyle(
+                color: isDark ? InhaleColors.blue : InhaleColors.deepNavy,
+                backgroundColor: isDark
+                    ? InhaleColors.blue.withValues(alpha: 0.15)
+                    : InhaleColors.blue.withValues(alpha: 0.08),
+                fontFamily: 'monospace',
+                fontSize: 14,
+              ),
+              codeblockPadding: EdgeInsets.all(12),
+              codeblockDecoration: BoxDecoration(
+                color: isDark
+                    ? InhaleColors.blue.withValues(alpha: 0.12)
+                    : InhaleColors.blue.withValues(alpha: 0.06),
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          );
 
     return Container(
       margin: const EdgeInsets.only(bottom: 4),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color:
-            isUser
-                ? (isDark
-                    ? InhaleColors.blue.withValues(alpha: 0.25)
-                    : InhaleColors.blue.withValues(alpha: 0.15))
-                : (isDark
-                    ? InhaleColors.glassSurfaceMedium
-                    : InhaleColors.lightGlassSurfaceMedium),
+        color: isUser
+            ? (isDark
+                ? InhaleColors.blue.withValues(alpha: 0.25)
+                : InhaleColors.blue.withValues(alpha: 0.15))
+            : (isDark
+                ? InhaleColors.glassSurfaceMedium
+                : InhaleColors.lightGlassSurfaceMedium),
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(isUser ? 8 : 4),
           topRight: Radius.circular(isUser ? 4 : 8),
@@ -122,10 +117,9 @@ class GlassChatBubble extends StatelessWidget {
           bottomRight: Radius.circular(8),
         ),
         border: Border.all(
-          color:
-              isUser
-                  ? InhaleColors.blue.withValues(alpha: 0.3)
-                  : InhaleColors.glassBorderSubtle,
+          color: isUser
+              ? InhaleColors.blue.withValues(alpha: 0.3)
+              : InhaleColors.glassBorderSubtle,
           width: 0.5,
         ),
       ),

@@ -25,10 +25,9 @@ class CollegeScreen extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.only(right: InhaleSpacing.md),
             child: GlassButton(
-              label:
-                  state.selectedSubject != null
-                      ? state.selectedSubject!
-                      : 'Select Subject',
+              label: state.selectedSubject != null
+                  ? state.selectedSubject!
+                  : 'Select Subject',
               onTap: null,
               outlined: true,
             ),
@@ -37,10 +36,9 @@ class CollegeScreen extends ConsumerWidget {
       ),
       body: Container(
         decoration: BoxDecoration(
-          gradient:
-              isDark
-                  ? InhaleColors.gradientBackgroundDark
-                  : InhaleColors.gradientBackground,
+          gradient: isDark
+              ? InhaleColors.gradientBackgroundDark
+              : InhaleColors.gradientBackground,
         ),
         child: CustomScrollView(
           slivers: [
@@ -53,20 +51,18 @@ class CollegeScreen extends ConsumerWidget {
                     Text(
                       'Choose Your Subject',
                       style: InhaleTypography.headlineMedium.copyWith(
-                        color:
-                            isDark
-                                ? InhaleColors.textPrimary
-                                : InhaleColors.lightNavyText,
+                        color: isDark
+                            ? InhaleColors.textPrimary
+                            : InhaleColors.lightNavyText,
                       ),
                     ),
                     const SizedBox(height: InhaleSpacing.xs),
                     Text(
                       'Select a subject area to begin your studies',
                       style: InhaleTypography.bodyMedium.copyWith(
-                        color:
-                            isDark
-                                ? InhaleColors.textSecondary
-                                : InhaleColors.lightTextSecondary,
+                        color: isDark
+                            ? InhaleColors.textSecondary
+                            : InhaleColors.lightTextSecondary,
                       ),
                     ),
                   ],
@@ -82,10 +78,9 @@ class CollegeScreen extends ConsumerWidget {
                   return Padding(
                     padding: const EdgeInsets.only(bottom: InhaleSpacing.sm),
                     child: GlassCard(
-                      onTap:
-                          () => ref
-                              .read(collegeProvider.notifier)
-                              .selectSubject(subject),
+                      onTap: () => ref
+                          .read(collegeProvider.notifier)
+                          .selectSubject(subject),
                       padding: const EdgeInsets.all(InhaleSpacing.md),
                       elevated: selected,
                       glow: selected,
@@ -94,10 +89,9 @@ class CollegeScreen extends ConsumerWidget {
                           Container(
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                              gradient:
-                                  selected
-                                      ? InhaleColors.gradientPrimary
-                                      : InhaleColors.gradientAccent,
+                              gradient: selected
+                                  ? InhaleColors.gradientPrimary
+                                  : InhaleColors.gradientAccent,
                               borderRadius: BorderRadius.circular(
                                 InhaleRadius.sm,
                               ),
@@ -113,28 +107,24 @@ class CollegeScreen extends ConsumerWidget {
                             child: Text(
                               subject,
                               style: InhaleTypography.titleMedium.copyWith(
-                                color:
-                                    isDark
-                                        ? InhaleColors.textPrimary
-                                        : InhaleColors.lightNavyText,
+                                color: isDark
+                                    ? InhaleColors.textPrimary
+                                    : InhaleColors.lightNavyText,
                               ),
                             ),
                           ),
                           GlassIconButton(
-                            onTap:
-                                () => ref
-                                    .read(collegeProvider.notifier)
-                                    .selectSubject(subject),
-                            icon:
-                                selected
-                                    ? Icons.check_circle_rounded
-                                    : Icons.chevron_right_rounded,
-                            color:
-                                selected
-                                    ? InhaleColors.success
-                                    : (isDark
-                                        ? InhaleColors.textMuted
-                                        : InhaleColors.lightTextMuted),
+                            onTap: () => ref
+                                .read(collegeProvider.notifier)
+                                .selectSubject(subject),
+                            icon: selected
+                                ? Icons.check_circle_rounded
+                                : Icons.chevron_right_rounded,
+                            color: selected
+                                ? InhaleColors.success
+                                : (isDark
+                                    ? InhaleColors.textMuted
+                                    : InhaleColors.lightTextMuted),
                           ),
                         ],
                       ),
@@ -148,15 +138,12 @@ class CollegeScreen extends ConsumerWidget {
               sliver: SliverToBoxAdapter(
                 child: GlassButton(
                   width: double.infinity,
-                  label:
-                      state.selectedSubject != null
-                          ? 'Start Learning: ${state.selectedSubject!}'
-                          : 'Select a Subject',
-                  onTap:
-                      state.selectedSubject != null
-                          ? () =>
-                              GoRouter.of(context).push('/chat?mode=college')
-                          : null,
+                  label: state.selectedSubject != null
+                      ? 'Start Learning: ${state.selectedSubject!}'
+                      : 'Select a Subject',
+                  onTap: state.selectedSubject != null
+                      ? () => GoRouter.of(context).push('/chat?mode=college')
+                      : null,
                   glow: state.selectedSubject != null,
                 ),
               ),

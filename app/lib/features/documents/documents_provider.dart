@@ -67,38 +67,37 @@ class DocumentItem {
 
 final documentsProvider =
     StateNotifierProvider<DocumentsNotifier, DocumentsState>(
-      (ref) => DocumentsNotifier(
-        ref.watch(databaseProvider),
-        ref.watch(ragServiceProvider),
-      ),
-    );
+  (ref) => DocumentsNotifier(
+    ref.watch(databaseProvider),
+    ref.watch(ragServiceProvider),
+  ),
+);
 
 class DocumentsNotifier extends StateNotifier<DocumentsState> {
   final db.AppDatabase _database;
   final RAGService _ragService;
 
   DocumentsNotifier(this._database, this._ragService)
-    : super(const DocumentsState());
+      : super(const DocumentsState());
 
   Future<void> loadDocuments() async {
     state = state.copyWith(isLoading: true);
     try {
       final docs = await _database.select(_database.documents).get();
       state = DocumentsState(
-        documents:
-            docs
-                .map(
-                  (d) => DocumentItem(
-                    id: d.id,
-                    title: d.title,
-                    filePath: d.filePath,
-                    fileType: d.fileType,
-                    sizeBytes: d.sizeBytes,
-                    importedAt: d.importedAt,
-                    summary: d.summary,
-                  ),
-                )
-                .toList(),
+        documents: docs
+            .map(
+              (d) => DocumentItem(
+                id: d.id,
+                title: d.title,
+                filePath: d.filePath,
+                fileType: d.fileType,
+                sizeBytes: d.sizeBytes,
+                importedAt: d.importedAt,
+                summary: d.summary,
+              ),
+            )
+            .toList(),
       );
     } catch (e) {
       state = DocumentsState(error: e.toString());
@@ -119,9 +118,7 @@ class DocumentsNotifier extends StateNotifier<DocumentsState> {
     try {
       final result = await _readFileContent(file.path!);
 
-      await _database
-          .into(_database.documents)
-          .insert(
+      await _database.into(_database.documents).insert(
             db.DocumentsCompanion(
               title: drift.Value(file.name),
               filePath: drift.Value(file.path!),
@@ -215,10 +212,9 @@ class DocumentsNotifier extends StateNotifier<DocumentsState> {
 
   void search(String query) {
     state = DocumentsState(
-      documents:
-          state.documents.where((d) {
-            return d.title.toLowerCase().contains(query.toLowerCase());
-          }).toList(),
+      documents: state.documents.where((d) {
+        return d.title.toLowerCase().contains(query.toLowerCase());
+      }).toList(),
       searchQuery: query,
     );
   }
@@ -257,15 +253,15 @@ class DocumentsNotifier extends StateNotifier<DocumentsState> {
     try {
       for (final id in ids) {
         await (_database.delete(_database.documents)
-          ..where((d) => d.id.equals(id))).go();
+              ..where((d) => d.id.equals(id)))
+            .go();
       }
 
       // Clean up RAG chunks for deleted documents
-      final paths =
-          state.documents
-              .where((d) => ids.contains(d.id))
-              .map((d) => d.filePath)
-              .toList();
+      final paths = state.documents
+          .where((d) => ids.contains(d.id))
+          .map((d) => d.filePath)
+          .toList();
       await _ragService.deleteDocuments(paths);
 
       clearSelection();
@@ -279,20 +275,20 @@ class DocumentsNotifier extends StateNotifier<DocumentsState> {
     state = state.copyWith(isLoading: true);
     try {
       await (_database.delete(_database.documents)
-        ..where((d) => d.id.equals(id))).go();
+            ..where((d) => d.id.equals(id)))
+          .go();
 
       // Clean up RAG chunks
       final doc = state.documents.firstWhere(
         (d) => d.id == id,
-        orElse:
-            () => DocumentItem(
-              id: id,
-              title: '',
-              filePath: '',
-              fileType: '',
-              sizeBytes: 0,
-              importedAt: DateTime.now(),
-            ),
+        orElse: () => DocumentItem(
+          id: id,
+          title: '',
+          filePath: '',
+          fileType: '',
+          sizeBytes: 0,
+          importedAt: DateTime.now(),
+        ),
       );
       await _ragService.deleteDocument(doc.filePath);
 

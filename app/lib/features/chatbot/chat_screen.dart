@@ -70,10 +70,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
     final chatContent = Container(
       decoration: BoxDecoration(
-        gradient:
-            isDark
-                ? InhaleColors.gradientBackgroundDark
-                : InhaleColors.gradientBackground,
+        gradient: isDark
+            ? InhaleColors.gradientBackgroundDark
+            : InhaleColors.gradientBackground,
       ),
       child: SafeArea(
         child: Column(
@@ -115,10 +114,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                         Text(
                           'Start a Conversation',
                           style: InhaleTypography.headlineMedium.copyWith(
-                            color:
-                                isDark
-                                    ? InhaleColors.textPrimary
-                                    : InhaleColors.lightNavyText,
+                            color: isDark
+                                ? InhaleColors.textPrimary
+                                : InhaleColors.lightNavyText,
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -126,19 +124,17 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                         Text(
                           'Ask questions, brainstorm ideas,\nor just chat.',
                           style: InhaleTypography.bodyMedium.copyWith(
-                            color:
-                                isDark
-                                    ? InhaleColors.textSecondary
-                                    : InhaleColors.lightTextSecondary,
+                            color: isDark
+                                ? InhaleColors.textSecondary
+                                : InhaleColors.lightTextSecondary,
                           ),
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: InhaleSpacing.lg),
                         GlassButton(
                           label: 'New Conversation',
-                          onTap:
-                              () =>
-                                  ref.read(chatProvider.notifier).newSession(),
+                          onTap: () =>
+                              ref.read(chatProvider.notifier).newSession(),
                           width: 200,
                         ),
                       ],
@@ -173,10 +169,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             ChatHistorySidebar(isOpen: true, onClose: () {}, isDesktop: true),
             VerticalDivider(
               width: 0.5,
-              color:
-                  isDark
-                      ? InhaleColors.glassBorderSubtle
-                      : InhaleColors.lightGlassBorderSubtle,
+              color: isDark
+                  ? InhaleColors.glassBorderSubtle
+                  : InhaleColors.lightGlassBorderSubtle,
             ),
             Expanded(child: chatContent),
           ],
@@ -250,16 +245,14 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     return Container(
       padding: const EdgeInsets.all(InhaleSpacing.md),
       decoration: BoxDecoration(
-        color:
-            isDark
-                ? InhaleColors.midnight.withValues(alpha: 0.8)
-                : InhaleColors.pureWhite.withValues(alpha: 0.8),
+        color: isDark
+            ? InhaleColors.midnight.withValues(alpha: 0.8)
+            : InhaleColors.pureWhite.withValues(alpha: 0.8),
         border: Border(
           top: BorderSide(
-            color:
-                isDark
-                    ? InhaleColors.glassBorderSubtle
-                    : InhaleColors.lightGlassBorderSubtle,
+            color: isDark
+                ? InhaleColors.glassBorderSubtle
+                : InhaleColors.lightGlassBorderSubtle,
             width: 0.5,
           ),
         ),
@@ -275,29 +268,26 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               maxLines: null,
               minLines: 1,
               enabled: !isGenerating,
-              prefixIcon:
-                  isGenerating
-                      ? const SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                      : null,
+              prefixIcon: isGenerating
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : null,
             ),
           ),
           const SizedBox(width: InhaleSpacing.sm),
           GlassIconButton(
-            onTap:
-                isGenerating
-                    ? () => ref.read(chatProvider.notifier).stopGeneration()
-                    : _sendMessage,
+            onTap: isGenerating
+                ? () => ref.read(chatProvider.notifier).stopGeneration()
+                : _sendMessage,
             icon: isGenerating ? Icons.stop_rounded : Icons.send_rounded,
-            color:
-                isGenerating
-                    ? InhaleColors.error
-                    : (isDark
-                        ? InhaleColors.electricBlue
-                        : InhaleColors.lightPrimaryBlue),
+            color: isGenerating
+                ? InhaleColors.error
+                : (isDark
+                    ? InhaleColors.electricBlue
+                    : InhaleColors.lightPrimaryBlue),
             size: 48,
           ),
         ],
@@ -324,24 +314,22 @@ class _ModelBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color:
-            isGenerating
-                ? (isDark
-                    ? InhaleColors.electricBlue.withValues(alpha: 0.2)
-                    : InhaleColors.lightPrimaryBlue.withValues(alpha: 0.15))
-                : (isDark
-                    ? InhaleColors.glassSurfaceMedium
-                    : InhaleColors.lightGlassSurface),
+        color: isGenerating
+            ? (isDark
+                ? InhaleColors.electricBlue.withValues(alpha: 0.2)
+                : InhaleColors.lightPrimaryBlue.withValues(alpha: 0.15))
+            : (isDark
+                ? InhaleColors.glassSurfaceMedium
+                : InhaleColors.lightGlassSurface),
         borderRadius: BorderRadius.circular(InhaleRadius.pill),
         border: Border.all(
-          color:
-              isGenerating
-                  ? (isDark
-                      ? InhaleColors.electricBlue.withValues(alpha: 0.4)
-                      : InhaleColors.lightPrimaryBlue.withValues(alpha: 0.3))
-                  : (isDark
-                      ? InhaleColors.glassBorderSubtle
-                      : InhaleColors.lightGlassBorderSubtle),
+          color: isGenerating
+              ? (isDark
+                  ? InhaleColors.electricBlue.withValues(alpha: 0.4)
+                  : InhaleColors.lightPrimaryBlue.withValues(alpha: 0.3))
+              : (isDark
+                  ? InhaleColors.glassBorderSubtle
+                  : InhaleColors.lightGlassBorderSubtle),
           width: 0.5,
         ),
       ),
@@ -352,12 +340,11 @@ class _ModelBadge extends StatelessWidget {
             width: 6,
             height: 6,
             decoration: BoxDecoration(
-              color:
-                  isGenerating
-                      ? (isDark
-                          ? InhaleColors.electricBlue
-                          : InhaleColors.lightPrimaryBlue)
-                      : (isDark ? InhaleColors.success : InhaleColors.success),
+              color: isGenerating
+                  ? (isDark
+                      ? InhaleColors.electricBlue
+                      : InhaleColors.lightPrimaryBlue)
+                  : (isDark ? InhaleColors.success : InhaleColors.success),
               shape: BoxShape.circle,
             ),
           ),
@@ -365,10 +352,9 @@ class _ModelBadge extends StatelessWidget {
           Text(
             mode.toUpperCase(),
             style: InhaleTypography.labelSmall.copyWith(
-              color:
-                  isDark
-                      ? InhaleColors.textSecondary
-                      : InhaleColors.lightTextSecondary,
+              color: isDark
+                  ? InhaleColors.textSecondary
+                  : InhaleColors.lightTextSecondary,
             ),
           ),
         ],

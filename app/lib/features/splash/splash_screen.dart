@@ -102,26 +102,25 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-          gradient:
-              isDark
-                  ? LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      AppColors.darkBackground,
-                      AppColors.darkSurface,
-                      AppColors.darkBackground,
-                    ],
-                  )
-                  : LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      AppColors.lightBackground,
-                      AppColors.lightSurface,
-                      AppColors.lightBackground,
-                    ],
-                  ),
+          gradient: isDark
+              ? LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    AppColors.darkBackground,
+                    AppColors.darkSurface,
+                    AppColors.darkBackground,
+                  ],
+                )
+              : LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    AppColors.lightBackground,
+                    AppColors.lightSurface,
+                    AppColors.lightBackground,
+                  ],
+                ),
         ),
         child: SafeArea(
           child: Center(
@@ -137,8 +136,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                       animation: _orbRotation,
                       builder: (context, child) {
                         return Transform.rotate(
-                          angle:
-                              _orbRotation.value *
+                          angle: _orbRotation.value *
                               0.0174533, // degrees to radians
                           child: _buildOrbLogo(cs, isDark),
                         );
@@ -195,24 +193,23 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
         shape: BoxShape.circle,
         gradient:
             isDark ? AppColors.primaryGradientDark : AppColors.primaryGradient,
-        boxShadow:
-            isDark
-                ? [
-                  ...AppShadows.darkPrimaryGlow,
-                  BoxShadow(
-                    color: AppColors.primaryBlue.withValues(alpha: 0.3),
-                    blurRadius: 40,
-                    spreadRadius: 10,
-                  ),
-                ]
-                : [
-                  ...AppShadows.primaryGlow,
-                  BoxShadow(
-                    color: AppColors.primaryBlue.withValues(alpha: 0.3),
-                    blurRadius: 40,
-                    spreadRadius: 10,
-                  ),
-                ],
+        boxShadow: isDark
+            ? [
+                ...AppShadows.darkPrimaryGlow,
+                BoxShadow(
+                  color: AppColors.primaryBlue.withValues(alpha: 0.3),
+                  blurRadius: 40,
+                  spreadRadius: 10,
+                ),
+              ]
+            : [
+                ...AppShadows.primaryGlow,
+                BoxShadow(
+                  color: AppColors.primaryBlue.withValues(alpha: 0.3),
+                  blurRadius: 40,
+                  spreadRadius: 10,
+                ),
+              ],
       ),
       child: Center(
         child: Container(

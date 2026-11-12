@@ -25,10 +25,9 @@ class SchoolScreen extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.only(right: InhaleSpacing.md),
             child: GlassButton(
-              label:
-                  state.selectedClass > 0
-                      ? 'Class ${state.selectedClass}'
-                      : 'Select Class',
+              label: state.selectedClass > 0
+                  ? 'Class ${state.selectedClass}'
+                  : 'Select Class',
               onTap: null,
               outlined: true,
             ),
@@ -37,10 +36,9 @@ class SchoolScreen extends ConsumerWidget {
       ),
       body: Container(
         decoration: BoxDecoration(
-          gradient:
-              isDark
-                  ? InhaleColors.gradientBackgroundDark
-                  : InhaleColors.gradientBackground,
+          gradient: isDark
+              ? InhaleColors.gradientBackgroundDark
+              : InhaleColors.gradientBackground,
         ),
         child: CustomScrollView(
           slivers: [
@@ -53,20 +51,18 @@ class SchoolScreen extends ConsumerWidget {
                     Text(
                       'Select Your Class',
                       style: InhaleTypography.headlineMedium.copyWith(
-                        color:
-                            isDark
-                                ? InhaleColors.textPrimary
-                                : InhaleColors.lightNavyText,
+                        color: isDark
+                            ? InhaleColors.textPrimary
+                            : InhaleColors.lightNavyText,
                       ),
                     ),
                     const SizedBox(height: InhaleSpacing.xs),
                     Text(
                       'Choose your grade level to personalize content',
                       style: InhaleTypography.bodyMedium.copyWith(
-                        color:
-                            isDark
-                                ? InhaleColors.textSecondary
-                                : InhaleColors.lightTextSecondary,
+                        color: isDark
+                            ? InhaleColors.textSecondary
+                            : InhaleColors.lightTextSecondary,
                       ),
                     ),
                   ],
@@ -86,9 +82,8 @@ class SchoolScreen extends ConsumerWidget {
                   final cls = index + 1;
                   final selected = cls == state.selectedClass;
                   return GlassCard(
-                    onTap:
-                        () =>
-                            ref.read(schoolProvider.notifier).selectClass(cls),
+                    onTap: () =>
+                        ref.read(schoolProvider.notifier).selectClass(cls),
                     padding: const EdgeInsets.all(InhaleSpacing.sm),
                     elevated: selected,
                     glow: selected,
@@ -96,12 +91,11 @@ class SchoolScreen extends ConsumerWidget {
                       child: Text(
                         'Class $cls',
                         style: TextStyle(
-                          color:
-                              selected
-                                  ? Colors.white
-                                  : (isDark
-                                      ? InhaleColors.electricBlue
-                                      : InhaleColors.lightPrimaryBlue),
+                          color: selected
+                              ? Colors.white
+                              : (isDark
+                                  ? InhaleColors.electricBlue
+                                  : InhaleColors.lightPrimaryBlue),
                           fontWeight:
                               selected ? FontWeight.w700 : FontWeight.w500,
                         ),
@@ -120,20 +114,18 @@ class SchoolScreen extends ConsumerWidget {
                     Text(
                       'Select Subject',
                       style: InhaleTypography.headlineMedium.copyWith(
-                        color:
-                            isDark
-                                ? InhaleColors.textPrimary
-                                : InhaleColors.lightNavyText,
+                        color: isDark
+                            ? InhaleColors.textPrimary
+                            : InhaleColors.lightNavyText,
                       ),
                     ),
                     const SizedBox(height: InhaleSpacing.xs),
                     Text(
                       'Pick a subject to start learning',
                       style: InhaleTypography.bodyMedium.copyWith(
-                        color:
-                            isDark
-                                ? InhaleColors.textSecondary
-                                : InhaleColors.lightTextSecondary,
+                        color: isDark
+                            ? InhaleColors.textSecondary
+                            : InhaleColors.lightTextSecondary,
                       ),
                     ),
                   ],
@@ -148,10 +140,9 @@ class SchoolScreen extends ConsumerWidget {
                   return Padding(
                     padding: const EdgeInsets.only(bottom: InhaleSpacing.sm),
                     child: GlassCard(
-                      onTap:
-                          () => ref
-                              .read(schoolProvider.notifier)
-                              .selectSubject(subject.name),
+                      onTap: () => ref
+                          .read(schoolProvider.notifier)
+                          .selectSubject(subject.name),
                       padding: const EdgeInsets.all(InhaleSpacing.md),
                       elevated: state.selectedSubject == subject.name,
                       glow: state.selectedSubject == subject.name,
@@ -160,10 +151,9 @@ class SchoolScreen extends ConsumerWidget {
                           Container(
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                              gradient:
-                                  state.selectedSubject == subject.name
-                                      ? InhaleColors.gradientPrimary
-                                      : InhaleColors.gradientAccent,
+                              gradient: state.selectedSubject == subject.name
+                                  ? InhaleColors.gradientPrimary
+                                  : InhaleColors.gradientAccent,
                               borderRadius: BorderRadius.circular(
                                 InhaleRadius.sm,
                               ),
@@ -178,28 +168,24 @@ class SchoolScreen extends ConsumerWidget {
                             child: Text(
                               subject.name,
                               style: InhaleTypography.titleMedium.copyWith(
-                                color:
-                                    isDark
-                                        ? InhaleColors.textPrimary
-                                        : InhaleColors.lightNavyText,
+                                color: isDark
+                                    ? InhaleColors.textPrimary
+                                    : InhaleColors.lightNavyText,
                               ),
                             ),
                           ),
                           GlassIconButton(
-                            onTap:
-                                () => ref
-                                    .read(schoolProvider.notifier)
-                                    .selectSubject(subject.name),
-                            icon:
-                                state.selectedSubject == subject.name
-                                    ? Icons.check_circle_rounded
-                                    : Icons.chevron_right_rounded,
-                            color:
-                                state.selectedSubject == subject.name
-                                    ? InhaleColors.success
-                                    : (isDark
-                                        ? InhaleColors.textMuted
-                                        : InhaleColors.lightTextMuted),
+                            onTap: () => ref
+                                .read(schoolProvider.notifier)
+                                .selectSubject(subject.name),
+                            icon: state.selectedSubject == subject.name
+                                ? Icons.check_circle_rounded
+                                : Icons.chevron_right_rounded,
+                            color: state.selectedSubject == subject.name
+                                ? InhaleColors.success
+                                : (isDark
+                                    ? InhaleColors.textMuted
+                                    : InhaleColors.lightTextMuted),
                           ),
                         ],
                       ),
@@ -213,14 +199,12 @@ class SchoolScreen extends ConsumerWidget {
               sliver: SliverToBoxAdapter(
                 child: GlassButton(
                   width: double.infinity,
-                  label:
-                      state.selectedSubject != null
-                          ? 'Start Learning: ${state.selectedSubject!}'
-                          : 'Select a Subject First',
-                  onTap:
-                      state.selectedSubject != null
-                          ? () => GoRouter.of(context).push('/chat?mode=school')
-                          : null,
+                  label: state.selectedSubject != null
+                      ? 'Start Learning: ${state.selectedSubject!}'
+                      : 'Select a Subject First',
+                  onTap: state.selectedSubject != null
+                      ? () => GoRouter.of(context).push('/chat?mode=school')
+                      : null,
                   glow: state.selectedSubject != null,
                 ),
               ),

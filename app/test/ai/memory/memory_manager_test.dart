@@ -57,8 +57,7 @@ void main() {
 
       for (final pattern in factPatterns) {
         final lower = pattern.toLowerCase();
-        final isFact =
-            lower.contains('i am') ||
+        final isFact = lower.contains('i am') ||
             lower.contains('my name is') ||
             lower.contains('i work') ||
             lower.contains('i study') ||
@@ -86,8 +85,7 @@ void main() {
 
       for (final pattern in preferencePatterns) {
         final lower = pattern.toLowerCase();
-        final isPreference =
-            lower.contains('i prefer') ||
+        final isPreference = lower.contains('i prefer') ||
             lower.contains('i like') ||
             lower.contains('i hate') ||
             lower.contains('i love') ||

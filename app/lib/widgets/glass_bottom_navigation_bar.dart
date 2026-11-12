@@ -28,16 +28,14 @@ class GlassBottomNavigationBar extends StatelessWidget {
         filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
         child: Container(
           decoration: BoxDecoration(
-            color:
-                isDark
-                    ? InhaleColors.glassSurfaceHeavy
-                    : InhaleColors.lightGlassSurfaceMedium,
+            color: isDark
+                ? InhaleColors.glassSurfaceHeavy
+                : InhaleColors.lightGlassSurfaceMedium,
             border: Border(
               top: BorderSide(
-                color:
-                    isDark
-                        ? InhaleColors.glassBorder
-                        : InhaleColors.lightGlassBorder,
+                color: isDark
+                    ? InhaleColors.glassBorder
+                    : InhaleColors.lightGlassBorder,
                 width: 0.5,
               ),
             ),
@@ -64,14 +62,13 @@ class GlassBottomNavigationBar extends StatelessWidget {
                               isActive
                                   ? item.activeIcon ?? item.icon
                                   : item.icon,
-                              color:
-                                  isActive
-                                      ? (isDark
-                                          ? InhaleColors.blue
-                                          : InhaleColors.lightPrimaryBlue)
-                                      : (isDark
-                                          ? InhaleColors.textMuted
-                                          : InhaleColors.lightTextMuted),
+                              color: isActive
+                                  ? (isDark
+                                      ? InhaleColors.blue
+                                      : InhaleColors.lightPrimaryBlue)
+                                  : (isDark
+                                      ? InhaleColors.textMuted
+                                      : InhaleColors.lightTextMuted),
                               size: 24,
                             ),
                             const SizedBox(height: 2),
@@ -79,18 +76,16 @@ class GlassBottomNavigationBar extends StatelessWidget {
                               item.label,
                               style: TextStyle(
                                 fontSize: 12,
-                                color:
-                                    isActive
-                                        ? (isDark
-                                            ? InhaleColors.blue
-                                            : InhaleColors.lightPrimaryBlue)
-                                        : (isDark
-                                            ? InhaleColors.textMuted
-                                            : InhaleColors.lightTextMuted),
-                                fontWeight:
-                                    isActive
-                                        ? FontWeight.w600
-                                        : FontWeight.w400,
+                                color: isActive
+                                    ? (isDark
+                                        ? InhaleColors.blue
+                                        : InhaleColors.lightPrimaryBlue)
+                                    : (isDark
+                                        ? InhaleColors.textMuted
+                                        : InhaleColors.lightTextMuted),
+                                fontWeight: isActive
+                                    ? FontWeight.w600
+                                    : FontWeight.w400,
                               ),
                             ),
                           ],

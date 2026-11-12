@@ -122,10 +122,9 @@ class FfiInferenceEngine implements InferenceEngine {
 
     final bridge = CallbackBridge();
     final promptPtr = prompt.toNativeUtf8();
-    final systemPtr =
-        systemPrompt != null && systemPrompt.isNotEmpty
-            ? systemPrompt.toNativeUtf8()
-            : nullptr;
+    final systemPtr = systemPrompt != null && systemPrompt.isNotEmpty
+        ? systemPrompt.toNativeUtf8()
+        : nullptr;
 
     try {
       final rc = _ffi!.inhale_generate(

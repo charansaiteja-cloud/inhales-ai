@@ -19,18 +19,16 @@ class SettingsScreen extends ConsumerWidget {
       appBar: GlassAppBar(title: 'Settings'),
       body: Container(
         decoration: BoxDecoration(
-          gradient:
-              isDark
-                  ? InhaleColors.gradientBackgroundDark
-                  : InhaleColors.gradientBackground,
+          gradient: isDark
+              ? InhaleColors.gradientBackgroundDark
+              : InhaleColors.gradientBackground,
         ),
         child: settingsAsync.when(
-          data:
-              (settings) => _buildSettingsBody(context, ref, settings, isDark),
+          data: (settings) =>
+              _buildSettingsBody(context, ref, settings, isDark),
           loading: () => const Center(child: CircularProgressIndicator()),
-          error:
-              (error, stackTrace) =>
-                  const Center(child: Text('Error loading settings')),
+          error: (error, stackTrace) =>
+              const Center(child: Text('Error loading settings')),
         ),
       ),
     );
@@ -58,12 +56,11 @@ class SettingsScreen extends ConsumerWidget {
           isDark: isDark,
           trailing: Switch(
             value: settings.themeMode == ThemeMode.dark,
-            onChanged:
-                (v) => notifier.setTheme(v ? ThemeMode.dark : ThemeMode.light),
-            activeThumbColor:
-                isDark
-                    ? InhaleColors.electricBlue
-                    : InhaleColors.lightPrimaryBlue,
+            onChanged: (v) =>
+                notifier.setTheme(v ? ThemeMode.dark : ThemeMode.light),
+            activeThumbColor: isDark
+                ? InhaleColors.electricBlue
+                : InhaleColors.lightPrimaryBlue,
           ),
         ),
         _SettingsTile(
@@ -75,10 +72,9 @@ class SettingsScreen extends ConsumerWidget {
           trailing: Switch(
             value: settings.reducedAnimation,
             onChanged: (v) => notifier.setReducedAnimation(v),
-            activeThumbColor:
-                isDark
-                    ? InhaleColors.electricBlue
-                    : InhaleColors.lightPrimaryBlue,
+            activeThumbColor: isDark
+                ? InhaleColors.electricBlue
+                : InhaleColors.lightPrimaryBlue,
           ),
         ),
         _SettingsTile(
@@ -90,10 +86,9 @@ class SettingsScreen extends ConsumerWidget {
           trailing: Switch(
             value: settings.reducedBlur,
             onChanged: (v) => notifier.setReducedBlur(v),
-            activeThumbColor:
-                isDark
-                    ? InhaleColors.electricBlue
-                    : InhaleColors.lightPrimaryBlue,
+            activeThumbColor: isDark
+                ? InhaleColors.electricBlue
+                : InhaleColors.lightPrimaryBlue,
           ),
         ),
 
@@ -133,10 +128,9 @@ class SettingsScreen extends ConsumerWidget {
           trailing: Switch(
             value: settings.useGpu,
             onChanged: (v) => notifier.setUseGpu(v),
-            activeThumbColor:
-                isDark
-                    ? InhaleColors.electricBlue
-                    : InhaleColors.lightPrimaryBlue,
+            activeThumbColor: isDark
+                ? InhaleColors.electricBlue
+                : InhaleColors.lightPrimaryBlue,
           ),
         ),
 
@@ -154,10 +148,9 @@ class SettingsScreen extends ConsumerWidget {
           trailing: Switch(
             value: settings.offlineMode,
             onChanged: (v) => notifier.setOffline(v),
-            activeThumbColor:
-                isDark
-                    ? InhaleColors.electricBlue
-                    : InhaleColors.lightPrimaryBlue,
+            activeThumbColor: isDark
+                ? InhaleColors.electricBlue
+                : InhaleColors.lightPrimaryBlue,
           ),
         ),
         _SettingsTile(
@@ -167,10 +160,9 @@ class SettingsScreen extends ConsumerWidget {
           subtitle: 'Remove all local data and models',
           isDark: isDark,
           iconColor: InhaleColors.error,
-          iconBgColor:
-              isDark
-                  ? InhaleColors.error.withValues(alpha: 0.15)
-                  : InhaleColors.error.withValues(alpha: 0.1),
+          iconBgColor: isDark
+              ? InhaleColors.error.withValues(alpha: 0.15)
+              : InhaleColors.error.withValues(alpha: 0.1),
           onTap: () {},
         ),
 
@@ -243,11 +235,9 @@ class _SettingsTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final effectiveIconColor =
-        iconColor ??
+    final effectiveIconColor = iconColor ??
         (isDark ? InhaleColors.electricBlue : InhaleColors.lightPrimaryBlue);
-    final effectiveIconBgColor =
-        iconBgColor ??
+    final effectiveIconBgColor = iconBgColor ??
         (isDark
             ? InhaleColors.electricBlue.withValues(alpha: 0.15)
             : InhaleColors.lightPrimaryBlue.withValues(alpha: 0.1));
@@ -277,19 +267,17 @@ class _SettingsTile extends StatelessWidget {
                   Text(
                     title,
                     style: InhaleTypography.titleSmall.copyWith(
-                      color:
-                          isDark
-                              ? InhaleColors.textPrimary
-                              : InhaleColors.lightNavyText,
+                      color: isDark
+                          ? InhaleColors.textPrimary
+                          : InhaleColors.lightNavyText,
                     ),
                   ),
                   Text(
                     subtitle,
                     style: InhaleTypography.bodySmall.copyWith(
-                      color:
-                          isDark
-                              ? InhaleColors.textSecondary
-                              : InhaleColors.lightTextSecondary,
+                      color: isDark
+                          ? InhaleColors.textSecondary
+                          : InhaleColors.lightTextSecondary,
                     ),
                   ),
                 ],
@@ -300,10 +288,9 @@ class _SettingsTile extends StatelessWidget {
             else if (onTap != null)
               Icon(
                 Icons.chevron_right_rounded,
-                color:
-                    isDark
-                        ? InhaleColors.textMuted
-                        : InhaleColors.lightTextMuted,
+                color: isDark
+                    ? InhaleColors.textMuted
+                    : InhaleColors.lightTextMuted,
               ),
           ],
         ),

@@ -80,8 +80,8 @@ class ChatMessage {
   });
 
   Map<String, dynamic> toJson() => {
-    'role': role,
-    'content': content,
-    'timestamp': timestamp.toIso8601String(),
-  };
+        'role': role,
+        'content': content,
+        'timestamp': timestamp.toIso8601String(),
+      };
 }

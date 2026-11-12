@@ -22,23 +22,21 @@ class PresentationScreen extends ConsumerWidget {
       appBar: GlassAppBar(title: 'Presentations'),
       body: Container(
         decoration: BoxDecoration(
-          gradient:
-              isDark
-                  ? InhaleColors.gradientBackgroundDark
-                  : InhaleColors.gradientBackground,
+          gradient: isDark
+              ? InhaleColors.gradientBackgroundDark
+              : InhaleColors.gradientBackground,
         ),
-        child:
-            state.isGenerating
-                ? const Center(child: CircularProgressIndicator())
-                : state.presentations.isEmpty
+        child: state.isGenerating
+            ? const Center(child: CircularProgressIndicator())
+            : state.presentations.isEmpty
                 ? _buildEmptyState(context, notifier, isDark)
                 : _buildPresentationsList(
-                  context,
-                  ref,
-                  state,
-                  notifier,
-                  isDark,
-                ),
+                    context,
+                    ref,
+                    state,
+                    notifier,
+                    isDark,
+                  ),
       ),
     );
   }
@@ -60,39 +58,35 @@ class PresentationScreen extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color:
-                    isDark
-                        ? InhaleColors.electricBlue.withValues(alpha: 0.15)
-                        : InhaleColors.lightPrimaryBlue.withValues(alpha: 0.1),
+                color: isDark
+                    ? InhaleColors.electricBlue.withValues(alpha: 0.15)
+                    : InhaleColors.lightPrimaryBlue.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 Icons.slideshow_rounded,
                 size: 64,
-                color:
-                    isDark
-                        ? InhaleColors.electricBlue
-                        : InhaleColors.lightPrimaryBlue,
+                color: isDark
+                    ? InhaleColors.electricBlue
+                    : InhaleColors.lightPrimaryBlue,
               ),
             ),
             const SizedBox(height: InhaleSpacing.lg),
             Text(
               'No Presentations Yet',
               style: InhaleTypography.headlineMedium.copyWith(
-                color:
-                    isDark
-                        ? InhaleColors.textPrimary
-                        : InhaleColors.lightNavyText,
+                color: isDark
+                    ? InhaleColors.textPrimary
+                    : InhaleColors.lightNavyText,
               ),
             ),
             const SizedBox(height: InhaleSpacing.sm),
             Text(
               'Create a presentation from a topic or generate one with AI',
               style: InhaleTypography.bodyMedium.copyWith(
-                color:
-                    isDark
-                        ? InhaleColors.textSecondary
-                        : InhaleColors.lightTextSecondary,
+                color: isDark
+                    ? InhaleColors.textSecondary
+                    : InhaleColors.lightTextSecondary,
               ),
               textAlign: TextAlign.center,
             ),
@@ -154,22 +148,20 @@ class PresentationScreen extends ConsumerWidget {
                         width: 48,
                         height: 48,
                         decoration: BoxDecoration(
-                          color:
-                              isDark
-                                  ? InhaleColors.electricBlue.withValues(
-                                    alpha: 0.2,
-                                  )
-                                  : InhaleColors.lightPrimaryBlue.withValues(
-                                    alpha: 0.15,
-                                  ),
+                          color: isDark
+                              ? InhaleColors.electricBlue.withValues(
+                                  alpha: 0.2,
+                                )
+                              : InhaleColors.lightPrimaryBlue.withValues(
+                                  alpha: 0.15,
+                                ),
                           borderRadius: BorderRadius.circular(InhaleRadius.md),
                         ),
                         child: Icon(
                           Icons.present_to_all_rounded,
-                          color:
-                              isDark
-                                  ? InhaleColors.electricBlue
-                                  : InhaleColors.lightPrimaryBlue,
+                          color: isDark
+                              ? InhaleColors.electricBlue
+                              : InhaleColors.lightPrimaryBlue,
                         ),
                       ),
                       const SizedBox(width: InhaleSpacing.md),
@@ -180,19 +172,17 @@ class PresentationScreen extends ConsumerWidget {
                             Text(
                               pres.title,
                               style: InhaleTypography.titleSmall.copyWith(
-                                color:
-                                    isDark
-                                        ? InhaleColors.textPrimary
-                                        : InhaleColors.lightNavyText,
+                                color: isDark
+                                    ? InhaleColors.textPrimary
+                                    : InhaleColors.lightNavyText,
                               ),
                             ),
                             Text(
                               '${pres.slideCount} slides',
                               style: InhaleTypography.bodySmall.copyWith(
-                                color:
-                                    isDark
-                                        ? InhaleColors.textMuted
-                                        : InhaleColors.lightTextMuted,
+                                color: isDark
+                                    ? InhaleColors.textMuted
+                                    : InhaleColors.lightTextMuted,
                               ),
                             ),
                           ],
@@ -200,10 +190,9 @@ class PresentationScreen extends ConsumerWidget {
                       ),
                       Icon(
                         Icons.chevron_right_rounded,
-                        color:
-                            isDark
-                                ? InhaleColors.textMuted
-                                : InhaleColors.lightTextMuted,
+                        color: isDark
+                            ? InhaleColors.textMuted
+                            : InhaleColors.lightTextMuted,
                       ),
                     ],
                   ),
@@ -236,59 +225,55 @@ class PresentationScreen extends ConsumerWidget {
 
     showDialog(
       context: context,
-      builder:
-          (ctx) => AlertDialog(
-            backgroundColor:
-                isDark ? InhaleColors.darkCharcoal : InhaleColors.lightSurface,
-            title: Text(
-              'New Presentation',
-              style: TextStyle(
-                color:
-                    isDark
-                        ? InhaleColors.textPrimary
-                        : InhaleColors.lightNavyText,
-              ),
-            ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                GlassTextField(
-                  controller: topicController,
-                  hintText: 'Enter topic...',
-                ),
-                const SizedBox(height: InhaleSpacing.sm),
-                GlassTextField(
-                  controller: slidesController,
-                  hintText: 'Number of slides (default 5)',
-                  keyboardType: TextInputType.number,
-                ),
-              ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(ctx),
-                child: Text(
-                  'Cancel',
-                  style: TextStyle(color: InhaleColors.blue),
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  final topic = topicController.text.trim();
-                  if (topic.isNotEmpty) {
-                    final slides =
-                        int.tryParse(slidesController.text.trim()) ?? 5;
-                    notifier.generatePresentation(topic, slides: slides);
-                    Navigator.pop(ctx);
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: InhaleColors.blue,
-                ),
-                child: const Text('Generate'),
-              ),
-            ],
+      builder: (ctx) => AlertDialog(
+        backgroundColor:
+            isDark ? InhaleColors.darkCharcoal : InhaleColors.lightSurface,
+        title: Text(
+          'New Presentation',
+          style: TextStyle(
+            color:
+                isDark ? InhaleColors.textPrimary : InhaleColors.lightNavyText,
           ),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            GlassTextField(
+              controller: topicController,
+              hintText: 'Enter topic...',
+            ),
+            const SizedBox(height: InhaleSpacing.sm),
+            GlassTextField(
+              controller: slidesController,
+              hintText: 'Number of slides (default 5)',
+              keyboardType: TextInputType.number,
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(
+              'Cancel',
+              style: TextStyle(color: InhaleColors.blue),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              final topic = topicController.text.trim();
+              if (topic.isNotEmpty) {
+                final slides = int.tryParse(slidesController.text.trim()) ?? 5;
+                notifier.generatePresentation(topic, slides: slides);
+                Navigator.pop(ctx);
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: InhaleColors.blue,
+            ),
+            child: const Text('Generate'),
+          ),
+        ],
+      ),
     );
   }
 }

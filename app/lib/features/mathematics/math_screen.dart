@@ -22,10 +22,9 @@ class MathScreen extends ConsumerWidget {
       appBar: GlassAppBar(title: 'Mathematics'),
       body: Container(
         decoration: BoxDecoration(
-          gradient:
-              isDark
-                  ? InhaleColors.gradientBackgroundDark
-                  : InhaleColors.gradientBackground,
+          gradient: isDark
+              ? InhaleColors.gradientBackgroundDark
+              : InhaleColors.gradientBackground,
         ),
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(InhaleSpacing.md),
@@ -35,10 +34,9 @@ class MathScreen extends ConsumerWidget {
               Text(
                 'Enter Expression',
                 style: InhaleTypography.headlineMedium.copyWith(
-                  color:
-                      isDark
-                          ? InhaleColors.textPrimary
-                          : InhaleColors.lightNavyText,
+                  color: isDark
+                      ? InhaleColors.textPrimary
+                      : InhaleColors.lightNavyText,
                 ),
               ),
               const SizedBox(height: InhaleSpacing.sm),
@@ -61,10 +59,9 @@ class MathScreen extends ConsumerWidget {
                 Text(
                   'Result',
                   style: InhaleTypography.titleMedium.copyWith(
-                    color:
-                        isDark
-                            ? InhaleColors.textPrimary
-                            : InhaleColors.lightNavyText,
+                    color: isDark
+                        ? InhaleColors.textPrimary
+                        : InhaleColors.lightNavyText,
                   ),
                 ),
                 const SizedBox(height: InhaleSpacing.sm),
@@ -77,10 +74,9 @@ class MathScreen extends ConsumerWidget {
                       Text(
                         state.output,
                         style: InhaleTypography.displaySmall.copyWith(
-                          color:
-                              isDark
-                                  ? InhaleColors.textPrimary
-                                  : InhaleColors.lightNavyText,
+                          color: isDark
+                              ? InhaleColors.textPrimary
+                              : InhaleColors.lightNavyText,
                         ),
                       ),
                       if (state.steps.isNotEmpty) ...[
@@ -88,10 +84,9 @@ class MathScreen extends ConsumerWidget {
                         Text(
                           state.steps,
                           style: InhaleTypography.bodySmall.copyWith(
-                            color:
-                                isDark
-                                    ? InhaleColors.textSecondary
-                                    : InhaleColors.lightTextSecondary,
+                            color: isDark
+                                ? InhaleColors.textSecondary
+                                : InhaleColors.lightTextSecondary,
                           ),
                         ),
                       ],
@@ -106,87 +101,75 @@ class MathScreen extends ConsumerWidget {
                 Text(
                   'Calculation History',
                   style: InhaleTypography.titleMedium.copyWith(
-                    color:
-                        isDark
-                            ? InhaleColors.textPrimary
-                            : InhaleColors.lightNavyText,
+                    color: isDark
+                        ? InhaleColors.textPrimary
+                        : InhaleColors.lightNavyText,
                   ),
                 ),
                 const SizedBox(height: InhaleSpacing.sm),
                 GlassCard(
                   padding: const EdgeInsets.all(InhaleSpacing.sm),
                   child: Column(
-                    children:
-                        state.history.take(10).map((entry) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: InhaleSpacing.xs,
+                    children: state.history.take(10).map((entry) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: InhaleSpacing.xs,
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: isDark
+                                    ? InhaleColors.electricBlue
+                                        .withValues(alpha: 0.15)
+                                    : InhaleColors.lightPrimaryBlue
+                                        .withValues(alpha: 0.1),
+                                borderRadius: BorderRadius.circular(
+                                  InhaleRadius.sm,
+                                ),
+                              ),
+                              child: Icon(
+                                Icons.calculate_rounded,
+                                size: 16,
+                                color: isDark
+                                    ? InhaleColors.electricBlue
+                                    : InhaleColors.lightPrimaryBlue,
+                              ),
                             ),
-                            child: Row(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                    color:
-                                        isDark
-                                            ? InhaleColors.electricBlue
-                                                .withValues(alpha: 0.15)
-                                            : InhaleColors.lightPrimaryBlue
-                                                .withValues(alpha: 0.1),
-                                    borderRadius: BorderRadius.circular(
-                                      InhaleRadius.sm,
+                            const SizedBox(width: InhaleSpacing.sm),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    entry.expression,
+                                    style: InhaleTypography.bodySmall.copyWith(
+                                      color: isDark
+                                          ? InhaleColors.textSecondary
+                                          : InhaleColors.lightTextSecondary,
                                     ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                  child: Icon(
-                                    Icons.calculate_rounded,
-                                    size: 16,
-                                    color:
-                                        isDark
-                                            ? InhaleColors.electricBlue
-                                            : InhaleColors.lightPrimaryBlue,
+                                  Text(
+                                    entry.result,
+                                    style: InhaleTypography.bodySmall.copyWith(
+                                      color: isDark
+                                          ? InhaleColors.textPrimary
+                                          : InhaleColors.lightNavyText,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                ),
-                                const SizedBox(width: InhaleSpacing.sm),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        entry.expression,
-                                        style: InhaleTypography.bodySmall
-                                            .copyWith(
-                                              color:
-                                                  isDark
-                                                      ? InhaleColors
-                                                          .textSecondary
-                                                      : InhaleColors
-                                                          .lightTextSecondary,
-                                            ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      Text(
-                                        entry.result,
-                                        style: InhaleTypography.bodySmall
-                                            .copyWith(
-                                              color:
-                                                  isDark
-                                                      ? InhaleColors.textPrimary
-                                                      : InhaleColors
-                                                          .lightNavyText,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          );
-                        }).toList(),
+                          ],
+                        ),
+                      );
+                    }).toList(),
                   ),
                 ),
               ],

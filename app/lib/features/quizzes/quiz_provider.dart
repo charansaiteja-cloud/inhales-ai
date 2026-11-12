@@ -49,15 +49,16 @@ class QuizState {
     int? correctCount,
     String? topic,
     String? error,
-  }) => QuizState(
-    isGenerating: isGenerating ?? this.isGenerating,
-    isInProgress: isInProgress ?? this.isInProgress,
-    questions: questions ?? this.questions,
-    currentIndex: currentIndex ?? this.currentIndex,
-    correctCount: correctCount ?? this.correctCount,
-    topic: topic ?? this.topic,
-    error: error ?? this.error,
-  );
+  }) =>
+      QuizState(
+        isGenerating: isGenerating ?? this.isGenerating,
+        isInProgress: isInProgress ?? this.isInProgress,
+        questions: questions ?? this.questions,
+        currentIndex: currentIndex ?? this.currentIndex,
+        correctCount: correctCount ?? this.correctCount,
+        topic: topic ?? this.topic,
+        error: error ?? this.error,
+      );
 }
 
 final quizProvider = StateNotifierProvider<QuizNotifier, QuizState>(

@@ -23,7 +23,7 @@ dependencies:
 
   # Database
   drift: ^2.22.0
-  sqlite3: ^3.9.1
+  sqlite3: ^3.8.0
 
   # Document processing & generation
 

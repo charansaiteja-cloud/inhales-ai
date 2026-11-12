@@ -498,8 +498,8 @@ class _AppSearchFieldState extends State<AppSearchField> {
       textField: true,
       label: widget.hint ?? 'Search',
       child: Container(
-        padding:
-            widget.padding ?? EdgeInsets.symmetric(horizontal: InhaleSpacing.md),
+        padding: widget.padding ??
+            EdgeInsets.symmetric(horizontal: InhaleSpacing.md),
         decoration: BoxDecoration(
           color: _hasFocus
               ? cs.surface
@@ -531,7 +531,8 @@ class _AppSearchFieldState extends State<AppSearchField> {
                   ),
                   border: InputBorder.none,
                   isDense: true,
-                  contentPadding: EdgeInsets.symmetric(vertical: InhaleSpacing.sm),
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: InhaleSpacing.sm),
                 ),
               ),
             ),

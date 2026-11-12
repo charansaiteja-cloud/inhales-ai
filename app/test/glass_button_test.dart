@@ -5,7 +5,8 @@ import 'package:inhaleskill_ai/core/theme/inhale_theme.dart';
 import 'package:inhaleskill_ai/core/theme/inhale_colors.dart';
 
 void main() {
-  testWidgets('GlassButton uses correct background in dark mode', (tester) async {
+  testWidgets('GlassButton uses correct background in dark mode',
+      (tester) async {
     await tester.pumpWidget(
       MaterialApp(
         theme: InhaleTheme.dark,

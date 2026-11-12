@@ -18,7 +18,9 @@ class TokensPreviewScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Colors', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  Text('Colors',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                   SizedBox(height: 12),
                   Wrap(
                     spacing: 8,
@@ -27,12 +29,15 @@ class TokensPreviewScreen extends StatelessWidget {
                       _ColorChip(InhaleColors.blue, 'InhaleColors.blue'),
                       _ColorChip(InhaleColors.pink, 'InhaleColors.pink'),
                       _ColorChip(InhaleColors.black, 'InhaleColors.black'),
-                      _ColorChip(InhaleColors.lightPrimaryBlue, 'lightPrimaryBlue'),
+                      _ColorChip(
+                          InhaleColors.lightPrimaryBlue, 'lightPrimaryBlue'),
                       _ColorChip(InhaleColors.lightSkyBlue, 'lightSkyBlue'),
                     ],
                   ),
                   SizedBox(height: 24),
-                  Text('Spacing', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  Text('Spacing',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                   SizedBox(height: 12),
                   Wrap(
                     spacing: 8,
@@ -46,7 +51,9 @@ class TokensPreviewScreen extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: 24),
-                  Text('Radius', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  Text('Radius',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                   SizedBox(height: 12),
                   Wrap(
                     spacing: 8,
@@ -58,7 +65,9 @@ class TokensPreviewScreen extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: 24),
-                  Text('Shadows', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  Text('Shadows',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                   SizedBox(height: 12),
                   Wrap(
                     spacing: 16,
@@ -100,13 +109,14 @@ class _ColorChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-    width: 60,
-    height: 60,
-    color: color,
-    child: Center(
-      child: Text(label, style: const TextStyle(color: Colors.white, fontSize: 10)),
-    ),
-  );
+        width: 60,
+        height: 60,
+        color: color,
+        child: Center(
+          child: Text(label,
+              style: const TextStyle(color: Colors.white, fontSize: 10)),
+        ),
+      );
 }
 
 class _SpacingChip extends StatelessWidget {
@@ -116,10 +126,10 @@ class _SpacingChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-    width: 40,
-    height: 8,
-    color: Colors.red,
-  );
+        width: 40,
+        height: 8,
+        color: Colors.red,
+      );
 }
 
 class _RadiusChip extends StatelessWidget {
@@ -129,10 +139,10 @@ class _RadiusChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-    width: 50,
-    height: 8,
-    color: Colors.green,
-  );
+        width: 50,
+        height: 8,
+        color: Colors.green,
+      );
 }
 
 class _ShadowBox extends StatelessWidget {
@@ -141,8 +151,8 @@ class _ShadowBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-    width: 80,
-    height: 80,
-    decoration: BoxDecoration(color: Colors.white, boxShadow: [shadow]),
-  );
+        width: 80,
+        height: 80,
+        decoration: BoxDecoration(color: Colors.white, boxShadow: [shadow]),
+      );
 }

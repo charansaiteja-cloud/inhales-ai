@@ -3,7 +3,6 @@ import 'dart:ui';
 import '../core/theme/inhale_colors.dart';
 import '../core/theme/inhale_tokens.dart';
 
-
 /// Premium Liquid Glass card with frosted blur and optional elevation/glow.
 ///
 /// A [StatefulWidget] that tracks keyboard focus and renders a subtle blue
@@ -56,12 +55,17 @@ class _GlassCardState extends State<GlassCard> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final settings = MediaQuery.of(context).accessibleNavigation;
     final shouldBlur = widget.useBlur ?? !settings;
-    final radius = widget.borderRadius ?? BorderRadius.circular(InhaleRadius.md);
+    final radius =
+        widget.borderRadius ?? BorderRadius.circular(InhaleRadius.md);
     final effectiveShadows = widget.shadows ?? _buildShadows(isDark);
     final effectiveBorder = widget.borderColor ??
-        (isDark ? InhaleColors.glassBorderSubtle : InhaleColors.lightGlassBorderSubtle);
+        (isDark
+            ? InhaleColors.glassBorderSubtle
+            : InhaleColors.lightGlassBorderSubtle);
     final effectiveBg = widget.backgroundColor ??
-        (isDark ? InhaleColors.glassSurfaceMedium : InhaleColors.lightGlassSurfaceMedium);
+        (isDark
+            ? InhaleColors.glassSurfaceMedium
+            : InhaleColors.lightGlassSurfaceMedium);
 
     final hoverCard = MouseRegion(
       cursor: SystemMouseCursors.click,

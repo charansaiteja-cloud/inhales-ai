@@ -227,7 +227,8 @@ class AppSkeletonCard extends StatelessWidget {
                 AppSkeleton(
                   width: 48,
                   height: 48,
-                  borderRadius: BorderRadius.circular(InhaleRadius.avatarRadius),
+                  borderRadius:
+                      BorderRadius.circular(InhaleRadius.avatarRadius),
                 ),
               if (showAvatar) SizedBox(width: InhaleSpacing.md),
               Expanded(
@@ -251,13 +252,15 @@ class AppSkeletonCard extends StatelessWidget {
                 AppSkeleton(
                   width: 100,
                   height: 36,
-                  borderRadius: BorderRadius.circular(InhaleRadius.buttonRadius),
+                  borderRadius:
+                      BorderRadius.circular(InhaleRadius.buttonRadius),
                 ),
                 SizedBox(width: InhaleSpacing.sm),
                 AppSkeleton(
                   width: 100,
                   height: 36,
-                  borderRadius: BorderRadius.circular(InhaleRadius.buttonRadius),
+                  borderRadius:
+                      BorderRadius.circular(InhaleRadius.buttonRadius),
                 ),
               ],
             ),

@@ -392,7 +392,8 @@ class _SidebarItemTile extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     color: cs.primaryContainer,
-                    borderRadius: BorderRadius.circular(InhaleRadius.badgeRadius),
+                    borderRadius:
+                        BorderRadius.circular(InhaleRadius.badgeRadius),
                   ),
                   child: Text(
                     item.badge!,
